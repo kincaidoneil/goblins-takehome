@@ -5,10 +5,19 @@
  * Otherwise stubs stand in, since the mock model only answers grading calls: uploads extract as a
  * template and the chat understands a few phrasings, so E2E and local work cost nothing.
  */
-import type { Db } from "@goblins/domain";
-import { CallLog, Chat, Extract, OpenRouter } from "@goblins/grader";
+import { DatabaseLive, type Db } from "@goblins/domain";
+import { CallLog, Chat, Extract, ModelClient, OpenRouter } from "@goblins/grader";
 import { getTemplate, templates } from "@goblins/templates";
-import { Array as Arr, Data, Duration, Effect, Either, Layer, Option } from "effect";
+import {
+  Array as Arr,
+  Data,
+  Duration,
+  Effect,
+  Either,
+  Layer,
+  ManagedRuntime,
+  Option,
+} from "effect";
 import { toAppEdits, toSetupProblems } from "./chat-edits";
 import { stubChat } from "./chat-stub";
 import type { Draft } from "./draft";
@@ -30,12 +39,33 @@ export interface ChatReply {
   readonly edits: ReadonlyArray<Edit>;
 }
 
-const realModel = () => process.env.MODEL_CLIENT === "openrouter";
+/**
+ * Which model setup uses. Unset means the mock; any value other than `mock` or `openrouter` is a
+ * misconfiguration, and setup refuses rather than quietly using the stubs.
+ */
+const modelMode = (): "mock" | "openrouter" | "invalid" => {
+  const value = process.env.MODEL_CLIENT ?? "mock";
+  return value === "mock" || value === "openrouter" ? value : "invalid";
+};
 
-/** OpenRouter with every call written to `model_calls`. Needs the database for the log. */
-const loggedOpenRouter = CallLog.withCallLog("openrouter").pipe(
-  Layer.provide(Layer.merge(OpenRouter.layer, CallLog.postgres)),
+/**
+ * OpenRouter with every call written to `model_calls`, built once per server instance so every
+ * setup call shares one spend guard (`MODEL_SPEND_CAP_USD`).
+ */
+const openRouterRuntime = ManagedRuntime.make(
+  CallLog.withCallLog("openrouter").pipe(
+    Layer.provide(Layer.merge(OpenRouter.layer, CallLog.postgres)),
+    Layer.provide(DatabaseLive),
+  ),
 );
+
+const withOpenRouter = <A, E>(effect: Effect.Effect<A, E, ModelClient>) =>
+  Effect.flatMap(
+    Effect.promise(() => openRouterRuntime.runPromise(ModelClient)),
+    (client) => Effect.provideService(effect, ModelClient, client),
+  );
+
+const MISCONFIGURED = "Reading worksheets isn't available right now. Start from a template.";
 
 /** What a model can fetch: https or data: URLs. Older template drafts stored app-relative paths. */
 const fetchable = (url: string) => url.startsWith("https://") || url.startsWith("data:");
@@ -64,7 +94,18 @@ export const extractWorksheet = (
   draftId: string,
   pages: ReadonlyArray<PageImage>,
 ): Effect.Effect<Extracted, NotMath | Unreadable, Db> =>
-  realModel() ? extractWithModel(draftId, pages) : extractStub(pages);
+  Effect.suspend(() => {
+    switch (modelMode()) {
+      case "openrouter":
+        return extractWithModel(draftId, pages);
+      case "mock":
+        return extractStub(pages);
+      case "invalid":
+        return Effect.logError("MODEL_CLIENT must be mock or openrouter").pipe(
+          Effect.zipRight(Effect.fail(new Unreadable({ message: MISCONFIGURED }))),
+        );
+    }
+  });
 
 const extractWithModel = (draftId: string, pages: ReadonlyArray<PageImage>) =>
   Effect.gen(function* () {
@@ -72,7 +113,7 @@ const extractWithModel = (draftId: string, pages: ReadonlyArray<PageImage>) =>
       pages.map((page) => page.imageUrl),
       { purpose: "extract", subjectId: draftId },
     ).pipe(
-      Effect.provide(loggedOpenRouter),
+      withOpenRouter,
       Effect.catchAll((error) =>
         Effect.logError("extraction call failed", error).pipe(
           Effect.zipRight(Effect.fail(new Unreadable({ message: COULD_NOT_READ }))),
@@ -120,7 +161,21 @@ export const extractTemplate = (templateId: string) =>
 
 /** Turns a chat message into edits and a reply. The model's failures become a reply, not an error. */
 export const editByChat = (draft: Draft, message: string): Effect.Effect<ChatReply, never, Db> =>
-  realModel() ? chatWithModel(draft, message) : Effect.succeed(stubChat(draft, message));
+  Effect.suspend(() => {
+    switch (modelMode()) {
+      case "openrouter":
+        return chatWithModel(draft, message);
+      case "mock":
+        return Effect.succeed(stubChat(draft, message));
+      case "invalid":
+        return Effect.logError("MODEL_CLIENT must be mock or openrouter").pipe(
+          Effect.as({
+            reply: "The chat isn't available right now. Edit the problems directly.",
+            edits: [],
+          }),
+        );
+    }
+  });
 
 const COULD_NOT_CHANGE =
   "I couldn't make that change. Try saying it another way, or edit the problem directly.";
@@ -136,7 +191,7 @@ const chatWithModel = (draft: Draft, message: string) =>
         message,
       },
       { purpose: "rubric-chat", subjectId: draft.id },
-    ).pipe(Effect.provide(loggedOpenRouter), Effect.either);
+    ).pipe(withOpenRouter, Effect.either);
     if (Either.isLeft(result)) {
       yield* Effect.logError("chat call failed", result.left);
       return {

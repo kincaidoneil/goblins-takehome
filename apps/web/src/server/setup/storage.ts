@@ -1,14 +1,16 @@
 /**
- * Where uploaded worksheet pages are stored: Vercel Blob when `BLOB_READ_WRITE_TOKEN` is set (every
- * Vercel deploy), otherwise inline as a `data:` URL, so local development and local production
- * builds need no Blob store. Pages are 80–140 KB JPEGs, so inline storage stays small.
+ * Where uploaded worksheet pages are stored: inline as a `data:` URL, unless `WORKSHEET_STORE=blob`
+ * and a Blob token are set. The production Blob store is private, and public uploads fail there
+ * (as they did for whiteboards), so inline is the default everywhere. Pages are 80–140 KB JPEGs,
+ * the model reads `data:` URLs directly, and no file server is needed.
  */
 import { del, put } from "@vercel/blob";
 import { Data, Effect } from "effect";
 
 export class StorageFailed extends Data.TaggedError("StorageFailed")<{ readonly cause: unknown }> {}
 
-const hasBlob = () => (process.env.BLOB_READ_WRITE_TOKEN ?? "") !== "";
+const hasBlob = () =>
+  process.env.WORKSHEET_STORE === "blob" && (process.env.BLOB_READ_WRITE_TOKEN ?? "") !== "";
 
 /** Stores a file under `pathname` and returns its URL. */
 export const storeFile = (pathname: string, body: Blob, contentType: string) =>
