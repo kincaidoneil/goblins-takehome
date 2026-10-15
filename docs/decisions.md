@@ -55,3 +55,14 @@ One line of reasoning per decision. Newest last. The fixed decisions in [prd.md]
 | 2026-10-15 | Grader | A cron runs every minute and re-sends grades queued for 3 minutes or claimed past the lease (`stuckJobs`) | The submit path commits before it sends, so a crash between the two would otherwise lose the grade; the idempotency key makes re-sending safe |
 | 2026-10-15 | Grader | Messages are kept for 7 days, the maximum | A broken consumer deploy then delays grades until it is fixed instead of dropping them after the 24-hour default |
 | 2026-10-15 | Grader | Load-test grades are routed to the mock by `GradingInput.loadTestRunId`, read from the class session at claim time, not by a flag in the message | The database is the source of truth; a forged or replayed message cannot send a load-test grade to the paid model |
+| 2026-10-15 | Grader | Queue for grade jobs: Upstash QStash with flow control (key `grade`, parallelism 100), provisional until it is benchmarked like Vercel Queues (60 × 5 s jobs at parallelism 10, ideal 30 s). Plain QStash, not Upstash Workflow | Comparison below. A grade is one step (one model call, then an idempotent write), so Workflow's steps would add messages and cost without adding safety; the consumer is queue-agnostic, so switching costs one adapter |
+
+**Grade queue options (2026-10-15).** Cost assumes a 10,000-student load-test run of about 100k grades, before retries.
+
+| Option | Enforced concurrency cap | Retries, outage | Cost per 100k-grade run | New vendor or account | Observability |
+|---|---|---|---|---|---|
+| Vercel Queues | Yes, via the undocumented trigger field `maxConcurrency`. Infra measured 129 s for 60 × 5 s jobs at cap 10 (ideal 30 s), too slow at the bell | At-least-once; backoff via the SDK's retry callback; 7-day retention | About $0.60 per million operations: cents | None | No queued or in-flight counts exposed |
+| Upstash QStash, flow control | Yes, documented: parallelism and rate per key; pay-as-you-go allows parallelism up to 100 (fixed plans: 200 or more) | At-least-once; retries with backoff, or our own delayed republish; dead-letter queue | $1 per 100k messages: about $1–2 with retries. The free tier (1,000 a day) can't run a load test | Upstash, through the Vercel Marketplace with integrated billing; needs terms accepted and a paid plan | Dashboard, dead-letter queue, flow-control API |
+| Upstash Workflow | Same as QStash | Step-level retries | At least 2–3 messages per grade: about $3 | Same as QStash | Run-level view |
+| Postgres jobs table plus cron | Yes, `FOR UPDATE SKIP LOCKED` with a running count | Ours to build; Vercel cron fires at most once a minute, so workers need a loop | $0 extra, but it adds load on the same database | None | Full SQL |
+| Inngest, Temporal | Yes | Yes | Not priced | New account, and a heavier programming model | Good |
