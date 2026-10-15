@@ -66,7 +66,7 @@ No real calls have been logged yet. Until they are:
 - The `seed` profile is a guess: log-normal latency with median 3.5 s and p95 9 s, 0.5% rate limits, 0.5% provider errors, 0.2% bad responses, 1,800 prompt and 250 completion tokens.
 - The `seed-window` recording is synthetic: 10 minutes at 5 calls per second drawn from the seed profile, with a 45-second burst of 429s at minute 4.
 
-Load-test reports must say which profile or recording a run used. Once latency calibration has logged real calls, export rows from the call log, build a profile and a recording with `profileFromCallLog` and `recordingFromCallLog`, and add them to `src/registry.ts`.
+Load-test reports must say which profile or recording a run used. Once real grading calls are logged, select rows from the domain `model_calls` table, build a profile and a recording with `profileFromCallLog` and `recordingFromCallLog`, and add them to `src/registry.ts`. Only real grading calls count: `provider = 'openrouter'`, `purpose` `grade` or `eval`, no load-test run id. The table stores no HTTP status or Retry-After, so replayed provider errors are 502s and replayed 429s have no retry hint.
 
 ## Tests
 

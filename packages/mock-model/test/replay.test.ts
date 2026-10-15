@@ -1,13 +1,7 @@
 import { describe, expect, it } from "@effect/vitest";
 import { Effect, Either } from "effect";
-import {
-  type MockConfig,
-  makeReplayer,
-  profileFromCallLog,
-  recordingFromCallLog,
-  seedWindow,
-} from "../src/index.ts";
-import { callsAt, share } from "./helpers.ts";
+import { type MockConfig, makeReplayer, recordingFromCallLog, seedWindow } from "../src/index.ts";
+import { callsAt, modelCallRow, share } from "./helpers.ts";
 
 const replay: MockConfig = { _tag: "Replay", recording: "seed-window", anchorMs: 0 };
 const MINUTE = 60_000;
@@ -35,50 +29,14 @@ describe("replay", () => {
   );
 
   it("uses the nearest call when a time bucket is empty", () => {
-    const call = (startedAt: number, outcome: "Ok" | "ProviderError") => ({
-      model: "m",
-      startedAt,
-      latencyMs: 100,
-      outcome,
-      promptTokens: 1,
-      completionTokens: 1,
-    });
-    const recording = recordingFromCallLog([call(0, "Ok"), call(95_000, "ProviderError")], {
+    const call = (offsetMs: number, status: "ok" | "provider_error") =>
+      modelCallRow({ createdAt: new Date(Date.UTC(2026, 9, 15) + offsetMs), status });
+    const recording = recordingFromCallLog([call(0, "ok"), call(95_000, "provider_error")], {
       source: "test",
     });
     if (Either.isLeft(recording)) throw new Error("expected a recording");
     const replayer = makeReplayer(recording.right);
     expect(replayer.callAt(30_000, Math.random).outcome).toBe("Ok");
     expect(replayer.callAt(80_000, Math.random).outcome).toBe("ProviderError");
-  });
-});
-
-describe("call log import", () => {
-  it("builds an empirical profile and rejects invalid rows with their index", () => {
-    const ok = profileFromCallLog(
-      [
-        {
-          model: "a",
-          startedAt: "2026-10-15T09:00:00Z",
-          latencyMs: 4000,
-          outcome: "Ok",
-          promptTokens: 1800,
-          completionTokens: 200,
-        },
-        {
-          model: "b",
-          startedAt: 1,
-          latencyMs: 1,
-          outcome: "Ok",
-          promptTokens: 1,
-          completionTokens: 1,
-        },
-      ],
-      { source: "test", model: "a" },
-    );
-    expect(Either.isRight(ok) && ok.right.calls.length).toBe(1);
-    const bad = profileFromCallLog([{ model: "a", latencyMs: -1 }], { source: "test" });
-    expect(Either.isLeft(bad) && bad.left._tag).toBe("InvalidRow");
-    expect(profileFromCallLog([], { source: "test" })).toMatchObject({ left: { _tag: "NoCalls" } });
   });
 });
