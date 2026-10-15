@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ClassesRouteImport } from './routes/classes'
 import { Route as JoinRouteImport } from './routes/join'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as ApiJoinRouteImport } from './routes/api/join'
@@ -37,6 +38,11 @@ import { Route as ApiTeacherSessionsSessionIdActionRouteImport } from './routes/
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClassesRoute = ClassesRouteImport.update({
+  id: '/classes',
+  path: '/classes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JoinRoute = JoinRouteImport.update({
@@ -161,6 +167,7 @@ const ApiTeacherSessionsSessionIdActionRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/classes': typeof ClassesRoute
   '/join': typeof JoinRoute
   '/api/health': typeof ApiHealthRoute
   '/api/join': typeof ApiJoinRoute
@@ -187,6 +194,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/classes': typeof ClassesRoute
   '/join': typeof JoinRoute
   '/api/health': typeof ApiHealthRoute
   '/api/join': typeof ApiJoinRoute
@@ -214,6 +222,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/classes': typeof ClassesRoute
   '/join': typeof JoinRoute
   '/api/health': typeof ApiHealthRoute
   '/api/join': typeof ApiJoinRoute
@@ -242,6 +251,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/classes'
     | '/join'
     | '/api/health'
     | '/api/join'
@@ -268,6 +278,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/classes'
     | '/join'
     | '/api/health'
     | '/api/join'
@@ -294,6 +305,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/classes'
     | '/join'
     | '/api/health'
     | '/api/join'
@@ -321,6 +333,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ClassesRoute: typeof ClassesRoute
   JoinRoute: typeof JoinRoute
   ApiHealthRoute: typeof ApiHealthRoute
   ApiJoinRoute: typeof ApiJoinRoute
@@ -352,6 +365,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/classes': {
+      id: '/classes'
+      path: '/classes'
+      fullPath: '/classes'
+      preLoaderRoute: typeof ClassesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/join': {
@@ -532,6 +552,7 @@ const ApiTeacherSessionsRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ClassesRoute: ClassesRoute,
   JoinRoute: JoinRoute,
   ApiHealthRoute: ApiHealthRoute,
   ApiJoinRoute: ApiJoinRoute,
