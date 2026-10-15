@@ -1,0 +1,401 @@
+{
+  "header": {
+    "runId": "after-sync-fix-990",
+    "startedAt": "2026-10-15T17:46:47.448Z",
+    "target": "http://localhost:3290",
+    "commit": "cd7b05a",
+    "scenario": "normal",
+    "mock": "`claude-haiku-5.5` profile: measured from 1,839 real grading calls (p50 3.9 s, p95 8.0 s, p99 11.4 s; no failures in the sample, measured at 8 concurrent calls)",
+    "mockSpecExample": "mode=sampled; profile=claude-haiku-5.5; start=<step start>",
+    "queue": "QStash local dev server, flow control parallelism 100; the app as 6 Node processes on one port (scripts/cluster.mjs) with per-class shapes (#104), sharing an 8-core laptop with the generator, Postgres and Electric 1.8.1 (raised concurrency limits)",
+    "template": "angle-relationships",
+    "submissionsPerStudent": 9,
+    "timeScale": 0.25,
+    "generator": "one Node v22.22.0 process on macbookpro.lan (8 CPUs, 16 GB)"
+  },
+  "summary": {
+    "capacityStudents": null,
+    "firstFailures": [
+      {
+        "criterion": "Submit latency p99",
+        "step": 1,
+        "students": 990,
+        "component": "Database: submit transactions waiting on locks or connections"
+      },
+      {
+        "criterion": "Submit to grade on dashboard p95",
+        "step": 1,
+        "students": 990,
+        "component": "Sync (Electric): outcome to dashboard"
+      }
+    ],
+    "stoppedBecause": "step 1 hit the load generator's own limit; shard the load across machines to go higher"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "runId": "after-sync-fix-990-s1",
+      "classes": 33,
+      "students": 990,
+      "metrics": {
+        "window": {
+          "startedAt": 1792086407512,
+          "endedAt": 1792087317996,
+          "minutes": 15.174733333333334
+        },
+        "load": {
+          "plannedStudents": 990,
+          "studentsJoined": 990,
+          "classesFailed": 0,
+          "studentsFailed": 0,
+          "plannedSubmissions": 8910,
+          "submissionsAcked": 8910,
+          "peakSubmitsPerSecond": 23.4,
+          "meanSubmitsPerSecond": 9.786003927581374
+        },
+        "submitRequestMs": {
+          "count": 8910,
+          "p50": 273,
+          "p95": 1797,
+          "p99": 2735,
+          "max": 3522
+        },
+        "submitAckMs": {
+          "count": 8910,
+          "p50": 273,
+          "p95": 1797,
+          "p99": 2735,
+          "max": 3522
+        },
+        "submitRetries": 0,
+        "submitToDashboardMs": {
+          "count": 8910,
+          "p50": 165532,
+          "p95": 256049,
+          "p99": 259933,
+          "max": 421145
+        },
+        "breakdown": {
+          "queueWaitMs": {
+            "count": 8910,
+            "p50": 6837,
+            "p95": 14070,
+            "p99": 34633,
+            "max": 191860
+          },
+          "gradingMs": {
+            "count": 8910,
+            "p50": 4216,
+            "p95": 8327,
+            "p99": 11651,
+            "max": 33722
+          },
+          "syncLagMs": {
+            "count": 8910,
+            "p50": 149194,
+            "p95": 251062,
+            "p99": 253265,
+            "max": 255832
+          },
+          "attemptsOverOne": 0
+        },
+        "grades": {
+          "byState": {
+            "graded": 7981,
+            "needs_teacher": 929,
+            "couldnt_grade": 0
+          },
+          "failureRate": 0,
+          "failureReasons": {},
+          "unexpectedStates": 0
+        },
+        "lost": {
+          "count": 0,
+          "byKind": {}
+        },
+        "pipeline": {
+          "peakQueued": 317,
+          "peakInFlight": 105,
+          "series": [
+            [0, 0, 0],
+            [5, 0, 0],
+            [10, 0, 0],
+            [15, 0, 0],
+            [20, 0, 0],
+            [25, 0, 0],
+            [30, 0, 0],
+            [35, 0, 0],
+            [40, 0, 0],
+            [45, 0, 0],
+            [50, 0, 0],
+            [55, 0, 0],
+            [60, 0, 0],
+            [65, 0, 0],
+            [70, 0, 0],
+            [75, 0, 0],
+            [80, 0, 0],
+            [85, 0, 0],
+            [90, 0, 3],
+            [95, 1, 4],
+            [100, 0, 10],
+            [105, 1, 12],
+            [110, 1, 13],
+            [115, 1, 16],
+            [120, 0, 20],
+            [125, 2, 20],
+            [130, 0, 29],
+            [135, 3, 23],
+            [140, 2, 42],
+            [145, 0, 62],
+            [150, 2, 44],
+            [155, 10, 51],
+            [160, 3, 62],
+            [165, 8, 39],
+            [170, 10, 49],
+            [175, 4, 58],
+            [180, 9, 59],
+            [185, 2, 82],
+            [190, 6, 66],
+            [195, 15, 63],
+            [200, 14, 64],
+            [205, 5, 74],
+            [210, 7, 73],
+            [215, 13, 85],
+            [220, 5, 77],
+            [225, 10, 75],
+            [230, 5, 86],
+            [235, 24, 43],
+            [240, 44, 94],
+            [245, 65, 65],
+            [250, 75, 86],
+            [255, 84, 88],
+            [260, 103, 93],
+            [265, 106, 96],
+            [270, 111, 98],
+            [275, 147, 49],
+            [280, 108, 95],
+            [285, 143, 84],
+            [290, 143, 77],
+            [295, 131, 101],
+            [300, 159, 54],
+            [305, 138, 95],
+            [310, 125, 91],
+            [315, 116, 96],
+            [320, 108, 98],
+            [325, 109, 84],
+            [330, 114, 89],
+            [335, 151, 76],
+            [340, 206, 69],
+            [345, 229, 72],
+            [350, 203, 88],
+            [355, 204, 87],
+            [360, 209, 96],
+            [365, 223, 98],
+            [370, 250, 77],
+            [375, 224, 97],
+            [380, 233, 83],
+            [385, 221, 98],
+            [390, 235, 66],
+            [395, 220, 89],
+            [400, 217, 93],
+            [405, 218, 66],
+            [410, 195, 95],
+            [415, 201, 76],
+            [420, 212, 95],
+            [425, 220, 97],
+            [430, 203, 96],
+            [435, 193, 92],
+            [440, 217, 91],
+            [445, 263, 95],
+            [450, 291, 64],
+            [455, 256, 81],
+            [460, 263, 95],
+            [465, 277, 98],
+            [470, 259, 100],
+            [475, 262, 95],
+            [480, 252, 94],
+            [485, 252, 93],
+            [490, 267, 98],
+            [495, 279, 84],
+            [500, 284, 86],
+            [505, 277, 97],
+            [510, 293, 92],
+            [515, 305, 75],
+            [520, 286, 92],
+            [525, 306, 78],
+            [530, 287, 98],
+            [535, 284, 83],
+            [540, 273, 92],
+            [545, 261, 87],
+            [550, 254, 101],
+            [555, 259, 96],
+            [560, 242, 96],
+            [565, 273, 68],
+            [570, 260, 92],
+            [575, 250, 94],
+            [580, 257, 94],
+            [585, 251, 97],
+            [590, 246, 79],
+            [595, 248, 97],
+            [600, 232, 96],
+            [605, 223, 99],
+            [610, 233, 93],
+            [615, 231, 88],
+            [620, 233, 84],
+            [625, 235, 84],
+            [630, 231, 99],
+            [635, 218, 84],
+            [640, 214, 93],
+            [645, 219, 97],
+            [650, 221, 96],
+            [655, 200, 96],
+            [660, 207, 87],
+            [665, 183, 94],
+            [670, 188, 90],
+            [675, 179, 94],
+            [680, 166, 89],
+            [685, 145, 99],
+            [690, 132, 92],
+            [695, 124, 93],
+            [700, 129, 94],
+            [705, 132, 84],
+            [710, 106, 99],
+            [715, 99, 93],
+            [720, 75, 97],
+            [725, 64, 99],
+            [730, 55, 91],
+            [735, 39, 96],
+            [740, 29, 94],
+            [745, 25, 90],
+            [750, 30, 79],
+            [755, 23, 87],
+            [760, 12, 67],
+            [765, 18, 59],
+            [770, 24, 47],
+            [775, 20, 72],
+            [780, 44, 49],
+            [785, 19, 71],
+            [790, 23, 66],
+            [795, 17, 49],
+            [800, 16, 59],
+            [805, 25, 38],
+            [810, 18, 66],
+            [815, 22, 50],
+            [820, 31, 39],
+            [825, 13, 70],
+            [830, 17, 44],
+            [835, 14, 46],
+            [840, 21, 35],
+            [845, 11, 57],
+            [850, 18, 43],
+            [855, 23, 31],
+            [860, 12, 39],
+            [865, 18, 18],
+            [870, 5, 39],
+            [875, 5, 38],
+            [880, 2, 24],
+            [885, 3, 27],
+            [890, 7, 22],
+            [895, 3, 19],
+            [900, 1, 24],
+            [905, 5, 13],
+            [910, 0, 0]
+          ]
+        },
+        "transitionShare": 0,
+        "correctness": {
+          "resumes": 53,
+          "resumeFailures": 0,
+          "dashboardStudentMismatches": 0
+        },
+        "errors": {
+          "requests": {
+            "shape: HTTP 500": 1449,
+            "shape: network error": 2671
+          },
+          "shapeErrors": 0,
+          "classFailures": {},
+          "studentFailures": {}
+        },
+        "sync": {
+          "requests": 773729,
+          "requestsPerSecond": 849.799666990304,
+          "liveRequests": 769357,
+          "byView": {
+            "students": 2336,
+            "grades": 22222,
+            "session": 1517,
+            "my-grades": 706155,
+            "my-session": 41499
+          },
+          "catchUpMs": {
+            "count": 4370,
+            "p50": 8,
+            "p95": 273,
+            "p99": 665,
+            "max": 4321
+          }
+        },
+        "database": {
+          "samples": 173,
+          "peakConnections": 41,
+          "maxConnections": 200,
+          "peakActive": 13,
+          "peakWaitingOnLock": 5,
+          "peakCommitsPerSecond": 387,
+          "deadlocks": 0
+        },
+        "generator": {
+          "peakEventLoopDelayP99Ms": 645,
+          "peakCpuPercent": 132,
+          "peakOpenRequests": 2149,
+          "peakHeapMb": 1371,
+          "limited": true
+        }
+      },
+      "criteria": [
+        {
+          "id": "lost",
+          "label": "Lost submissions",
+          "bar": "0",
+          "measured": "0",
+          "pass": true
+        },
+        {
+          "id": "submit-p99",
+          "label": "Submit latency p99",
+          "bar": "< 1 s",
+          "measured": "2.73 s",
+          "pass": false
+        },
+        {
+          "id": "dashboard-p95",
+          "label": "Submit to grade on dashboard p95",
+          "bar": "< 30 s",
+          "measured": "256.05 s",
+          "pass": false
+        },
+        {
+          "id": "failures",
+          "label": "Grades that fail",
+          "bar": "< 0.1%",
+          "measured": "0.00% (0)",
+          "pass": true
+        }
+      ],
+      "verdict": {
+        "_tag": "ClientLimited"
+      },
+      "attribution": {
+        "submit-p99": "Database: submit transactions waiting on locks or connections",
+        "dashboard-p95": "Sync (Electric): outcome to dashboard"
+      },
+      "cleanup": {
+        "classSessions": 33,
+        "assignments": 33,
+        "teachers": 33,
+        "modelCalls": 8910
+      }
+    }
+  ]
+}
