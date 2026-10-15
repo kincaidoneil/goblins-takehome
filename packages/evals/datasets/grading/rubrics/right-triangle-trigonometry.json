@@ -1,0 +1,194 @@
+[
+  {
+    "itemId": "1a",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "Uses that the altitude splits the base in half: CD = 4. A trig route (8 sin 60°) earns this line instead."
+      },
+      {
+        "id": "L2",
+        "points": 1,
+        "description": "Sets up x² + 4² = 8², or x = 8 sin 60°."
+      },
+      {
+        "id": "L3",
+        "points": 1,
+        "description": "x = 4√3 (accept √48 or ≈ 6.93)."
+      }
+    ],
+    "notes": "Follow-through inside the problem: a wrong half-base carried correctly through the Pythagorean theorem earns L2 but not L3. A bare correct answer with no work earns the answer line only."
+  },
+  {
+    "itemId": "1b",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "60°."
+      }
+    ],
+    "notes": "Accept 60 with or without the degree sign."
+  },
+  {
+    "itemId": "2",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "Uses area = 1/2 · base · height with base 8 and the height from problem 1a (4√3, or the student's own 1a value)."
+      },
+      {
+        "id": "L2",
+        "points": 1,
+        "description": "Area = 16√3 ≈ 27.7 square units, or the correct product for the student's own height."
+      }
+    ],
+    "notes": "Follow-through on 1a applies (the worksheet does not state the link; Kincaid confirmed it). Units are not required. The formula (√3/4)·s² is also correct. A bare correct answer with no work earns the answer line only."
+  },
+  {
+    "itemId": "3a",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "Finds the side of square ABCD: 4/√2 = 2√2 (≈ 2.83)."
+      },
+      {
+        "id": "L2",
+        "points": 1,
+        "description": "AE = √2 (≈ 1.41), half the side."
+      }
+    ],
+    "notes": "Accept 2/√2. Follow-through inside the problem: halving a wrong side correctly earns L2 only if the student states the side. A bare correct answer with no work earns the answer line only."
+  },
+  {
+    "itemId": "3b",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "Uses side² with side 2√2, or diagonal² ÷ 2."
+      },
+      {
+        "id": "L2",
+        "points": 1,
+        "description": "Area = 8."
+      }
+    ],
+    "notes": "Units are not required. A bare correct answer with no work earns the answer line only."
+  },
+  {
+    "itemId": "4",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "Sets up 18 · sin 30°, or uses that the side opposite 30° is half the hypotenuse."
+      },
+      {
+        "id": "L2",
+        "points": 1,
+        "description": "9 feet."
+      }
+    ],
+    "notes": "Units are not required. Using cos 30° (≈ 15.6) loses both lines. A bare correct answer with no work earns the answer line only."
+  },
+  {
+    "itemId": "5",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "Sets up tan 30° = AB/6, or uses 30-60-90 ratios with AC as the longer leg."
+      },
+      {
+        "id": "L2",
+        "points": 1,
+        "description": "AB = 2√3 (accept 6/√3, 6 tan 30°, ≈ 3.46)."
+      }
+    ],
+    "notes": "A bare correct answer with no work earns the answer line only."
+  },
+  {
+    "itemId": "6",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "BD = 5, from BD² + 12² = 13²."
+      },
+      {
+        "id": "L2",
+        "points": 1,
+        "description": "AD = 25/12 (≈ 2.08), from similar triangles: AD/BD = BD/DC."
+      },
+      {
+        "id": "L3",
+        "points": 1,
+        "description": "Checks the answers with a different method (for example AB² = AD · AC, or trig ratios in two triangles)."
+      }
+    ],
+    "notes": "Accept AD = 2 1/12. L3 needs a second, different calculation, not a restatement."
+  },
+  {
+    "itemId": "7",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "JH = 9 sin 35° (or 9 cos 55°)."
+      },
+      {
+        "id": "L2",
+        "points": 1,
+        "description": "GJ = 9 cos 35° (or 9 sin 55°)."
+      }
+    ],
+    "notes": "Decimal values (JH ≈ 5.16, GJ ≈ 7.37) with the right method also earn each line."
+  },
+  {
+    "itemId": "8a",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "Shows 5² + 12² = 13²: 25 + 144 = 169."
+      }
+    ],
+    "notes": "Stating it is a triple without the arithmetic earns nothing."
+  },
+  {
+    "itemId": "8b",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "One acute angle ≈ 22.6° from a trig ratio (tan⁻¹(5/12), sin⁻¹(5/13) or cos⁻¹(12/13))."
+      },
+      {
+        "id": "L2",
+        "points": 1,
+        "description": "The other acute angle ≈ 67.4° (90 minus the first, or its own ratio)."
+      }
+    ],
+    "notes": "Accept answers within 1° (23° and 67°). Bare answers within 1° earn both lines."
+  },
+  {
+    "itemId": "9",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "QP = 2 (opposite the 30° angle: 4 sin 30°, or half the hypotenuse)."
+      },
+      {
+        "id": "L2",
+        "points": 1,
+        "description": "RQ = 2√3 (accept 4 cos 30° or ≈ 3.46)."
+      }
+    ],
+    "notes": "Swapping the legs (QP = 2√3, RQ = 2) loses both lines."
+  }
+]

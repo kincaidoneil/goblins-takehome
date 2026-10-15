@@ -55,7 +55,7 @@ const readKey = Effect.gen(function* () {
 });
 
 const Row = Schema.Struct({
-  purpose: Schema.Literal("grade", "extract", "rubric-chat", "eval", "calibration"),
+  purpose: Schema.Literal("grade", "extract", "rubric-chat", "report", "eval", "calibration"),
   calls: Schema.NumberFromString,
   failed: Schema.NumberFromString,
   cost_usd: Schema.NumberFromString,

@@ -118,7 +118,7 @@ const seed = (options: { readonly loadTestRunId?: string } = {}) =>
   });
 
 const join = (joinCode: JoinCode, name: string) =>
-  joinSession({ joinCode, name, pickAvatar: () => 7 });
+  joinSession({ joinCode, name, pickAvatar: (taken) => taken.length });
 
 const submit = (sessionId: string, studentId: string, problemId: string) =>
   submitWork({

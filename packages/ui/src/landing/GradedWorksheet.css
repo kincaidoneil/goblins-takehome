@@ -1,0 +1,203 @@
+@import "@fontsource/patrick-hand/400.css";
+
+.lp-sheet {
+  position: relative;
+  margin: 0;
+  padding-bottom: var(--gb-space-12);
+}
+
+.lp-sheet-paper {
+  padding: var(--gb-space-6);
+  border-radius: var(--gb-radius-lg);
+  background:
+    repeating-linear-gradient(transparent 0 31px, rgb(27 111 79 / 0.07) 31px 32px),
+    var(--gb-paper-0);
+  box-shadow: var(--gb-shadow-lg);
+  rotate: -1.5deg;
+}
+
+.lp-sheet-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gb-space-4);
+  padding-bottom: var(--gb-space-4);
+  border-bottom: 2px solid var(--gb-color-border);
+}
+
+.lp-sheet-kicker {
+  color: var(--gb-color-text-muted);
+  font-size: var(--gb-text-xs);
+  font-weight: var(--gb-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.lp-sheet-student {
+  display: flex;
+  align-items: center;
+  gap: var(--gb-space-2);
+  margin-top: var(--gb-space-1);
+  color: var(--gb-color-text-brand);
+  font-size: var(--gb-text-lg);
+  font-weight: var(--gb-weight-heavy);
+}
+
+.lp-sheet-total {
+  color: var(--gb-color-text-muted);
+  font-size: var(--gb-text-lg);
+  font-weight: var(--gb-weight-bold);
+  white-space: nowrap;
+}
+
+.lp-sheet-total {
+  text-align: right;
+}
+
+.lp-sheet-total small {
+  display: block;
+  font-size: var(--gb-text-xs);
+  font-weight: var(--gb-weight-medium);
+}
+
+.lp-sheet-total span {
+  color: var(--gb-color-text-brand);
+  font-size: var(--gb-text-2xl);
+  font-weight: var(--gb-weight-heavy);
+}
+
+.lp-sheet-rows {
+  display: grid;
+  gap: var(--gb-space-4);
+  margin: var(--gb-space-4) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: lp-sheet;
+}
+
+.lp-sheet-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gb-space-3);
+  counter-increment: lp-sheet;
+}
+
+.lp-sheet-row::before {
+  content: counter(lp-sheet) ".";
+  min-width: 1.4em;
+  color: var(--gb-color-text-muted);
+  font-size: var(--gb-text-sm);
+  font-weight: var(--gb-weight-bold);
+}
+
+.lp-sheet-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.lp-sheet-prompt {
+  margin: 0;
+  color: var(--gb-color-text);
+  font-size: var(--gb-text-sm);
+  line-height: var(--gb-leading-snug);
+}
+
+.lp-sheet-work {
+  margin: var(--gb-space-1) 0 0;
+  color: #34407a;
+  font-family: "Patrick Hand", "Comic Sans MS", cursive;
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+.lp-sheet-chip {
+  margin-top: 2px;
+  animation: lp-sheet-pop var(--gb-duration-slow) var(--gb-ease-spring);
+}
+
+.lp-sheet-reason {
+  margin: var(--gb-space-5) 0 0;
+  padding: var(--gb-space-3) var(--gb-space-4);
+  border-radius: var(--gb-radius-md);
+  background: var(--gb-color-info-soft);
+  color: var(--gb-color-info);
+  font-size: var(--gb-text-sm);
+  opacity: 0;
+  translate: 0 6px;
+  transition:
+    opacity var(--gb-duration-slow) var(--gb-ease-out),
+    translate var(--gb-duration-slow) var(--gb-ease-out);
+}
+
+.lp-sheet-reason[data-shown] {
+  opacity: 1;
+  translate: none;
+}
+
+.lp-sheet-class {
+  position: absolute;
+  right: calc(-1 * var(--gb-space-4));
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--gb-space-3);
+  padding: var(--gb-space-3) var(--gb-space-4);
+  border-radius: var(--gb-radius-lg);
+  background: var(--gb-color-surface);
+  box-shadow: var(--gb-shadow-lg);
+  rotate: 1.5deg;
+}
+
+.lp-sheet-avatars {
+  display: flex;
+}
+
+.lp-sheet-avatars > * + * {
+  margin-left: -10px;
+}
+
+.lp-sheet-avatars > * {
+  box-shadow: 0 0 0 2px var(--gb-paper-0);
+}
+
+.lp-sheet-class-text {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--gb-text-xs);
+  line-height: 1.35;
+}
+
+.lp-sheet-class-text strong {
+  color: var(--gb-color-text-brand);
+  font-size: var(--gb-text-sm);
+}
+
+.lp-sheet-class-text span {
+  color: var(--gb-color-text-muted);
+}
+
+@keyframes lp-sheet-pop {
+  from {
+    opacity: 0;
+    scale: 0.4;
+  }
+}
+
+@media (max-width: 520px) {
+  .lp-sheet-paper {
+    padding: var(--gb-space-4);
+    rotate: none;
+  }
+
+  .lp-sheet-class {
+    right: var(--gb-space-2);
+    left: var(--gb-space-2);
+    rotate: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-sheet-chip {
+    animation: none;
+  }
+}

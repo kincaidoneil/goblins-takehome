@@ -47,6 +47,8 @@ const describe = (error: ModelError): string => {
       return `the model provider returned an error (${error.status}): ${error.message}`;
     case "BadResponse":
       return `the model's answer was unusable: ${error.message}`;
+    case "BudgetExceeded":
+      return `the project's model budget is used up ($${error.spentUsd.toFixed(2)} of $${error.capUsd.toFixed(2)})`;
   }
 };
 

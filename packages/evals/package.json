@@ -1,0 +1,34 @@
+{
+  "name": "@goblins/evals",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./datasets": "./datasets/src/index.ts",
+    "./datasets/simulator": "./datasets/src/simulator.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "test": "vitest run",
+    "dataset:render": "node datasets/scripts/render.ts",
+    "dataset:check": "node datasets/scripts/check.ts"
+  },
+  "dependencies": {
+    "@goblins/templates": "workspace:*",
+    "effect": "^3.22.2"
+  },
+  "devDependencies": {
+    "@fontsource/caveat": "^5.3.0",
+    "@fontsource/gochi-hand": "^5.3.0",
+    "@fontsource/indie-flower": "^5.3.0",
+    "@fontsource/kalam": "^5.3.0",
+    "@fontsource/nanum-pen-script": "^5.3.0",
+    "@fontsource/patrick-hand": "^5.3.0",
+    "@fontsource/reenie-beanie": "^5.3.0",
+    "@fontsource/shadows-into-light": "^5.3.0",
+    "@napi-rs/canvas": "^1.0.11",
+    "@types/node": "^22.20.5",
+    "typescript": "7.0.2",
+    "vitest": "^3.2.4"
+  }
+}

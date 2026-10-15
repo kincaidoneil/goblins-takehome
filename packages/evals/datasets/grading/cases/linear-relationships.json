@@ -1,0 +1,3820 @@
+[
+  {
+    "id": "lr-1-correct",
+    "itemId": "1",
+    "tags": ["correct"],
+    "summary": "Finds $11 per pizza from the $33 difference, the $3 fee, and solves 11n + 3 = 80.",
+    "style": {
+      "font": "caveat",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "58 - 25 = 33",
+        "at": [60, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "3 more pizzas cost $33"
+      },
+      {
+        "_tag": "Text",
+        "text": "33 ÷ 3 = $11 per pizza"
+      },
+      {
+        "_tag": "Text",
+        "text": "fee: 25 - 2(11) = 25 - 22 = $3",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "11n + 3 = 80",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "11n = 77"
+      },
+      {
+        "_tag": "Text",
+        "text": "n = 7"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[7 pizzas]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "$11 per pizza, $3 fee, and 11n + 3 = 80 solved to 7 pizzas."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-1-table",
+    "itemId": "1",
+    "tags": ["correct", "alternate-method", "messy"],
+    "summary": "Builds a table counting up $11 per pizza and works back to the $3 fee; finds 7 pizzas at $80.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "black",
+      "mess": 2,
+      "size": 38
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "pizzas | cost",
+        "at": [60, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "2 | 25"
+      },
+      {
+        "_tag": "Text",
+        "text": "3 | 36"
+      },
+      {
+        "_tag": "Text",
+        "text": "4 | 47"
+      },
+      {
+        "_tag": "Text",
+        "text": "5 | 58"
+      },
+      {
+        "_tag": "Text",
+        "text": "6 | 69"
+      },
+      {
+        "_tag": "Text",
+        "text": "7 | 80"
+      },
+      {
+        "_tag": "Path",
+        "points": [[150, 90], [150, 470]]
+      },
+      {
+        "_tag": "Text",
+        "text": "goes up $11 each pizza",
+        "at": [470, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "1 pizza = 11"
+      },
+      {
+        "_tag": "Text",
+        "text": "fee: 25 - 22 = 3",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "so fee is $3"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[7 pizzas]]",
+        "at": [520, 420],
+        "size": 46
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "Table shows $11 per pizza and the $3 fee, and reaches $80 at 7 pizzas; rubric notes accept a table."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-1-per-pizza",
+    "itemId": "1",
+    "tags": ["common-mistake", "partial"],
+    "summary": "Divides $25 by 2 for $12.50 a pizza, ignoring the delivery fee, then 80 ÷ 12.50 = 6.4, about 6 pizzas.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "25 ÷ 2 = 12.50 for each pizza",
+        "at": [70, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "80 ÷ 12.50 = 6.4",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "[[about 6 pizzas]]",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "Either",
+      "reason": "$12.50 per pizza ignores the fee and no fee is found; \"about 6\" is not a solution of the cost model, so no line is earned."
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Decided 2026-10-15: 0/0/0; no fee is found and \"about 6\" is not a solution of any cost model the student wrote."
+    }
+  },
+  {
+    "id": "lr-1-fee-one-pizza",
+    "itemId": "1",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Gets $11 per pizza but subtracts only one pizza for the fee ($14), then solves 11p + 14 = 80 to get 6.",
+    "style": {
+      "font": "shadows-into-light",
+      "ink": "purple",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "58 - 25 = 33",
+        "at": [80, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "33 ÷ 3 = $11 each"
+      },
+      {
+        "_tag": "Text",
+        "text": "fee: 25 - 11 = $14"
+      },
+      {
+        "_tag": "Text",
+        "text": "11p + 14 = 80",
+        "gap": 25
+      },
+      {
+        "_tag": "Text",
+        "text": "11p = 66"
+      },
+      {
+        "_tag": "Text",
+        "text": "p = 6"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[6 pizzas]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "$11 per pizza is right; the fee subtracts one pizza instead of two ($14, not $3); 11p + 14 = 80 is solved correctly, so L3 follows through."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-1-answer-only",
+    "itemId": "1",
+    "tags": ["answer-only"],
+    "summary": "Writes only the boxed answer 7 pizzas.",
+    "style": {
+      "font": "reenie-beanie",
+      "ink": "black",
+      "mess": 1,
+      "size": 50
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "[[7 pizzas]]",
+        "at": [380, 320]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Right answer with no price or fee shown; a bare answer earns L3 only."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-1-blank",
+    "itemId": "1",
+    "tags": ["blank"],
+    "summary": "Leaves the board empty.",
+    "style": {
+      "font": "kalam",
+      "ink": "blue"
+    },
+    "board": [],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Nothing written."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-2a-correct",
+    "itemId": "2a",
+    "tags": ["correct"],
+    "summary": "Splits the sugar 6 and 6 and multiplies by each recipe's flour-per-sugar rate: Lin 3, Noah 4.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "12 ÷ 2 = 6 cups sugar each",
+        "at": [60, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "Lin: 2 sugar → 1 flour",
+        "gap": 25
+      },
+      {
+        "_tag": "Text",
+        "text": "6 × 1/2 = [[3 cups flour]]",
+        "indent": 40
+      },
+      {
+        "_tag": "Text",
+        "text": "Noah: 3 sugar → 2 flour",
+        "gap": 25
+      },
+      {
+        "_tag": "Text",
+        "text": "6 × 2/3 = [[4 cups flour]]",
+        "indent": 40
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "6 cups of sugar each; Lin needs 3 cups of flour and Noah 4."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-2a-table",
+    "itemId": "2a",
+    "tags": ["correct", "alternate-method"],
+    "summary": "Extends a sugar/flour table for each recipe down to 6 cups of sugar: Lin 3, Noah 4.",
+    "style": {
+      "font": "kalam",
+      "ink": "black",
+      "mess": 1,
+      "size": 36
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "each gets 6 cups sugar",
+        "at": [60, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "Noah",
+        "at": [80, 130]
+      },
+      {
+        "_tag": "Text",
+        "text": "sugar | flour"
+      },
+      {
+        "_tag": "Text",
+        "text": "1 1/2 | 1"
+      },
+      {
+        "_tag": "Text",
+        "text": "3 | 2"
+      },
+      {
+        "_tag": "Text",
+        "text": "4 1/2 | 3"
+      },
+      {
+        "_tag": "Text",
+        "text": "6 | 4"
+      },
+      {
+        "_tag": "Text",
+        "text": "Lin",
+        "at": [560, 130]
+      },
+      {
+        "_tag": "Text",
+        "text": "sugar | flour"
+      },
+      {
+        "_tag": "Text",
+        "text": "2 | 1"
+      },
+      {
+        "_tag": "Text",
+        "text": "4 | 2"
+      },
+      {
+        "_tag": "Text",
+        "text": "6 | 3"
+      },
+      {
+        "_tag": "Text",
+        "text": "Lin 3 cups flour, Noah 4 cups flour",
+        "at": [60, 560]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Unit-rate tables reach 6 cups of sugar: Lin 3 cups of flour, Noah 4."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-2a-flipped-lin",
+    "itemId": "2a",
+    "tags": ["common-mistake", "partial"],
+    "summary": "Reads Lin's graph as 2 cups of flour per cup of sugar (12 cups); Noah is right at 4.",
+    "style": {
+      "font": "caveat",
+      "ink": "black",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "6 cups of sugar each",
+        "at": [60, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "Lin: 2 flour for every 1 sugar",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "6 × 2 = 12 cups flour"
+      },
+      {
+        "_tag": "Text",
+        "text": "Noah: 3 sugar uses 2 flour",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "6 ÷ 3 = 2, 2 × 2 = 4 cups flour"
+      },
+      {
+        "_tag": "Text",
+        "text": "Lin 12, Noah 4",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Lin's rate is flipped (2 flour per sugar instead of 1/2), so 12 is wrong; Noah's 4 cups is right."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-2a-whole-bag",
+    "itemId": "2a",
+    "tags": ["common-mistake", "incorrect"],
+    "summary": "Uses all 12 cups of sugar for each person instead of 6: Lin 6, Noah 8.",
+    "style": {
+      "font": "nanum-pen-script",
+      "ink": "blue",
+      "mess": 1,
+      "size": 46
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Lin: 12 × 1/2 = 6 cups flour",
+        "at": [80, 140]
+      },
+      {
+        "_tag": "Text",
+        "text": "Noah: 12 × 2/3 = 8 cups flour",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Rates are right but the bag is not split, so Lin 6 and Noah 8 are both wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-2a-near-blank",
+    "itemId": "2a",
+    "tags": ["near-blank"],
+    "summary": "Divides the sugar in half and stops with a question mark.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "black",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "12 ÷ 2 = 6",
+        "at": [90, 90]
+      },
+      {
+        "_tag": "Text",
+        "text": "Lin ?",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Only 6 cups each; no flour amounts."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-2b-correct",
+    "itemId": "2b",
+    "tags": ["correct"],
+    "summary": "Gives each 5 cups of flour and uses sugar-per-flour rates: Lin 10, Noah 7.5.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "purple",
+      "mess": 1,
+      "size": 38
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "10 ÷ 2 = 5 cups flour each",
+        "at": [60, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "Lin: 1 flour → 2 sugar",
+        "gap": 25
+      },
+      {
+        "_tag": "Text",
+        "text": "5 × 2 = 10",
+        "indent": 40
+      },
+      {
+        "_tag": "Text",
+        "text": "Noah: 1 flour → 1.5 sugar",
+        "gap": 25
+      },
+      {
+        "_tag": "Text",
+        "text": "5 × 1.5 = 7.5",
+        "indent": 40
+      },
+      {
+        "_tag": "Text",
+        "text": "[[Lin 10 cups, Noah 7.5 cups]]",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "5 cups of flour each; Lin 10 cups of sugar, Noah 7.5."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-2b-flipped",
+    "itemId": "2b",
+    "tags": ["common-mistake", "incorrect"],
+    "summary": "Multiplies 5 cups of flour by the flour-per-sugar rates from part a: Lin 2.5, Noah 3 1/3.",
+    "style": {
+      "font": "kalam",
+      "ink": "black",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "5 cups flour each",
+        "at": [60, 70]
+      },
+      {
+        "_tag": "Text",
+        "text": "Lin: 5 × 1/2 = 2.5 cups sugar",
+        "gap": 25
+      },
+      {
+        "_tag": "Text",
+        "text": "Noah: 5 × 2/3 = 3 1/3 cups sugar",
+        "gap": 25
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Used flour per sugar (1/2, 2/3) instead of sugar per flour, so both amounts are wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-2b-fraction",
+    "itemId": "2b",
+    "tags": ["correct", "messy"],
+    "summary": "Messy but correct: Lin 5 · 2 = 10 and Noah 5 · 3/2 = 15/2, left as an improper fraction.",
+    "style": {
+      "font": "caveat",
+      "ink": "blue",
+      "mess": 2,
+      "size": 44
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "5 flour each",
+        "at": [70, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "Lin  5 · 2 = 10",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "Noah  5 · \\frac{3}{2} = \\frac{15}{2}",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "Lin 10 sugar, Noah 15/2 sugar",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "Lin 10 and Noah 15/2 (= 7.5, accepted by the notes); readable despite the handwriting."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-2b-overwrite",
+    "itemId": "2b",
+    "tags": ["messy", "correct"],
+    "summary": "Lin 10 is clear; Noah's final answer has its first digit written over, reading as 7.5 or 1.5.",
+    "style": {
+      "font": "reenie-beanie",
+      "ink": "black",
+      "mess": 3,
+      "size": 48
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "each 5 flour",
+        "at": [70, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "Lin  5 × 2 = 10",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "Noah  5 × 1.5 =",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "Noah:",
+        "at": [70, 340]
+      },
+      {
+        "_tag": "Text",
+        "text": "7.5",
+        "at": [230, 340]
+      },
+      {
+        "_tag": "Text",
+        "text": "1",
+        "at": [232, 340]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Lin 10 earns L1; Noah's answer is either 7.5 or 1.5 because the digit is written over, so the teacher should look.",
+      "scoreOn": "flag"
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). The deciding digit of Noah's answer is overwritten (7 or 1). Chose L2 = 1 because the line above sets up 5 × 1.5, which gives 7.5; a teacher reading 1.5 would give 0."
+    }
+  },
+  {
+    "id": "lr-3a-correct",
+    "itemId": "3a",
+    "tags": ["correct"],
+    "summary": "Computes 500 + 50 · 20 and 500 + 50 · 50.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "black",
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "20 hrs: 500 + 50·20 = 500 + 1000 = $1500",
+        "at": [50, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "50 hrs: 500 + 50·50 = 500 + 2500 = $3000",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Both costs are right: $1,500 and $3,000."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-3a-forgot-flat-rate",
+    "itemId": "3a",
+    "tags": ["common-mistake", "incorrect"],
+    "summary": "Multiplies $50 by the hours and leaves out the $500 flat rate: $1,000 and $2,500.",
+    "style": {
+      "font": "caveat",
+      "ink": "black",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "20 hours: 50 × 20 = $1000",
+        "at": [80, 100]
+      },
+      {
+        "_tag": "Text",
+        "text": "50 hours: 50 × 50 = $2500",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Drops the $500 flat rate, so $1,000 and $2,500 are both wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-3a-fee-every-hour",
+    "itemId": "3a",
+    "tags": ["common-mistake", "incorrect", "messy"],
+    "summary": "Adds the $500 to the hourly rate ($550 an hour): $11,000 and $27,500.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "blue",
+      "mess": 2
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "500 + 50 = 550 an hour",
+        "at": [70, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "20 hr: 550 × 20 = 11,000",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "50 hr: 550 × 50 = 27,500",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "Either",
+      "reason": "Charges the $500 every hour ($550/hr), so $11,000 and $27,500 are both wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-3a-answer-only",
+    "itemId": "3a",
+    "tags": ["correct", "answer-only"],
+    "summary": "Writes only the two costs, $1500 and $3000.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "purple",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "[[$1500]]   and   [[$3000]]",
+        "at": [200, 300]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Both costs are right; the part does not ask for work."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-3a-one-wrong",
+    "itemId": "3a",
+    "tags": ["partial"],
+    "summary": "Gets $1,500 for 20 hours but multiplies 50 · 50 as 250, giving $750 for 50 hours.",
+    "style": {
+      "font": "kalam",
+      "ink": "black",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "500 + 50(20) = 500 + 1000 = 1500",
+        "at": [60, 90]
+      },
+      {
+        "_tag": "Text",
+        "text": "500 + 50(50) = 500 + 250 = 750",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "$1,500 is right; 50 · 50 was taken as 250, so $750 for 50 hours is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-3b-correct",
+    "itemId": "3b",
+    "tags": ["correct", "diagram"],
+    "summary": "Sketches axes, plots and labels (20, 1500) and (50, 3000), and draws the line from (0, 500).",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "black",
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Graph",
+        "at": [150, 70],
+        "size": [700, 560],
+        "x": {
+          "min": 0,
+          "max": 60,
+          "step": 10,
+          "label": "hours"
+        },
+        "y": {
+          "min": 0,
+          "max": 4000,
+          "step": 1000,
+          "label": "cost ($)"
+        },
+        "lines": [[[0, 500], [60, 3500]]],
+        "points": [
+          {
+            "at": [20, 1500],
+            "label": "(20, 1500)"
+          },
+          {
+            "at": [50, 3000],
+            "label": "(50, 3000)"
+          }
+        ]
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "3a",
+        "caseId": "lr-3a-correct"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Both points plotted and labeled; the straight line meets the y-axis at 500."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-3b-ft-forgot-fee",
+    "itemId": "3b",
+    "tags": ["follow-through", "diagram"],
+    "summary": "Plots its own part-a values (20, 1000) and (50, 2500), labels them, and draws the line through them from the origin.",
+    "style": {
+      "font": "caveat",
+      "ink": "black",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Graph",
+        "at": [160, 60],
+        "size": [700, 560],
+        "x": {
+          "min": 0,
+          "max": 60,
+          "step": 10,
+          "label": "hours"
+        },
+        "y": {
+          "min": 0,
+          "max": 3000,
+          "step": 500,
+          "label": "cost"
+        },
+        "lines": [[[0, 0], [60, 3000]]],
+        "points": [
+          {
+            "at": [20, 1000],
+            "label": "(20, 1000)"
+          },
+          {
+            "at": [50, 2500],
+            "label": "(50, 2500)"
+          }
+        ]
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "3a",
+        "caseId": "lr-3a-forgot-flat-rate"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Follow-through: its own points (20, 1000) and (50, 2500) are plotted, labeled, and joined by a line that reaches the axis."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-3b-misses-points",
+    "itemId": "3b",
+    "tags": ["follow-through", "partial", "diagram"],
+    "summary": "Plots and labels its own part-a points (20, 1000) and (50, 2500) but draws the line from (0, 500) to (60, 3500), missing both points.",
+    "style": {
+      "font": "caveat",
+      "ink": "black",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Graph",
+        "at": [140, 60],
+        "size": [600, 540],
+        "x": {
+          "min": 0,
+          "max": 60,
+          "step": 10,
+          "label": "hours"
+        },
+        "y": {
+          "min": 0,
+          "max": 4000,
+          "step": 1000,
+          "label": "cost"
+        },
+        "lines": [[[0, 500], [60, 3500]]],
+        "points": [
+          {
+            "at": [20, 1000],
+            "label": "(20, 1000)"
+          },
+          {
+            "at": [50, 2500],
+            "label": "(50, 2500)"
+          }
+        ]
+      },
+      {
+        "_tag": "Text",
+        "text": "starts",
+        "at": [800, 420]
+      },
+      {
+        "_tag": "Text",
+        "text": "at 500"
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "3a",
+        "caseId": "lr-3a-forgot-flat-rate"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Its own points are plotted and labeled, but the line starts at 500 and passes through neither point, so no L2."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-3b-ft-fee-every-hour",
+    "itemId": "3b",
+    "tags": ["follow-through", "diagram", "messy"],
+    "summary": "Draws its own axes to 30,000, plots and labels (20, 11000) and (50, 27500) from part a, and draws the line from the origin.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "blue",
+      "mess": 2
+    },
+    "board": [
+      {
+        "_tag": "Graph",
+        "at": [170, 50],
+        "size": [680, 580],
+        "x": {
+          "min": 0,
+          "max": 60,
+          "step": 10,
+          "label": "hours"
+        },
+        "y": {
+          "min": 0,
+          "max": 30000,
+          "step": 5000,
+          "label": "$"
+        },
+        "lines": [[[0, 0], [54, 29700]]],
+        "points": [
+          {
+            "at": [20, 11000],
+            "label": "(20, 11000)"
+          },
+          {
+            "at": [50, 27500],
+            "label": "(50, 27500)"
+          }
+        ]
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "3a",
+        "caseId": "lr-3a-fee-every-hour"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "Follow-through: its own points from part a are in the right places on its own scale, labeled, and joined by a line to the axis."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-3b-unlabeled",
+    "itemId": "3b",
+    "tags": ["partial", "diagram"],
+    "summary": "Plots (20, 1500) and (50, 3000) and draws the line from (0, 500), but does not label the points.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "purple",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Graph",
+        "at": [150, 70],
+        "size": [720, 560],
+        "x": {
+          "min": 0,
+          "max": 60,
+          "step": 10,
+          "label": "hours"
+        },
+        "y": {
+          "min": 0,
+          "max": 4000,
+          "step": 1000,
+          "label": "dollars"
+        },
+        "lines": [[[0, 500], [60, 3500]]],
+        "points": [
+          {
+            "at": [20, 1500]
+          },
+          {
+            "at": [50, 3000]
+          }
+        ]
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "3a",
+        "caseId": "lr-3a-answer-only"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Points and line are right, but the points carry no labels, so no L3."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-3b-axes-only",
+    "itemId": "3b",
+    "tags": ["near-blank", "diagram"],
+    "summary": "Draws empty axes and a question mark; no points or line.",
+    "style": {
+      "font": "kalam",
+      "ink": "black",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Graph",
+        "at": [160, 80],
+        "size": [640, 520],
+        "x": {
+          "min": 0,
+          "max": 60,
+          "step": 10,
+          "label": "hours"
+        },
+        "y": {
+          "min": 0,
+          "max": 4000,
+          "step": 1000,
+          "label": "cost"
+        }
+      },
+      {
+        "_tag": "Text",
+        "text": "?",
+        "at": [460, 300],
+        "size": 60
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "3a",
+        "caseId": "lr-3a-one-wrong"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Axes only: no points, line or labels."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-3c-correct",
+    "itemId": "3c",
+    "tags": ["correct"],
+    "summary": "Computes the slope from the two labeled points as 1500 / 30 = 50 and says the cost rises $50 for each hour.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "black",
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "slope = \\frac{3000 - 1500}{50 - 20} = \\frac{1500}{30} = 50",
+        "at": [60, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "The cost goes up $50 for",
+        "gap": 40
+      },
+      {
+        "_tag": "Text",
+        "text": "every hour of labor."
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "3b",
+        "caseId": "lr-3b-correct"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Slope 50, explained as $50 more per hour of labor."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-3c-total-over-hours",
+    "itemId": "3c",
+    "tags": ["common-mistake", "partial"],
+    "summary": "Divides the total cost by the hours (3000 ÷ 50 = 60) and calls 60 the cost per hour.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "black",
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "3000 ÷ 50 = 60",
+        "at": [70, 100]
+      },
+      {
+        "_tag": "Text",
+        "text": "slope is 60",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "it costs $60 for each hour",
+        "gap": 20
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "3b",
+        "caseId": "lr-3b-correct"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "60 ignores the $500 starting point, so the slope is wrong; the per-hour meaning is given for that rate."
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Decided 2026-10-15: L2 = 1; the rubric credits the per-hour meaning of the student's own slope, and L1 already takes the point for the wrong slope."
+    }
+  },
+  {
+    "id": "lr-3c-cost-only",
+    "itemId": "3c",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Gets slope 50 from rise 1500 over run 30, but explains it only as 'the cost'.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "purple",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "rise = 1500   run = 30",
+        "at": [70, 90]
+      },
+      {
+        "_tag": "Text",
+        "text": "1500 / 30 = 50",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "slope = 50, it's the cost",
+        "gap": 30
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "3b",
+        "caseId": "lr-3b-unlabeled"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Slope 50 is right; 'the cost' has no per-hour meaning, which the notes say is not enough."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-3c-ft-fee-every-hour",
+    "itemId": "3c",
+    "tags": ["follow-through", "messy"],
+    "summary": "Uses its own points (20, 11000) and (50, 27500): slope 16500 / 30 = 550, $550 more each hour.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "blue",
+      "mess": 2
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "\\frac{27500 - 11000}{50 - 20} = \\frac{16500}{30} = 550",
+        "at": [60, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "slope = 550",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "$550 more for each hour",
+        "gap": 10
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "3b",
+        "caseId": "lr-3b-ft-fee-every-hour"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "Follow-through: 550 is the slope of its own line, explained as dollars per hour."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-3c-ft-slip",
+    "itemId": "3c",
+    "tags": ["follow-through", "incorrect", "messy"],
+    "summary": "Uses its own points but divides 16500 by 30 as 55, and says the slope is 'the cost of painting'.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "blue",
+      "mess": 2
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "\\frac{27500 - 11000}{50 - 20} = \\frac{16500}{30} = 55",
+        "at": [60, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "slope = 55",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "it is the cost of painting",
+        "gap": 10
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "3b",
+        "caseId": "lr-3b-ft-fee-every-hour"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "Either",
+      "reason": "Its own line's slope is 550, not 55; 'the cost of painting' has no per-hour meaning."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-3c-overwrite",
+    "itemId": "3c",
+    "tags": ["follow-through", "messy"],
+    "summary": "Sets up 1500 / 30 from its own points; the slope digit is written over (50 or 30), and the meaning refers to 'that many dollars' per hour.",
+    "style": {
+      "font": "caveat",
+      "ink": "black",
+      "mess": 3
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "\\frac{2500 - 1000}{50 - 20} = \\frac{1500}{30}",
+        "at": [60, 70]
+      },
+      {
+        "_tag": "Text",
+        "text": "slope =",
+        "at": [60, 260],
+        "size": 44
+      },
+      {
+        "_tag": "Text",
+        "text": "50",
+        "at": [250, 262],
+        "size": 44
+      },
+      {
+        "_tag": "Text",
+        "text": "3",
+        "at": [252, 262],
+        "size": 44
+      },
+      {
+        "_tag": "Text",
+        "text": "each hour costs that many",
+        "at": [60, 360]
+      },
+      {
+        "_tag": "Text",
+        "text": "more dollars"
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "3b",
+        "caseId": "lr-3b-ft-forgot-fee"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "The slope's first digit is written over, 5 or 3; the per-hour meaning points to that number, so the teacher should read it.",
+      "scoreOn": "flag"
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). The deciding digit is overwritten: 50 (which 1500/30 gives) or 30 (the run). Chose 1, 1 on the 50 reading; a teacher reading 30 would give 0, 0."
+    }
+  },
+  {
+    "id": "lr-4-correct",
+    "itemId": "4",
+    "tags": ["correct"],
+    "summary": "Finds slope 2/4 = 1/2, substitutes (2, 5) to get b = 4, and writes y = 1/2 x + 4.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "black",
+      "mess": 1,
+      "size": 38
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "m = \\frac{7 - 5}{6 - 2} = \\frac{2}{4} = \\frac{1}{2}",
+        "at": [60, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "y = mx + b",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "5 = \\frac{1}{2}(2) + b"
+      },
+      {
+        "_tag": "Text",
+        "text": "5 = 1 + b"
+      },
+      {
+        "_tag": "Text",
+        "text": "b = 4"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y = 1/2 x + 4]]",
+        "gap": 15
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Slope 1/2, intercept 4, equation y = 1/2 x + 4."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-4-point-slope",
+    "itemId": "4",
+    "tags": ["correct", "alternate-method"],
+    "summary": "Finds slope 1/2 and writes point-slope form through (6, 7).",
+    "style": {
+      "font": "kalam",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "slope = (7 - 5)/(6 - 2) = 2/4 = 1/2",
+        "at": [60, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "use point (6, 7)",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y - 7 = 1/2(x - 6)]]",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Slope 1/2; point-slope form through (6, 7) earns L2 and L3 by the notes."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-4-run-over-rise",
+    "itemId": "4",
+    "tags": ["common-mistake", "partial"],
+    "summary": "Puts the x-change over the y-change for slope 2, then finds b = 1 through (2, 5): y = 2x + 1.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "black",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "slope = \\frac{6 - 2}{7 - 5} = \\frac{4}{2} = 2",
+        "at": [60, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "5 = 2(2) + b",
+        "gap": 15
+      },
+      {
+        "_tag": "Text",
+        "text": "5 = 4 + b"
+      },
+      {
+        "_tag": "Text",
+        "text": "b = 1"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y = 2x + 1]]",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Slope is run over rise (2, not 1/2); b = 1 is right for slope 2 through (2, 5); the equation is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-4-b-is-5",
+    "itemId": "4",
+    "tags": ["common-mistake", "partial"],
+    "summary": "Finds slope 1/2 but uses the 5 from (2, 5) as the intercept: y = 1/2 x + 5.",
+    "style": {
+      "font": "caveat",
+      "ink": "purple",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "slope = 2/4 = 1/2",
+        "at": [80, 100]
+      },
+      {
+        "_tag": "Text",
+        "text": "starts at 5",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y = 1/2x + 5]]",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Slope 1/2 is right; 5 is the y-value at x = 2, not the intercept, so the equation is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-4-crossed",
+    "itemId": "4",
+    "tags": ["correct", "crossed-out", "messy"],
+    "summary": "Crosses out a run-over-rise slope of 2, redoes it as 1/2, finds b = 4 from (6, 7) and circles y = .5x + 4.",
+    "style": {
+      "font": "shadows-into-light",
+      "ink": "black",
+      "mess": 2
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "~~m = 4/2 = 2~~",
+        "at": [60, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "m = \\frac{7 - 5}{6 - 2} = \\frac{1}{2}",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "7 = 1/2(6) + b",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "7 = 3 + b"
+      },
+      {
+        "_tag": "Text",
+        "text": "b = 4"
+      },
+      {
+        "_tag": "Text",
+        "text": "y = .5x + 4",
+        "at": [80, 560]
+      },
+      {
+        "_tag": "Ring",
+        "at": [55, 545],
+        "size": [280, 90]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "Crossed-out slope is replaced by 1/2; b = 4 from (6, 7); y = 0.5x + 4 is accepted."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-5a-correct",
+    "itemId": "5a",
+    "tags": ["correct", "messy"],
+    "summary": "Reads 1.2 miles for Tyler at 10 minutes, solves 10 = 8.5x for Elena (≈ 1.18), and gives Tyler by 0.02 miles.",
+    "style": {
+      "font": "nanum-pen-script",
+      "ink": "blue",
+      "mess": 2,
+      "size": 46
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Tyler: graph at 10 min is 1.2 mi",
+        "at": [60, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "Elena: 10 = 8.5x",
+        "gap": 15
+      },
+      {
+        "_tag": "Text",
+        "text": "x = 10 ÷ 8.5 ≈ 1.18 mi"
+      },
+      {
+        "_tag": "Text",
+        "text": "Tyler ran farther",
+        "gap": 15
+      },
+      {
+        "_tag": "Text",
+        "text": "1.2 - 1.18 = 0.02 mi farther"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "Tyler; 1.2 and about 1.18 miles; about 0.02 miles farther."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-5a-elena-85",
+    "itemId": "5a",
+    "tags": ["common-mistake", "incorrect"],
+    "summary": "Puts 10 in for x (miles) in Elena's equation, gets 85, and says Elena ran 83.8 miles farther.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "black",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Elena: y = 8.5(10) = 85",
+        "at": [60, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "Tyler: 1.2",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "Elena ran way farther",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "85 - 1.2 = 83.8"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "10 minutes is y, not x; Elena's 85 is wrong, so the runner and the difference are wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-5a-no-difference",
+    "itemId": "5a",
+    "tags": ["partial"],
+    "summary": "Finds both distances and picks Tyler but never says how much farther.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "purple",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Tyler: 1.2 miles (graph)",
+        "at": [60, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "Elena: 10 ÷ 8.5 = 1.18 miles",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "[[Tyler]] because 1.2 > 1.18",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Tyler, with both distances, but no difference given."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-5a-compares-time",
+    "itemId": "5a",
+    "tags": ["off-rubric", "partial"],
+    "summary": "Compares times instead of distances: Elena needs 10.2 minutes for 1.2 miles, so Tyler is 'ahead by 0.2 minutes'.",
+    "style": {
+      "font": "kalam",
+      "ink": "blue",
+      "mess": 1,
+      "size": 38
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Tyler goes 1.2 mi in 10 min",
+        "at": [60, 70]
+      },
+      {
+        "_tag": "Text",
+        "text": "Elena: 8.5 × 1.2 = 10.2 min for 1.2 mi",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "so Elena is slower, Tyler ran farther",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "Tyler is ahead by 0.2 minutes",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Picks Tyler with valid reasoning, but never finds Elena's distance and gives the gap in minutes, not miles."
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 3). The rubric expects distances; this compares times for the same 1.2 miles. Chose 1, 0, 0. A teacher could give L2 for Tyler's 1.2 and an equivalent comparison."
+    }
+  },
+  {
+    "id": "lr-5a-blank",
+    "itemId": "5a",
+    "tags": ["blank"],
+    "summary": "Leaves the board empty.",
+    "style": {
+      "font": "caveat",
+      "ink": "black"
+    },
+    "board": [],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Nothing written."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-5b-correct",
+    "itemId": "5b",
+    "tags": ["correct"],
+    "summary": "Tyler 10 ÷ 1.2 = 8.33 minutes per mile; Elena 8.5 from the equation.",
+    "style": {
+      "font": "caveat",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Tyler: 10 min ÷ 1.2 mi = 8.33",
+        "at": [60, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "min per mile",
+        "indent": 120
+      },
+      {
+        "_tag": "Text",
+        "text": "Elena: y = 8.5x so 8.5 min per mile",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Tyler about 8.33 and Elena 8.5 minutes per mile."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-5b-mi-per-min",
+    "itemId": "5b",
+    "tags": ["common-mistake", "incorrect"],
+    "summary": "Computes miles per minute instead of minutes per mile: Tyler 0.12, Elena 0.118.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "black",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Tyler 1.2 ÷ 10 = 0.12",
+        "at": [60, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "Elena 1 ÷ 8.5 = 0.118",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "Tyler: 0.12 mi per min",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "Elena: 0.118 mi per min"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Both rates are miles per minute, the inverse of the pace asked for."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-5b-misread-graph",
+    "itemId": "5b",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Misreads Tyler's line as 12 minutes at 1.4 miles (it is about 11.7), giving 8.57 minutes per mile; Elena 8.5 is right.",
+    "style": {
+      "font": "shadows-into-light",
+      "ink": "purple",
+      "mess": 1,
+      "size": 42
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Tyler: at 1.4 miles about 12 min",
+        "at": [60, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "12 ÷ 1.4 = 8.57 min/mile",
+        "gap": 15
+      },
+      {
+        "_tag": "Text",
+        "text": "Elena: 8.5 min/mile",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Tyler's pace comes from a misread point and is wrong (8.57, not 8 1/3); Elena's 8.5 is right."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-5b-tyler-times",
+    "itemId": "5b",
+    "tags": ["partial"],
+    "summary": "Multiplies 10 × 1.2 for Tyler (12 minutes per mile); Elena 8.5 is right.",
+    "style": {
+      "font": "reenie-beanie",
+      "ink": "blue",
+      "mess": 1,
+      "size": 48
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Tyler 10 × 1.2 = 12 min/mi",
+        "at": [80, 120]
+      },
+      {
+        "_tag": "Text",
+        "text": "Elena 8.5 min/mi",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Tyler's pace multiplies instead of divides (12, not 8 1/3); Elena's 8.5 is right."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-5c-correct",
+    "itemId": "5c",
+    "tags": ["correct"],
+    "summary": "Tyler, because 8.33 < 8.5 means less time for each mile.",
+    "style": {
+      "font": "caveat",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "[[Tyler]] ran faster",
+        "at": [60, 100]
+      },
+      {
+        "_tag": "Text",
+        "text": "8.33 < 8.5 so he takes less time",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "to run each mile"
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "5b",
+        "caseId": "lr-5b-correct"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Tyler, because fewer minutes per mile is faster."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-5c-bigger-faster",
+    "itemId": "5c",
+    "tags": ["common-mistake", "incorrect"],
+    "summary": "Picks Elena because her pace number 8.5 is bigger, treating a bigger pace as faster.",
+    "style": {
+      "font": "caveat",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Elena, because 8.5 is bigger",
+        "at": [60, 120]
+      },
+      {
+        "_tag": "Text",
+        "text": "than 8.33 so her pace is faster",
+        "gap": 10
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "5b",
+        "caseId": "lr-5b-correct"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "More minutes per mile is slower, so Elena and the reasoning are both wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-5c-ft-misread",
+    "itemId": "5c",
+    "tags": ["follow-through"],
+    "summary": "From its own paces (Tyler 8.57, Elena 8.5), picks Elena because she needs fewer minutes per mile.",
+    "style": {
+      "font": "shadows-into-light",
+      "ink": "purple",
+      "mess": 1,
+      "size": 42
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Elena is faster",
+        "at": [60, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "her pace 8.5 is less than Tyler's 8.57",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "less minutes each mile = faster",
+        "gap": 20
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "5b",
+        "caseId": "lr-5b-misread-graph"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Follow-through: with its own paces, Elena has fewer minutes per mile, and the reasoning is right."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-5c-misread-bigger",
+    "itemId": "5c",
+    "tags": ["follow-through", "partial"],
+    "summary": "From its own paces (Tyler 8.57, Elena 8.5), picks Tyler because 8.57 is bigger.",
+    "style": {
+      "font": "shadows-into-light",
+      "ink": "purple",
+      "mess": 1,
+      "size": 42
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Tyler, 8.57 > 8.5",
+        "at": [70, 120]
+      },
+      {
+        "_tag": "Text",
+        "text": "so he's faster",
+        "gap": 20
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "5b",
+        "caseId": "lr-5b-misread-graph"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "Either",
+      "reason": "By its own paces (Tyler 8.57, Elena 8.5) Elena is faster; naming Tyler because 8.57 is bigger gets both the runner and the reasoning wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-5c-mph",
+    "itemId": "5c",
+    "tags": ["alternate-method", "off-rubric"],
+    "summary": "Converts both paces to miles per hour (7.2 and about 7.06) and picks Tyler for more miles each hour.",
+    "style": {
+      "font": "caveat",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Tyler: 60 ÷ 8.33 ≈ 7.2 mph",
+        "at": [60, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "Elena: 60 ÷ 8.5 ≈ 7.06 mph",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "[[Tyler]] is faster, he goes more",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "miles every hour"
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "5b",
+        "caseId": "lr-5b-correct"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Tyler, with a valid speed comparison in miles per hour instead of the fewer-minutes-per-mile argument."
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 3). L2 describes reasoning about fewer minutes per mile; this converts to mph and compares speeds, which is equivalent. Chose 1, 1; a strict reading of L2 gives 0."
+    }
+  },
+  {
+    "id": "lr-6a-correct",
+    "itemId": "6a",
+    "tags": ["correct"],
+    "summary": "Computes the slope from (0, 60) and (1, 80) as 20 and says each class costs $20.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "(0, 60) and (1, 80)",
+        "at": [60, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "slope = \\frac{80 - 60}{1 - 0} = 20",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "each class costs $20",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Slope 20, each class costs $20."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-6a-answer-only",
+    "itemId": "6a",
+    "tags": ["correct", "answer-only"],
+    "summary": "Writes only 'Each class costs $20'.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "black",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Each class costs $20",
+        "at": [180, 300]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "The notes say 'Each class costs $20' earns both lines."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-6a-total-cost",
+    "itemId": "6a",
+    "tags": ["common-mistake", "partial", "messy"],
+    "summary": "Gets slope 20 but says 20 is the total cost.",
+    "style": {
+      "font": "reenie-beanie",
+      "ink": "black",
+      "mess": 2,
+      "size": 50
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "slope = 20",
+        "at": [100, 140]
+      },
+      {
+        "_tag": "Text",
+        "text": "20 is the total cost",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "Either",
+      "reason": "Slope 20 is right; calling it the total cost is not the cost per class."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-6a-divide-total",
+    "itemId": "6a",
+    "tags": ["common-mistake", "incorrect"],
+    "summary": "Divides $200 by 7 classes and says each class costs about $28.57, ignoring the starting cost.",
+    "style": {
+      "font": "kalam",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "200 ÷ 7 ≈ 28.57",
+        "at": [80, 100]
+      },
+      {
+        "_tag": "Text",
+        "text": "each class costs about $28.57",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Total ÷ classes ignores the $60 starting cost; the slope is 20, not 28.57."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-6a-idk",
+    "itemId": "6a",
+    "tags": ["near-blank"],
+    "summary": "Writes 'idk'.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "black",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "idk",
+        "at": [420, 320]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "No answer."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-6b-correct",
+    "itemId": "6b",
+    "tags": ["correct"],
+    "summary": "Says the cost at 0 classes is $60, the fee to join the gym.",
+    "style": {
+      "font": "kalam",
+      "ink": "purple",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "at 0 classes the cost is $60",
+        "at": [60, 100]
+      },
+      {
+        "_tag": "Text",
+        "text": "the 60 is the fee to join the gym",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Intercept 60, the membership fee to join."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-6b-zero",
+    "itemId": "6b",
+    "tags": ["common-mistake", "incorrect"],
+    "summary": "Says the intercept is 0 because you start with 0 classes.",
+    "style": {
+      "font": "caveat",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "the intercept is 0",
+        "at": [80, 120]
+      },
+      {
+        "_tag": "Text",
+        "text": "because you start with 0 classes",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Confuses the intercept with x = 0; the intercept is 60 and has no fee meaning here."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-6b-first-class",
+    "itemId": "6b",
+    "tags": ["common-mistake", "partial"],
+    "summary": "Gets 60 but says it is the cost of the first class.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "60, its how much the first class costs",
+        "at": [60, 200]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "60 is right; it is the cost with zero classes (the fee to join), not the first class."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-6b-crossed",
+    "itemId": "6b",
+    "tags": ["correct", "crossed-out", "messy"],
+    "summary": "Crosses out 'intercept = 20', writes 60, and explains it as paying $60 to join even with no classes.",
+    "style": {
+      "font": "shadows-into-light",
+      "ink": "black",
+      "mess": 2
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "~~intercept = 20~~",
+        "at": [70, 70]
+      },
+      {
+        "_tag": "Text",
+        "text": "intercept = 60",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "you pay $60 just to join,",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "even with no classes"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "The crossed-out 20 is replaced by 60, explained as the $60 to join."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-6b-blank",
+    "itemId": "6b",
+    "tags": ["blank"],
+    "summary": "Leaves the board empty.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "black"
+    },
+    "board": [],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Nothing written."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-7a-correct",
+    "itemId": "7a",
+    "tags": ["correct"],
+    "summary": "Reads the start at 12, finds 3 inches per month from (0, 12) and (6, 30), and writes h = 3t + 12.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "starts at 12",
+        "at": [60, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "(0, 12) to (6, 30): \\frac{30 - 12}{6} = 3",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "[[h = 3t + 12]]",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Rate 3 inches per month and start 12: h = 3t + 12."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-7a-swapped",
+    "itemId": "7a",
+    "tags": ["common-mistake", "incorrect"],
+    "summary": "Lists (0, 12) and (1, 15) but writes h = 12t + 3, swapping the rate and the start.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "(0, 12)  (1, 15)",
+        "at": [80, 100]
+      },
+      {
+        "_tag": "Text",
+        "text": "[[h = 12t + 3]]",
+        "gap": 40
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Rate and starting height are swapped: the equation uses 12 per month and starts at 3."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-7a-t-h-swapped",
+    "itemId": "7a",
+    "tags": ["partial"],
+    "summary": "Finds slope 3 and start 12 but writes t = 3h + 12.",
+    "style": {
+      "font": "kalam",
+      "ink": "black",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "slope = 3, start = 12",
+        "at": [80, 100]
+      },
+      {
+        "_tag": "Text",
+        "text": "[[t = 3h + 12]]",
+        "gap": 40
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Rate 3 earns L1; the notes say t and h swapped loses L2."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-7a-forgot-start",
+    "itemId": "7a",
+    "tags": ["common-mistake", "partial"],
+    "summary": "Finds 3 inches per month but leaves out the starting height: h = 3t.",
+    "style": {
+      "font": "caveat",
+      "ink": "black",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "goes up 3 each month",
+        "at": [80, 110]
+      },
+      {
+        "_tag": "Text",
+        "text": "[[h = 3t]]",
+        "gap": 40
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Rate 3 is right; the 12-inch start is missing."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-7a-recursive",
+    "itemId": "7a",
+    "tags": ["off-rubric", "partial"],
+    "summary": "Makes a table from 12 adding 3 each month and writes 'new h = old h + 3' instead of an equation in t.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "purple",
+      "mess": 1,
+      "size": 38
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "t | h",
+        "at": [80, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "0 | 12"
+      },
+      {
+        "_tag": "Text",
+        "text": "1 | 15"
+      },
+      {
+        "_tag": "Text",
+        "text": "2 | 18"
+      },
+      {
+        "_tag": "Text",
+        "text": "3 | 21"
+      },
+      {
+        "_tag": "Text",
+        "text": "start at 12 and add 3",
+        "at": [420, 120]
+      },
+      {
+        "_tag": "Text",
+        "text": "every month"
+      },
+      {
+        "_tag": "Text",
+        "text": "new h = old h + 3",
+        "at": [420, 330]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Rate 3 and start 12 are both there, but as a recursive rule, not an equation relating h and t."
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 3). The rubric expects h = 3t + 12; the student gives a correct recursive rule with start 12. Chose L1 = 1, L2 = 0 because no equation in t is written; a teacher could give L2 for using the 12-inch start."
+    }
+  },
+  {
+    "id": "lr-7a-messy",
+    "itemId": "7a",
+    "tags": ["correct", "crossed-out", "messy"],
+    "summary": "Crosses out h = 3t and writes h = 3t + 12 below it.",
+    "style": {
+      "font": "nanum-pen-script",
+      "ink": "black",
+      "mess": 2,
+      "size": 46
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "+3 every month, starts 12",
+        "at": [70, 70]
+      },
+      {
+        "_tag": "Text",
+        "text": "~~h = 3t~~",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "h = 3t + 12",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "The crossed-out h = 3t is corrected to h = 3t + 12."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-7b-correct",
+    "itemId": "7b",
+    "tags": ["correct"],
+    "summary": "Sets 66 = 3t + 12 and solves t = 18.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "66 = 3t + 12",
+        "at": [80, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "3t = 54",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "t = 18",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "[[18 months]]",
+        "gap": 30
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "7a",
+        "caseId": "lr-7a-correct"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "66 = 3t + 12 solved to 18 months."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-7b-plugs-t",
+    "itemId": "7b",
+    "tags": ["common-mistake", "incorrect"],
+    "summary": "Puts 66 in for t instead of h and gets 210.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "h = 3(66) + 12",
+        "at": [80, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "h = 198 + 12 = 210",
+        "gap": 15
+      },
+      {
+        "_tag": "Text",
+        "text": "[[210]]",
+        "gap": 30
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "7a",
+        "caseId": "lr-7a-correct"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "66 is the height, not the time; substituting it for t gives the wrong setup and answer."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-7b-subtract-first",
+    "itemId": "7b",
+    "tags": ["correct", "alternate-method"],
+    "summary": "Reasons that the plant needs 54 more inches at 3 a month: 54 ÷ 3 = 18 months.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "needs 66 - 12 = 54 more inches",
+        "at": [60, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "grows 3 inches a month",
+        "gap": 15
+      },
+      {
+        "_tag": "Text",
+        "text": "54 ÷ 3 = 18",
+        "gap": 15
+      },
+      {
+        "_tag": "Text",
+        "text": "[[18 months]]",
+        "gap": 30
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "7a",
+        "caseId": "lr-7a-correct"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "66 − 12 = 54 and 54 ÷ 3 = 18 is the equation 66 = 3t + 12 solved in words."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-7b-ft-swapped",
+    "itemId": "7b",
+    "tags": ["follow-through"],
+    "summary": "Uses its own h = 12t + 3: 66 = 12t + 3, 63 = 12t, t = 5.25 months.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "66 = 12t + 3",
+        "at": [80, 70]
+      },
+      {
+        "_tag": "Text",
+        "text": "63 = 12t",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "t = 5.25",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "[[5.25 months]]",
+        "gap": 30
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "7a",
+        "caseId": "lr-7a-swapped"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Follow-through: its own equation with h = 66 is solved correctly, 63 ÷ 12 = 5.25."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-7b-swapped-slip",
+    "itemId": "7b",
+    "tags": ["follow-through", "partial"],
+    "summary": "Uses its own h = 12t + 3 but adds 3 instead of subtracting: 69 = 12t, t = 5.75.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "blue",
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "66 = 12t + 3",
+        "at": [80, 70]
+      },
+      {
+        "_tag": "Text",
+        "text": "69 = 12t",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "t = 5.75",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "[[5.75 months]]",
+        "gap": 30
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "7a",
+        "caseId": "lr-7a-swapped"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Setup with its own equation earns L1; adding 3 to 66 instead of subtracting gives 5.75, not 5.25."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "lr-7b-overwrite",
+    "itemId": "7b",
+    "tags": ["messy", "correct"],
+    "summary": "Sets 66 = 3t + 12 and gets 54 ÷ 3; the final answer's second digit is written over, 18 or 16.",
+    "style": {
+      "font": "nanum-pen-script",
+      "ink": "black",
+      "mess": 3,
+      "size": 46
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "66 = 3t + 12",
+        "at": [70, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "66 - 12 = 54",
+        "gap": 15
+      },
+      {
+        "_tag": "Text",
+        "text": "54 ÷ 3 =",
+        "gap": 15
+      },
+      {
+        "_tag": "Text",
+        "text": "t =",
+        "at": [70, 400],
+        "size": 46
+      },
+      {
+        "_tag": "Text",
+        "text": "18",
+        "at": [190, 400],
+        "size": 46
+      },
+      {
+        "_tag": "Text",
+        "text": "6",
+        "at": [203, 400],
+        "size": 46
+      },
+      {
+        "_tag": "Text",
+        "text": "months",
+        "at": [300, 400],
+        "size": 46
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "7a",
+        "caseId": "lr-7a-messy"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Setup is right; the final digit is overwritten (18 or 16), so the teacher should read it.",
+      "scoreOn": "flag"
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). The answer's second digit is written over: 18 (which 54 ÷ 3 gives) or 16. Chose L2 = 1 on the 18 reading; a teacher reading 16 would give 0."
+    }
+  }
+]
