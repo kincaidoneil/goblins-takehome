@@ -1,68 +1,71 @@
 # Goblins Grader
 
-A free auto-grader for math teachers. A teacher drops in the worksheet they were going to hand out anyway, students show their work on a whiteboard, and the teacher gets a graded class and a report that points the struggling students at Goblins.
+Live: [goblins-takehome-three.vercel.app](https://goblins-takehome-three.vercel.app) · [sample report](https://goblins-takehome-three.vercel.app/report/demo) · [shared view](https://goblins-takehome-three.vercel.app/share/demo)
 
-Live: **https://goblins-takehome-three.vercel.app** · [sample report](https://goblins-takehome-three.vercel.app/report/demo) · [shared view](https://goblins-takehome-three.vercel.app/share/demo)
+A free auto-grader for math teachers. A teacher drops in the worksheet they were going to hand out anyway, students show their work on a whiteboard, and the teacher gets a graded class and a report that sends the students who struggled to Goblins.
 
 ## How I approached it
 
-**The problem first.** The brief calls this a growth product: Goblins keeps students once a teacher assigns work, but teachers stall before the first assignment. So the grader had to save a teacher real hours on something they already do, and end one click from Goblins. That framing decided what to build and what to cut.
+- **The PRD and the agent setup came first.** I wrote a [PRD](docs/prd.md) with the user flows, the ship / no-ship criteria, and how the agents would be organized. Then I oversaw the build. One orchestrator Claude session ran about a dozen Claude Code workstreams in parallel, each owning one package. Every change was a small PR merged on green CI and E2E. I made the calls: scope, vendors, spend, eval ground truth, and the changes of course logged in [decisions.md](docs/decisions.md).
+- **Evals and inference were separate, parallel workstreams, measured before chosen.** One stream compared eight cheap vision models on 230 generated whiteboards. Others built the grading queue, a free mock of the model, the class simulator and the load test. Claude Haiku 5.5 won: it gives the score a careful teacher would 96% of the time and sends 7% to the teacher, at $0.00057 a grade, or $3.30 per teacher a month ([eval report](packages/evals/REPORT.md)). The whiteboards are generated handwriting, so 96% is an upper bound.
+- **Everything serves the business goal: getting teachers into Goblins.** Goblins keeps students once a teacher assigns work, and teachers stall before the first assignment. So the landing page takes the worksheet a teacher already has, with no sign-up until launch. The report shows where the class struggled, offers one click to give exactly those students practice in Goblins, and makes a name-free link to share with administrators.
 
-**A spec before any code.** I wrote a [PRD](docs/prd.md) with the user flows, the decisions I didn't want reopened, and the ship / no-ship criteria for the load test, each with its reason, before anything was built or measured. Where the PRD was silent, whoever made the call logged it in [docs/decisions.md](docs/decisions.md) with one line of reasoning.
+## Notable things
 
-**Evidence as the bar.** Evals picked the model and what it sees. The load test, re-runnable by anyone, makes the ship call. The $20 model budget was split by use up front, and a mock model keeps tests and load tests free.
+- **The dashboard updates live, with Electric.** Every submission and grade streams from Postgres to the teacher's dashboard, the projector and each student's progress strip through Electric. We run Electric ourselves on Fly, because Electric Cloud [is winding down](https://electric.ax/blog/2026/08/11/electric-joining-databricks). Writes go through server functions, and a server proxy decides who can read which rows.
+- **When the grader isn't sure, the teacher decides.** Cheap models don't give calibrated confidence scores, so the grader doesn't report a number. It reports marks it couldn't read and answers that conflict, and code turns either into a flag. A flagged grade goes to the teacher with the grader's best guess and its reason. In the evals, the grader flagged 13 of 25 ambiguous submissions, with 1 false flag in 170 clear ones.
+- **Students never wait on the grader.** The brief says a student sees their score after each problem. Grading takes 4.5 s at the median, so the student moves straight on to the next problem and the score fills in on the progress strip a few seconds later. About 4% of grades arrive during the 1.5 s transition.
 
-**Agents built it; I made the calls.** An orchestrator Claude session split the PRD into about a dozen parallel Claude Code workstreams, one package each, every change a small PR merged on green CI and E2E. I set scope, chose vendors, approved spend, reviewed eval ground truth the agents weren't sure of, and changed course when something failed: Electric Cloud shut down mid-build, and Vercel Queues measured 4× slower than QStash.
+## Load testing
 
-## Key product decisions
+`[TBD: capacity and the ship call, once the reruns land.]` So far nothing has been lost at any load, and the first thing to break past one class is live sync, not grading.
 
-- **Start from the worksheet the teacher already has.** No form for typing problems; a few real worksheets cover the empty state. Sign-in comes only at launch, so a teacher sees the extracted problems and rubrics before any friction.
-- **A live class session, joined like Kahoot.** A code on the projector, a first name, and the teacher in the room as the identity check. No student accounts: handing out access is exactly where teachers stall today.
-- **The grader asks instead of guessing.** Every grade either stands or goes to the teacher with a reason, and the teacher always has the last word. That is what makes a cheap model trustworthy. Students see "your teacher will check this one", never an error.
-- **The report is the growth loop.** It shows where the class struggled, offers one click to give exactly those students practice in Goblins, and makes a name-free link to share with colleagues and administrators.
+**How it works.** The test recreates a testing day: classes of 30 start within 2 minutes of the bell, and each student makes 9 submissions. Simulated students and teachers use the app's real HTTP routes and Electric subscriptions, as browsers do. Only the model is mocked, so a run costs nothing. The steps grow until a ship / no-ship criterion fails. The criteria, set before the first run: no lost submissions, submit p99 under 1 s, grades on the dashboard within 30 s at p95, and under 0.1% of grades failing. Vercel allows load tests only on Enterprise plans, so the ramp runs against the app's production build on one machine, and production got a one-class smoke test. Every run so far used a guessed model latency profile (median 3.5 s); reruns with the profile measured from 1,839 real Haiku calls are pending.
 
-## Technical overview
+| Run | Students | Lost | Submit p99 | Dashboard p95 | Result |
+|---|---|---|---|---|---|
+| [Production smoke test](packages/loadtest/reports/smoke-production/report.md), the deployed stack | 30 | 0 | 0.66 s | 9.2 s | Pass |
+| [Local, one app process](packages/loadtest/reports/ramp-local-qstash/report.md) | 990 | 0 | 49.5 s | 254 s | Fail: one process saturates |
+| [Local, six app processes](packages/loadtest/reports/ramp-local-6workers/report.md) | 990 | 0 | 5.8 s | 49 s | Fail: sync accounts for 44 s of the dashboard time |
 
-TanStack Start and Effect on Vercel, Postgres on Neon, Electric (self-hosted on Fly) for live dashboards, Upstash QStash for grading jobs, and Claude Haiku 5.5 through OpenRouter, with a mock behind the same interface.
+No grade failed in any run. With six processes, grades waited at most 1.3 s in the queue (p95). The bottleneck is the live subscriptions: each student holds their own, and Electric falls behind serving them all.
 
-- **The model was chosen by evals.** Eight cheap vision models graded 230 generated whiteboards. Haiku 5.5 matched the correct score most often and flagged the most ambiguous work. One call per submission beat one per rubric line, and a text description of the diagram beat sending the page image. [Eval report](packages/evals/REPORT.md).
-- **A mock model makes testing free.** Its latency is sampled from real Haiku calls and it can replay outages and rate-limit storms, so E2E, the class simulator and the load test cost nothing to repeat.
-- **The queue was chosen by measurement.** At a concurrency cap of 10, QStash ran 60 five-second jobs in 32 s; Vercel Queues took 129 s. [Comparison](docs/grade-queue-options.md).
-- **No grade is lost.** Grade writes are idempotent per attempt, a claim lease stops duplicate model calls, and a sweeper re-sends anything stuck.
-- **The load test runs on a local production build.** Vercel allows load tests only on Enterprise plans, so the full ramp runs the app's production build against Postgres and Electric on one machine, and production gets a one-class smoke test through the same command.
+**The first limits in production.** QStash is on its free plan: 1,000 messages a day, about three classes, and 10 grades in flight. Moving to pay-as-you-go (100 in flight) is the first step for real use. After that comes sync: share one subscription per class instead of one per student, and add Electric machines.
 
-## Results
+**At larger scale,** model cost and provider capacity limit us before our own infrastructure does. Peak numbers assume everyone tests in the same 30 minutes.
 
-- **Accuracy:** 96% of grades match the correct score; 7% go to the teacher. Measured on generated handwriting, so treat it as an upper bound.
-- **Cost:** $0.00057 per grade, about half the $0.001 target: $3.30 a month for a teacher with 130 students grading one 10-problem assignment a week.
-- **Load:** capacity pending the full ramp. So far: 90 students at 20× testing-day pace, 0 lost, grades on the dashboard at p95 5.9 s. [Load-test reports](packages/loadtest/reports/README.md).
+| Students | Model cost a month | Peak grades/s | What changes |
+|---|---|---|---|
+| 1,000 | $25 | 6 | QStash pay-as-you-go; sync fixes from the ramp |
+| 10,000 | $254 | 56 | Shard the queue past 100 in flight; raise the model's rate limits and fail over to GPT-6 Luna; move whiteboards to object storage; several Electric machines |
+| 100,000 | $2,500 | 560 | Cut model cost: cache the shared prompt prefix, shorten output, send smaller images; Electric behind a CDN; a larger Postgres |
+| 1,000,000 | $25,000 | 5,600 | Several model providers and contract pricing; a queue built for this rate; partition by district |
 
 ## Deferred
 
-- **Rubric questions.** Grouping a problem's flagged grades into one question for the teacher ("5 students left 6/8 unsimplified; full credit?"). The flag already gets the teacher there; grouping is polish.
 - **Real handwriting in the evals.** The dataset is generated from handwriting fonts; I didn't have time to draw the planned check set.
-- **The full ramp on Vercel.** It needs an Enterprise plan and QStash pay-as-you-go. The runner supports it with one flag.
+- **Rubric questions.** Grouping a problem's flagged grades into one question for the teacher ("5 students left 6/8 unsimplified; full credit?"). The flag already gets the teacher there.
+- **The full ramp on Vercel.** It needs an Enterprise plan. The runner supports it with one flag.
 - **A real Goblins handoff.** Goblins has no public API, so the CTA opens a labeled demo screen and links to Goblins onboarding.
-- **Grade export and share-link revocation.** Worth building once teachers come back for a second assignment.
 
 ## Run it
 
 Needs Node 22, pnpm and Docker. Run `pnpm install` first.
 
 ```bash
-# The app, at http://localhost:3000 (Postgres and Electric in Docker, mock model, no sign-in needed)
+# The app at http://localhost:3000, with the mock model and no sign-in
 pnpm --filter @goblins/web db:up && \
   DATABASE_URL=postgres://postgres:postgres@localhost:55432/goblins pnpm --filter @goblins/domain db:migrate && \
   pnpm --filter @goblins/web dev
 
-# E2E, against a production build as CI runs it (the dev server is too slow for the tests' timeouts)
+# E2E, against a production build as CI runs it
 pnpm --filter @goblins/web build && (cd apps/web && PORT=3000 node --env-file=local.env .output/server/index.mjs &)
 pnpm --filter @goblins/e2e exec playwright install chromium
 E2E_BASE_URL=http://localhost:3000 pnpm e2e
 
-# Evals: rebuilds the tables from cached responses, at no cost
+# Evals, rebuilt from cached responses at no cost
 pnpm --filter @goblins/evals eval:tables anthropic/claude-haiku-5.5
 
-# Load test: see packages/loadtest/README.md to start the production build, then
+# Load test: start the production build as in packages/loadtest/README.md, then
 LOAD_TEST_TOKEN=local pnpm --filter @goblins/loadtest loadtest ramp --url http://localhost:3290 --pricing none
 ```
