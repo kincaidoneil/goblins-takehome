@@ -19,7 +19,11 @@ const meta = {
     onFiles: stubUpload({ _tag: "Started", draftId: "draft_123" }),
     onTemplate: stubUpload({ _tag: "Started", draftId: "draft_template" }, 600),
     onStarted: () => {},
-    signInHref: "#sign-in",
+    signIn: (
+      <a className="lp-signin" href="#sign-in">
+        Sign in
+      </a>
+    ),
   },
 } satisfies Meta<typeof LandingPage>;
 

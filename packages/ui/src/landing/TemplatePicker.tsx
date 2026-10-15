@@ -5,11 +5,13 @@ import type { TemplateSummary } from "./templates";
 export interface TemplatePickerProps {
   templates: ReadonlyArray<TemplateSummary>;
   onPick: (templateId: string) => void;
+  /** The template whose draft is being created; every card is disabled until it settles. */
+  pendingId?: string | undefined;
   ref?: Ref<HTMLElement>;
 }
 
 /** "No worksheet handy?" A row of ready-made assignments. */
-export function TemplatePicker({ templates, onPick, ref }: TemplatePickerProps) {
+export function TemplatePicker({ templates, onPick, pendingId, ref }: TemplatePickerProps) {
   return (
     <section ref={ref} className="lp-templates" aria-labelledby="lp-templates-title" tabIndex={-1}>
       <div className="lp-section-head">
@@ -19,7 +21,13 @@ export function TemplatePicker({ templates, onPick, ref }: TemplatePickerProps) 
       <ul className="lp-templates-grid">
         {templates.map((template) => (
           <li key={template.id}>
-            <button type="button" className="lp-template" onClick={() => onPick(template.id)}>
+            <button
+              type="button"
+              className="lp-template"
+              disabled={pendingId !== undefined}
+              aria-busy={pendingId === template.id}
+              onClick={() => onPick(template.id)}
+            >
               <span className="lp-template-thumb">
                 {template.thumbnailUrl !== undefined && (
                   <img src={template.thumbnailUrl} alt="" loading="lazy" width={560} height={725} />
@@ -38,12 +46,30 @@ export function TemplatePicker({ templates, onPick, ref }: TemplatePickerProps) 
                     </Badge>
                   ))}
                 </span>
-                <span className="lp-template-source">{template.source}</span>
+                <span className="lp-template-source">
+                  {pendingId === template.id ? "Starting…" : template.attribution}
+                </span>
               </span>
             </button>
           </li>
         ))}
       </ul>
+      <details className="lp-credits">
+        <summary>Template sources and licenses</summary>
+        <ul>
+          {templates.map((template) => (
+            <li key={template.id}>
+              <strong>{template.title}.</strong>{" "}
+              {template.sourceUrl === undefined ? (
+                template.attribution
+              ) : (
+                <a href={template.sourceUrl}>{template.attribution}</a>
+              )}{" "}
+              <a href={template.licenseUrl}>License</a>. {template.changes}
+            </li>
+          ))}
+        </ul>
+      </details>
     </section>
   );
 }
