@@ -1,26 +1,49 @@
 /**
- * Turns call-log rows into profiles and recordings.
+ * Turns rows of the domain `model_calls` table into profiles and recordings.
  *
- * PROVISIONAL: the call-log table lives in `packages/domain` and does not
- * exist yet. `CallLogRow` is the shape this package expects; adjust the field
- * mapping here when the real table lands. Rows are validated, never cast.
+ * `CallLogRow` validates the columns this package reads, as Drizzle returns
+ * them (camelCase; `createdAt` a Date, or an ISO string from a JSON export).
+ * `test/callLog.test.ts` checks at compile time that a `model_calls` row still
+ * fits it. `statusCode` is kept when present, and a `provider_error` without
+ * one replays as a 502. A 429 carries no retry hint.
  */
 import { Either, Schema } from "effect";
-import { failureKinds } from "./fate.ts";
+import type { FailureKind } from "./fate.ts";
 import type { EmpiricalProfile, LoggedCall } from "./profile.ts";
 import type { Recording } from "./replay.ts";
 
-const NonNegative = Schema.NonNegative;
+const Count = Schema.NullOr(Schema.NonNegative);
+
+/** Statuses that describe what the provider did. `interrupted` means our caller gave up, so it is skipped. */
+type ProviderStatus = Exclude<CallLogRow["status"], "interrupted">;
+
+const statusToOutcome = {
+  ok: "Ok",
+  rate_limited: "RateLimited",
+  timeout: "Timeout",
+  provider_error: "ProviderError",
+  bad_response: "BadResponse",
+} as const satisfies Record<ProviderStatus, "Ok" | FailureKind>;
 
 export const CallLogRow = Schema.Struct({
+  purpose: Schema.String,
+  provider: Schema.String,
   model: Schema.String,
-  startedAt: Schema.Union(Schema.Number, Schema.String, Schema.DateFromSelf),
-  latencyMs: NonNegative,
-  outcome: Schema.Literal("Ok", ...failureKinds),
-  httpStatus: Schema.optional(Schema.NullOr(Schema.Number)),
-  retryAfterMs: Schema.optional(Schema.NullOr(NonNegative)),
-  promptTokens: NonNegative,
-  completionTokens: NonNegative,
+  status: Schema.Literal(
+    "ok",
+    "rate_limited",
+    "timeout",
+    "provider_error",
+    "bad_response",
+    "interrupted",
+  ),
+  latencyMs: Schema.NonNegative,
+  inputTokens: Count,
+  outputTokens: Count,
+  /** HTTP status the provider returned. Not in `model_calls` yet; read when an export or a later column has it. */
+  statusCode: Schema.optional(Schema.NullOr(Schema.Number)),
+  loadTestRunId: Schema.NullOr(Schema.String),
+  createdAt: Schema.Union(Schema.DateFromSelf, Schema.String),
 });
 export type CallLogRow = typeof CallLogRow.Type;
 
@@ -28,8 +51,19 @@ export type CallLogError =
   | { readonly _tag: "InvalidRow"; readonly index: number; readonly message: string }
   | { readonly _tag: "NoCalls" };
 
-const toEpochMs = (value: number | string | Date): number =>
-  typeof value === "number" ? value : new Date(value).getTime();
+const toEpochMs = (value: string | Date): number =>
+  typeof value === "string" ? new Date(value).getTime() : value.getTime();
+
+/**
+ * Only completed real grading calls describe the provider: app grades and eval runs
+ * (the same grading prompt, run offline), not the mock's own rows, other
+ * purposes or load-test traffic.
+ */
+const isRealGradeCall = (row: CallLogRow): row is CallLogRow & { status: ProviderStatus } =>
+  row.status !== "interrupted" &&
+  row.provider === "openrouter" &&
+  (row.purpose === "grade" || row.purpose === "eval") &&
+  row.loadTestRunId === null;
 
 const decodeRow = Schema.decodeUnknownEither(CallLogRow);
 
@@ -44,23 +78,25 @@ const toLoggedCalls = (
       return Either.left({ _tag: "InvalidRow", index, message: decoded.left.message });
     }
     const row = decoded.right;
-    const startedAt = toEpochMs(row.startedAt);
+    // `createdAt` is when the row was written, about `latencyMs` after the call
+    // started. Replay only uses offsets between calls, so the shift cancels out.
+    const startedAt = toEpochMs(row.createdAt) - row.latencyMs;
     if (!Number.isFinite(startedAt)) {
       return Either.left({
         _tag: "InvalidRow",
         index,
-        message: `unparseable startedAt: ${String(row.startedAt)}`,
+        message: `unparseable createdAt: ${String(row.createdAt)}`,
       });
     }
-    if (model !== undefined && row.model !== model) continue;
+    if (!isRealGradeCall(row) || (model !== undefined && row.model !== model)) continue;
     calls.push({
       startedAt,
       latencyMs: row.latencyMs,
-      outcome: row.outcome,
-      status: row.httpStatus ?? undefined,
-      retryAfterMs: row.retryAfterMs ?? undefined,
-      promptTokens: row.promptTokens,
-      completionTokens: row.completionTokens,
+      outcome: statusToOutcome[row.status],
+      status: row.statusCode ?? undefined,
+      retryAfterMs: undefined,
+      promptTokens: row.inputTokens ?? 0,
+      completionTokens: row.outputTokens ?? 0,
     });
   }
   calls.sort((a, b) => a.startedAt - b.startedAt);
