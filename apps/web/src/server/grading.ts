@@ -23,7 +23,13 @@ import { Context, Duration, Effect, Layer, Runtime } from "effect";
 
 export class GradeQueue extends Context.Tag("@goblins/web/GradeQueue")<
   GradeQueue,
-  { readonly enqueue: (job: GradeJob) => Effect.Effect<void> }
+  {
+    /**
+     * `dedupeKey` overrides the queue's default dedupe key. The sweeper passes a fresh one,
+     * so a resend isn't dropped as a duplicate of the message it replaces.
+     */
+    readonly enqueue: (job: GradeJob, dedupeKey?: string) => Effect.Effect<void>;
+  }
 >() {}
 
 const scriptedOutcome = (input: GradingInput, studentName: string): GraderOutcome => {
