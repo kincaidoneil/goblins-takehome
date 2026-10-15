@@ -66,6 +66,13 @@
   --_fg: var(--gb-color-text-brand);
 }
 
+/* Concealed: work is in, score hidden. Same look whatever the grade. */
+.gb-score-chip[data-tone="done"] {
+  --_bg: var(--gb-green-100);
+  --_fg: var(--gb-green-700);
+  min-width: 40px;
+}
+
 .gb-score-chip[data-tone="pending"] {
   box-shadow: inset 0 0 0 1.5px var(--gb-color-border);
 }

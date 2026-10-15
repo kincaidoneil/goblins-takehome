@@ -36,19 +36,6 @@ export {
   useToast,
 } from "./components/Toast";
 export { Tooltip, type TooltipProps, TooltipProvider } from "./components/Tooltip";
-export {
-  ClassGrid,
-  type ClassGridProps,
-  type GridProblem,
-  type GridStudent,
-} from "./dashboard/ClassGrid";
-export {
-  GradeReview,
-  type GradeReviewProps,
-  type ReviewLine,
-  type ReviewState,
-} from "./dashboard/GradeReview";
-export { type NeedsYouItem, NeedsYouList, type NeedsYouListProps } from "./dashboard/NeedsYouList";
 export { type ProblemFigure, ProblemPanel, type ProblemPanelProps } from "./student/ProblemPanel";
 export { StudentWorkLayout, type StudentWorkLayoutProps } from "./student/StudentWorkLayout";
 export { SubmitButton, type SubmitButtonProps, type SubmitState } from "./student/SubmitButton";

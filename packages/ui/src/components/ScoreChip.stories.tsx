@@ -18,6 +18,7 @@ export const NeedsYou: Story = { args: { status: { state: "needs-teacher" } } };
 export const CouldntGrade: Story = { args: { status: { state: "couldnt-grade" } } };
 export const Grading: Story = { args: { status: { state: "grading" } } };
 export const NotStarted: Story = { args: { status: { state: "not-started" } } };
+export const Concealed: Story = { args: { concealed: true } };
 export const StudentSeesTeacherCheck: Story = {
   args: { status: { state: "needs-teacher" }, audience: "student" },
 };
@@ -43,6 +44,7 @@ export const AllStates: Story = {
           <th>Teacher</th>
           <th>Student</th>
           <th>Small</th>
+          <th>Concealed</th>
         </tr>
       </thead>
       <tbody>
@@ -58,6 +60,9 @@ export const AllStates: Story = {
             </td>
             <td>
               <ScoreChip status={status} size="sm" />
+            </td>
+            <td>
+              <ScoreChip status={status} size="sm" concealed />
             </td>
           </tr>
         ))}
