@@ -1,0 +1,14 @@
+/* Every component's styles. Import once in the app, after tokens.css. */
+@import "./components/Avatar.css";
+@import "./components/Badge.css";
+@import "./components/Button.css";
+@import "./components/Card.css";
+@import "./components/Dialog.css";
+@import "./components/EmptyState.css";
+@import "./components/Field.css";
+@import "./components/Menu.css";
+@import "./components/ProgressStrip.css";
+@import "./components/ScoreChip.css";
+@import "./components/Tabs.css";
+@import "./components/Toast.css";
+@import "./components/Tooltip.css";

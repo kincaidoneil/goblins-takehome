@@ -1,0 +1,76 @@
+/*
+ * Absolute, not fixed: a fixed backdrop can leave gaps on iOS 26+ Safari after
+ * scrolling. Needs `body { position: relative }`, which base.css sets.
+ */
+.gb-dialog-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: var(--gb-z-dialog);
+  background: var(--gb-color-overlay);
+  backdrop-filter: blur(2px);
+  transition: opacity var(--gb-duration-base) var(--gb-ease-out);
+}
+
+.gb-dialog-backdrop[data-starting-style],
+.gb-dialog-backdrop[data-ending-style] {
+  opacity: 0;
+}
+
+.gb-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: var(--gb-z-dialog);
+  box-sizing: border-box;
+  width: min(480px, calc(100vw - 2 * var(--gb-space-4)));
+  max-height: calc(100dvh - 2 * var(--gb-space-8));
+  overflow-y: auto;
+  padding: var(--gb-space-8);
+  border-radius: var(--gb-radius-xl);
+  background: var(--gb-color-surface);
+  box-shadow: var(--gb-shadow-lg);
+  translate: -50% -50%;
+  transition:
+    opacity var(--gb-duration-base) var(--gb-ease-out),
+    scale var(--gb-duration-base) var(--gb-ease-spring);
+}
+
+.gb-dialog[data-size="sm"] {
+  width: min(380px, calc(100vw - 2 * var(--gb-space-4)));
+}
+
+.gb-dialog[data-size="lg"] {
+  width: min(720px, calc(100vw - 2 * var(--gb-space-4)));
+}
+
+.gb-dialog[data-starting-style],
+.gb-dialog[data-ending-style] {
+  opacity: 0;
+  scale: 0.96;
+}
+
+.gb-dialog-title {
+  margin: 0;
+  color: var(--gb-color-text-brand);
+  font-size: var(--gb-text-xl);
+  font-weight: var(--gb-weight-heavy);
+  letter-spacing: var(--gb-tracking-heading);
+  line-height: var(--gb-leading-tight);
+}
+
+.gb-dialog-description {
+  margin: var(--gb-space-2) 0 0;
+  color: var(--gb-color-text-muted);
+}
+
+.gb-dialog-body {
+  margin-top: var(--gb-space-6);
+}
+
+.gb-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--gb-space-3);
+  margin-top: var(--gb-space-8);
+}

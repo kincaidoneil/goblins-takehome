@@ -1,0 +1,94 @@
+.gb-button {
+  --_bg: var(--gb-color-accent);
+  --_bg-hover: var(--gb-color-accent-hover);
+  --_fg: var(--gb-color-text-on-accent);
+  --_border: transparent;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gb-space-2);
+  height: 44px;
+  padding: 0 var(--gb-space-5);
+  border: 2px solid var(--_border);
+  border-radius: var(--gb-radius-md);
+  background: var(--_bg);
+  color: var(--_fg);
+  font: inherit;
+  font-size: var(--gb-text-md);
+  font-weight: var(--gb-weight-bold);
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--gb-duration-fast) var(--gb-ease-out),
+    border-color var(--gb-duration-fast) var(--gb-ease-out),
+    transform var(--gb-duration-fast) var(--gb-ease-out),
+    box-shadow var(--gb-duration-fast) var(--gb-ease-out);
+}
+
+.gb-button:hover {
+  background: var(--_bg-hover);
+}
+
+.gb-button:active {
+  transform: scale(0.97);
+}
+
+.gb-button:focus-visible {
+  outline: 2px solid var(--gb-color-focus);
+  outline-offset: 2px;
+}
+
+.gb-button[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.45;
+  transform: none;
+}
+
+.gb-button svg {
+  width: 1.15em;
+  height: 1.15em;
+  flex-shrink: 0;
+}
+
+.gb-button[data-size="sm"] {
+  height: 34px;
+  padding: 0 var(--gb-space-3);
+  border-radius: var(--gb-radius-sm);
+  font-size: var(--gb-text-sm);
+}
+
+.gb-button[data-size="lg"] {
+  height: 60px;
+  padding: 0 var(--gb-space-8);
+  border-radius: var(--gb-radius-xl);
+  font-size: var(--gb-text-lg);
+}
+
+.gb-button[data-variant="brand"] {
+  --_bg: var(--gb-color-brand);
+  --_bg-hover: var(--gb-color-brand-hover);
+  --_fg: var(--gb-color-text-on-brand);
+  box-shadow: var(--gb-shadow-brand);
+}
+
+.gb-button[data-variant="secondary"] {
+  --_bg: transparent;
+  --_bg-hover: var(--gb-color-brand-soft);
+  --_fg: var(--gb-color-brand);
+  --_border: var(--gb-color-border-brand);
+}
+
+.gb-button[data-variant="ghost"] {
+  --_bg: transparent;
+  --_bg-hover: var(--gb-color-surface-sunken);
+  --_fg: var(--gb-color-brand);
+}
+
+.gb-button[data-variant="danger"] {
+  --_bg: var(--gb-color-danger-soft);
+  --_bg-hover: var(--gb-coral-200);
+  --_fg: var(--gb-color-danger);
+}
