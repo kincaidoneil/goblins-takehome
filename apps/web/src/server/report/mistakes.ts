@@ -20,9 +20,9 @@ import {
 } from "../../report/mistakes";
 import type { ClassReport, ProblemStats } from "../../report/model";
 
-/** A small, cheap model: the task is sorting a dozen one-line reasons into a few groups. */
+/** AI quality's pick: text only, about 2k tokens, about $0.001 per weak problem. */
 const ReportModel = Config.string("REPORT_MODEL").pipe(
-  Config.withDefault("google/gemini-2.5-flash-lite"),
+  Config.withDefault("anthropic/claude-haiku-5.5"),
 );
 
 const inputHash = (stats: ProblemStats): string =>
@@ -39,7 +39,7 @@ const inputHash = (stats: ProblemStats): string =>
 const decodeAnswer = Schema.decodeUnknown(Schema.parseJson(ModelGrouping));
 const decodeCached = Schema.decodeUnknown(ModelGrouping);
 
-const askModel = (stats: ProblemStats) =>
+const askModel = (sessionId: string, stats: ProblemStats) =>
   Effect.gen(function* () {
     const client = yield* ModelClient;
     const model = yield* ReportModel;
@@ -52,7 +52,7 @@ const askModel = (stats: ProblemStats) =>
         },
         { role: "user", content: groupingPrompt(stats) },
       ],
-      tag: { purpose: "report", subjectId: stats.problem.id },
+      tag: { purpose: "report", subjectId: sessionId },
       maxTokens: 800,
       temperature: 0,
       jsonSchema: { name: "mistake_groups", schema: JSONSchema.make(ModelGrouping) },
@@ -78,7 +78,7 @@ const groupProblem = (sessionId: string, stats: ProblemStats) =>
       .where(key);
     if (cached !== undefined) return fromModel(stats, yield* decodeCached(cached));
 
-    const { grouping, model } = yield* askModel(stats);
+    const { grouping, model } = yield* askModel(sessionId, stats);
     yield* db
       .insert(schema.reportMistakeGroups)
       .values({

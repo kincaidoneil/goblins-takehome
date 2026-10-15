@@ -5,7 +5,7 @@
  *
  *   DATABASE_URL=… pnpm --filter @goblins/web exec tsx src/server/report/seed-demo.ts [clerkUserId]
  *
- * Pass your Clerk user id to own the session and open /report/<session id> signed in.
+ * Pass your Clerk user id to own the session and open /sessions/<session id>/report signed in.
  */
 import { DatabaseLive, Db, schema } from "@goblins/domain";
 import { eq } from "drizzle-orm";

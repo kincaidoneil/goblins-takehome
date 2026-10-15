@@ -3,18 +3,18 @@ import { Button, EmptyState } from "@goblins/ui";
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { teacherGrades, teacherSession, teacherStudents } from "../../lib/sync";
-import { TeacherReport } from "../../report/components/TeacherReport";
-import type { ProblemMistakes } from "../../report/mistakes";
-import { buildReport, type ReportInput, type ReportProblem } from "../../report/model";
-import type { ReportHeader } from "../../server/report/data";
-import { getMistakes, getReport, shareReport } from "../../server/report/fns";
+import { teacherGrades, teacherSession, teacherStudents } from "../../../lib/sync";
+import { TeacherReport } from "../../../report/components/TeacherReport";
+import type { ProblemMistakes } from "../../../report/mistakes";
+import { buildReport, type ReportInput, type ReportProblem } from "../../../report/model";
+import type { ReportHeader } from "../../../server/report/data";
+import { getMistakes, getReport, shareReport } from "../../../server/report/fns";
 
 /**
  * The teacher's report for one class session. The problems load once; students and grades are
  * live collections, so the report updates as pending grades resolve.
  */
-export const Route = createFileRoute("/report/$sessionId")({
+export const Route = createFileRoute("/sessions/$sessionId/report")({
   // Live collections read from the browser.
   ssr: false,
   loader: ({ params }) => getReport({ data: { sessionId: params.sessionId } }),
@@ -130,7 +130,7 @@ function LiveReport({
       meta={{ title: header.title, course: null, topic: header.title, endedAt }}
       input={input}
       mistakes={mistakes}
-      dashboardHref={null}
+      dashboardHref={`/sessions/${sessionId}`}
       createShareLink={createShareLink}
     />
   );

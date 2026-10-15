@@ -14,10 +14,10 @@ import { Route as JoinRouteImport } from './routes/join'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as ApiShapeRouteImport } from './routes/api/shape'
 import { Route as PlaySessionIdRouteImport } from './routes/play/$sessionId'
-import { Route as ReportSessionIdRouteImport } from './routes/report/$sessionId'
 import { Route as ReportDemoRouteImport } from './routes/report/demo'
 import { Route as ShareTokenRouteImport } from './routes/share/$token'
 import { Route as ShareDemoRouteImport } from './routes/share/demo'
+import { Route as SessionsSessionIdReportRouteImport } from './routes/sessions/$sessionId/report'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -44,11 +44,6 @@ const PlaySessionIdRoute = PlaySessionIdRouteImport.update({
   path: '/play/$sessionId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ReportSessionIdRoute = ReportSessionIdRouteImport.update({
-  id: '/report/$sessionId',
-  path: '/report/$sessionId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ReportDemoRoute = ReportDemoRouteImport.update({
   id: '/report/demo',
   path: '/report/demo',
@@ -64,6 +59,11 @@ const ShareDemoRoute = ShareDemoRouteImport.update({
   path: '/share/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SessionsSessionIdReportRoute = SessionsSessionIdReportRouteImport.update({
+  id: '/sessions/$sessionId/report',
+  path: '/sessions/$sessionId/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -71,10 +71,10 @@ export interface FileRoutesByFullPath {
   '/api/health': typeof ApiHealthRoute
   '/api/shape': typeof ApiShapeRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
-  '/report/$sessionId': typeof ReportSessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/share/$token': typeof ShareTokenRoute
   '/share/demo': typeof ShareDemoRoute
+  '/sessions/$sessionId/report': typeof SessionsSessionIdReportRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -82,10 +82,10 @@ export interface FileRoutesByTo {
   '/api/health': typeof ApiHealthRoute
   '/api/shape': typeof ApiShapeRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
-  '/report/$sessionId': typeof ReportSessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/share/$token': typeof ShareTokenRoute
   '/share/demo': typeof ShareDemoRoute
+  '/sessions/$sessionId/report': typeof SessionsSessionIdReportRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -94,10 +94,10 @@ export interface FileRoutesById {
   '/api/health': typeof ApiHealthRoute
   '/api/shape': typeof ApiShapeRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
-  '/report/$sessionId': typeof ReportSessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/share/$token': typeof ShareTokenRoute
   '/share/demo': typeof ShareDemoRoute
+  '/sessions/$sessionId/report': typeof SessionsSessionIdReportRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -107,10 +107,10 @@ export interface FileRouteTypes {
     | '/api/health'
     | '/api/shape'
     | '/play/$sessionId'
-    | '/report/$sessionId'
     | '/report/demo'
     | '/share/$token'
     | '/share/demo'
+    | '/sessions/$sessionId/report'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -118,10 +118,10 @@ export interface FileRouteTypes {
     | '/api/health'
     | '/api/shape'
     | '/play/$sessionId'
-    | '/report/$sessionId'
     | '/report/demo'
     | '/share/$token'
     | '/share/demo'
+    | '/sessions/$sessionId/report'
   id:
     | '__root__'
     | '/'
@@ -129,10 +129,10 @@ export interface FileRouteTypes {
     | '/api/health'
     | '/api/shape'
     | '/play/$sessionId'
-    | '/report/$sessionId'
     | '/report/demo'
     | '/share/$token'
     | '/share/demo'
+    | '/sessions/$sessionId/report'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -141,10 +141,10 @@ export interface RootRouteChildren {
   ApiHealthRoute: typeof ApiHealthRoute
   ApiShapeRoute: typeof ApiShapeRoute
   PlaySessionIdRoute: typeof PlaySessionIdRoute
-  ReportSessionIdRoute: typeof ReportSessionIdRoute
   ReportDemoRoute: typeof ReportDemoRoute
   ShareTokenRoute: typeof ShareTokenRoute
   ShareDemoRoute: typeof ShareDemoRoute
+  SessionsSessionIdReportRoute: typeof SessionsSessionIdReportRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -184,13 +184,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlaySessionIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/report/$sessionId': {
-      id: '/report/$sessionId'
-      path: '/report/$sessionId'
-      fullPath: '/report/$sessionId'
-      preLoaderRoute: typeof ReportSessionIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/report/demo': {
       id: '/report/demo'
       path: '/report/demo'
@@ -212,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShareDemoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sessions/$sessionId/report': {
+      id: '/sessions/$sessionId/report'
+      path: '/sessions/$sessionId/report'
+      fullPath: '/sessions/$sessionId/report'
+      preLoaderRoute: typeof SessionsSessionIdReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -221,10 +221,10 @@ const rootRouteChildren: RootRouteChildren = {
   ApiHealthRoute: ApiHealthRoute,
   ApiShapeRoute: ApiShapeRoute,
   PlaySessionIdRoute: PlaySessionIdRoute,
-  ReportSessionIdRoute: ReportSessionIdRoute,
   ReportDemoRoute: ReportDemoRoute,
   ShareTokenRoute: ShareTokenRoute,
   ShareDemoRoute: ShareDemoRoute,
+  SessionsSessionIdReportRoute: SessionsSessionIdReportRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
