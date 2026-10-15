@@ -18,6 +18,8 @@ export interface LaunchDialogProps {
   readonly points: number;
   readonly timeLimitMinutes: number | null;
   readonly onTimeLimitChange: (minutes: number | null) => void;
+  /** An edit is still being saved; launching now could lock the rubric before it lands. */
+  readonly saving: boolean;
   /** A problem the server refused to launch with, so the screen can point at it. */
   readonly onProblemNeedsText: (label: string) => void;
 }
@@ -38,6 +40,7 @@ export function LaunchDialog({
   points,
   timeLimitMinutes,
   onTimeLimitChange,
+  saving,
   onProblemNeedsText,
 }: LaunchDialogProps) {
   const { isSignedIn, user } = useUser();
@@ -118,9 +121,13 @@ export function LaunchDialog({
             size="lg"
             className="setup-launch-cta"
             onClick={start}
-            disabled={state._tag === "Launching"}
+            disabled={state._tag === "Launching" || saving}
           >
-            {state._tag === "Launching" ? "Opening…" : "Open the projector"}
+            {state._tag === "Launching"
+              ? "Opening…"
+              : saving
+                ? "Saving your changes…"
+                : "Open the projector"}
           </Button>
         ) : (
           <Button size="lg" className="setup-launch-cta" onClick={signIn}>

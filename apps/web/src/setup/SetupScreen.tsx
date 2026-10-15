@@ -354,6 +354,7 @@ export function SetupScreen({ initial, launchOnArrival, initialTimeLimit }: Setu
         points={points}
         timeLimitMinutes={timeLimit}
         onTimeLimitChange={setTimeLimit}
+        saving={save === "saving"}
         onProblemNeedsText={onProblemNeedsText}
       />
     </div>
