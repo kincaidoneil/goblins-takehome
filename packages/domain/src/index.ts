@@ -1,5 +1,6 @@
 export * from "./class-sessions";
 export * from "./db";
+export * from "./diagram";
 export * from "./grade";
 export * from "./grades";
 export * from "./join-code";

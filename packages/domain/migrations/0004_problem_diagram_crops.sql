@@ -1,0 +1,1 @@
+ALTER TABLE "problems" ADD COLUMN "diagram_crops" jsonb DEFAULT '[]'::jsonb NOT NULL;
