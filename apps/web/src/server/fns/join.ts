@@ -1,5 +1,5 @@
 import { joinSession, parseJoinCodeInput } from "@goblins/domain";
-import { CREATURE_COUNT } from "@goblins/ui";
+import { randomCreatureId } from "@goblins/ui";
 import { createServerFn } from "@tanstack/react-start";
 import { setCookie } from "@tanstack/react-start/server";
 import { Effect, Option, Schema } from "effect";
@@ -20,7 +20,7 @@ export const join = createServerFn({ method: "POST" })
         const { student, resumed } = yield* joinSession({
           joinCode: joinCode.value,
           name: data.name,
-          pickAvatar: () => Math.floor(Math.random() * CREATURE_COUNT),
+          pickAvatar: (taken) => randomCreatureId(taken),
         });
         const cookie = yield* studentCookie(student.sessionId, student.id);
         setCookie(cookie.name, cookie.value, cookie.options);
