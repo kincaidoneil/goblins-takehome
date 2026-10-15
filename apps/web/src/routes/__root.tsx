@@ -1,6 +1,13 @@
 import { ClerkProvider } from "@clerk/tanstack-react-start";
-import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
+import {
+  createRootRoute,
+  HeadContent,
+  Outlet,
+  Scripts,
+  useRouterState,
+} from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { LiveStatusBanner } from "../components/LiveStatusBanner";
 import appCss from "../styles.css?url";
 
 export const Route = createRootRoute({
@@ -12,9 +19,22 @@ export const Route = createRootRoute({
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),
-  component: () => <Outlet />,
+  component: Root,
   shellComponent: RootDocument,
 });
+
+/** Screens that read live data, where a missing Electric deserves a notice. */
+const LIVE_PATHS = /^\/(sessions|play)\//;
+
+function Root() {
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  return (
+    <>
+      {LIVE_PATHS.test(pathname) && <LiveStatusBanner />}
+      <Outlet />
+    </>
+  );
+}
 
 function RootDocument({ children }: { readonly children: ReactNode }) {
   return (

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as JoinRouteImport } from './routes/join'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
+import { Route as ApiLiveRouteImport } from './routes/api/live'
 import { Route as ApiShapeRouteImport } from './routes/api/shape'
 import { Route as PlaySessionIdRouteImport } from './routes/play/$sessionId'
 import { Route as ReportDemoRouteImport } from './routes/report/demo'
@@ -33,6 +34,11 @@ const JoinRoute = JoinRouteImport.update({
 const ApiHealthRoute = ApiHealthRouteImport.update({
   id: '/api/health',
   path: '/api/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLiveRoute = ApiLiveRouteImport.update({
+  id: '/api/live',
+  path: '/api/live',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiShapeRoute = ApiShapeRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/join': typeof JoinRoute
   '/api/health': typeof ApiHealthRoute
+  '/api/live': typeof ApiLiveRoute
   '/api/shape': typeof ApiShapeRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/join': typeof JoinRoute
   '/api/health': typeof ApiHealthRoute
+  '/api/live': typeof ApiLiveRoute
   '/api/shape': typeof ApiShapeRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/join': typeof JoinRoute
   '/api/health': typeof ApiHealthRoute
+  '/api/live': typeof ApiLiveRoute
   '/api/shape': typeof ApiShapeRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/'
     | '/join'
     | '/api/health'
+    | '/api/live'
     | '/api/shape'
     | '/play/$sessionId'
     | '/report/demo'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/'
     | '/join'
     | '/api/health'
+    | '/api/live'
     | '/api/shape'
     | '/play/$sessionId'
     | '/report/demo'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/'
     | '/join'
     | '/api/health'
+    | '/api/live'
     | '/api/shape'
     | '/play/$sessionId'
     | '/report/demo'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   JoinRoute: typeof JoinRoute
   ApiHealthRoute: typeof ApiHealthRoute
+  ApiLiveRoute: typeof ApiLiveRoute
   ApiShapeRoute: typeof ApiShapeRoute
   PlaySessionIdRoute: typeof PlaySessionIdRoute
   ReportDemoRoute: typeof ReportDemoRoute
@@ -182,6 +195,13 @@ declare module '@tanstack/react-router' {
       path: '/api/health'
       fullPath: '/api/health'
       preLoaderRoute: typeof ApiHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/live': {
+      id: '/api/live'
+      path: '/api/live'
+      fullPath: '/api/live'
+      preLoaderRoute: typeof ApiLiveRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/shape': {
@@ -240,6 +260,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   JoinRoute: JoinRoute,
   ApiHealthRoute: ApiHealthRoute,
+  ApiLiveRoute: ApiLiveRoute,
   ApiShapeRoute: ApiShapeRoute,
   PlaySessionIdRoute: PlaySessionIdRoute,
   ReportDemoRoute: ReportDemoRoute,
