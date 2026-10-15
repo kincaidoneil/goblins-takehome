@@ -12,9 +12,8 @@ export function useSyncExternalStoreWithSelector<Snapshot, Selection>(
   selector: (snapshot: Snapshot) => Selection,
   isEqual?: (a: Selection, b: Selection) => boolean,
 ): Selection {
-  const instRef = useRef<{ hasValue: boolean; value: Selection | null }>({
+  const instRef = useRef<{ hasValue: false } | { hasValue: true; value: Selection }>({
     hasValue: false,
-    value: null,
   });
 
   const [getSelection, getServerSelection] = useMemo(() => {
@@ -27,12 +26,9 @@ export function useSyncExternalStoreWithSelector<Snapshot, Selection>(
         memoizedSnapshot = nextSnapshot;
         const nextSelection = selector(nextSnapshot);
         const inst = instRef.current;
-        if (isEqual !== undefined && inst.hasValue) {
-          const current = inst.value as Selection;
-          if (isEqual(current, nextSelection)) {
-            memoizedSelection = current;
-            return current;
-          }
+        if (isEqual !== undefined && inst.hasValue && isEqual(inst.value, nextSelection)) {
+          memoizedSelection = inst.value;
+          return inst.value;
         }
         memoizedSelection = nextSelection;
         return nextSelection;
@@ -57,8 +53,7 @@ export function useSyncExternalStoreWithSelector<Snapshot, Selection>(
   const value = useSyncExternalStore(subscribe, getSelection, getServerSelection);
 
   useEffect(() => {
-    instRef.current.hasValue = true;
-    instRef.current.value = value;
+    instRef.current = { hasValue: true, value };
   }, [value]);
 
   useDebugValue(value);
