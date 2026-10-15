@@ -91,23 +91,26 @@ function Play() {
   });
 
   const [sent, setSent] = useState<ReadonlySet<string>>(() => new Set(work.submittedProblemIds));
-  const outbox = useOutbox(sessionId, {
-    onSent: (problemId) => setSent((current) => new Set(current).add(problemId)),
-    onRejected: (_problemId, error) => {
-      switch (error._tag) {
-        case "SessionNotLive":
-          setView({ _tag: "Ended" });
-          return;
-        case "NotJoined":
-          setView({ _tag: "NotJoined" });
-          return;
-        case "UnknownProblem":
-        case "InvalidImage":
-          // Not expected from this client. The problem unlocks with its strokes intact.
-          return;
-      }
+  const outbox = useOutbox(
+    { sessionId, studentId: work.student.id },
+    {
+      onSent: (problemId) => setSent((current) => new Set(current).add(problemId)),
+      onRejected: (_problemId, error) => {
+        switch (error._tag) {
+          case "SessionNotLive":
+            setView({ _tag: "Ended" });
+            return;
+          case "NotJoined":
+            setView({ _tag: "NotJoined" });
+            return;
+          case "UnknownProblem":
+          case "InvalidImage":
+            // Not expected from this client. The problem unlocks with its strokes intact.
+            return;
+        }
+      },
     },
-  });
+  );
 
   const statuses = useMemo(() => {
     const byProblem = new Map<string, GradeStatus>();
@@ -211,6 +214,7 @@ function Play() {
               <Workspace
                 key={screen.problem.id}
                 sessionId={sessionId}
+                studentId={work.student.id}
                 problem={screen.problem}
                 pages={work.pages}
                 onSubmit={(png) => submitProblem(screen.problem.id, png)}
