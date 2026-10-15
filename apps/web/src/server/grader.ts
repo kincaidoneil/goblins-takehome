@@ -11,6 +11,7 @@
  */
 import { DatabaseLive } from "@goblins/domain";
 import {
+  AiGrader,
   CallLog,
   Consumer,
   Grader,
@@ -95,12 +96,27 @@ const loadTestModel = Layer.effect(Consumer.LoadTestModelClient, ModelClient).pi
   Layer.provide(mockModel),
 );
 
+/**
+ * Which grader runs. Real grades on OpenRouter use AI quality's evaluated grader
+ * (`AiGrader`). On the mock, and for every load-test grade (always on the mock),
+ * the placeholder grader runs, because the mock answers in its reply format.
+ */
+const gradeWith = Layer.effect(
+  Grader.Grader,
+  Effect.map(Effect.orDie(ModelChoice), (choice) => ({
+    grade: (input, tag) =>
+      choice === "openrouter" && Option.isNone(input.loadTestRunId)
+        ? AiGrader.grader.grade(input, tag)
+        : Grader.placeholder.grade(input, tag),
+  })),
+);
+
 const graderServices = Layer.mergeAll(
   Consumer.ModelRouterLive.pipe(
     Layer.provide(Layer.mergeAll(configuredModel, loadTestModel, CallLog.postgres)),
   ),
   GradeStore.postgres,
-  Layer.succeed(Grader.Grader, Grader.placeholder),
+  gradeWith,
 ).pipe(Layer.provide(DatabaseLive), Layer.orDie);
 
 /** Built on the first delivery, so routes that never grade don't open a second pool. */
