@@ -56,7 +56,7 @@ const askModel = (sessionId: string, stats: ProblemStats) =>
       groups: result.mistakes.map((m) => ({ description: m.mistake, studentIds: m.studentIds })),
     });
     return { grouping, model: Models.models.mistakes.model };
-  }).pipe(Effect.timeout(Duration.seconds(45)));
+  }).pipe(Effect.timeout(Duration.seconds(60)));
 
 const groupProblem = (sessionId: string, stats: ProblemStats) =>
   Effect.gen(function* () {
