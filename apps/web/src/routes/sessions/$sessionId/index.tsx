@@ -161,7 +161,8 @@ function Dashboard(props: {
         />
       </main>
 
-      {selectedGrade !== undefined &&
+      {!hideNames &&
+        selectedGrade !== undefined &&
         selectedStudent !== undefined &&
         selectedProblem !== undefined && (
           <CellDetail
@@ -387,7 +388,12 @@ function NeedsYou(props: {
                         Try again
                       </Button>
                     )}
-                    <Button size="sm" variant="ghost" onClick={() => props.onOpen(grade)}>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      disabled={props.hideScores}
+                      onClick={() => props.onOpen(grade)}
+                    >
                       {grade.state === "needs_teacher" ? "Look at the work" : "Score it myself"}
                     </Button>
                   </div>
