@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { type ReactNode, useRef, useState } from "react";
 import { CreatureArt } from "../components/creatures";
 import { ScoreChip } from "../components/ScoreChip";
 import { DropZone, type DropZoneState } from "./DropZone";
@@ -15,7 +15,8 @@ export interface LandingPageProps {
   onTemplate: (templateId: string) => Promise<UploadResult>;
   /** Navigates to the new draft's setup screen. */
   onStarted: (draftId: string) => void;
-  signInHref: string;
+  /** The header's sign-in control, e.g. Clerk's SignInButton wrapping an element with class "lp-signin". */
+  signIn: ReactNode;
   /** For stories: the drop zone's starting state. */
   dropZoneState?: DropZoneState;
 }
@@ -40,7 +41,7 @@ export function LandingPage({
   onFiles,
   onTemplate,
   onStarted,
-  signInHref,
+  signIn,
   dropZoneState,
 }: LandingPageProps) {
   const templatesRef = useRef<HTMLElement>(null);
@@ -50,10 +51,15 @@ export function LandingPage({
     key: number;
     state: DropZoneState;
   } | null>(null);
+  // One template at a time: a second click can't start a second draft or race the first.
+  const [pendingTemplate, setPendingTemplate] = useState<string | undefined>(undefined);
   const pickTemplate = async (templateId: string) => {
+    if (pendingTemplate !== undefined) return;
+    setPendingTemplate(templateId);
     const result = await onTemplate(templateId).catch(
       (): UploadResult => ({ _tag: "Rejected", reason: "upload-failed" }),
     );
+    setPendingTemplate(undefined);
     if (result._tag === "Started") {
       onStarted(result.draftId);
       return;
@@ -79,9 +85,7 @@ export function LandingPage({
             Goblins <span className="lp-wordmark-sub">Grader</span>
           </span>
         </a>
-        <a className="lp-signin" href={signInHref}>
-          Sign in
-        </a>
+        {signIn}
       </header>
 
       <main>
@@ -135,6 +139,7 @@ export function LandingPage({
           ref={templatesRef}
           templates={templates}
           onPick={(id) => void pickTemplate(id)}
+          pendingId={pendingTemplate}
         />
       </main>
 
