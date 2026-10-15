@@ -3,25 +3,33 @@
  * server checks who is asking and picks the table, filter and columns. The browser never sends a
  * `where` clause.
  */
-import { Db, schema } from "@goblins/domain"
-import { and, eq } from "drizzle-orm"
-import { Data, Effect, Option } from "effect"
-import { studentFromCookies } from "./student-identity"
-import { currentTeacher } from "./teacher"
+import { Db, schema } from "@goblins/domain";
+import { and, eq } from "drizzle-orm";
+import { Data, Effect, Option } from "effect";
+import { studentFromCookies } from "./student-identity";
+import { currentTeacher } from "./teacher";
 
 /** An Electric shape: one table, a parameterized filter, and the columns to send. */
 export interface ShapeDefinition {
-  readonly table: string
-  readonly where: string
-  readonly params: ReadonlyArray<string>
-  readonly columns: ReadonlyArray<string>
+  readonly table: string;
+  readonly where: string;
+  readonly params: ReadonlyArray<string>;
+  readonly columns: ReadonlyArray<string>;
 }
 
 export class Forbidden extends Data.TaggedError("Forbidden") {}
 export class UnknownView extends Data.TaggedError("UnknownView") {}
 
-const sessionColumns = ["id", "assignment_id", "join_code", "status", "time_limit_minutes", "started_at", "ended_at"]
-const studentColumns = ["id", "session_id", "display_name", "avatar_id", "created_at"]
+const sessionColumns = [
+  "id",
+  "assignment_id",
+  "join_code",
+  "status",
+  "time_limit_minutes",
+  "started_at",
+  "ended_at",
+];
+const studentColumns = ["id", "session_id", "display_name", "avatar_id", "created_at"];
 const gradeColumnsForTeacher = [
   "submission_id",
   "session_id",
@@ -39,28 +47,41 @@ const gradeColumnsForTeacher = [
   "line_points",
   "points",
   "graded_at",
-  "updated_at"
-]
+  "updated_at",
+];
 /** Students see only their own final scores: `points` is null until a grade is final. */
-const gradeColumnsForStudent = ["submission_id", "student_id", "problem_id", "state", "points", "max_points"]
+const gradeColumnsForStudent = [
+  "submission_id",
+  "student_id",
+  "problem_id",
+  "state",
+  "points",
+  "max_points",
+];
 
-const bySession = (table: string, sessionId: string, columns: ReadonlyArray<string>): ShapeDefinition => ({
+const bySession = (
+  table: string,
+  sessionId: string,
+  columns: ReadonlyArray<string>,
+): ShapeDefinition => ({
   table,
   where: table === "class_sessions" ? "id = $1" : "session_id = $1",
   params: [sessionId],
-  columns
-})
+  columns,
+});
 
 const teacherOwnsSession = (sessionId: string) =>
   Effect.gen(function* () {
-    const teacher = yield* currentTeacher
-    const db = yield* Db
+    const teacher = yield* currentTeacher;
+    const db = yield* Db;
     const [row] = yield* db
       .select({ id: schema.classSessions.id })
       .from(schema.classSessions)
-      .where(and(eq(schema.classSessions.id, sessionId), eq(schema.classSessions.teacherId, teacher.id)))
-    if (row === undefined) return yield* Effect.fail(new Forbidden())
-  })
+      .where(
+        and(eq(schema.classSessions.id, sessionId), eq(schema.classSessions.teacherId, teacher.id)),
+      );
+    if (row === undefined) return yield* Effect.fail(new Forbidden());
+  });
 
 /**
  * Views:
@@ -71,36 +92,40 @@ export const resolveShape = (request: Request, view: string, sessionId: string) 
   Effect.gen(function* () {
     switch (view) {
       case "session":
-        yield* teacherOwnsSession(sessionId)
-        return bySession("class_sessions", sessionId, sessionColumns)
+        yield* teacherOwnsSession(sessionId);
+        return bySession("class_sessions", sessionId, sessionColumns);
       case "students":
-        yield* teacherOwnsSession(sessionId)
-        return bySession("students", sessionId, studentColumns)
+        yield* teacherOwnsSession(sessionId);
+        return bySession("students", sessionId, studentColumns);
       case "grades":
-        yield* teacherOwnsSession(sessionId)
-        return bySession("grades", sessionId, gradeColumnsForTeacher)
+        yield* teacherOwnsSession(sessionId);
+        return bySession("grades", sessionId, gradeColumnsForTeacher);
       case "my-session": {
-        yield* requireStudent(request, sessionId)
-        return bySession("class_sessions", sessionId, sessionColumns.filter((c) => c !== "join_code"))
+        yield* requireStudent(request, sessionId);
+        return bySession(
+          "class_sessions",
+          sessionId,
+          sessionColumns.filter((c) => c !== "join_code"),
+        );
       }
       case "my-grades": {
-        const studentId = yield* requireStudent(request, sessionId)
+        const studentId = yield* requireStudent(request, sessionId);
         return {
           table: "grades",
           where: "student_id = $1",
           params: [studentId],
-          columns: gradeColumnsForStudent
-        } satisfies ShapeDefinition
+          columns: gradeColumnsForStudent,
+        } satisfies ShapeDefinition;
       }
       default:
-        return yield* Effect.fail(new UnknownView())
+        return yield* Effect.fail(new UnknownView());
     }
-  })
+  });
 
 const requireStudent = (request: Request, sessionId: string) =>
   Effect.flatMap(studentFromCookies(request.headers.get("cookie"), sessionId), (studentId) =>
     Option.match(studentId, {
       onNone: () => Effect.fail(new Forbidden()),
-      onSome: Effect.succeed
-    })
-  )
+      onSome: Effect.succeed,
+    }),
+  );

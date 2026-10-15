@@ -1,13 +1,13 @@
-import { joinSession, parseJoinCodeInput } from "@goblins/domain"
-import { CREATURE_COUNT } from "@goblins/ui"
-import { createServerFn } from "@tanstack/react-start"
-import { setCookie } from "@tanstack/react-start/server"
-import { Effect, Option, Schema } from "effect"
-import { err, ok } from "../result"
-import { run } from "../runtime"
-import { studentCookie } from "../student-identity"
+import { joinSession, parseJoinCodeInput } from "@goblins/domain";
+import { CREATURE_COUNT } from "@goblins/ui";
+import { createServerFn } from "@tanstack/react-start";
+import { setCookie } from "@tanstack/react-start/server";
+import { Effect, Option, Schema } from "effect";
+import { err, ok } from "../result";
+import { run } from "../runtime";
+import { studentCookie } from "../student-identity";
 
-const JoinInput = Schema.Struct({ joinCode: Schema.String, name: Schema.String })
+const JoinInput = Schema.Struct({ joinCode: Schema.String, name: Schema.String });
 
 /** Join a session by code and name, or resume the student with the same name. */
 export const join = createServerFn({ method: "POST" })
@@ -15,27 +15,28 @@ export const join = createServerFn({ method: "POST" })
   .handler(({ data }) =>
     run(
       Effect.gen(function* () {
-        const joinCode = parseJoinCodeInput(data.joinCode)
-        if (Option.isNone(joinCode)) return err({ _tag: "SessionNotFound" } as const)
+        const joinCode = parseJoinCodeInput(data.joinCode);
+        if (Option.isNone(joinCode)) return err({ _tag: "SessionNotFound" } as const);
         const { student, resumed } = yield* joinSession({
           joinCode: joinCode.value,
           name: data.name,
-          pickAvatar: () => Math.floor(Math.random() * CREATURE_COUNT)
-        })
-        const cookie = yield* studentCookie(student.sessionId, student.id)
-        setCookie(cookie.name, cookie.value, cookie.options)
+          pickAvatar: () => Math.floor(Math.random() * CREATURE_COUNT),
+        });
+        const cookie = yield* studentCookie(student.sessionId, student.id);
+        setCookie(cookie.name, cookie.value, cookie.options);
         return ok({
           sessionId: student.sessionId,
           studentId: student.id,
           displayName: student.displayName,
           avatarId: student.avatarId,
-          resumed
-        })
+          resumed,
+        });
       }).pipe(
         Effect.catchTags({
           SessionNotFound: () => Effect.succeed(err({ _tag: "SessionNotFound" } as const)),
-          InvalidName: (e) => Effect.succeed(err({ _tag: "InvalidName", reason: e.reason } as const))
-        })
-      )
-    )
-  )
+          InvalidName: (e) =>
+            Effect.succeed(err({ _tag: "InvalidName", reason: e.reason } as const)),
+        }),
+      ),
+    ),
+  );
