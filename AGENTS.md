@@ -41,7 +41,8 @@ pnpm monorepo. Each workstream owns one package and does not edit another stream
 - Keep it simple. Do not build for scale the PRD does not ask for.
 - End-to-end tests (Playwright) over unit tests. Unit tests only where logic is dense.
 - UI components get Storybook stories. Check UI changes by screenshot.
-- Root commands: `pnpm lint` (Biome), `pnpm format`, `pnpm typecheck`, `pnpm test`. CI runs `lint`, `typecheck` and `test` on every PR.
+- Root commands: `pnpm lint` (Biome), `pnpm format`, `pnpm typecheck`, `pnpm test`, `pnpm e2e`. CI runs `lint`, `typecheck` and `test` on every PR, and E2E against each Vercel preview once it deploys.
+- E2E tests live in `e2e/tests`. Use the `classroom` fixture from `e2e/fixtures.ts` for a teacher, a projector and any number of students, each on its own device. Run locally with `E2E_BASE_URL=http://localhost:3000 pnpm e2e`.
 - Each package's `tsconfig.json` extends `../../tsconfig.base.json` and its `package.json` defines `typecheck` (`tsc -p .`) and, if it has tests, `test` (Vitest). Root scripts run those in every package.
 
 ## Models and money
