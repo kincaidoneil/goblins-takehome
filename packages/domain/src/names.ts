@@ -13,9 +13,9 @@ export const normalizeName = (name: string): string =>
     .replace(/[\u0300-\u036f]/g, "")
     .normalize("NFC")
     .toLowerCase()
-    .replace(/[^\p{L}\p{M}\p{N}]/gu, "")
+    .replace(/[^\p{L}\p{M}\p{N}]/gu, "");
 
 /** Collapses runs of whitespace and trims, keeping the student's own capitalization. */
-export const cleanDisplayName = (name: string): string => name.trim().replace(/\s+/g, " ")
+export const cleanDisplayName = (name: string): string => name.trim().replace(/\s+/g, " ");
 
-export const MAX_NAME_LENGTH = 40
+export const MAX_NAME_LENGTH = 40;

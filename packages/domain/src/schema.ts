@@ -11,7 +11,7 @@
  * - State columns are enums, and check constraints tie each state to the columns it needs,
  *   so an impossible combination is rejected by Postgres, not just by the app.
  */
-import { sql } from "drizzle-orm"
+import { sql } from "drizzle-orm";
 import {
   type AnyPgColumn,
   boolean,
@@ -28,19 +28,19 @@ import {
   timestamp,
   unique,
   uniqueIndex,
-  uuid
-} from "drizzle-orm/pg-core"
-import type { LinePoints } from "./grade"
+  uuid,
+} from "drizzle-orm/pg-core";
+import type { LinePoints } from "./grade";
 
-const id = () => uuid().primaryKey().defaultRandom()
-const createdAt = () => timestamp({ withTimezone: true }).notNull().defaultNow()
+const id = () => uuid().primaryKey().defaultRandom();
+const createdAt = () => timestamp({ withTimezone: true }).notNull().defaultNow();
 const updatedAt = () =>
   timestamp({ withTimezone: true })
     .notNull()
     .defaultNow()
-    .$onUpdate(() => new Date())
+    .$onUpdate(() => new Date());
 /** Set on rows a load test created, so they can be excluded from real views and deleted. */
-const loadTestRunId = () => text()
+const loadTestRunId = () => text();
 
 // ---------------------------------------------------------------------------
 // Teachers
@@ -57,15 +57,15 @@ export const teachers = pgTable(
     hideNamesAndScores: boolean().notNull().default(false),
     loadTestRunId: loadTestRunId(),
     createdAt: createdAt(),
-    updatedAt: updatedAt()
+    updatedAt: updatedAt(),
   },
-  (t) => [index().on(t.loadTestRunId)]
-)
+  (t) => [index().on(t.loadTestRunId)],
+);
 
 // ---------------------------------------------------------------------------
 // Assignments and problems
 
-export const extractionStatus = pgEnum("extraction_status", ["extracting", "ready", "failed"])
+export const extractionStatus = pgEnum("extraction_status", ["extracting", "ready", "failed"]);
 
 export const assignments = pgTable(
   "assignments",
@@ -86,7 +86,7 @@ export const assignments = pgTable(
     extractionFailureReason: text(),
     loadTestRunId: loadTestRunId(),
     createdAt: createdAt(),
-    updatedAt: updatedAt()
+    updatedAt: updatedAt(),
   },
   (t) => [
     index().on(t.teacherId),
@@ -94,14 +94,14 @@ export const assignments = pgTable(
     index().on(t.loadTestRunId),
     check(
       "assignments_has_one_owner",
-      sql`(${t.teacherId} is null) <> (${t.draftOwnerId} is null)`
+      sql`(${t.teacherId} is null) <> (${t.draftOwnerId} is null)`,
     ),
     check(
       "assignments_failure_reason_iff_failed",
-      sql`(${t.extractionStatus} = 'failed') = (${t.extractionFailureReason} is not null)`
-    )
-  ]
-)
+      sql`(${t.extractionStatus} = 'failed') = (${t.extractionFailureReason} is not null)`,
+    ),
+  ],
+);
 
 /** The original worksheet pages, shown beside the review screen and behind "See worksheet". */
 export const worksheetPages = pgTable(
@@ -114,13 +114,13 @@ export const worksheetPages = pgTable(
     pageNumber: integer().notNull(),
     /** Vercel Blob URL of the page image. */
     imageUrl: text().notNull(),
-    createdAt: createdAt()
+    createdAt: createdAt(),
   },
   (t) => [
     primaryKey({ columns: [t.assignmentId, t.pageNumber] }),
-    check("worksheet_pages_page_number_positive", sql`${t.pageNumber} >= 1`)
-  ]
-)
+    check("worksheet_pages_page_number_positive", sql`${t.pageNumber} >= 1`),
+  ],
+);
 
 export const problems = pgTable(
   "problems",
@@ -144,13 +144,13 @@ export const problems = pgTable(
     /** Rubric-wide guidance that is not a point line, e.g. "Accept equivalent forms." */
     gradingNotes: text().notNull().default(""),
     createdAt: createdAt(),
-    updatedAt: updatedAt()
+    updatedAt: updatedAt(),
   },
   (t) => [
     uniqueIndex().on(t.assignmentId, t.position),
-    check("problems_position_nonnegative", sql`${t.position} >= 0`)
-  ]
-)
+    check("problems_position_nonnegative", sql`${t.position} >= 0`),
+  ],
+);
 
 /**
  * "2b uses your answer to 2a": `problemId` depends on `dependsOnProblemId`. The grader gets the
@@ -164,14 +164,14 @@ export const problemDependencies = pgTable(
       .references(() => problems.id, { onDelete: "cascade" }),
     dependsOnProblemId: uuid()
       .notNull()
-      .references((): AnyPgColumn => problems.id, { onDelete: "cascade" })
+      .references((): AnyPgColumn => problems.id, { onDelete: "cascade" }),
   },
   (t) => [
     primaryKey({ columns: [t.problemId, t.dependsOnProblemId] }),
     index().on(t.dependsOnProblemId),
-    check("problem_dependencies_not_self", sql`${t.problemId} <> ${t.dependsOnProblemId}`)
-  ]
-)
+    check("problem_dependencies_not_self", sql`${t.problemId} <> ${t.dependsOnProblemId}`),
+  ],
+);
 
 /** One line of an AP-style scoring guide: "1 pt: correct setup." */
 export const rubricLines = pgTable(
@@ -186,16 +186,16 @@ export const rubricLines = pgTable(
     points: integer().notNull(),
     description: text().notNull(),
     createdAt: createdAt(),
-    updatedAt: updatedAt()
+    updatedAt: updatedAt(),
   },
   (t) => [
     uniqueIndex().on(t.problemId, t.position),
     check("rubric_lines_points_positive", sql`${t.points} > 0`),
-    check("rubric_lines_position_nonnegative", sql`${t.position} >= 0`)
-  ]
-)
+    check("rubric_lines_position_nonnegative", sql`${t.position} >= 0`),
+  ],
+);
 
-export const chatRole = pgEnum("chat_role", ["teacher", "assistant"])
+export const chatRole = pgEnum("chat_role", ["teacher", "assistant"]);
 
 /** The setup chat panel: "make problem 3 worth 4 points." */
 export const assignmentChatMessages = pgTable(
@@ -207,15 +207,15 @@ export const assignmentChatMessages = pgTable(
       .references(() => assignments.id, { onDelete: "cascade" }),
     role: chatRole().notNull(),
     content: text().notNull(),
-    createdAt: createdAt()
+    createdAt: createdAt(),
   },
-  (t) => [index().on(t.assignmentId, t.createdAt)]
-)
+  (t) => [index().on(t.assignmentId, t.createdAt)],
+);
 
 // ---------------------------------------------------------------------------
 // Class sessions, students, submissions and grades
 
-export const classSessionStatus = pgEnum("class_session_status", ["lobby", "live", "ended"])
+export const classSessionStatus = pgEnum("class_session_status", ["lobby", "live", "ended"]);
 
 /** One launch of an assignment to one class. Named to avoid confusion with auth sessions. */
 export const classSessions = pgTable(
@@ -240,19 +240,17 @@ export const classSessions = pgTable(
     reportShareToken: text().unique(),
     loadTestRunId: loadTestRunId(),
     createdAt: createdAt(),
-    updatedAt: updatedAt()
+    updatedAt: updatedAt(),
   },
   (t) => [
-    uniqueIndex("class_sessions_open_join_code")
-      .on(t.joinCode)
-      .where(sql`${t.status} <> 'ended'`),
+    uniqueIndex("class_sessions_open_join_code").on(t.joinCode).where(sql`${t.status} <> 'ended'`),
     index().on(t.teacherId),
     index().on(t.assignmentId),
     index().on(t.loadTestRunId),
     check("class_sessions_join_code_format", sql`${t.joinCode} ~ '^[0-9]{6}$'`),
     check(
       "class_sessions_time_limit_positive",
-      sql`${t.timeLimitMinutes} is null or ${t.timeLimitMinutes} > 0`
+      sql`${t.timeLimitMinutes} is null or ${t.timeLimitMinutes} > 0`,
     ),
     check(
       "class_sessions_status_timestamps",
@@ -260,10 +258,10 @@ export const classSessions = pgTable(
         when 'lobby' then ${t.startedAt} is null and ${t.endedAt} is null
         when 'live' then ${t.startedAt} is not null and ${t.endedAt} is null
         when 'ended' then ${t.endedAt} is not null
-      end`
-    )
-  ]
-)
+      end`,
+    ),
+  ],
+);
 
 export const students = pgTable(
   "students",
@@ -279,14 +277,14 @@ export const students = pgTable(
     /** Creature avatar id from `packages/ui` (0 to `CREATURE_COUNT - 1`). */
     avatarId: integer().notNull(),
     createdAt: createdAt(),
-    updatedAt: updatedAt()
+    updatedAt: updatedAt(),
   },
   (t) => [
     uniqueIndex().on(t.sessionId, t.nameKey),
     check("students_name_key_not_empty", sql`${t.nameKey} <> ''`),
-    check("students_avatar_id_nonnegative", sql`${t.avatarId} >= 0`)
-  ]
-)
+    check("students_avatar_id_nonnegative", sql`${t.avatarId} >= 0`),
+  ],
+);
 
 export const submissions = pgTable(
   "submissions",
@@ -305,7 +303,7 @@ export const submissions = pgTable(
     whiteboardUrl: text().notNull(),
     /** When the student pressed Submit, from the client. Differs from `createdAt` after an offline retry. */
     submittedAt: timestamp({ withTimezone: true }).notNull(),
-    createdAt: createdAt()
+    createdAt: createdAt(),
   },
   (t) => [
     // A submitted problem is locked, so a student has at most one submission per problem.
@@ -314,25 +312,25 @@ export const submissions = pgTable(
     // Target of the composite foreign key from `grades`, which keeps a grade's copies in step.
     unique("submissions_grade_link").on(t.id, t.sessionId, t.studentId, t.problemId),
     index().on(t.sessionId),
-    index().on(t.problemId)
-  ]
-)
+    index().on(t.problemId),
+  ],
+);
 
 export const gradeState = pgEnum("grade_state", [
   "submitted",
   "grading",
   "graded",
   "needs_teacher",
-  "couldnt_grade"
-])
+  "couldnt_grade",
+]);
 
 /** Who decided the final score of a graded grade. */
 export const gradeSource = pgEnum("grade_source", [
   "model",
   "teacher_accepted",
   "teacher_scored",
-  "teacher_override"
-])
+  "teacher_override",
+]);
 
 /**
  * One grade per submission. See `grade.ts` for the state machine and the tagged union that
@@ -390,13 +388,18 @@ export const grades = pgTable(
     outcomeAt: timestamp({ withTimezone: true }),
 
     createdAt: createdAt(),
-    updatedAt: updatedAt()
+    updatedAt: updatedAt(),
   },
   (t) => [
     foreignKey({
       name: "grades_submission_fk",
       columns: [t.submissionId, t.sessionId, t.studentId, t.problemId],
-      foreignColumns: [submissions.id, submissions.sessionId, submissions.studentId, submissions.problemId]
+      foreignColumns: [
+        submissions.id,
+        submissions.sessionId,
+        submissions.studentId,
+        submissions.problemId,
+      ],
     })
       .onDelete("cascade")
       .onUpdate("cascade"),
@@ -411,34 +414,34 @@ export const grades = pgTable(
     check("grades_max_points_positive", sql`${t.maxPoints} > 0`),
     check(
       "grades_points_in_range",
-      sql`${t.points} is null or (${t.points} >= 0 and ${t.points} <= ${t.maxPoints})`
+      sql`${t.points} is null or (${t.points} >= 0 and ${t.points} <= ${t.maxPoints})`,
     ),
     check(
       "grades_final_fields_iff_graded",
       sql`(${t.state} = 'graded') = (
         ${t.source} is not null and ${t.linePoints} is not null
         and ${t.points} is not null and ${t.gradedAt} is not null
-      )`
+      )`,
     ),
     check(
       "grades_failure_iff_couldnt_grade",
-      sql`(${t.state} = 'couldnt_grade') = (${t.failureReason} is not null)`
+      sql`(${t.state} = 'couldnt_grade') = (${t.failureReason} is not null)`,
     ),
     check(
       "grades_model_result_complete",
       sql`(${t.graderRead} is null) = (${t.modelLinePoints} is null)
-        and (${t.graderRead} is null) = (${t.graderReason} is null)`
+        and (${t.graderRead} is null) = (${t.graderReason} is null)`,
     ),
     check(
       "grades_needs_teacher_has_model_result",
-      sql`${t.state} <> 'needs_teacher' or (${t.graderRead} is not null and ${t.flagReason} is not null)`
+      sql`${t.state} <> 'needs_teacher' or (${t.graderRead} is not null and ${t.flagReason} is not null)`,
     ),
     check(
       "grades_model_source_has_model_result",
-      sql`${t.source} is distinct from 'model' or ${t.graderRead} is not null`
-    )
-  ]
-)
+      sql`${t.source} is distinct from 'model' or ${t.graderRead} is not null`,
+    ),
+  ],
+);
 
 // ---------------------------------------------------------------------------
 // Model call log
@@ -448,8 +451,8 @@ export const modelCallStatus = pgEnum("model_call_status", [
   "rate_limited",
   "timeout",
   "provider_error",
-  "bad_response"
-])
+  "bad_response",
+]);
 
 /**
  * Every model call, real or mock, with latency, status, tokens and cost. Feeds the usage report,
@@ -474,7 +477,7 @@ export const modelCalls = pgTable(
     attempt: integer(),
     errorMessage: text(),
     loadTestRunId: loadTestRunId(),
-    createdAt: createdAt()
+    createdAt: createdAt(),
   },
-  (t) => [index().on(t.createdAt), index().on(t.loadTestRunId), index().on(t.submissionId)]
-)
+  (t) => [index().on(t.createdAt), index().on(t.loadTestRunId), index().on(t.submissionId)],
+);

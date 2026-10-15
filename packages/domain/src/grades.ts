@@ -7,23 +7,23 @@
  * Teacher writes are conditional on the state too, so two tabs cannot race a grade into an
  * impossible state.
  */
-import { and, asc, eq, inArray, isNull, lt, or, sql } from "drizzle-orm"
-import { Data, Effect, Either, Option, Schema } from "effect"
-import { Db } from "./db"
+import { and, asc, eq, inArray, isNull, lt, or, sql } from "drizzle-orm";
+import { Data, Effect, Either, Option, Schema } from "effect";
+import { Db } from "./db";
 import {
   Attempt,
   CouldntGrade,
-  Grade,
+  type Grade,
   Graded,
   type GradeJob,
   type GraderOutcome,
   Grading,
   LinePoints,
   NeedsTeacher,
-  Submitted,
   SubmissionId,
-  totalPoints
-} from "./grade"
+  Submitted,
+  totalPoints,
+} from "./grade";
 import {
   classSessions,
   grades,
@@ -31,51 +31,61 @@ import {
   problems,
   rubricLines,
   submissions,
-  worksheetPages
-} from "./schema"
+  worksheetPages,
+} from "./schema";
 
-type GradeRow = typeof grades.$inferSelect
+type GradeRow = typeof grades.$inferSelect;
 
 // ---------------------------------------------------------------------------
 // Decoding
 
 /** A row that breaks the state machine. The check constraints make this unreachable. */
 export class CorruptGradeRow extends Data.TaggedError("CorruptGradeRow")<{
-  readonly submissionId: string
-  readonly problem: string
+  readonly submissionId: string;
+  readonly problem: string;
 }> {}
 
 const required = <A>(row: GradeRow, value: A | null, field: string) =>
   value === null
-    ? Effect.fail(new CorruptGradeRow({ submissionId: row.submissionId, problem: `${field} is null` }))
-    : Effect.succeed(value)
+    ? Effect.fail(
+        new CorruptGradeRow({ submissionId: row.submissionId, problem: `${field} is null` }),
+      )
+    : Effect.succeed(value);
 
 const modelResultOf = (row: GradeRow) =>
   row.graderRead !== null && row.modelLinePoints !== null && row.graderReason !== null
-    ? Option.some({ read: row.graderRead, linePoints: row.modelLinePoints, reason: row.graderReason })
-    : Option.none()
+    ? Option.some({
+        read: row.graderRead,
+        linePoints: row.modelLinePoints,
+        reason: row.graderReason,
+      })
+    : Option.none();
 
 /** Decodes a `grades` row into the `Grade` tagged union. */
 export const decodeGrade = (row: GradeRow): Effect.Effect<Grade, CorruptGradeRow> =>
   Effect.gen(function* () {
-    const attempt = Attempt.make(row.attempt)
+    const attempt = Attempt.make(row.attempt);
     const status = yield* (() => {
       switch (row.state) {
         case "submitted":
-          return Effect.succeed(new Submitted({ attempt }))
+          return Effect.succeed(new Submitted({ attempt }));
         case "grading":
-          return Effect.succeed(new Grading({ attempt }))
+          return Effect.succeed(new Grading({ attempt }));
         case "needs_teacher":
           return Effect.gen(function* () {
-            const model = yield* required(row, Option.getOrNull(modelResultOf(row)), "model result")
-            const flagReason = yield* required(row, row.flagReason, "flag_reason")
-            return new NeedsTeacher({ attempt, model, flagReason })
-          })
+            const model = yield* required(
+              row,
+              Option.getOrNull(modelResultOf(row)),
+              "model result",
+            );
+            const flagReason = yield* required(row, row.flagReason, "flag_reason");
+            return new NeedsTeacher({ attempt, model, flagReason });
+          });
         case "couldnt_grade":
           return Effect.map(
             required(row, row.failureReason, "failure_reason"),
-            (failureReason) => new CouldntGrade({ attempt, failureReason })
-          )
+            (failureReason) => new CouldntGrade({ attempt, failureReason }),
+          );
         case "graded":
           return Effect.gen(function* () {
             return new Graded({
@@ -85,11 +95,11 @@ export const decodeGrade = (row: GradeRow): Effect.Effect<Grade, CorruptGradeRow
               points: yield* required(row, row.points, "points"),
               gradedAt: yield* required(row, row.gradedAt, "graded_at"),
               model: modelResultOf(row),
-              flagReason: Option.fromNullable(row.flagReason)
-            })
-          })
+              flagReason: Option.fromNullable(row.flagReason),
+            });
+          });
       }
-    })()
+    })();
     return {
       submissionId: SubmissionId.make(row.submissionId),
       sessionId: row.sessionId,
@@ -97,96 +107,99 @@ export const decodeGrade = (row: GradeRow): Effect.Effect<Grade, CorruptGradeRow
       problemId: row.problemId,
       maxPoints: row.maxPoints,
       status,
-      updatedAt: row.updatedAt
-    }
-  })
+      updatedAt: row.updatedAt,
+    };
+  });
 
 export const getGrade = (submissionId: SubmissionId) =>
   Effect.gen(function* () {
-    const db = yield* Db
-    const [row] = yield* db.select().from(grades).where(eq(grades.submissionId, submissionId))
-    return row === undefined ? Option.none() : Option.some(yield* decodeGrade(row))
-  })
+    const db = yield* Db;
+    const [row] = yield* db.select().from(grades).where(eq(grades.submissionId, submissionId));
+    return row === undefined ? Option.none() : Option.some(yield* decodeGrade(row));
+  });
 
 // ---------------------------------------------------------------------------
 // Rubric checks
 
 /** Line points that do not match the problem's rubric: a line is missing, unknown or over its maximum. */
 export class LinePointsMismatch extends Data.TaggedError("LinePointsMismatch")<{
-  readonly submissionId: string
-  readonly problem: string
+  readonly submissionId: string;
+  readonly problem: string;
 }> {}
 
 const checkLinePoints = (submissionId: SubmissionId, linePoints: LinePoints) =>
   Effect.gen(function* () {
-    const db = yield* Db
+    const db = yield* Db;
     const lines = yield* db
       .select({ id: rubricLines.id, points: rubricLines.points, maxPoints: grades.maxPoints })
       .from(rubricLines)
       .innerJoin(grades, eq(grades.problemId, rubricLines.problemId))
-      .where(eq(grades.submissionId, submissionId))
-    const max = new Map(lines.map((line) => [line.id, line.points]))
-    const fail = (problem: string) => Effect.fail(new LinePointsMismatch({ submissionId, problem }))
+      .where(eq(grades.submissionId, submissionId));
+    const max = new Map(lines.map((line) => [line.id, line.points]));
+    const fail = (problem: string) =>
+      Effect.fail(new LinePointsMismatch({ submissionId, problem }));
     // Model output and teacher input arrive as plain data; enforce whole, non-negative points.
     if (Either.isLeft(Schema.decodeUnknownEither(LinePoints)(linePoints))) {
-      return yield* fail("line points must be whole numbers of at least 0")
+      return yield* fail("line points must be whole numbers of at least 0");
     }
     // The rubric is locked once an assignment launches, so this only trips on a bug; it turns
     // the `grades_points_in_range` check into a typed error.
-    const maxPoints = lines[0]?.maxPoints ?? 0
-    if (totalPoints(linePoints) > maxPoints) return yield* fail(`total over ${maxPoints}`)
+    const maxPoints = lines[0]?.maxPoints ?? 0;
+    if (totalPoints(linePoints) > maxPoints) return yield* fail(`total over ${maxPoints}`);
     if (linePoints.length !== lines.length) {
-      return yield* fail(`expected ${lines.length} rubric lines, got ${linePoints.length}`)
+      return yield* fail(`expected ${lines.length} rubric lines, got ${linePoints.length}`);
     }
-    const seen = new Set<string>()
+    const seen = new Set<string>();
     for (const line of linePoints) {
-      const lineMax = max.get(line.rubricLineId)
-      if (lineMax === undefined) return yield* fail(`unknown rubric line ${line.rubricLineId}`)
-      if (seen.has(line.rubricLineId)) return yield* fail(`rubric line ${line.rubricLineId} repeated`)
-      if (line.points > lineMax) return yield* fail(`rubric line ${line.rubricLineId} over ${lineMax}`)
-      seen.add(line.rubricLineId)
+      const lineMax = max.get(line.rubricLineId);
+      if (lineMax === undefined) return yield* fail(`unknown rubric line ${line.rubricLineId}`);
+      if (seen.has(line.rubricLineId))
+        return yield* fail(`rubric line ${line.rubricLineId} repeated`);
+      if (line.points > lineMax)
+        return yield* fail(`rubric line ${line.rubricLineId} over ${lineMax}`);
+      seen.add(line.rubricLineId);
     }
-  })
+  });
 
 // ---------------------------------------------------------------------------
 // Grading pipeline
 
 /** A consumer's hold on one attempt. Pass it back to `recordOutcome`. */
 export interface Lease {
-  readonly submissionId: SubmissionId
-  readonly attempt: Attempt
-  readonly claimId: string
+  readonly submissionId: SubmissionId;
+  readonly attempt: Attempt;
+  readonly claimId: string;
 }
 
 /** Everything the grader needs for one attempt. */
 export interface GradingInput {
-  readonly lease: Lease
+  readonly lease: Lease;
   /** Set when a load test created this grade. Route it to the mock model and tag its call log rows. */
-  readonly loadTestRunId: Option.Option<string>
-  readonly whiteboardUrl: string
+  readonly loadTestRunId: Option.Option<string>;
+  readonly whiteboardUrl: string;
   readonly problem: {
-    readonly label: string
-    readonly text: string
-    readonly answerKey: string
-    readonly diagramDescription: string | null
-    readonly gradingNotes: string
+    readonly label: string;
+    readonly text: string;
+    readonly answerKey: string;
+    readonly diagramDescription: string | null;
+    readonly gradingNotes: string;
     /** Empty unless the teacher marked the problem as needing the page image. */
-    readonly pageImageUrls: ReadonlyArray<string>
-  }
+    readonly pageImageUrls: ReadonlyArray<string>;
+  };
   readonly rubricLines: ReadonlyArray<{
-    readonly id: string
-    readonly points: number
-    readonly description: string
-  }>
+    readonly id: string;
+    readonly points: number;
+    readonly description: string;
+  }>;
   /** Earlier problems this one depends on, with the student's work on each, for follow-through credit. */
   readonly dependencies: ReadonlyArray<{
-    readonly label: string
-    readonly text: string
+    readonly label: string;
+    readonly text: string;
     /** None if the student has not submitted the earlier problem. */
-    readonly whiteboardUrl: Option.Option<string>
+    readonly whiteboardUrl: Option.Option<string>;
     /** What the grader read from the earlier whiteboard, if it has been graded. */
-    readonly graderRead: Option.Option<string>
-  }>
+    readonly graderRead: Option.Option<string>;
+  }>;
 }
 
 /**
@@ -194,7 +207,7 @@ export interface GradingInput {
  * in progress, so one message never pays for two model calls. After the lease, a redelivery takes
  * the attempt over, which recovers from a consumer that crashed mid-call.
  */
-export const CLAIM_LEASE_SECONDS = 120
+export const CLAIM_LEASE_SECONDS = 120;
 
 /**
  * What the queue consumer does with a message:
@@ -205,15 +218,15 @@ export const CLAIM_LEASE_SECONDS = 120
 export type Claim =
   | { readonly _tag: "Claimed"; readonly input: GradingInput }
   | { readonly _tag: "Stale" }
-  | { readonly _tag: "InProgress" }
+  | { readonly _tag: "InProgress" };
 
-const stale: Claim = { _tag: "Stale" }
+const stale: Claim = { _tag: "Stale" };
 
 /** Called by the queue consumer when a message arrives. Moves the grade to `grading`. */
 export const startGrading = (job: GradeJob) =>
   Effect.gen(function* () {
-    const db = yield* Db
-    const claimId = crypto.randomUUID()
+    const db = yield* Db;
+    const claimId = crypto.randomUUID();
     const [claimed] = yield* db
       .update(grades)
       .set({ state: "grading", claimedAt: new Date(), claimId, outcomeAt: null })
@@ -227,36 +240,43 @@ export const startGrading = (job: GradeJob) =>
               eq(grades.state, "grading"),
               or(
                 isNull(grades.claimedAt),
-                lt(grades.claimedAt, sql`now() - make_interval(secs => ${CLAIM_LEASE_SECONDS})`)
-              )
-            )
-          )
-        )
+                lt(grades.claimedAt, sql`now() - make_interval(secs => ${CLAIM_LEASE_SECONDS})`),
+              ),
+            ),
+          ),
+        ),
       )
-      .returning({ problemId: grades.problemId, studentId: grades.studentId })
+      .returning({ problemId: grades.problemId, studentId: grades.studentId });
     if (claimed === undefined) {
       const [current] = yield* db
         .select({ state: grades.state, attempt: grades.attempt })
         .from(grades)
-        .where(eq(grades.submissionId, job.submissionId))
+        .where(eq(grades.submissionId, job.submissionId));
       return current?.state === "grading" && current.attempt === job.attempt
         ? ({ _tag: "InProgress" } satisfies Claim)
-        : stale
+        : stale;
     }
 
     const [submission] = yield* db
-      .select({ whiteboardUrl: submissions.whiteboardUrl, loadTestRunId: classSessions.loadTestRunId })
+      .select({
+        whiteboardUrl: submissions.whiteboardUrl,
+        loadTestRunId: classSessions.loadTestRunId,
+      })
       .from(submissions)
       .innerJoin(classSessions, eq(classSessions.id, submissions.sessionId))
-      .where(eq(submissions.id, job.submissionId))
-    const [problem] = yield* db.select().from(problems).where(eq(problems.id, claimed.problemId))
-    if (submission === undefined || problem === undefined) return stale
+      .where(eq(submissions.id, job.submissionId));
+    const [problem] = yield* db.select().from(problems).where(eq(problems.id, claimed.problemId));
+    if (submission === undefined || problem === undefined) return stale;
 
     const lines = yield* db
-      .select({ id: rubricLines.id, points: rubricLines.points, description: rubricLines.description })
+      .select({
+        id: rubricLines.id,
+        points: rubricLines.points,
+        description: rubricLines.description,
+      })
       .from(rubricLines)
       .where(eq(rubricLines.problemId, problem.id))
-      .orderBy(asc(rubricLines.position))
+      .orderBy(asc(rubricLines.position));
 
     const pages = problem.gradeWithPageImage
       ? yield* db
@@ -265,11 +285,11 @@ export const startGrading = (job: GradeJob) =>
           .where(
             and(
               eq(worksheetPages.assignmentId, problem.assignmentId),
-              inArray(worksheetPages.pageNumber, problem.pageNumbers)
-            )
+              inArray(worksheetPages.pageNumber, problem.pageNumbers),
+            ),
           )
           .orderBy(asc(worksheetPages.pageNumber))
-      : []
+      : [];
 
     const dependencies = yield* db
       .select({
@@ -277,17 +297,17 @@ export const startGrading = (job: GradeJob) =>
         text: problems.text,
         position: problems.position,
         whiteboardUrl: submissions.whiteboardUrl,
-        graderRead: grades.graderRead
+        graderRead: grades.graderRead,
       })
       .from(problemDependencies)
       .innerJoin(problems, eq(problems.id, problemDependencies.dependsOnProblemId))
       .leftJoin(
         submissions,
-        and(eq(submissions.problemId, problems.id), eq(submissions.studentId, claimed.studentId))
+        and(eq(submissions.problemId, problems.id), eq(submissions.studentId, claimed.studentId)),
       )
       .leftJoin(grades, eq(grades.submissionId, submissions.id))
       .where(eq(problemDependencies.problemId, problem.id))
-      .orderBy(asc(problems.position))
+      .orderBy(asc(problems.position));
 
     const input: GradingInput = {
       lease: { submissionId: job.submissionId, attempt: job.attempt, claimId },
@@ -299,18 +319,18 @@ export const startGrading = (job: GradeJob) =>
         answerKey: problem.answerKey,
         diagramDescription: problem.diagramDescription,
         gradingNotes: problem.gradingNotes,
-        pageImageUrls: pages.map((page) => page.imageUrl)
+        pageImageUrls: pages.map((page) => page.imageUrl),
       },
       rubricLines: lines,
       dependencies: dependencies.map((dep) => ({
         label: dep.label,
         text: dep.text,
         whiteboardUrl: Option.fromNullable(dep.whiteboardUrl),
-        graderRead: Option.fromNullable(dep.graderRead)
-      }))
-    }
-    return { _tag: "Claimed", input } satisfies Claim
-  })
+        graderRead: Option.fromNullable(dep.graderRead),
+      })),
+    };
+    return { _tag: "Claimed", input } satisfies Claim;
+  });
 
 /**
  * Records the outcome of one attempt. Returns "stale" when the attempt was already recorded or
@@ -321,27 +341,29 @@ export const startGrading = (job: GradeJob) =>
  */
 export const recordOutcome = (lease: Lease, outcome: GraderOutcome) =>
   Effect.gen(function* () {
-    const db = yield* Db
-    const now = new Date()
+    const db = yield* Db;
+    const now = new Date();
     // A superseded attempt is acknowledged, never retried: check before validating, and again if
     // validation fails, since the lease can be taken over in between.
     const holdsLease = Effect.gen(function* () {
       const [current] = yield* db
         .select({ state: grades.state, claimId: grades.claimId })
         .from(grades)
-        .where(eq(grades.submissionId, lease.submissionId))
-      return current?.state === "grading" && current.claimId === lease.claimId
-    })
-    if (!(yield* holdsLease)) return "stale" as const
+        .where(eq(grades.submissionId, lease.submissionId));
+      return current?.state === "grading" && current.claimId === lease.claimId;
+    });
+    if (!(yield* holdsLease)) return "stale" as const;
 
     if (outcome._tag !== "Failed") {
       const valid = yield* checkLinePoints(lease.submissionId, outcome.result.linePoints).pipe(
         Effect.as(true),
         Effect.catchTag("LinePointsMismatch", (mismatch) =>
-          Effect.flatMap(holdsLease, (holds) => (holds ? Effect.fail(mismatch) : Effect.succeed(false)))
-        )
-      )
-      if (!valid) return "stale" as const
+          Effect.flatMap(holdsLease, (holds) =>
+            holds ? Effect.fail(mismatch) : Effect.succeed(false),
+          ),
+        ),
+      );
+      if (!valid) return "stale" as const;
     }
 
     const values = (() => {
@@ -356,8 +378,8 @@ export const recordOutcome = (lease: Lease, outcome: GraderOutcome) =>
             source: "model" as const,
             linePoints: outcome.result.linePoints,
             points: totalPoints(outcome.result.linePoints),
-            gradedAt: now
-          }
+            gradedAt: now,
+          };
         case "Unsure":
           return {
             state: "needs_teacher" as const,
@@ -365,12 +387,16 @@ export const recordOutcome = (lease: Lease, outcome: GraderOutcome) =>
             graderRead: outcome.result.read,
             modelLinePoints: outcome.result.linePoints,
             graderReason: outcome.result.reason,
-            flagReason: outcome.flagReason
-          }
+            flagReason: outcome.flagReason,
+          };
         case "Failed":
-          return { state: "couldnt_grade" as const, outcomeAt: now, failureReason: outcome.failureReason }
+          return {
+            state: "couldnt_grade" as const,
+            outcomeAt: now,
+            failureReason: outcome.failureReason,
+          };
       }
-    })()
+    })();
     const updated = yield* db
       .update(grades)
       .set(values)
@@ -378,42 +404,42 @@ export const recordOutcome = (lease: Lease, outcome: GraderOutcome) =>
         and(
           eq(grades.submissionId, lease.submissionId),
           eq(grades.claimId, lease.claimId),
-          eq(grades.state, "grading")
-        )
+          eq(grades.state, "grading"),
+        ),
       )
-      .returning({ submissionId: grades.submissionId })
-    return updated.length === 1 ? ("recorded" as const) : ("stale" as const)
-  })
+      .returning({ submissionId: grades.submissionId });
+    return updated.length === 1 ? ("recorded" as const) : ("stale" as const);
+  });
 
 // ---------------------------------------------------------------------------
 // Teacher actions. The caller checks that the teacher owns the session.
 
 export class GradeNotFound extends Data.TaggedError("GradeNotFound")<{
-  readonly submissionId: string
+  readonly submissionId: string;
 }> {}
 
 /** The grade is no longer in a state that allows the action, e.g. another tab resolved it first. */
 export class GradeStateChanged extends Data.TaggedError("GradeStateChanged")<{
-  readonly submissionId: string
-  readonly current: GradeRow["state"]
+  readonly submissionId: string;
+  readonly current: GradeRow["state"];
 }> {}
 
 const stateChanged = (submissionId: SubmissionId) =>
   Effect.gen(function* () {
-    const db = yield* Db
+    const db = yield* Db;
     const [row] = yield* db
       .select({ state: grades.state })
       .from(grades)
-      .where(eq(grades.submissionId, submissionId))
+      .where(eq(grades.submissionId, submissionId));
     return yield* row === undefined
       ? Effect.fail(new GradeNotFound({ submissionId }))
-      : Effect.fail(new GradeStateChanged({ submissionId, current: row.state }))
-  })
+      : Effect.fail(new GradeStateChanged({ submissionId, current: row.state }));
+  });
 
 /** Accepts the model's best guess on a grade that needs the teacher. */
 export const acceptGrade = (submissionId: SubmissionId) =>
   Effect.gen(function* () {
-    const db = yield* Db
+    const db = yield* Db;
     const updated = yield* db
       .update(grades)
       .set({
@@ -421,12 +447,12 @@ export const acceptGrade = (submissionId: SubmissionId) =>
         source: "teacher_accepted",
         linePoints: sql`${grades.modelLinePoints}`,
         points: sql`(select coalesce(sum((line->>'points')::int), 0) from jsonb_array_elements(${grades.modelLinePoints}) as line)`,
-        gradedAt: new Date()
+        gradedAt: new Date(),
       })
       .where(and(eq(grades.submissionId, submissionId), eq(grades.state, "needs_teacher")))
-      .returning({ submissionId: grades.submissionId })
-    if (updated.length === 0) return yield* stateChanged(submissionId)
-  })
+      .returning({ submissionId: grades.submissionId });
+    if (updated.length === 0) return yield* stateChanged(submissionId);
+  });
 
 /**
  * The teacher's own score, per rubric line. Works from any state: rescoring a flagged grade,
@@ -435,8 +461,8 @@ export const acceptGrade = (submissionId: SubmissionId) =>
  */
 export const scoreGrade = (submissionId: SubmissionId, linePoints: LinePoints) =>
   Effect.gen(function* () {
-    yield* checkLinePoints(submissionId, linePoints)
-    const db = yield* Db
+    yield* checkLinePoints(submissionId, linePoints);
+    const db = yield* Db;
     const updated = yield* db
       .update(grades)
       .set({
@@ -445,12 +471,12 @@ export const scoreGrade = (submissionId: SubmissionId, linePoints: LinePoints) =
         linePoints,
         points: totalPoints(linePoints),
         failureReason: null,
-        gradedAt: new Date()
+        gradedAt: new Date(),
       })
       .where(eq(grades.submissionId, submissionId))
-      .returning({ submissionId: grades.submissionId })
-    if (updated.length === 0) return yield* Effect.fail(new GradeNotFound({ submissionId }))
-  })
+      .returning({ submissionId: grades.submissionId });
+    if (updated.length === 0) return yield* Effect.fail(new GradeNotFound({ submissionId }));
+  });
 
 /**
  * Queues a new attempt for a grade that needs the teacher or couldn't be graded. Returns the job
@@ -458,7 +484,7 @@ export const scoreGrade = (submissionId: SubmissionId, linePoints: LinePoints) =
  */
 export const retryGrade = (submissionId: SubmissionId) =>
   Effect.gen(function* () {
-    const db = yield* Db
+    const db = yield* Db;
     const [updated] = yield* db
       .update(grades)
       .set({
@@ -471,18 +497,18 @@ export const retryGrade = (submissionId: SubmissionId) =>
         modelLinePoints: null,
         graderReason: null,
         flagReason: null,
-        failureReason: null
+        failureReason: null,
       })
       .where(
         and(
           eq(grades.submissionId, submissionId),
-          inArray(grades.state, ["needs_teacher", "couldnt_grade"])
-        )
+          inArray(grades.state, ["needs_teacher", "couldnt_grade"]),
+        ),
       )
-      .returning({ attempt: grades.attempt })
-    if (updated === undefined) return yield* stateChanged(submissionId)
-    return { submissionId, attempt: Attempt.make(updated.attempt) } satisfies GradeJob
-  })
+      .returning({ attempt: grades.attempt });
+    if (updated === undefined) return yield* stateChanged(submissionId);
+    return { submissionId, attempt: Attempt.make(updated.attempt) } satisfies GradeJob;
+  });
 
 /**
  * Gives a claimed attempt back to the queue without an outcome, e.g. when the provider is rate
@@ -491,7 +517,7 @@ export const retryGrade = (submissionId: SubmissionId) =>
  */
 export const releaseClaim = (lease: Lease) =>
   Effect.gen(function* () {
-    const db = yield* Db
+    const db = yield* Db;
     const released = yield* db
       .update(grades)
       .set({ state: "submitted", claimId: null, claimedAt: null })
@@ -499,12 +525,12 @@ export const releaseClaim = (lease: Lease) =>
         and(
           eq(grades.submissionId, lease.submissionId),
           eq(grades.claimId, lease.claimId),
-          eq(grades.state, "grading")
-        )
+          eq(grades.state, "grading"),
+        ),
       )
-      .returning({ submissionId: grades.submissionId })
-    return released.length === 1 ? ("released" as const) : ("stale" as const)
-  })
+      .returning({ submissionId: grades.submissionId });
+    return released.length === 1 ? ("released" as const) : ("stale" as const);
+  });
 
 /**
  * Jobs whose queue message may have been lost: grades queued for longer than `queuedSeconds`, or
@@ -512,7 +538,7 @@ export const releaseClaim = (lease: Lease) =>
  */
 export const stuckJobs = (options: { readonly queuedSeconds: number; readonly limit: number }) =>
   Effect.gen(function* () {
-    const db = yield* Db
+    const db = yield* Db;
     const rows = yield* db
       .select({ submissionId: grades.submissionId, attempt: grades.attempt })
       .from(grades)
@@ -520,20 +546,20 @@ export const stuckJobs = (options: { readonly queuedSeconds: number; readonly li
         or(
           and(
             eq(grades.state, "submitted"),
-            lt(grades.updatedAt, sql`now() - make_interval(secs => ${options.queuedSeconds})`)
+            lt(grades.updatedAt, sql`now() - make_interval(secs => ${options.queuedSeconds})`),
           ),
           and(
             eq(grades.state, "grading"),
-            lt(grades.claimedAt, sql`now() - make_interval(secs => ${CLAIM_LEASE_SECONDS})`)
-          )
-        )
+            lt(grades.claimedAt, sql`now() - make_interval(secs => ${CLAIM_LEASE_SECONDS})`),
+          ),
+        ),
       )
       .orderBy(asc(grades.updatedAt))
-      .limit(options.limit)
+      .limit(options.limit);
     return rows.map(
       (row): GradeJob => ({
         submissionId: SubmissionId.make(row.submissionId),
-        attempt: Attempt.make(row.attempt)
-      })
-    )
-  })
+        attempt: Attempt.make(row.attempt),
+      }),
+    );
+  });

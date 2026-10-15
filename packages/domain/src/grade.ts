@@ -11,28 +11,28 @@
  *
  * A `grades` row decodes into the `Grade` union here. Only `Graded` shows a score to the student.
  */
-import { Schema } from "effect"
+import { Schema } from "effect";
 
-export const SubmissionId = Schema.UUID.pipe(Schema.brand("SubmissionId"))
-export type SubmissionId = typeof SubmissionId.Type
+export const SubmissionId = Schema.UUID.pipe(Schema.brand("SubmissionId"));
+export type SubmissionId = typeof SubmissionId.Type;
 
-export const RubricLineId = Schema.UUID.pipe(Schema.brand("RubricLineId"))
-export type RubricLineId = typeof RubricLineId.Type
+export const RubricLineId = Schema.UUID.pipe(Schema.brand("RubricLineId"));
+export type RubricLineId = typeof RubricLineId.Type;
 
-export const Attempt = Schema.Int.pipe(Schema.greaterThanOrEqualTo(1), Schema.brand("Attempt"))
-export type Attempt = typeof Attempt.Type
+export const Attempt = Schema.Int.pipe(Schema.greaterThanOrEqualTo(1), Schema.brand("Attempt"));
+export type Attempt = typeof Attempt.Type;
 
-const Points = Schema.Int.pipe(Schema.nonNegative())
+const Points = Schema.Int.pipe(Schema.nonNegative());
 
 /** Points awarded for one rubric line. */
 export const LinePoint = Schema.Struct({
   rubricLineId: Schema.UUID,
-  points: Points
-})
-export type LinePoint = typeof LinePoint.Type
+  points: Points,
+});
+export type LinePoint = typeof LinePoint.Type;
 
-export const LinePoints = Schema.Array(LinePoint)
-export type LinePoints = typeof LinePoints.Type
+export const LinePoints = Schema.Array(LinePoint);
+export type LinePoints = typeof LinePoints.Type;
 
 /** What the model returned, kept so the teacher can always see what the grader read and why. */
 export const ModelResult = Schema.Struct({
@@ -40,24 +40,24 @@ export const ModelResult = Schema.Struct({
   read: Schema.String,
   linePoints: LinePoints,
   /** One-line reason for the score. */
-  reason: Schema.String
-})
-export type ModelResult = typeof ModelResult.Type
+  reason: Schema.String,
+});
+export type ModelResult = typeof ModelResult.Type;
 
 export const GradeSource = Schema.Literal(
   "model",
   "teacher_accepted",
   "teacher_scored",
-  "teacher_override"
-)
-export type GradeSource = typeof GradeSource.Type
+  "teacher_override",
+);
+export type GradeSource = typeof GradeSource.Type;
 
 export class Submitted extends Schema.TaggedClass<Submitted>()("Submitted", {
-  attempt: Attempt
+  attempt: Attempt,
 }) {}
 
 export class Grading extends Schema.TaggedClass<Grading>()("Grading", {
-  attempt: Attempt
+  attempt: Attempt,
 }) {}
 
 export class Graded extends Schema.TaggedClass<Graded>()("Graded", {
@@ -69,23 +69,23 @@ export class Graded extends Schema.TaggedClass<Graded>()("Graded", {
   /** Absent when the teacher scored a grade the model could not. */
   model: Schema.OptionFromSelf(ModelResult),
   /** Present when the grade went through `NeedsTeacher` first. */
-  flagReason: Schema.OptionFromSelf(Schema.String)
+  flagReason: Schema.OptionFromSelf(Schema.String),
 }) {}
 
 export class NeedsTeacher extends Schema.TaggedClass<NeedsTeacher>()("NeedsTeacher", {
   attempt: Attempt,
   /** The model's best guess, which the teacher can accept. */
   model: ModelResult,
-  flagReason: Schema.String
+  flagReason: Schema.String,
 }) {}
 
 export class CouldntGrade extends Schema.TaggedClass<CouldntGrade>()("CouldntGrade", {
   attempt: Attempt,
-  failureReason: Schema.String
+  failureReason: Schema.String,
 }) {}
 
-export const GradeStatus = Schema.Union(Submitted, Grading, Graded, NeedsTeacher, CouldntGrade)
-export type GradeStatus = typeof GradeStatus.Type
+export const GradeStatus = Schema.Union(Submitted, Grading, Graded, NeedsTeacher, CouldntGrade);
+export type GradeStatus = typeof GradeStatus.Type;
 
 /** A grade with its identity and the student-facing max score. */
 export const Grade = Schema.Struct({
@@ -95,28 +95,28 @@ export const Grade = Schema.Struct({
   problemId: Schema.UUID,
   maxPoints: Schema.Int.pipe(Schema.positive()),
   status: GradeStatus,
-  updatedAt: Schema.DateFromSelf
-})
-export type Grade = typeof Grade.Type
+  updatedAt: Schema.DateFromSelf,
+});
+export type Grade = typeof Grade.Type;
 
 /** What a student sees for one problem. Anything not final reads "your teacher will check this one". */
 export type StudentView =
   | { readonly _tag: "Pending" }
   | { readonly _tag: "TeacherWillCheck" }
-  | { readonly _tag: "Scored"; readonly points: number; readonly maxPoints: number }
+  | { readonly _tag: "Scored"; readonly points: number; readonly maxPoints: number };
 
 export const studentView = (grade: Grade): StudentView => {
   switch (grade.status._tag) {
     case "Submitted":
     case "Grading":
-      return { _tag: "Pending" }
+      return { _tag: "Pending" };
     case "NeedsTeacher":
     case "CouldntGrade":
-      return { _tag: "TeacherWillCheck" }
+      return { _tag: "TeacherWillCheck" };
     case "Graded":
-      return { _tag: "Scored", points: grade.status.points, maxPoints: grade.maxPoints }
+      return { _tag: "Scored", points: grade.status.points, maxPoints: grade.maxPoints };
   }
-}
+};
 
 // ---------------------------------------------------------------------------
 // Messages between the app and the grading pipeline
@@ -124,18 +124,18 @@ export const studentView = (grade: Grade): StudentView => {
 /** The queue message for one grading attempt. Delivery is at-least-once. */
 export const GradeJob = Schema.Struct({
   submissionId: SubmissionId,
-  attempt: Attempt
-})
-export type GradeJob = typeof GradeJob.Type
+  attempt: Attempt,
+});
+export type GradeJob = typeof GradeJob.Type;
 
 /** What the grading pipeline reports for one attempt. */
 export const GraderOutcome = Schema.Union(
   Schema.TaggedStruct("Sure", { result: ModelResult }),
   Schema.TaggedStruct("Unsure", { result: ModelResult, flagReason: Schema.String }),
-  Schema.TaggedStruct("Failed", { failureReason: Schema.String })
-)
-export type GraderOutcome = typeof GraderOutcome.Type
+  Schema.TaggedStruct("Failed", { failureReason: Schema.String }),
+);
+export type GraderOutcome = typeof GraderOutcome.Type;
 
 /** Sum of line points. */
 export const totalPoints = (linePoints: LinePoints): number =>
-  linePoints.reduce((sum, line) => sum + line.points, 0)
+  linePoints.reduce((sum, line) => sum + line.points, 0);
