@@ -1,4 +1,4 @@
-import type { CompletionRequest } from "@goblins/grader";
+import type { CompletionRequest, ModelError } from "@goblins/grader";
 import { Clock, Duration, Effect, Either } from "effect";
 import { type MockConfig, makeMockModelClient } from "../src/index.ts";
 
@@ -46,12 +46,14 @@ export const callsAt = (config: MockConfig, atMs: number, n: number, text?: stri
     );
     const tally: Tally = {};
     const texts: Array<string> = [];
+    const errors: Array<ModelError> = [];
     for (const result of results) {
       const tag = Either.isRight(result) ? "Ok" : result.left._tag;
       tally[tag] = (tally[tag] ?? 0) + 1;
       if (Either.isRight(result)) texts.push(result.right.text);
+      else errors.push(result.left);
     }
-    return { tally, texts, latencies };
+    return { tally, texts, errors, latencies };
   }).pipe(Effect.withClock(frozenClock(atMs, latencies)));
 };
 

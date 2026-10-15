@@ -1,4 +1,5 @@
 import { describe, expect, it } from "@effect/vitest";
+import { isRetryable } from "@goblins/grader";
 import { Effect } from "effect";
 import {
   applyScenario,
@@ -34,7 +35,7 @@ describe("scenarios produce the expected error mix", () => {
   );
 
   it.effect(
-    "provider down: every call fails with 503 inside the 5-minute window, none outside",
+    "provider down: every call fails with a retryable no-response error inside the 5-minute window, none outside",
     () =>
       Effect.gen(function* () {
         const before = yield* callsAt(sampled("provider-down"), 1 * MINUTE, N);
@@ -43,6 +44,8 @@ describe("scenarios produce the expected error mix", () => {
         const after = yield* callsAt(sampled("provider-down"), 7 * MINUTE, N);
         expect(share(before.tally, "ProviderError", N)).toBeLessThan(0.02);
         expect(during.tally).toEqual({ ProviderError: N });
+        expect(during.errors.every((e) => e._tag === "ProviderError" && e.status === 0)).toBe(true);
+        expect(during.errors.every(isRetryable)).toBe(true);
         expect(lastMs.tally).toEqual({ ProviderError: N });
         expect(share(after.tally, "ProviderError", N)).toBeLessThan(0.02);
       }),

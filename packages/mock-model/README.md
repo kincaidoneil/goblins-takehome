@@ -7,7 +7,7 @@ A mock `ModelClient` (the interface in `@goblins/grader`) for development, E2E t
 `selectModel({ env, loadTestHeader })` returns `Real` or `Mock(config)`:
 
 1. A load-test header (`x-goblins-load-test`) always selects the mock it describes, even in production.
-2. Otherwise `MODEL_CLIENT=real` selects the real model. Nothing else spends money.
+2. Otherwise `MODEL_CLIENT=openrouter` selects the real model. Nothing else spends money.
 3. Otherwise the mock, configured by `MOCK_MODEL` (default `mode=fixed`).
 
 The grading consumer runs outside the HTTP request, so the web app stores the header value with the submission and passes it to `selectModel` when it grades.
@@ -31,7 +31,7 @@ mode=replay; recording=seed-window; start=1760000000000; run=lt-42
 | Scenario | Default window | Effect |
 |---|---|---|
 | `rate-limit-storm` | minutes 2–5 | 70% of calls get a 429 with Retry-After 2–10 s |
-| `provider-down` | minutes 2–7 | every call gets a 503 after 0.1–0.4 s |
+| `provider-down` | minutes 2–7 | every call fails after 0.1–0.4 s with `ProviderError` status 0 (no HTTP response), which the grader retries |
 | `latency-doubling` | whole run | every latency doubles; calls pushed past 60 s time out |
 
 **Replay** reproduces a recorded window: a call made `t` into the run takes the latency and outcome of a recorded call made about `t` into the recording (same 10-second bucket). The recording's pattern over time survives at whatever call rate the load test drives. Runs longer than the recording loop over it.

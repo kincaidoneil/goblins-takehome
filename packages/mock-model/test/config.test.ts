@@ -8,17 +8,17 @@ describe("selectModel", () => {
     });
   });
 
-  it("uses the real model only when MODEL_CLIENT=real and no load-test header", () => {
-    expect(selectModel({ env: { MODEL_CLIENT: "real" }, loadTestHeader: undefined })).toMatchObject(
-      {
-        right: { _tag: "Real" },
-      },
-    );
+  it("uses the real model only when MODEL_CLIENT=openrouter and no load-test header", () => {
+    expect(
+      selectModel({ env: { MODEL_CLIENT: "openrouter" }, loadTestHeader: undefined }),
+    ).toMatchObject({
+      right: { _tag: "Real" },
+    });
   });
 
   it("routes a load-test header to the mock even in production", () => {
     const selection = selectModel({
-      env: { MODEL_CLIENT: "real" },
+      env: { MODEL_CLIENT: "openrouter" },
       loadTestHeader:
         "mode=sampled; scenario=provider-down; at=60; for=300; start=1760000000000; run=lt-42",
     });

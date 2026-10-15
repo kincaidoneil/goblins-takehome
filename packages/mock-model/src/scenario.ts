@@ -58,7 +58,8 @@ export const applyScenario = (
       return {
         _tag: "Fail",
         latencyMs: 100 + Math.round(rng() * 300),
-        failure: { _tag: "ProviderError", status: 503 },
+        // Status 0 is how the real client reports no HTTP response at all.
+        failure: { _tag: "ProviderError", status: 0 },
       };
     case "latency-doubling":
       return { ...base, latencyMs: base.latencyMs * 2 };

@@ -152,7 +152,7 @@ export const parseMockSpec = (
  *
  * 1. A load-test header always selects the mock it describes, so tagged
  *    traffic never reaches the paid model, even in production.
- * 2. Otherwise `MODEL_CLIENT=real` selects the real model. This is the only
+ * 2. Otherwise `MODEL_CLIENT=openrouter` selects the real model. This is the only
  *    way to spend money; development, tests and CI never set it.
  * 3. Otherwise the mock, configured by `MOCK_MODEL` (default `mode=fixed`).
  *
@@ -171,12 +171,12 @@ export const selectModel = (input: {
     }));
   }
   const client = input.env.MODEL_CLIENT ?? "mock";
-  if (client === "real") return Either.right({ _tag: "Real" });
+  if (client === "openrouter") return Either.right({ _tag: "Real" });
   if (client !== "mock") {
     return Either.left({
       _tag: "ConfigError",
       source: "env",
-      message: `MODEL_CLIENT must be "real" or "mock", got "${client}"`,
+      message: `MODEL_CLIENT must be "openrouter" or "mock", got "${client}"`,
     });
   }
   return Either.map(parseMockSpec(input.env.MOCK_MODEL ?? "mode=fixed", "env"), ({ config }) => ({
