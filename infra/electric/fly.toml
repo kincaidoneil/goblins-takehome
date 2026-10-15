@@ -10,6 +10,9 @@ primary_region = "iad" # Next to Neon (us-east-1) and Vercel functions (iad1).
   ELECTRIC_PORT = "3000"
   ELECTRIC_STORAGE_DIR = "/var/lib/electric/persistent"
   ELECTRIC_REPLICATION_STREAM_ID = "prod"
+  # The default of 300 concurrent initial syncs answers a class bell with 503s and an
+  # 8-10 s Retry-After. 1,500 simultaneous initial requests all succeed with this (#104).
+  ELECTRIC_MAX_CONCURRENT_REQUESTS = '{"initial": 3000, "existing": 20000}'
 
 # Shape logs and metadata. Must survive restarts.
 [[mounts]]
