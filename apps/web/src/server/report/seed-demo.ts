@@ -134,8 +134,8 @@ export const seedDemoReport = (clerkUserId: string) =>
               state: "couldnt_grade" as const,
               failureReason: "The model timed out three times.",
             };
-          case "submitted":
-          case "grading":
+          default:
+            // Still with the grader: queued again.
             return { ...base, state: "submitted" as const };
         }
       }),
