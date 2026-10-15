@@ -145,12 +145,16 @@ if (command === "cleanup") {
   // A smoke test (one class, one step) may go anywhere. Anything bigger against a deploy is a load
   // test, which Vercel permits only with an Enterprise approval.
   const isLocal = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(baseUrl);
+  // Bound every dimension: one class of at most 30 students, one step, at no more than ten times
+  // the testing-day rate (Codex review of #62).
   const isSmoke =
     Number(values["start-classes"]) <= 1 &&
+    Number(values["students-per-class"]) <= 30 &&
+    Number(values["time-scale"]) >= 0.1 &&
     (command !== "ramp" || Number(values["max-steps"]) <= 1);
   if (!isLocal && !isSmoke && !values["i-have-vercel-approval"]) {
     fail(
-      `${baseUrl} is not local. Sending more than one class to a deploy is a load test; Vercel permits it only on Enterprise with prior approval. Pass --i-have-vercel-approval if you have it, or use --start-classes 1 --max-steps 1 for a smoke test.`,
+      `${baseUrl} is not local. Sending more than one class to a deploy is a load test; Vercel permits it only on Enterprise with prior approval. Pass --i-have-vercel-approval if you have it, or run a smoke test: --start-classes 1 --max-steps 1, at most 30 students per class and --time-scale 0.1 or more.`,
     );
   }
 
