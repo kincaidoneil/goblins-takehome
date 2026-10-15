@@ -128,3 +128,12 @@
   background: var(--gb-green-500);
   box-shadow: none;
 }
+
+/* Hidden mode: avatars are unique per class, so they'd identify students on a projector. */
+.gb-grid-anon {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gb-color-surface-sunken);
+}

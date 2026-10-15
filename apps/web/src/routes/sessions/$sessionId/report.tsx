@@ -2,11 +2,11 @@ import { SignInButton } from "@clerk/tanstack-react-start";
 import { Button, EmptyState } from "@goblins/ui";
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { teacherGrades, teacherSession, teacherStudents } from "../../../lib/sync";
 import { TeacherReport } from "../../../report/components/TeacherReport";
 import type { ProblemMistakes } from "../../../report/mistakes";
-import { buildReport, type ReportInput, type ReportProblem } from "../../../report/model";
+import { buildReport, type ReportInput } from "../../../report/model";
 import type { ReportHeader } from "../../../server/report/data";
 import { getMistakes, getReport, shareReport } from "../../../server/report/fns";
 
@@ -30,7 +30,7 @@ function ReportPage() {
       <LiveReport
         sessionId={sessionId}
         header={result.value.header}
-        problems={result.value.problems}
+        snapshot={result.value.snapshot}
       />
     );
   }
@@ -79,24 +79,32 @@ function Centered({
 function LiveReport({
   sessionId,
   header,
-  problems,
+  snapshot,
 }: {
   readonly sessionId: string;
   readonly header: ReportHeader;
-  readonly problems: ReadonlyArray<ReportProblem>;
+  /** What the server read at load time. */
+  readonly snapshot: ReportInput;
 }) {
-  const { data: sessions = [] } = useLiveQuery(() => teacherSession(sessionId), [sessionId]);
-  const { data: students = [] } = useLiveQuery(() => teacherStudents(sessionId), [sessionId]);
-  const { data: grades = [] } = useLiveQuery(() => teacherGrades(sessionId), [sessionId]);
+  const sessions = useLiveQuery(() => teacherSession(sessionId), [sessionId]);
+  const students = useLiveQuery(() => teacherStudents(sessionId), [sessionId]);
+  const grades = useLiveQuery(() => teacherGrades(sessionId), [sessionId]);
+  const live = sessions.isReady && students.isReady && grades.isReady;
+  // Until the collections are ready, the page-load snapshot. Where sync is off (previews), it
+  // stays, and the app's LiveStatusBanner says so. Once live data has arrived, a later sync
+  // failure keeps the last live data rather than going back to the older snapshot.
+  const lastLive = useRef<ReportInput | null>(null);
 
-  const input: ReportInput = useMemo(
-    () => ({
-      problems,
-      students: [...students].sort((a, b) => a.createdAt.localeCompare(b.createdAt)),
-      grades,
-    }),
-    [problems, students, grades],
-  );
+  const input: ReportInput = useMemo(() => {
+    if (!live) return lastLive.current ?? snapshot;
+    const current = {
+      problems: snapshot.problems,
+      students: [...(students.data ?? [])].sort((a, b) => a.createdAt.localeCompare(b.createdAt)),
+      grades: grades.data ?? [],
+    };
+    lastLive.current = current;
+    return current;
+  }, [live, snapshot, students.data, grades.data]);
 
   // Regroup mistakes when the missed grades on weak problems change, not on every grade update.
   const signature = useMemo(() => {
@@ -124,7 +132,7 @@ function LiveReport({
       : null;
   };
 
-  const endedAt = sessions[0]?.endedAt ?? header.endedAt;
+  const endedAt = (live ? sessions.data?.[0]?.endedAt : undefined) ?? header.endedAt;
   return (
     <TeacherReport
       meta={{ title: header.title, course: null, topic: header.title, endedAt }}

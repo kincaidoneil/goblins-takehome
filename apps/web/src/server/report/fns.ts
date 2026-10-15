@@ -8,9 +8,10 @@ import { createServerFn } from "@tanstack/react-start";
 import { and, eq, isNull } from "drizzle-orm";
 import { Effect, Schema } from "effect";
 import { anonymize, buildReport } from "../../report/model";
+import { ownedSession } from "../access";
 import { err, ok } from "../result";
 import { run } from "../runtime";
-import { ownedSession, reportHeader, reportInput, reportProblems, sharedSession } from "./data";
+import { reportHeader, reportInput, reportProblems, sharedSession } from "./data";
 import { mistakesFor } from "./mistakes";
 
 /**
@@ -24,19 +25,21 @@ const BySession = Schema.Struct({ sessionId: Schema.UUID });
 const notFound = { _tag: "ReportNotFound" } as const;
 const notSignedIn = { _tag: "NotSignedIn" } as const;
 
-/** The report's fixed parts: title, status and the problems with their rubrics. */
+/** The report as it stands now: title, status, problems with rubrics, students and grades. */
 export const getReport = createServerFn({ method: "GET" })
   .validator(Schema.standardSchemaV1(BySession))
   .handler(({ data }) =>
     run(
       Effect.gen(function* () {
-        const session = yield* ownedSession(data.sessionId);
+        const { session } = yield* ownedSession(data.sessionId);
         const header = yield* reportHeader(session);
         const problems = yield* reportProblems(session.assignmentId);
-        return ok({ header, problems });
+        // Shown until the live collections are ready, and instead of them where sync is off.
+        const snapshot = yield* reportInput(session.id, problems);
+        return ok({ header, snapshot });
       }).pipe(
         Effect.catchTags({
-          ReportNotFound: () => Effect.succeed(err(notFound)),
+          SessionNotFound: () => Effect.succeed(err(notFound)),
           NotSignedIn: () => Effect.succeed(err(notSignedIn)),
         }),
       ),
@@ -49,13 +52,13 @@ export const getMistakes = createServerFn({ method: "POST" })
   .handler(({ data }) =>
     run(
       Effect.gen(function* () {
-        const session = yield* ownedSession(data.sessionId);
+        const { session } = yield* ownedSession(data.sessionId);
         const problems = yield* reportProblems(session.assignmentId);
         const report = buildReport(yield* reportInput(session.id, problems));
         return ok(yield* mistakesFor(session.id, report).pipe(withModel));
       }).pipe(
         Effect.catchTags({
-          ReportNotFound: () => Effect.succeed(err(notFound)),
+          SessionNotFound: () => Effect.succeed(err(notFound)),
           NotSignedIn: () => Effect.succeed(err(notSignedIn)),
         }),
       ),
@@ -68,7 +71,7 @@ export const shareReport = createServerFn({ method: "POST" })
   .handler(({ data }) =>
     run(
       Effect.gen(function* () {
-        const session = yield* ownedSession(data.sessionId);
+        const { session } = yield* ownedSession(data.sessionId);
         if (session.reportShareToken !== null) return ok({ token: session.reportShareToken });
         const db = yield* Db;
         // Only one token per session, even if the teacher clicks twice at once.
@@ -89,7 +92,7 @@ export const shareReport = createServerFn({ method: "POST" })
         return ok({ token: row.token });
       }).pipe(
         Effect.catchTags({
-          ReportNotFound: () => Effect.succeed(err(notFound)),
+          SessionNotFound: () => Effect.succeed(err(notFound)),
           NotSignedIn: () => Effect.succeed(err(notSignedIn)),
         }),
       ),
