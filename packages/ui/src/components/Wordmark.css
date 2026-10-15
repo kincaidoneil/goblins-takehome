@@ -1,5 +1,7 @@
+/* Block-level, so a wrapping link or flex item adds no line box (and no space below the baseline). */
 .gb-wordmark {
-  display: inline-flex;
+  display: flex;
+  width: fit-content;
   align-items: center;
   gap: 0.4em;
   color: var(--gb-color-text-brand);
@@ -30,9 +32,13 @@
   height: 100%;
 }
 
-/* Nunito sits high in its line box; this nudge centers the capitals on Pip's face. */
+/*
+ * Pip's face sits below the middle of the circle (eyes at 55%, mouth at 73%), so text centered on
+ * the circle reads high. Center the capitals between the circle's middle and the face instead.
+ */
 .gb-wordmark-text {
-  padding-top: 0.09em;
+  position: relative;
+  top: 0.15em;
 }
 
 .gb-wordmark-sub {
