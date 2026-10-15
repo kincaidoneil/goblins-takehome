@@ -43,16 +43,51 @@ Every text token meets WCAG AA (4.5:1) on the page background and on white.
 | Text on lime CTA | 6.1 |
 | Score chips (full, partial, low, needs you, couldn't grade) | 6.1, 4.7, 4.9, 5.9, 4.8 |
 
+## Components
+
+React components built on [Base UI](https://base-ui.com), one file each in [src/components](src/components), with styles in plain CSS (`gb-*` classes, variants as `data-*` attributes). Run `pnpm -C packages/ui storybook` to see every component and state.
+
+| Component | Notes |
+|---|---|
+| `Button` | `primary` (lime, one per screen), `brand`, `secondary`, `ghost`, `danger`; three sizes |
+| `Field`, `Input`, `Textarea` | Label, help text and error wired up by Base UI Field |
+| `Dialog`, `DialogClose` | Title, description, body, actions |
+| `ToastProvider`, `useToast` | Neutral, success and attention tones; bottom-right stack |
+| `Tabs` | Segmented control with a sliding indicator |
+| `Menu` | Items, separators, a danger tone |
+| `Tooltip`, `TooltipProvider` | Dark green popup |
+| `Card` | Raised, sunken and tint tones |
+| `Badge` | Soft or outlined, seven tones |
+| `ScoreChip` | Every grade state, for a teacher or a student audience |
+| `ProgressStrip` | The student's problem row; unsubmitted problems are buttons, submitted ones are locked and fill in with scores |
+| `Avatar`, `CreatureArt` | Student creatures or a teacher's photo with initials |
+| `EmptyState` | Art, title, description, actions on the brand glow |
+
+`GradeStatus` in [grade.ts](src/components/grade.ts) is the tagged union both grade components take. A student never sees "needs you" or "couldn't grade"; both render as "Teacher will check".
+
+## Avatars
+
+![The 48 creatures](docs/avatars.jpg)
+
+48 creatures, drawn in code from parts: 8 colors from the palette, 6 head tops (goblin ears, bear ears, bunny ears, horns, antenna, sprout), 3 head shapes, 4 eye styles and 4 mouths. Every creature has a different color and head-top pair, so a class of 30 never has two that look alike at a glance. Each has a name for its accessible label. Assign one with `randomCreatureId()` and render it with `<Avatar kind="creature" creatureId={id} />`. The art is original; nothing is traced from Goblins.
+
 ## Using it
 
 ```css
 /* Plain CSS */
 @import "@goblins/ui/tokens.css";
 @import "@goblins/ui/base.css"; /* optional: font, background, headings, focus ring */
+@import "@goblins/ui/styles.css"; /* component styles */
 
 /* Tailwind v4: utilities follow the tokens (bg-accent, text-brand, rounded-xl) */
 @import "tailwindcss";
 @import "@goblins/ui/tailwind.css";
 ```
+
+```tsx
+import { Button, ScoreChip, ToastProvider, TooltipProvider } from "@goblins/ui";
+```
+
+Wrap the app once in `TooltipProvider` and `ToastProvider`.
 
 Light theme only for now. Classrooms project in bright rooms and teachers grade on school laptops in the default theme, so dark mode is deferred.

@@ -1,0 +1,36 @@
+.gb-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--gb-space-12) var(--gb-space-6);
+  border-radius: var(--gb-radius-xl);
+  background: var(--gb-glow), var(--gb-color-surface-tint);
+  text-align: center;
+}
+
+.gb-empty-art {
+  margin-bottom: var(--gb-space-5);
+}
+
+.gb-empty-title {
+  margin: 0;
+  color: var(--gb-color-text-brand);
+  font-size: var(--gb-text-xl);
+  font-weight: var(--gb-weight-heavy);
+  letter-spacing: var(--gb-tracking-heading);
+}
+
+.gb-empty-description {
+  max-width: 42ch;
+  margin: var(--gb-space-2) 0 0;
+  color: var(--gb-color-text-muted);
+  text-wrap: pretty;
+}
+
+.gb-empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gb-space-3);
+  margin-top: var(--gb-space-6);
+}
