@@ -8,6 +8,15 @@ export interface WorksheetPage {
   imageUrl: string;
 }
 
+/** A region of a page, as fractions of its width and height from the top left. */
+export interface PageRegion {
+  pageNumber: number;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
 export interface WorksheetViewerProps {
   pages: ReadonlyArray<WorksheetPage>;
   /**
@@ -18,6 +27,8 @@ export interface WorksheetViewerProps {
   onPageChange?: (pageNumber: number) => void;
   /** Pages to mark in the page buttons, e.g. the active problem's pages. */
   highlightPages?: ReadonlyArray<number>;
+  /** Opens zoomed to this region (e.g. a problem's figure) instead of fit-width. */
+  focus?: PageRegion;
   /** Fills its parent's height; give the parent one. */
   className?: string;
 }
@@ -59,6 +70,7 @@ export function WorksheetViewer({
   page,
   onPageChange,
   highlightPages = [],
+  focus,
   className,
 }: WorksheetViewerProps) {
   const [current, setCurrent] = useState(() => page ?? pages[0]?.pageNumber ?? 1);
@@ -82,17 +94,37 @@ export function WorksheetViewer({
       if (entry === undefined) return;
       const { width, height } = entry.contentRect;
       setSize({ width, height });
-      setView(FIT);
     });
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
-  // Each page opens at fit-width.
-  const shownUrl = shown?.imageUrl;
+  // Each page opens at fit-width, or zoomed to `focus` on its page. Also on resize and once the
+  // image's shape is known.
+  const shownPage = shown?.pageNumber;
+  const region = focus !== undefined && focus.pageNumber === shownPage ? focus : undefined;
+  const { x: rx, y: ry, w: rw, h: rh } = region ?? { x: 0, y: 0, w: 1, h: 0 };
   useEffect(() => {
-    if (shownUrl !== undefined) setView(FIT);
-  }, [shownUrl]);
+    if (shownPage === undefined || size.width === 0) return;
+    if (rh === 0) {
+      setView(FIT);
+      return;
+    }
+    // The largest zoom that shows the whole region with a little room, centered.
+    const pageHeight = size.width * ratio;
+    const scale = clampNum(
+      0.9 * Math.min(1 / rw, size.height / (rh * pageHeight)),
+      MIN_SCALE,
+      MAX_SCALE,
+    );
+    const width = size.width * scale;
+    const height = width * ratio;
+    setView({
+      scale,
+      x: clampNum(size.width / 2 - (rx + rw / 2) * width, Math.min(0, size.width - width), 0),
+      y: clampNum(size.height / 2 - (ry + rh / 2) * height, Math.min(0, size.height - height), 0),
+    });
+  }, [shownPage, size.width, size.height, ratio, rx, ry, rw, rh]);
 
   /** Keeps the page covering the viewport: no panning past its edges. */
   const clamp = useCallback((next: View): View => {

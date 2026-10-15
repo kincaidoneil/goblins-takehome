@@ -1,8 +1,11 @@
+import type { DiagramCrop } from "@goblins/domain";
 import {
   Button,
   Dialog,
   DialogClose,
   isDocEmpty,
+  type PageRegion,
+  type ProblemFigure,
   ProblemPanel,
   renderWhiteboardPng,
   StudentWorkLayout,
@@ -22,6 +25,8 @@ export interface WorkspaceProblem {
   label: string;
   text: string;
   diagramDescription: string | null;
+  /** Where its figures are on the worksheet; empty for uploads, which don't have crops yet. */
+  diagramCrops: ReadonlyArray<DiagramCrop>;
   pageNumbers: ReadonlyArray<number>;
 }
 
@@ -81,6 +86,22 @@ export function Workspace({
     onSubmit(await toBase64(png.right));
   };
 
+  // The worksheet sheet: from See worksheet at the problem's page, or from the figure zoomed to it.
+  const [worksheet, setWorksheet] = useState<
+    { _tag: "Closed" } | { _tag: "Open"; focus: PageRegion | undefined }
+  >({ _tag: "Closed" });
+  const crop = problem.diagramCrops[0];
+  const cropPage = crop === undefined ? undefined : pages.find((p) => p.pageNumber === crop.page);
+  const figure: ProblemFigure | undefined =
+    crop === undefined || cropPage === undefined
+      ? undefined
+      : {
+          src: cropPage.imageUrl,
+          alt: problem.diagramDescription ?? `The diagram for problem ${problem.label}`,
+          crop,
+          onOpen: () => setWorksheet({ _tag: "Open", focus: { pageNumber: crop.page, ...crop } }),
+        };
+
   const state: SubmitState = exporting
     ? { _tag: "Submitting" }
     : isDocEmpty(doc)
@@ -96,14 +117,25 @@ export function Workspace({
           total={total}
           {...(pages.length > 0
             ? {
-                action: <WorksheetButton problem={problem} pages={pages} />,
+                action: (
+                  <WorksheetSheet
+                    problem={problem}
+                    pages={pages}
+                    focus={worksheet._tag === "Open" ? worksheet.focus : undefined}
+                    open={worksheet._tag === "Open"}
+                    onOpenChange={(open) =>
+                      setWorksheet(open ? { _tag: "Open", focus: undefined } : { _tag: "Closed" })
+                    }
+                  />
+                ),
               }
             : {})}
+          {...(figure === undefined ? {} : { figure })}
         >
           <MathText text={problem.text} />
-          {/* Until extraction gives each diagram its own page region, point to the worksheet
-              rather than show a whole page that may hold another problem's figure. */}
-          {problem.diagramDescription !== null && pages.length > 0 && (
+          {/* Without a crop (uploads, for now), point to the worksheet rather than show a whole
+              page that may hold another problem's figure. */}
+          {figure === undefined && problem.diagramDescription !== null && pages.length > 0 && (
             <p className="mt-2 text-sm text-text-muted">
               This one has a diagram. Tap See worksheet to look at it.
             </p>
@@ -123,16 +155,26 @@ export function Workspace({
   );
 }
 
-function WorksheetButton({
+function WorksheetSheet({
   problem,
   pages,
+  focus,
+  open,
+  onOpenChange,
 }: {
   problem: WorkspaceProblem;
   pages: ReadonlyArray<WorksheetPage>;
+  /** Opens zoomed to this region, when opened from the figure. */
+  focus: PageRegion | undefined;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
+  const page = focus?.pageNumber ?? problem.pageNumbers[0];
   return (
     <Dialog
       size="lg"
+      open={open}
+      onOpenChange={onOpenChange}
       trigger={
         <Button variant="secondary" size="sm">
           See worksheet
@@ -145,12 +187,13 @@ function WorksheetButton({
         </DialogClose>
       }
     >
-      {/* Every page, opening on the problem's first and marking its pages. */}
+      {/* Every page, opening on the problem's first (or the figure's) and marking its pages. */}
       <div className="h-[62dvh]">
         <WorksheetViewer
           pages={pages}
           highlightPages={problem.pageNumbers}
-          {...(problem.pageNumbers[0] === undefined ? {} : { page: problem.pageNumbers[0] })}
+          {...(page === undefined ? {} : { page })}
+          {...(focus === undefined ? {} : { focus })}
         />
       </div>
     </Dialog>
