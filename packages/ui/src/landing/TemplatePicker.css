@@ -1,0 +1,110 @@
+.lp-section-head {
+  max-width: 620px;
+  margin: 0 auto var(--gb-space-8);
+  text-align: center;
+}
+
+.lp-section-head h2 {
+  font-size: var(--gb-text-2xl);
+}
+
+.lp-section-head p {
+  margin: var(--gb-space-3) 0 0;
+  color: var(--gb-color-text-muted);
+  font-size: var(--gb-text-lg);
+}
+
+.lp-templates {
+  outline: none;
+  scroll-margin-top: var(--gb-space-8);
+}
+
+.lp-templates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--gb-space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lp-template {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--gb-radius-xl);
+  background: var(--gb-color-surface);
+  box-shadow: var(--gb-shadow-md);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform var(--gb-duration-base) var(--gb-ease-spring),
+    box-shadow var(--gb-duration-base) var(--gb-ease-out);
+}
+
+.lp-template:hover {
+  box-shadow: var(--gb-shadow-lg);
+  transform: translateY(-3px);
+}
+
+.lp-template:focus-visible {
+  outline: 3px solid var(--gb-color-focus);
+  outline-offset: 3px;
+}
+
+.lp-template-thumb {
+  display: block;
+  background: linear-gradient(160deg, var(--gb-lime-100), var(--gb-green-100));
+}
+
+.lp-template-thumb[data-topic="equations"] {
+  background: linear-gradient(160deg, var(--gb-sun-100), var(--gb-sun-300));
+}
+
+.lp-template-thumb[data-topic="triangles"] {
+  background: linear-gradient(160deg, var(--gb-lilac-100), #ddd5fb);
+}
+
+.lp-template-thumb[data-topic="fractions"] {
+  background: linear-gradient(160deg, var(--gb-coral-100), var(--gb-coral-200));
+}
+
+.lp-template-thumb svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: -4px;
+}
+
+.lp-template-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gb-space-1);
+  padding: var(--gb-space-4) var(--gb-space-5) var(--gb-space-5);
+}
+
+.lp-template-meta {
+  color: var(--gb-color-text-muted);
+  font-size: var(--gb-text-xs);
+  font-weight: var(--gb-weight-bold);
+}
+
+.lp-template-title {
+  color: var(--gb-color-text-brand);
+  font-size: var(--gb-text-md);
+  font-weight: var(--gb-weight-heavy);
+  line-height: var(--gb-leading-snug);
+}
+
+.lp-template-source {
+  margin-top: auto;
+  padding-top: var(--gb-space-2);
+  color: var(--gb-color-text-subtle);
+  font-size: var(--gb-text-xs);
+}
