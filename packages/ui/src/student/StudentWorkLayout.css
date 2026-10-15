@@ -36,40 +36,67 @@
 }
 
 @media (max-width: 860px) {
+  /*
+   * One screen, no scrolling: the problem keeps its height (capped in ProblemPanel.css), Submit
+   * sits at the bottom, and the board takes what's left. The app gives the layout a definite
+   * height (the play route is h-dvh on phones while working).
+   */
   .gb-work {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "progress"
-      "problem"
-      "board";
-    gap: var(--gb-space-4);
-    padding: var(--gb-space-3) var(--gb-space-4) var(--gb-space-6);
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--gb-space-3);
+    padding: var(--gb-space-3) var(--gb-space-4);
+  }
+
+  .gb-work-progress:empty {
+    display: none;
   }
 
   .gb-work-problem {
     position: static;
+    flex: none;
   }
 
+  /* Flex items keep min-height: auto, so the board's 200px floor grows the page, not overlaps. */
   .gb-work-board {
+    flex: 1;
     max-width: none;
+    gap: var(--gb-space-3);
   }
 
-  /*
-   * A portrait board as wide as the phone is taller than what's left under the header, strip,
-   * problem and toolbar. Narrow it (keeping 3:4) so the whole board and Submit fit on one screen.
-   */
+  .gb-work-board .gb-board {
+    flex: 1;
+  }
+
+  .gb-work-board .gb-board-stage {
+    display: flex;
+    flex: 1;
+    /* Not stretched, so the surface keeps its aspect ratio. */
+    align-items: flex-start;
+    justify-content: center;
+    /* Still big enough to write on a very short screen; then the page scrolls instead. */
+    min-height: 200px;
+    container-type: size;
+  }
+
+  /* As big as the space allows at the page's shape. */
+  .gb-work-board .gb-board-surface {
+    width: min(100cqw, 100cqh * 4 / 3);
+  }
+
   .gb-work-board .gb-board-surface[data-shape="portrait"] {
-    width: min(100%, calc((100dvh - 400px) * 0.75));
-    margin-inline: auto;
+    width: min(100cqw, 100cqh * 3 / 4);
   }
 
-  /* The board is tall on a phone; Submit stays in reach at the bottom of the screen. */
   .gb-work-submit {
-    position: sticky;
-    bottom: 0;
-    z-index: 1;
-    margin: 0 calc(-1 * var(--gb-space-4)) calc(-1 * var(--gb-space-6));
-    padding: var(--gb-space-4) var(--gb-space-4) var(--gb-space-3);
-    background: linear-gradient(to bottom, rgb(244 245 240 / 0), var(--gb-color-bg) 35%);
+    flex: none;
+  }
+}
+
+/* Short phones (an iPhone SE in Safari): less problem text on screen, more board. */
+@media (max-width: 860px) and (max-height: 700px) {
+  .gb-work .gb-problem {
+    max-height: 18dvh;
   }
 }

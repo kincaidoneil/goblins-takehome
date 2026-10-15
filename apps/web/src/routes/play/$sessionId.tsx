@@ -168,7 +168,8 @@ function Play() {
         : "";
 
   return (
-    <div className="flex min-h-dvh flex-col bg-bg">
+    // On a phone the work screen is exactly one screen tall, so the board fills what is left.
+    <div className={`flex min-h-dvh flex-col bg-bg ${working ? "max-[860px]:h-dvh" : ""}`}>
       <header className="flex items-center gap-2 px-4 pt-3 pb-2 md:px-5">
         <Avatar
           kind="creature"
