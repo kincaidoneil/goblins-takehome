@@ -129,7 +129,7 @@ const Reply = Schema.parseJson(
         pages: Schema.Array(Schema.Int.pipe(Schema.positive())),
         text: Schema.NonEmptyString,
         diagramDescription: Schema.NullOr(Schema.String),
-        answerKey: Schema.String,
+        answerKey: Schema.NonEmptyTrimmedString,
         rubric: Schema.NonEmptyArray(
           Schema.Struct({
             points: Schema.Int.pipe(Schema.positive()),
@@ -181,8 +181,8 @@ export const toWire = (p: ExtractedProblem): WireProblem => ({
 });
 
 /**
- * Decodes the reply and repairs what is safe to repair: blank diagram descriptions become null,
- * and dependency links to labels that don't exist or come later are dropped.
+ * Decodes the reply and repairs what is safe to repair: blank diagram descriptions become null
+ * and repeated links collapse. Links to labels that don't exist or come later fail the reply.
  */
 export const parseExtractReply = (text: string): Either.Either<Extraction, string> => {
   const decoded = Schema.decodeUnknownEither(Reply)(stripFence(text));
@@ -194,13 +194,20 @@ export const parseExtractReply = (text: string): Either.Either<Extraction, strin
   if (reply.problems.length === 0) return Either.left("Extraction found no problems");
   const labels = reply.problems.map((p) => p.label);
   if (new Set(labels).size !== labels.length) return Either.left("Extraction repeated a label");
-  const problems = reply.problems.map((p, index) => {
+  // A link to a label that doesn't exist or comes later would silently lose follow-through
+  // credit, so the reply is retried instead.
+  for (const [index, p] of reply.problems.entries()) {
     const earlier = new Set(labels.slice(0, index));
+    const bad = p.dependsOn.find((d) => !earlier.has(d));
+    if (bad !== undefined)
+      return Either.left(`Extraction linked ${p.label} to ${bad}, which is not an earlier problem`);
+  }
+  const problems = reply.problems.map((p) => {
     const description = p.diagramDescription?.trim() ?? "";
     return fromWire({
       ...p,
       diagramDescription: description === "" ? null : description,
-      dependsOn: [...new Set(p.dependsOn)].filter((d) => earlier.has(d)),
+      dependsOn: [...new Set(p.dependsOn)],
     });
   });
   return Either.right({ _tag: "Worksheet", problems });
