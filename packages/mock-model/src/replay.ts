@@ -43,7 +43,8 @@ export const makeReplayer = (recording: Recording): Replayer => {
   const first = recording.calls[0];
   const t0 = calls[0]?.startedAt ?? first.startedAt;
   const offsets = calls.map((call) => call.startedAt - t0);
-  const lengthMs = (offsets[offsets.length - 1] ?? 0) + BUCKET_MS;
+  // Ends at the boundary of the last occupied bucket, so the loop has no empty tail.
+  const lengthMs = (Math.floor((offsets[offsets.length - 1] ?? 0) / BUCKET_MS) + 1) * BUCKET_MS;
 
   const callAt = (elapsedMs: number, rng: Rng): LoggedCall => {
     const t = ((elapsedMs % lengthMs) + lengthMs) % lengthMs;

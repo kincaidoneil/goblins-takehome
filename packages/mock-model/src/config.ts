@@ -154,6 +154,16 @@ export const parseMockSpec = (
       message: "`at` and `for` need a `scenario`",
     });
   }
+  const timed =
+    (decoded.mode === "sampled" && decoded.scenario !== undefined) || decoded.mode === "replay";
+  if (source === "header" && timed && decoded.start === undefined) {
+    // Each serverless instance would otherwise start its own timeline when it is built.
+    return Either.left({
+      _tag: "ConfigError",
+      source,
+      message: "a load test with a scenario or replay needs `start`, shared by every instance",
+    });
+  }
   return Either.right(toConfig(decoded));
 };
 

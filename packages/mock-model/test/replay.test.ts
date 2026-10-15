@@ -22,6 +22,10 @@ describe("replay", () => {
     }),
   );
 
+  it("the 10-minute recording loops every 10 minutes, with no empty tail", () => {
+    expect(makeReplayer(seedWindow).lengthMs).toBe(10 * MINUTE);
+  });
+
   it.effect("loops when the run outlasts the recording", () =>
     Effect.gen(function* () {
       const { lengthMs } = makeReplayer(seedWindow);

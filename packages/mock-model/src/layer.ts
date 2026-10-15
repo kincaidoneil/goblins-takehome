@@ -131,7 +131,7 @@ export const makeMockModelClient = (config: MockConfig, options: MockOptions = {
     /**
      * The scripted outcome for a request. A request can carry more than the
      * submitted whiteboard (a diagram, earlier work), so every image is read:
-     * the first that matches a fixture decides, else the last image's hash
+     * the last that matches a fixture decides, else the last image's hash
      * does. Reading is bounded by the model timeout, as the provider's fetch
      * would be. An unreadable image fails as the provider's 400.
      */
@@ -151,7 +151,8 @@ export const makeMockModelClient = (config: MockConfig, options: MockOptions = {
               : new ProviderError({ status: 400, message: `mock: ${error.message}` }),
         ),
         Effect.map((hashes): Resolved => {
-          const fixture = hashes.flatMap((hash) => fixtureByHash.get(hash) ?? []).at(0);
+          // The submitted board comes after any earlier work or diagrams, so the last match wins.
+          const fixture = hashes.flatMap((hash) => fixtureByHash.get(hash) ?? []).at(-1);
           const hash = fixture?.sha256 ?? hashes.at(-1) ?? "";
           return {
             scripted: fixture?.outcome ?? fallbackFor(hash),

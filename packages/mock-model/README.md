@@ -20,7 +20,7 @@ mode=sampled; profile=seed; scenario=provider-down; at=60; for=300; start=176000
 mode=replay; recording=seed-window; start=1760000000000
 ```
 
-`latency` is milliseconds. `start` is the run's start in epoch milliseconds; `at` and `for` are seconds after `start` and override a scenario's default window. Load tests should always send `start`: scenarios and replay depend only on time since `start`, so every serverless instance sees an outage at the same moment without sharing state.
+`latency` is milliseconds. `start` is the run's start in epoch milliseconds; `at` and `for` are seconds after `start` and override a scenario's default window. A load-test header with a scenario or replay must include `start`, or it is rejected: scenarios and replay depend only on time since `start`, so every serverless instance sees an outage at the same moment without sharing state.
 
 ## Modes
 
@@ -38,7 +38,7 @@ mode=replay; recording=seed-window; start=1760000000000
 
 ## Fixture whiteboards
 
-The mock hashes each image in the request (SHA-256 of the bytes, from a data URL or fetched from an http URL) and looks the hashes up in `src/fixtures.ts`. The first image that matches a fixture decides, so other images such as a diagram don't get in the way; with no match, the last image's hash decides. A fetch that takes longer than the model timeout fails as `Timeout`. E2E tests and the class simulator submit the files in `fixtures/`:
+The mock hashes each image in the request (SHA-256 of the bytes, from a data URL or fetched from an http URL) and looks the hashes up in `src/fixtures.ts`. The last image that matches a fixture decides, because the submitted board comes after any diagram or earlier work in the request; with no match, the last image's hash decides. A fetch that takes longer than the model timeout fails as `Timeout`. E2E tests and the class simulator submit the files in `fixtures/`:
 
 | File | Outcome |
 |---|---|

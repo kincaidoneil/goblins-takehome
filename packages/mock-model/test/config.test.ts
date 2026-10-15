@@ -34,6 +34,15 @@ describe("authorizeLoadTest", () => {
     ).toEqual(Either.right(undefined));
   });
 
+  it.each([["mode=replay"], ["mode=sampled; scenario=provider-down"]])(
+    "rejects a timed load-test spec without a shared start: %s",
+    (spec) => {
+      expect(
+        authorizeLoadTest({ env, loadTestHeader: "s3cret:lt-42", mockSpecHeader: spec }),
+      ).toMatchObject({ left: { _tag: "ConfigError", source: "header" } });
+    },
+  );
+
   it("rejects an invalid mock spec when the token is valid", () => {
     expect(
       authorizeLoadTest({ env, loadTestHeader: "s3cret:lt-42", mockSpecHeader: "mode=chaos" }),

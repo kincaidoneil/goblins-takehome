@@ -132,6 +132,26 @@ describe("image handling", () => {
   const dataUrl = (bytes: Uint8Array) =>
     `data:image/png;base64,${Buffer.from(bytes).toString("base64")}`;
 
+  it.effect("grades the last fixture when earlier work from another fixture comes first", () =>
+    Effect.gen(function* () {
+      const client = yield* makeMockModelClient(fixed, { seed: 1 });
+      const result = yield* client.complete({
+        model: "test/model",
+        tag: { purpose: "grade" },
+        messages: [
+          {
+            role: "user",
+            content: [
+              { type: "image", url: dataUrl(fixtureBytes("correct.png")) },
+              { type: "image", url: dataUrl(fixtureBytes("illegible.png")) },
+            ],
+          },
+        ],
+      });
+      expect(JSON.parse(result.text)).toMatchObject({ status: "needs_teacher" });
+    }),
+  );
+
   it.effect("finds the fixture whiteboard among other images in the request", () =>
     Effect.gen(function* () {
       const client = yield* makeMockModelClient(fixed, { seed: 1 });
