@@ -402,6 +402,10 @@ export const grades = pgTable(
     index().on(t.sessionId),
     index().on(t.studentId),
     index().on(t.problemId),
+    // For the sweeper: the few grades still waiting on the pipeline.
+    index("grades_open_by_updated_at")
+      .on(t.updatedAt)
+      .where(sql`${t.state} in ('submitted', 'grading')`),
     check("grades_attempt_positive", sql`${t.attempt} >= 1`),
     check("grades_max_points_positive", sql`${t.maxPoints} > 0`),
     check(

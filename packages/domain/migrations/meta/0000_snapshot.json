@@ -1,5 +1,5 @@
 {
-  "id": "53fe45c2-7824-4a88-8a05-922bcd1f09a6",
+  "id": "0e9d9204-14b4-493f-8a11-50cd4bdf6905",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -613,6 +613,22 @@
             }
           ],
           "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "grades_open_by_updated_at": {
+          "name": "grades_open_by_updated_at",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"grades\".\"state\" in ('submitted', 'grading')",
           "concurrently": false,
           "method": "btree",
           "with": {}

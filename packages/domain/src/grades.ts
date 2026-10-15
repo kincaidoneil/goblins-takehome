@@ -465,14 +465,52 @@ export const retryGrade = (submissionId: SubmissionId) =>
     return { submissionId, attempt: Attempt.make(updated.attempt) } satisfies GradeJob
   })
 
-/** Grades in a session that are still waiting on the pipeline. Used to re-enqueue after a lost message. */
-export const pendingJobs = (sessionId: string) =>
+/**
+ * Gives a claimed attempt back to the queue without an outcome, e.g. when the provider is rate
+ * limiting and the consumer asks for redelivery after a backoff. The grade returns to
+ * `submitted`, so the redelivered message can claim it at once instead of waiting out the lease.
+ */
+export const releaseClaim = (lease: Lease) =>
+  Effect.gen(function* () {
+    const db = yield* Db
+    const released = yield* db
+      .update(grades)
+      .set({ state: "submitted", claimId: null, claimedAt: null })
+      .where(
+        and(
+          eq(grades.submissionId, lease.submissionId),
+          eq(grades.claimId, lease.claimId),
+          eq(grades.state, "grading")
+        )
+      )
+      .returning({ submissionId: grades.submissionId })
+    return released.length === 1 ? ("released" as const) : ("stale" as const)
+  })
+
+/**
+ * Jobs whose queue message may have been lost: grades queued for longer than `queuedSeconds`, or
+ * claimed by a consumer whose lease ran out. A sweeper re-enqueues them; a duplicate is harmless.
+ */
+export const stuckJobs = (options: { readonly queuedSeconds: number; readonly limit: number }) =>
   Effect.gen(function* () {
     const db = yield* Db
     const rows = yield* db
       .select({ submissionId: grades.submissionId, attempt: grades.attempt })
       .from(grades)
-      .where(and(eq(grades.sessionId, sessionId), inArray(grades.state, ["submitted", "grading"])))
+      .where(
+        or(
+          and(
+            eq(grades.state, "submitted"),
+            lt(grades.updatedAt, sql`now() - make_interval(secs => ${options.queuedSeconds})`)
+          ),
+          and(
+            eq(grades.state, "grading"),
+            lt(grades.claimedAt, sql`now() - make_interval(secs => ${CLAIM_LEASE_SECONDS})`)
+          )
+        )
+      )
+      .orderBy(asc(grades.updatedAt))
+      .limit(options.limit)
     return rows.map(
       (row): GradeJob => ({
         submissionId: SubmissionId.make(row.submissionId),

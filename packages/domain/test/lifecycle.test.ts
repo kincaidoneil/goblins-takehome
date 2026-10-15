@@ -16,9 +16,11 @@ import {
   JoinCode,
   joinSession,
   recordOutcome,
+  releaseClaim,
   retryGrade,
   scoreGrade,
   startGrading,
+  stuckJobs,
   submitWork
 } from "../src/index"
 import { classSessions, grades, submissions, problemDependencies, problems, rubricLines, students, teachers, assignments } from "../src/schema"
@@ -308,6 +310,27 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
         db.execute(sql`update grades set state = 'graded' where submission_id = ${s.submissionId}`)
       )
       expect(Either.isLeft(result)).toBe(true)
+    }))
+
+  it.effect("releases a claim for backoff and finds jobs whose message was lost", () =>
+    Effect.gen(function* () {
+      const { session, joinCode, p1 } = yield* seed()
+      const { student } = yield* join(joinCode, "Rae")
+      const s = yield* submit(session.id, student.id, p1.id)
+      const lease = yield* claim(jobOf(s))
+      expect(yield* releaseClaim(lease)).toBe("released")
+      // The redelivery after the backoff claims it at once.
+      const again = yield* claim(jobOf(s))
+      expect(yield* releaseClaim(lease)).toBe("stale")
+
+      const isStuck = (jobs: ReadonlyArray<GradeJob>) => jobs.some((j) => j.submissionId === s.submissionId)
+      expect(isStuck(yield* stuckJobs({ queuedSeconds: 60, limit: 1000 }))).toBe(false)
+      const db = yield* Db
+      yield* db
+        .update(grades)
+        .set({ claimedAt: new Date(Date.now() - (CLAIM_LEASE_SECONDS + 1) * 1000) })
+        .where(eq(grades.submissionId, again.submissionId))
+      expect(isStuck(yield* stuckJobs({ queuedSeconds: 60, limit: 1000 }))).toBe(true)
     }))
 
   it.effect("moves a grade with its submission when the teacher splits a student", () =>

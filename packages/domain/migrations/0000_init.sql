@@ -206,6 +206,7 @@ CREATE INDEX "class_sessions_load_test_run_id_index" ON "class_sessions" USING b
 CREATE INDEX "grades_session_id_index" ON "grades" USING btree ("session_id");--> statement-breakpoint
 CREATE INDEX "grades_student_id_index" ON "grades" USING btree ("student_id");--> statement-breakpoint
 CREATE INDEX "grades_problem_id_index" ON "grades" USING btree ("problem_id");--> statement-breakpoint
+CREATE INDEX "grades_open_by_updated_at" ON "grades" USING btree ("updated_at") WHERE "grades"."state" in ('submitted', 'grading');--> statement-breakpoint
 CREATE INDEX "model_calls_created_at_index" ON "model_calls" USING btree ("created_at");--> statement-breakpoint
 CREATE INDEX "model_calls_load_test_run_id_index" ON "model_calls" USING btree ("load_test_run_id");--> statement-breakpoint
 CREATE INDEX "model_calls_submission_id_index" ON "model_calls" USING btree ("submission_id");--> statement-breakpoint

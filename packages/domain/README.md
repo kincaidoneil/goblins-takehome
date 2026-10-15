@@ -38,7 +38,7 @@ Queue delivery is at-least-once. Each grading attempt has a number; the queue me
 - A message for an attempt the teacher has since retried or scored is stale and dropped.
 - A redelivery while another consumer holds the attempt gets `InProgress`: leave the message for redelivery. A claim older than `CLAIM_LEASE_SECONDS` (120 s) can be taken over, which recovers from a consumer that crashed mid-call. So one message never pays for two model calls unless a call outlives the lease. Each claim carries a fencing token (`lease.claimId`); `recordOutcome` requires it, so a consumer whose lease was taken over cannot overwrite the new holder's result.
 
-`submitWork` is idempotent per student and problem. While the grade is still `submitted` it returns the job again, so a client retry also re-enqueues a message that was lost after the first write. `pendingJobs(sessionId)` lists grades still waiting, for a sweeper.
+`submitWork` is idempotent per student and problem. While the grade is still `submitted` it returns the job again, so a client retry also re-enqueues a message that was lost after the first write. `stuckJobs({ queuedSeconds, limit })` lists grades whose message may be lost (queued too long, or claimed past the lease), for a sweeper. When a consumer wants redelivery after a backoff (rate limit, outage), it calls `releaseClaim(lease)` first, so the grade goes back to `submitted` and the redelivery can claim it at once.
 
 `grades.claimed_at` and `grades.outcome_at` record when the pipeline claimed the current attempt and recorded its outcome; with `submissions.created_at` they give queue wait and model time for the load-test report. Teacher actions leave them alone.
 
