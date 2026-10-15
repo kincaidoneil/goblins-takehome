@@ -45,7 +45,7 @@ These four were marked `Unsure` until Kincaid reviewed them on 2026-10-15. They 
 
 - `angle-relationships` 8: the key follows the diagram (138°), not IM's alt text (128°).
 - `solving-linear-equations` 7: naming either of Clare's two errors earns credit.
-- `linear-relationships` 5a: any reasoned estimate of the graph-read difference earns credit.
+- `linear-relationships` 5a: any reasonable reading of the graph earns credit, along with the winner and difference that follow from it.
 - `right-triangle-trigonometry` 2: stays linked to 1a, so a wrong height from 1a still earns method credit.
 
 ## Rebuilding the worksheets
