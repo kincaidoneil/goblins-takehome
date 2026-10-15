@@ -16,7 +16,11 @@ export interface CallLogEntry {
   readonly subjectId?: string
   readonly loadTestRunId?: string
   readonly status: CallStatus
-  readonly httpStatus?: number
+  /**
+   * The code the provider reported: the HTTP status, or for OpenRouter's errors
+   * inside a 200 body, the code in that body. Absent for timeouts.
+   */
+  readonly statusCode?: number
   readonly latencyMs: number
   readonly promptTokens: number
   readonly completionTokens: number
@@ -43,14 +47,14 @@ const statusOf: Record<ModelError["_tag"], CallStatus> = {
 const failureFields = (error: ModelError) => {
   switch (error._tag) {
     case "RateLimited":
-      return { httpStatus: 429, error: "rate limited" }
+      return { statusCode: 429, error: "rate limited" }
     case "Timeout":
       return { error: `no response after ${error.afterMs} ms` }
     case "ProviderError":
-      return { httpStatus: error.status, error: error.message }
+      return { statusCode: error.status, error: error.message }
     case "BadResponse":
       return {
-        httpStatus: 200,
+        statusCode: 200,
         error: error.message,
         ...(error.usage === undefined ? {} : error.usage),
       }
@@ -86,7 +90,7 @@ export const withCallLog = Layer.effect(
               ? {
                   ...base,
                   status: "ok",
-                  httpStatus: 200,
+                  statusCode: 200,
                   model: result.right.model,
                   providerId: result.right.id,
                   ...result.right.usage,

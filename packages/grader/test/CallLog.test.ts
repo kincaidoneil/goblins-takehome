@@ -58,7 +58,7 @@ describe("withCallLog", () => {
           costUsd: 0.0001,
           providerId: "gen-1",
         },
-        { modelRequested: "bad", status: "rate_limited", httpStatus: 429, latencyMs: 1500, costUsd: 0 },
+        { modelRequested: "bad", status: "rate_limited", statusCode: 429, latencyMs: 1500, costUsd: 0 },
       ])
     }),
   )

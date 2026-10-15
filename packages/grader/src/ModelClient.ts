@@ -71,7 +71,10 @@ export class Timeout extends Schema.TaggedError<Timeout>()("Timeout", {
 
 /** The provider returned an error status (5xx, or a 4xx other than 429), or no response at all. */
 export class ProviderError extends Schema.TaggedError<ProviderError>()("ProviderError", {
-  /** HTTP status, or 0 when the request never got a response (DNS, connection reset). */
+  /**
+   * HTTP status, the error code from a 200 response's error body, or 0 when the
+   * request never got a response (DNS, connection reset).
+   */
   status: Schema.Number,
   message: Schema.String,
 }) {}
