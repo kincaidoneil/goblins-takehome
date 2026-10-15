@@ -30,6 +30,7 @@ Options:
   --time-scale <x>          compress every interval; 1 = real testing day (default 1)
   --students-per-class <n>  default 30
   --start-classes <n>       classes in the first step (default 33, i.e. 990 students)
+  --steps <a,b,c>           explicit classes per step, e.g. 1,3,6,11,17 (overrides the three above)
   --step-classes <n>        classes added per step (default 17, about 500 students)
   --max-steps <n>           default 6
   --profile <name>          mock latency profile: claude-haiku-5.5 (measured, default) or seed (guessed)
@@ -53,6 +54,7 @@ const { values, positionals } = parseArgs({
     "time-scale": { type: "string", default: "1" },
     "students-per-class": { type: "string", default: "30" },
     "start-classes": { type: "string", default: "33" },
+    steps: { type: "string" },
     "step-classes": { type: "string", default: "17" },
     "max-steps": { type: "string", default: "6" },
     template: { type: "string", default: DEFAULT_TEMPLATE },
@@ -151,7 +153,8 @@ if (command === "cleanup") {
     Number(values["start-classes"]) <= 1 &&
     Number(values["students-per-class"]) <= 30 &&
     Number(values["time-scale"]) >= 0.1 &&
-    (command !== "ramp" || Number(values["max-steps"]) <= 1);
+    (values.steps === undefined || values.steps.trim() === "1") &&
+    (command !== "ramp" || values.steps !== undefined || Number(values["max-steps"]) <= 1);
   if (!isLocal && !isSmoke && !values["i-have-vercel-approval"]) {
     fail(
       `${baseUrl} is not local. Sending more than one class to a deploy is a load test; Vercel permits it only on Enterprise with prior approval. Pass --i-have-vercel-approval if you have it, or run a smoke test: --start-classes 1 --max-steps 1, at most 30 students per class and --time-scale 0.1 or more.`,
@@ -172,7 +175,10 @@ if (command === "cleanup") {
     scenario,
     profile:
       profiles.find((p) => p === values.profile) ?? fail(`unknown profile "${values.profile}"`),
-    classesPerStep: stepClasses(ramp),
+    classesPerStep:
+      values.steps === undefined
+        ? stepClasses(ramp)
+        : values.steps.split(",").map((n) => positive("steps", n.trim())),
     studentsPerClass: ramp.studentsPerClass,
     templateId,
     submissionsPerStudent: perStudent,
