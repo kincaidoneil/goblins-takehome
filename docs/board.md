@@ -24,8 +24,8 @@ The orchestrator keeps this current. Sessions are named for their stream. As of 
 ## Open before submission
 
 - Load-test capacity with the measured latency profile, then the ship / no-ship call in [writeup.md](writeup.md) and the README.
-- The simulator command for the demo's 27 students.
 - Kincaid's edits to the README, and the recording.
+- Invite Alp to kincaidoneil/goblins-takehome.
 
 ## Checkpoints
 
