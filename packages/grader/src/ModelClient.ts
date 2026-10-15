@@ -11,8 +11,10 @@ export type CallPurpose = "grade" | "extract" | "rubric-chat" | "eval" | "calibr
 /** Metadata recorded in the call log next to each call. Not sent to the provider. */
 export interface CallTag {
   readonly purpose: CallPurpose;
-  /** The thing this call works on, such as a grade id, for joining log rows to app data. */
+  /** The thing this call works on, such as a submission id, for joining log rows to app data. */
   readonly subjectId?: string;
+  /** For grading calls, the grade attempt the call belongs to. */
+  readonly attempt?: number;
   /** Set when the call was made for a load-test run; its rows are deleted after the run. */
   readonly loadTestRunId?: string;
 }
@@ -66,7 +68,10 @@ export class Timeout extends Schema.TaggedError<Timeout>()("Timeout", {
 
 /** The provider returned an error status (5xx, or a 4xx other than 429), or no response at all. */
 export class ProviderError extends Schema.TaggedError<ProviderError>()("ProviderError", {
-  /** HTTP status, or 0 when the request never got a response (DNS, connection reset). */
+  /**
+   * HTTP status, the error code from a 200 response's error body, or 0 when the
+   * request never got a response (DNS, connection reset).
+   */
   status: Schema.Number,
   message: Schema.String,
 }) {}
