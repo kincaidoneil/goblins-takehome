@@ -17,6 +17,14 @@
   font-weight: var(--gb-weight-bold);
 }
 
+.gb-problem-label {
+  margin: 0;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: normal;
+}
+
 .gb-problem-text {
   margin-top: var(--gb-space-3);
   color: var(--gb-color-text);
@@ -41,6 +49,14 @@
   .gb-problem {
     max-width: none;
     padding: var(--gb-space-4) var(--gb-space-5);
+  }
+
+  .gb-problem-label {
+    margin: 0;
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: normal;
   }
 
   .gb-problem-text {

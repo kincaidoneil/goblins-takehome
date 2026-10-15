@@ -71,7 +71,9 @@ export function Workspace({
 
   const own = pages.filter((page) => problem.pageNumbers.includes(page.pageNumber));
   // A problem with a diagram shows its page beside the text, so the student needn't open the worksheet.
-  const figurePage = problem.diagramDescription === null ? undefined : (own[0] ?? pages[0]);
+  // A problem spanning pages usually has its figure after the text, so prefer its last page.
+  const figurePage =
+    problem.diagramDescription === null ? undefined : (own[own.length - 1] ?? pages[0]);
 
   const submit = async () => {
     setExporting(true);
@@ -108,6 +110,7 @@ export function Workspace({
         <Whiteboard
           initialDoc={doc}
           onChange={setDoc}
+          label={`Whiteboard for problem ${problem.label}`}
           disabled={exporting}
           {...(pages.length > 0
             ? {

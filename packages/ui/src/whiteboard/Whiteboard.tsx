@@ -40,6 +40,8 @@ export interface WhiteboardProps {
   disabled?: boolean;
   /** Shown at the end of the toolbar, e.g. the app's "See worksheet" button. */
   accessory?: ReactNode;
+  /** The board's accessible name, e.g. "Whiteboard for problem 3". */
+  label?: string;
   className?: string;
 }
 
@@ -53,6 +55,7 @@ export function Whiteboard({
   onChange,
   disabled = false,
   accessory,
+  label = "Your whiteboard. Draw your work here.",
   className,
 }: WhiteboardProps) {
   const [history, dispatch] = useReducer(historyReducer, initialDoc, startHistory);
@@ -261,7 +264,7 @@ export function Whiteboard({
           className="gb-board-canvas"
           data-tool={tool._tag}
           role="img"
-          aria-label="Your whiteboard. Draw your work here."
+          aria-label={label}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerEnd}

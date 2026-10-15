@@ -36,7 +36,7 @@ test("a student draws, submits offline, and the outbox holds a 1024 × 768 PNG",
   await expect(student.getByText("Show your work on the board first.")).toBeVisible();
 
   // Draw a stroke on the canvas with the pointer.
-  const board = student.getByRole("img", { name: /Your whiteboard/ });
+  const board = student.getByRole("img", { name: /Whiteboard for problem/ });
   const box = await board.boundingBox();
   if (box === null) throw new Error("whiteboard not on screen");
   await student.mouse.move(box.x + box.width * 0.2, box.y + box.height * 0.3);
