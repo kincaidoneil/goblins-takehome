@@ -21,10 +21,10 @@ jobs:
     name: E2E
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # No Clerk keys: with AUTH_MODE=local (apps/web/local.env) the app skips Clerk, so PR code
+    # never sees a credential.
     env:
       MODEL_CLIENT: mock
-      VITE_CLERK_PUBLISHABLE_KEY: ${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}
-      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
     steps:
       - uses: actions/checkout@v4
         with:
