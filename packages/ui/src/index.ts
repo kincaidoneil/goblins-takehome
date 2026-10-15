@@ -36,6 +36,13 @@ export {
   useToast,
 } from "./components/Toast";
 export { Tooltip, type TooltipProps, TooltipProvider } from "./components/Tooltip";
+export { StudentWorkLayout, type StudentWorkLayoutProps } from "./student/StudentWorkLayout";
+export { SubmitButton, type SubmitButtonProps, type SubmitState } from "./student/SubmitButton";
+export {
+  SubmitTransition,
+  type SubmitTransitionProps,
+  TRANSITION_MS,
+} from "./student/SubmitTransition";
 export {
   BOARD_HEIGHT,
   BOARD_WIDTH,

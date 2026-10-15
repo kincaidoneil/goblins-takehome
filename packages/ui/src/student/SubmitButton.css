@@ -1,0 +1,49 @@
+.gb-submit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gb-space-2);
+}
+
+.gb-submit-button {
+  min-width: 220px;
+}
+
+.gb-submit[data-state="QueuedOffline"] .gb-submit-button {
+  --_bg: var(--gb-sun-100);
+  --_fg: var(--gb-color-text-brand);
+  opacity: 1;
+}
+
+.gb-submit[data-state="Submitting"] .gb-submit-button {
+  opacity: 1;
+}
+
+.gb-submit-hint {
+  min-height: 1.4em;
+  margin: 0;
+  color: var(--gb-color-text-muted);
+  font-size: var(--gb-text-sm);
+  text-align: center;
+}
+
+.gb-submit-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: gb-submit-spin 0.8s linear infinite;
+}
+
+@keyframes gb-submit-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gb-submit-spinner {
+    animation-duration: 2s;
+  }
+}

@@ -1,0 +1,134 @@
+.gb-transition {
+  position: fixed;
+  inset: 0;
+  z-index: var(--gb-z-dialog);
+  display: grid;
+  place-items: center;
+  padding: var(--gb-space-4);
+  background: rgb(244 245 240 / 0.82);
+  backdrop-filter: blur(6px);
+  animation: gb-transition-fade 1500ms var(--gb-ease-out) both;
+}
+
+.gb-transition-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(360px, 100%);
+  padding: var(--gb-space-8) var(--gb-space-6);
+  border-radius: var(--gb-radius-xl);
+  background: var(--gb-glow), var(--gb-color-surface);
+  box-shadow: var(--gb-shadow-lg);
+  text-align: center;
+  animation: gb-transition-pop 420ms var(--gb-ease-spring) both;
+}
+
+.gb-transition-creature {
+  animation: gb-transition-hop 600ms var(--gb-ease-spring) 120ms both;
+}
+
+.gb-transition-title {
+  margin: var(--gb-space-4) 0 0;
+  font-size: var(--gb-text-xl);
+}
+
+/* Reserved height, so a score arriving mid-transition doesn't shift the card. */
+.gb-transition-score {
+  display: grid;
+  place-items: center;
+  min-height: 38px;
+  margin-top: var(--gb-space-3);
+}
+
+.gb-transition-score[data-shown] > * {
+  animation: gb-transition-pop 360ms var(--gb-ease-spring) both;
+}
+
+.gb-transition-next {
+  margin: var(--gb-space-3) 0 0;
+  color: var(--gb-color-text-muted);
+  font-weight: var(--gb-weight-medium);
+}
+
+.gb-transition-sparkles {
+  position: absolute;
+  top: 76px;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+.gb-transition-sparkles span {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  margin: -5px;
+  border-radius: 50%;
+  background: var(--gb-lime-400);
+  animation: gb-transition-burst 700ms var(--gb-ease-out) 150ms both;
+}
+
+.gb-transition-sparkles span:nth-child(3n + 2) {
+  background: var(--gb-sun-400);
+}
+
+.gb-transition-sparkles span:nth-child(3n + 3) {
+  background: var(--gb-lilac-400);
+}
+
+@keyframes gb-transition-fade {
+  0% {
+    opacity: 0;
+  }
+  12%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes gb-transition-pop {
+  from {
+    opacity: 0;
+    scale: 0.85;
+  }
+}
+
+@keyframes gb-transition-hop {
+  0% {
+    translate: 0 12px;
+  }
+  50% {
+    translate: 0 -10px;
+  }
+  100% {
+    translate: 0 0;
+  }
+}
+
+@keyframes gb-transition-burst {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-80px) scale(0.4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gb-transition,
+  .gb-transition-card,
+  .gb-transition-creature,
+  .gb-transition-score[data-shown] > * {
+    animation: none;
+  }
+
+  .gb-transition-sparkles {
+    display: none;
+  }
+}

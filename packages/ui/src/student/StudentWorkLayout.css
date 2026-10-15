@@ -1,0 +1,49 @@
+.gb-work {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(260px, 2fr) minmax(0, 3fr);
+  grid-template-areas:
+    "progress progress"
+    "problem board";
+  align-items: start;
+  gap: var(--gb-space-5) var(--gb-space-8);
+  width: min(1280px, 100%);
+  margin: 0 auto;
+  padding: var(--gb-space-5) var(--gb-space-6) var(--gb-space-8);
+}
+
+.gb-work-progress {
+  grid-area: progress;
+  min-width: 0;
+}
+
+.gb-work-problem {
+  grid-area: problem;
+  position: sticky;
+  top: var(--gb-space-5);
+  min-width: 0;
+}
+
+.gb-work-board {
+  grid-area: board;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gb-space-5);
+  min-width: 0;
+}
+
+@media (max-width: 860px) {
+  .gb-work {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "progress"
+      "problem"
+      "board";
+    gap: var(--gb-space-4);
+    padding: var(--gb-space-3) var(--gb-space-4) var(--gb-space-6);
+  }
+
+  .gb-work-problem {
+    position: static;
+  }
+}
