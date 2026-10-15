@@ -156,7 +156,9 @@ export function SetupScreen({
           title:
             result.error.reason === "last_problem"
               ? "An assignment needs at least one problem"
-              : "That change didn't save",
+              : result.error.reason === "too_many_problems"
+                ? "An assignment can have up to 50 problems"
+                : "That change didn't save",
           tone: "attention",
         });
         return "failed";
