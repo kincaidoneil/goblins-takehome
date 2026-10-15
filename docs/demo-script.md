@@ -5,7 +5,7 @@ A 2–3 minute walkthrough recorded on production, https://goblins-takehome-thre
 ## Pre-flight
 
 - [ ] **Signed in.** Use a demo Google account with no old assignments, so the assignments list and the report stay clean. Sign in before recording so launch skips the Google screen.
-- [ ] **Real model on.** Production grades with `MODEL_CLIENT=openrouter`. Check with `vercel env ls production | grep MODEL_CLIENT`. A class of 28 makes about 250 grades, roughly $0.15.
+- [ ] **Real model on.** Production grades with `MODEL_CLIENT=openrouter`. Check with `vercel env ls production | grep MODEL_CLIENT`. The simulated class costs about $0.25 in real grades.
 - [ ] **Spend checked.** `pnpm --filter @goblins/grader usage-report` shows what's left of the $20 key.
 - [ ] **Phone ready.** Open the site on your phone, connected to the internet independently of the laptop, with screen mirroring or a camera on it for the recording. You join as "Kincaid O."
 - [ ] **Windows placed.** Allow pop-ups for the site, since launch opens the projector in a new window. Put the dashboard on the left half of the screen and the projector on the right, both in frame.
@@ -17,8 +17,17 @@ A 2–3 minute walkthrough recorded on production, https://goblins-takehome-thre
 The simulator command for the second terminal. Fill in the join code from the projector:
 
 ```bash
-[TBD from the class-simulator stream: simulate --url https://goblins-takehome-three.vercel.app --join-code <code> --students 27, with solving-linear-equations whiteboards, finishing in 2–3 minutes]
+pnpm demo:class --target https://goblins-takehome-three.vercel.app --code <join code> --template solving-linear-equations
 ```
+
+What it does:
+
+- 27 students join within about 20 s and wait in the lobby. Each works through all 8 problems over 1.5–2.5 minutes after you press Start, staggered so the grid fills visibly.
+- Grades are real, from Haiku. The whiteboards are eval cases Haiku graded correctly in both eval runs.
+- Most work is correct. On problems 7 and 8, 70% of students make a common mistake, so both land at about 65% and the report has a "where students struggled" section and the Goblins CTA. `--struggle 3,5` picks other problems.
+- Four students submit unclear work on problems 2 and 4 that Haiku flags, so "Needs you" has items besides yours.
+- It finishes by printing "Done: 27 students, 216 submissions, …", but you can end the session before then.
+- It can't force a "couldn't grade" state. That only happens if the provider actually fails.
 
 ## What to write on the phone
 
@@ -52,21 +61,21 @@ Click **Launch**. The projector window opens with the join code and the QR code.
 
 > "Sign-in comes only at launch. The projector shows a code, like Kahoot. Students join on any device with a first name."
 
-### 0:45 One student, live (40 s)
+### 0:45 The class joins (15 s)
 
-On the phone, enter the code and "Kincaid O." Your avatar appears on the projector. Click **Start** on the dashboard. Then work the three problems from the table above.
+Paste the code into the simulator command in the second terminal and run it. On your phone, enter the code and "Kincaid O." Avatars fill the projector lobby. Click **Start** on the dashboard.
+
+> "To show a full class, 27 simulated students join on their own connections and submit real work. The same simulator drives the load test. I'm the 28th, on my phone."
+
+### 1:00 One student, live (35 s)
+
+Work the three problems from the table above while the other students work in the background.
 
 1. **Problem 1, correct.** The full score shows on the transition, or fills in on the progress strip a few seconds later.
 2. **Problem 8, wrong.** A low score, in a calm color, never red.
 3. **Problem 6, ambiguous.** "Your teacher will check this one."
 
 > "Students show their work one problem at a time. They see their score and move on. When the grader can't read something, the student never sees an error. The teacher gets it instead."
-
-### 1:25 The rest of the class (10 s)
-
-Paste the code into the simulator command in the second terminal and run it. Avatars fill the projector.
-
-> "To show a full class, 27 simulated students join on their own connections and submit real work at testing-day pace. The same simulator drives the load test."
 
 ### 1:35 The dashboard (35 s)
 
