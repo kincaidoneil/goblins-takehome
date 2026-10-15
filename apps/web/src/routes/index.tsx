@@ -1,9 +1,9 @@
-import { SignInButton } from "@clerk/tanstack-react-start";
 import { LandingPage, TEMPLATE_SUMMARIES } from "@goblins/ui/landing";
 import landingCss from "@goblins/ui/landing.css?url";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { startDraftFromTemplate, startDraftFromUpload } from "../landing/setup";
 import { toUploadResult } from "../landing/upload";
+import { SignInTrigger } from "../lib/auth";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -29,11 +29,11 @@ function Landing() {
       onTemplate={async (templateId) => toUploadResult(await startDraftFromTemplate(templateId))}
       onStarted={(draftId) => void navigate({ to: "/setup/$draftId", params: { draftId } })}
       signIn={
-        <SignInButton mode="modal">
+        <SignInTrigger>
           <button type="button" className="lp-signin">
             Sign in
           </button>
-        </SignInButton>
+        </SignInTrigger>
       }
     />
   );

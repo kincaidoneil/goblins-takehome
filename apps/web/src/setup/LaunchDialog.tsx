@@ -2,9 +2,10 @@
  * The last step: pick an optional time limit, sign in with Google if needed (the only sign-in in
  * setup), then open the projector and the class session.
  */
-import { useClerk, useUser } from "@clerk/tanstack-react-start";
+
 import { Button, Dialog } from "@goblins/ui";
 import { useState } from "react";
+import { useTeacherAuth } from "../lib/auth";
 import { launch } from "../server/setup/fns";
 import { dashboardPath, projectorPath } from "./links";
 import { pointsLabel } from "./problem-groups";
@@ -45,8 +46,7 @@ export function LaunchDialog({
   signedIn,
   onProblemNeedsText,
 }: LaunchDialogProps) {
-  const { user } = useUser();
-  const clerk = useClerk();
+  const auth = useTeacherAuth();
   const [state, setState] = useState<LaunchState>({ _tag: "Idle" });
 
   const signIn = () => {
@@ -54,10 +54,7 @@ export function LaunchDialog({
     back.searchParams.set("launch", "1");
     if (timeLimitMinutes === null) back.searchParams.delete("minutes");
     else back.searchParams.set("minutes", String(timeLimitMinutes));
-    clerk.openSignIn({
-      forceRedirectUrl: back.toString(),
-      signUpForceRedirectUrl: back.toString(),
-    });
+    auth.openSignIn(back.toString());
   };
 
   const start = async () => {
@@ -172,9 +169,7 @@ export function LaunchDialog({
         <li>The projector opens in its own window. Drag it to the classroom screen.</li>
         <li>The rubric locks once you launch, so every student is graded the same way.</li>
         {signedIn ? (
-          <li>
-            Signed in as {user?.primaryEmailAddress?.emailAddress ?? user?.fullName ?? "a teacher"}.
-          </li>
+          <li>Signed in as {auth.label ?? "a teacher"}.</li>
         ) : (
           <li>Signing in keeps your class and grades in your account. Your setup is saved.</li>
         )}

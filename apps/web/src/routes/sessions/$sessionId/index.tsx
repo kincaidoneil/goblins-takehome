@@ -15,10 +15,12 @@ import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { CellDetail } from "../../../components/teacher/dashboard/CellDetail";
+import { LiveChip } from "../../../components/teacher/dashboard/LiveChip";
 import {
   type DashboardProblem,
   gradeKey,
   gradeStatus,
+  needsYouQueue,
   studentLabel,
 } from "../../../components/teacher/dashboard/model";
 import { TeacherHeader } from "../../../components/teacher/TeacherHeader";
@@ -112,6 +114,20 @@ function Dashboard(props: {
       ? undefined
       : gradeByCell.get(gradeKey(selected.studentId, selected.problemId));
   const selectedStudent = students.find((s) => s.id === selected?.studentId);
+  const queue = needsYouQueue(grades, students, props.problems);
+  /** The next grade waiting on the teacher after the open one, wrapping to the start. */
+  const nextInQueue = () => {
+    const others = queue.filter((g) => g.submissionId !== selectedGrade?.submissionId);
+    const at = queue.findIndex((g) => g.submissionId === selectedGrade?.submissionId);
+    return (
+      queue.slice(at + 1).find((g) => g.submissionId !== selectedGrade?.submissionId) ?? others[0]
+    );
+  };
+  const next = nextInQueue();
+  const openGrade = (grade: TeacherGradeRow | undefined) =>
+    setSelected(
+      grade === undefined ? null : { studentId: grade.studentId, problemId: grade.problemId },
+    );
   const selectedProblem = props.problems.find((p) => p.id === selected?.problemId);
 
   return (
@@ -166,10 +182,14 @@ function Dashboard(props: {
         selectedStudent !== undefined &&
         selectedProblem !== undefined && (
           <CellDetail
-            open
-            onOpenChange={(open) => {
-              if (!open) setSelected(null);
+            key={selectedGrade.submissionId}
+            onClose={() => setSelected(null)}
+            onResolved={() => {
+              // A resolved flag moves on to the next one; an override stays put.
+              if (selectedGrade.state === "graded") return;
+              openGrade(next);
             }}
+            onNext={next === undefined ? undefined : () => openGrade(next)}
             student={selectedStudent}
             studentLabel={labelOf(selectedStudent)}
             problem={selectedProblem}
@@ -323,16 +343,7 @@ function NeedsYou(props: {
   readonly onOpen: (grade: TeacherGradeRow) => void;
 }) {
   const toast = useToast();
-  const problemIndex = (id: string) => props.problems.findIndex((p) => p.id === id);
-  const studentIndex = (id: string) => props.students.findIndex((s) => s.id === id);
-  const waiting = props.grades
-    .filter((g) => g.state === "needs_teacher" || g.state === "couldnt_grade")
-    // A stable order (problem, then join order), so cards don't move while the teacher works.
-    .toSorted(
-      (a, b) =>
-        problemIndex(a.problemId) - problemIndex(b.problemId) ||
-        studentIndex(a.studentId) - studentIndex(b.studentId),
-    );
+  const waiting = needsYouQueue(props.grades, props.students, props.problems);
   if (waiting.length === 0) {
     return (
       <section
@@ -532,7 +543,7 @@ function Grid(props: {
                             aria-label={`${student.displayName}, problem ${problem.label}`}
                             onClick={() => props.onOpen(student.id, problem.id)}
                           >
-                            <ScoreChip status={status} size="sm" />
+                            <LiveChip status={status} />
                           </button>
                         )}
                       </td>

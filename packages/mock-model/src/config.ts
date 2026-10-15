@@ -16,7 +16,7 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 import { Either, Schema } from "effect";
 import type { ProfileName, RecordingName } from "./registry.ts";
-import { profileNames, recordingNames } from "./registry.ts";
+import { DEFAULT_PROFILE, DEFAULT_RECORDING, profileNames, recordingNames } from "./registry.ts";
 import { type Scenario, scenarioDefaults, scenarioNames } from "./scenario.ts";
 
 /** `<LOAD_TEST_TOKEN>:<runId>`. Marks a request as load-test traffic. */
@@ -26,7 +26,7 @@ export const LOAD_TEST_HEADER = "x-goblins-load-test";
 export const MOCK_SPEC_HEADER = "x-goblins-mock-model";
 
 /** Mock spec for load-test requests that send no `x-goblins-mock-model` header. */
-export const DEFAULT_LOAD_TEST_SPEC = "mode=sampled; profile=seed";
+export const DEFAULT_LOAD_TEST_SPEC = `mode=sampled; profile=${DEFAULT_PROFILE}`;
 
 /** Calls whose latency would exceed this fail with `Timeout` instead. */
 export const DEFAULT_TIMEOUT_MS = 60_000;
@@ -122,10 +122,19 @@ const toConfig = (spec: Spec): MockConfig => {
               durationMs:
                 spec.for === undefined ? scenarioDefaults[name].durationMs : spec.for * 1000,
             };
-      return { _tag: "Sampled", profile: spec.profile ?? "seed", scenario, anchorMs: spec.start };
+      return {
+        _tag: "Sampled",
+        profile: spec.profile ?? DEFAULT_PROFILE,
+        scenario,
+        anchorMs: spec.start,
+      };
     }
     case "replay":
-      return { _tag: "Replay", recording: spec.recording ?? "seed-window", anchorMs: spec.start };
+      return {
+        _tag: "Replay",
+        recording: spec.recording ?? DEFAULT_RECORDING,
+        anchorMs: spec.start,
+      };
   }
 };
 
