@@ -36,6 +36,12 @@ export interface CompletionRequest {
   readonly tag: CallTag;
   readonly maxTokens?: number;
   readonly temperature?: number;
+  /**
+   * How hard a reasoning model may think. Cheap models often reason by default, and
+   * reasoning tokens are billed, so graders usually set this low. Sent as
+   * OpenRouter's `reasoning.effort`; ignored by models that don't reason.
+   */
+  readonly reasoning?: { readonly effort: "none" | "minimal" | "low" | "medium" | "high" };
   /** Ask for JSON matching this JSON Schema. The caller still validates the text. */
   readonly jsonSchema?: { readonly name: string; readonly schema: object };
 }
@@ -45,6 +51,8 @@ export interface Usage {
   readonly completionTokens: number;
   /** Cost in US dollars as reported by the provider. Zero for the mock. */
   readonly costUsd: number;
+  /** Of `completionTokens`, how many were reasoning, when the provider reports it. */
+  readonly reasoningTokens?: number;
 }
 
 export interface Completion {
@@ -96,7 +104,16 @@ export class BadResponse extends Schema.TaggedError<BadResponse>()("BadResponse"
   ),
 }) {}
 
-export type ModelError = RateLimited | Timeout | ProviderError | BadResponse;
+/**
+ * The project's spend cap (`MODEL_SPEND_CAP_USD`) is reached. The call was not
+ * sent. Not retryable: grades wait for a teacher, not for money.
+ */
+export class BudgetExceeded extends Schema.TaggedError<BudgetExceeded>()("BudgetExceeded", {
+  spentUsd: Schema.Number,
+  capUsd: Schema.Number,
+}) {}
+
+export type ModelError = RateLimited | Timeout | ProviderError | BadResponse | BudgetExceeded;
 
 /**
  * Whether trying the same request again can succeed. A 4xx other than 408 or 429 means
@@ -110,6 +127,8 @@ export const isRetryable = (error: ModelError): boolean => {
       return true;
     case "BadResponse":
       return error.truncated !== true;
+    case "BudgetExceeded":
+      return false;
     case "ProviderError":
       return (
         error.retryAfterMs !== undefined ||

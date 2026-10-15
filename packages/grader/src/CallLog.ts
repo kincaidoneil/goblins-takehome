@@ -4,6 +4,7 @@
  */
 import { Cause, Clock, Context, Effect, Exit, Layer, Option, Ref } from "effect";
 import {
+  type BudgetExceeded,
   type CallPurpose,
   type CompletionRequest,
   ModelClient,
@@ -63,7 +64,7 @@ export class CallLog extends Context.Tag("@goblins/grader/CallLog")<
 const NOT_BILLED: CallCost = { promptTokens: 0, completionTokens: 0, costUsd: 0 };
 
 const failureFields = (
-  error: ModelError,
+  error: Exclude<ModelError, BudgetExceeded>,
 ): Pick<CallLogEntry, "status" | "statusCode" | "cost" | "error"> => {
   switch (error._tag) {
     case "RateLimited":
@@ -115,9 +116,9 @@ export const wrap = (inner: ModelClient["Type"], log: CallLog["Type"]): ModelCli
         const startedMs = yield* Clock.currentTimeMillis;
         const exit = yield* Effect.exit(restore(inner.complete(request)));
         const base = baseFields(request, startedMs, yield* Clock.currentTimeMillis);
-        yield* log.record(
-          Exit.match(exit, {
-            onSuccess: (completion): CallLogEntry => ({
+        const entry = Exit.match(exit, {
+          onSuccess: (completion): Option.Option<CallLogEntry> =>
+            Option.some({
               ...base,
               status: "ok",
               statusCode: 200,
@@ -125,10 +126,15 @@ export const wrap = (inner: ModelClient["Type"], log: CallLog["Type"]): ModelCli
               providerId: completion.id,
               cost: completion.usage,
             }),
-            onFailure: (cause): CallLogEntry =>
-              Option.match(Cause.failureOption(cause), {
-                onSome: (error) => ({ ...base, ...failureFields(error) }),
-                onNone: () =>
+          onFailure: (cause): Option.Option<CallLogEntry> =>
+            Option.match(Cause.failureOption(cause), {
+              onSome: (error) =>
+                // A call the spend cap refused never reached the provider, so it is not a call.
+                error._tag === "BudgetExceeded"
+                  ? Option.none()
+                  : Option.some({ ...base, ...failureFields(error) }),
+              onNone: () =>
+                Option.some(
                   Cause.isInterruptedOnly(cause)
                     ? {
                         ...base,
@@ -138,9 +144,10 @@ export const wrap = (inner: ModelClient["Type"], log: CallLog["Type"]): ModelCli
                       }
                     : // A defect in the client: the request may or may not have gone out.
                       { ...base, status: "provider_error", cost: null, error: Cause.pretty(cause) },
-              }),
-          }),
-        );
+                ),
+            }),
+        });
+        if (Option.isSome(entry)) yield* log.record(entry.value);
         return yield* exit;
       }),
     ),
