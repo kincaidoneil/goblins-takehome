@@ -8,8 +8,17 @@ It talks to the app only over HTTP, as a browser would. Three uses:
 - **The recorded demo**: a real teacher launches a session; `--join-code` sends a class into it, and their dashboard and projector fill up live. The same `--seed` gives the same names, schedule and whiteboards.
 - **The load test's client**: see [`@goblins/loadtest`](../loadtest).
 
+The recorded demo uses its own command, with eval-dataset whiteboards the real grader is known to grade right:
+
 ```bash
-# Demo: 30 students join session 123456 and finish in 2–4 minutes
+# 27 students join session 123456 on production and finish every problem in 2–3 minutes
+pnpm demo:class --target https://goblins-takehome-gathers.vercel.app --code 123456 --template solving-linear-equations
+```
+
+Most students submit correct work. On two "struggle" problems (default: the last two the eval set has common mistakes for; set with `--struggle 7,8`) 70% of students make a common mistake, so the report shows where the class struggled and the Goblins CTA. Four students submit ambiguous work the grader flagged in every eval run, so "Needs you" has items to review. The class is not tagged as a load test, so the app grades it with its real model (about $0.25 for 27 × 8 grades with Haiku).
+
+```bash
+# Demo with fixture whiteboards: 30 students join session 123456 and finish in 2–4 minutes
 pnpm --filter @goblins/simulator simulate --url https://<app> --join-code 123456 --time-scale 0.1
 
 # Five load-test classes (needs LOAD_TEST_TOKEN; data stays until `loadtest cleanup <run id>`)

@@ -28,6 +28,11 @@ export interface ClassOptions {
   readonly drainMs: number;
   /** A submit that has not been acknowledged after this long is abandoned. */
   readonly submitGiveUpMs: number;
+  /**
+   * Chooses a student's whiteboard for a problem. Defaults to the weighted fixture mix. Returning
+   * undefined skips the problem.
+   */
+  readonly pick?: (problem: api.Problem, student: number) => Whiteboard | undefined;
 }
 
 /** What the class's own dashboard shows, kept current by the teacher's subscriptions. */
@@ -153,6 +158,7 @@ export const runClass = (options: ClassOptions) =>
               runStudent({
                 ...options,
                 joinCode: session.joinCode,
+                index: i,
                 name: names[i] ?? `Student ${i}`,
                 studentPlan,
                 rng: forkRng(options.seed, `${classId}:student:${i}`),
@@ -263,6 +269,7 @@ export const runStudentsOnly = (options: StudentsOnlyOptions) =>
               teacher: -1,
               templateId: "",
               drainMs: 0,
+              index: i,
               name: names[i] ?? `Student ${i}`,
               studentPlan,
               rng: forkRng(options.seed, `${options.classId}:student:${i}`),
@@ -287,6 +294,8 @@ export const runStudentsOnly = (options: StudentsOnlyOptions) =>
 
 interface StudentOptions extends ClassOptions {
   readonly joinCode: string;
+  /** The student's position in the class, from 0. */
+  readonly index: number;
   readonly name: string;
   readonly studentPlan: StudentPlan;
   readonly rng: Rng;
@@ -401,7 +410,11 @@ const runStudent = (options: StudentOptions) =>
             const offset = studentPlan.submitOffsetsMs[index];
             if (problem === undefined || offset === undefined) continue;
             yield* sleepUntil(start + offset);
-            const whiteboard = weighted(options.rng, options.whiteboards, (w) => w.weight);
+            const whiteboard =
+              options.pick === undefined
+                ? weighted(options.rng, options.whiteboards, (w) => w.weight)
+                : options.pick(problem, options.index);
+            if (whiteboard === undefined) continue;
             const outcome = yield* submitWithRetry(options, current, problem.id, whiteboard);
             if (outcome === "stop") return;
           }

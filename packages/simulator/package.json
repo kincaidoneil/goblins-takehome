@@ -13,13 +13,15 @@
   "scripts": {
     "simulate": "tsx src/cli.ts",
     "typecheck": "tsc -p .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "demo:class": "tsx src/demo.ts"
   },
   "dependencies": {
     "@electric-sql/client": "^1.5.28",
+    "@goblins/evals": "workspace:*",
     "@goblins/mock-model": "workspace:*",
-    "effect": "^3.22.2",
-    "@goblins/templates": "workspace:*"
+    "@goblins/templates": "workspace:*",
+    "effect": "^3.22.2"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
