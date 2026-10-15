@@ -7,7 +7,7 @@
  * Teacher writes are conditional on the state too, so two tabs cannot race a grade into an
  * impossible state.
  */
-import { and, asc, eq, inArray, sql } from "drizzle-orm"
+import { and, asc, eq, inArray, isNull, lt, or, sql } from "drizzle-orm"
 import { Data, Effect, Option } from "effect"
 import { Db } from "./db"
 import {
@@ -120,12 +120,16 @@ const checkLinePoints = (submissionId: SubmissionId, linePoints: LinePoints) =>
   Effect.gen(function* () {
     const db = yield* Db
     const lines = yield* db
-      .select({ id: rubricLines.id, points: rubricLines.points })
+      .select({ id: rubricLines.id, points: rubricLines.points, maxPoints: grades.maxPoints })
       .from(rubricLines)
-      .innerJoin(submissions, eq(submissions.problemId, rubricLines.problemId))
-      .where(eq(submissions.id, submissionId))
+      .innerJoin(grades, eq(grades.problemId, rubricLines.problemId))
+      .where(eq(grades.submissionId, submissionId))
     const max = new Map(lines.map((line) => [line.id, line.points]))
     const fail = (problem: string) => Effect.fail(new LinePointsMismatch({ submissionId, problem }))
+    // The rubric is locked once an assignment launches, so this only trips on a bug; it turns
+    // the `grades_points_in_range` check into a typed error.
+    const maxPoints = lines[0]?.maxPoints ?? 0
+    if (totalPoints(linePoints) > maxPoints) return yield* fail(`total over ${maxPoints}`)
     if (linePoints.length !== lines.length) {
       return yield* fail(`expected ${lines.length} rubric lines, got ${linePoints.length}`)
     }
@@ -172,32 +176,65 @@ export interface GradingInput {
 }
 
 /**
- * Called by the queue consumer when a message arrives. Moves the grade to `grading` and returns
- * what to grade, or None when the message is stale (the attempt is finished or superseded), in
- * which case the consumer acknowledges it and does nothing.
+ * How long a consumer owns a claimed attempt. A redelivery within the lease is told the attempt is
+ * in progress, so one message never pays for two model calls. After the lease, a redelivery takes
+ * the attempt over, which recovers from a consumer that crashed mid-call.
  */
+export const CLAIM_LEASE_SECONDS = 120
+
+/**
+ * What the queue consumer does with a message:
+ * - `Claimed`: grade it.
+ * - `Stale`: the attempt is finished or superseded. Acknowledge the message and do nothing.
+ * - `InProgress`: another consumer holds the attempt. Leave the message for redelivery after the lease.
+ */
+export type Claim =
+  | { readonly _tag: "Claimed"; readonly input: GradingInput }
+  | { readonly _tag: "Stale" }
+  | { readonly _tag: "InProgress" }
+
+const stale: Claim = { _tag: "Stale" }
+
+/** Called by the queue consumer when a message arrives. Moves the grade to `grading`. */
 export const startGrading = (job: GradeJob) =>
   Effect.gen(function* () {
     const db = yield* Db
     const [claimed] = yield* db
       .update(grades)
-      .set({ state: "grading" })
+      .set({ state: "grading", claimedAt: new Date(), outcomeAt: null })
       .where(
         and(
           eq(grades.submissionId, job.submissionId),
           eq(grades.attempt, job.attempt),
-          inArray(grades.state, ["submitted", "grading"])
+          or(
+            eq(grades.state, "submitted"),
+            and(
+              eq(grades.state, "grading"),
+              or(
+                isNull(grades.claimedAt),
+                lt(grades.claimedAt, sql`now() - make_interval(secs => ${CLAIM_LEASE_SECONDS})`)
+              )
+            )
+          )
         )
       )
       .returning({ problemId: grades.problemId, studentId: grades.studentId })
-    if (claimed === undefined) return Option.none<GradingInput>()
+    if (claimed === undefined) {
+      const [current] = yield* db
+        .select({ state: grades.state, attempt: grades.attempt })
+        .from(grades)
+        .where(eq(grades.submissionId, job.submissionId))
+      return current?.state === "grading" && current.attempt === job.attempt
+        ? ({ _tag: "InProgress" } satisfies Claim)
+        : stale
+    }
 
     const [submission] = yield* db
       .select({ whiteboardUrl: submissions.whiteboardUrl })
       .from(submissions)
       .where(eq(submissions.id, job.submissionId))
     const [problem] = yield* db.select().from(problems).where(eq(problems.id, claimed.problemId))
-    if (submission === undefined || problem === undefined) return Option.none<GradingInput>()
+    if (submission === undefined || problem === undefined) return stale
 
     const lines = yield* db
       .select({ id: rubricLines.id, points: rubricLines.points, description: rubricLines.description })
@@ -236,7 +273,7 @@ export const startGrading = (job: GradeJob) =>
       .where(eq(problemDependencies.problemId, problem.id))
       .orderBy(asc(problems.position))
 
-    return Option.some<GradingInput>({
+    const input: GradingInput = {
       job,
       whiteboardUrl: submission.whiteboardUrl,
       problem: {
@@ -254,7 +291,8 @@ export const startGrading = (job: GradeJob) =>
         whiteboardUrl: Option.fromNullable(dep.whiteboardUrl),
         graderRead: Option.fromNullable(dep.graderRead)
       }))
-    })
+    }
+    return { _tag: "Claimed", input } satisfies Claim
   })
 
 /**
@@ -268,11 +306,19 @@ export const recordOutcome = (job: GradeJob, outcome: GraderOutcome) =>
   Effect.gen(function* () {
     const db = yield* Db
     const now = new Date()
+    // Check staleness first, so a superseded attempt is acknowledged rather than retried.
+    const [current] = yield* db
+      .select({ state: grades.state, attempt: grades.attempt })
+      .from(grades)
+      .where(eq(grades.submissionId, job.submissionId))
+    if (current?.state !== "grading" || current.attempt !== job.attempt) return "stale" as const
+
     const values = yield* (() => {
       switch (outcome._tag) {
         case "Sure":
           return Effect.as(checkLinePoints(job.submissionId, outcome.result.linePoints), {
             state: "graded" as const,
+            outcomeAt: now,
             graderRead: outcome.result.read,
             modelLinePoints: outcome.result.linePoints,
             graderReason: outcome.result.reason,
@@ -284,6 +330,7 @@ export const recordOutcome = (job: GradeJob, outcome: GraderOutcome) =>
         case "Unsure":
           return Effect.as(checkLinePoints(job.submissionId, outcome.result.linePoints), {
             state: "needs_teacher" as const,
+            outcomeAt: now,
             graderRead: outcome.result.read,
             modelLinePoints: outcome.result.linePoints,
             graderReason: outcome.result.reason,
@@ -292,6 +339,7 @@ export const recordOutcome = (job: GradeJob, outcome: GraderOutcome) =>
         case "Failed":
           return Effect.succeed({
             state: "couldnt_grade" as const,
+            outcomeAt: now,
             failureReason: outcome.failureReason
           })
       }
@@ -378,7 +426,7 @@ export const scoreGrade = (submissionId: SubmissionId, linePoints: LinePoints) =
   })
 
 /**
- * Starts a new attempt for a grade that needs the teacher or couldn't be graded. Returns the job
+ * Queues a new attempt for a grade that needs the teacher or couldn't be graded. Returns the job
  * to enqueue. Messages for earlier attempts become stale.
  */
 export const retryGrade = (submissionId: SubmissionId) =>
@@ -387,8 +435,10 @@ export const retryGrade = (submissionId: SubmissionId) =>
     const [updated] = yield* db
       .update(grades)
       .set({
-        state: "grading",
+        state: "submitted",
         attempt: sql`${grades.attempt} + 1`,
+        claimedAt: null,
+        outcomeAt: null,
         graderRead: null,
         modelLinePoints: null,
         graderReason: null,

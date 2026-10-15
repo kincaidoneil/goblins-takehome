@@ -7,6 +7,7 @@ import { eq, sql } from "drizzle-orm"
 import { Effect, Either, Option } from "effect"
 import {
   acceptGrade,
+  CLAIM_LEASE_SECONDS,
   type GradeJob,
   type GraderOutcome,
   Db,
@@ -20,8 +21,12 @@ import {
   startGrading,
   submitWork
 } from "../src/index"
-import { classSessions, problemDependencies, problems, rubricLines, students, teachers, assignments } from "../src/schema"
+import { classSessions, grades, submissions, problemDependencies, problems, rubricLines, students, teachers, assignments } from "../src/schema"
 import { TestDatabase } from "./test-database"
+
+/** The first row, or a test failure. */
+const first = <A>(rows: ReadonlyArray<A>): Effect.Effect<A> =>
+  rows[0] === undefined ? Effect.die("expected a row") : Effect.succeed(rows[0])
 
 let codeCounter = 100000
 const nextCode = () => JoinCode.make(String(codeCounter++))
@@ -31,36 +36,42 @@ const seed = (options: { readonly loadTestRunId?: string } = {}) =>
   Effect.gen(function* () {
     const db = yield* Db
     const loadTestRunId = options.loadTestRunId ?? null
-    const [teacher] = yield* db
-      .insert(teachers)
-      .values({ clerkUserId: `user_${crypto.randomUUID()}`, name: "Ms. Rivera", loadTestRunId })
-      .returning()
-    const [assignment] = yield* db
-      .insert(assignments)
-      .values({ teacherId: teacher!.id, title: "Linear equations", extractionStatus: "ready", loadTestRunId })
-      .returning()
-    const [p1, p2] = yield* db
+    const teacher = yield* first(
+      yield* db
+        .insert(teachers)
+        .values({ clerkUserId: `user_${crypto.randomUUID()}`, name: "Ms. Rivera", loadTestRunId })
+        .returning()
+    )
+    const assignment = yield* first(
+      yield* db
+        .insert(assignments)
+        .values({ teacherId: teacher.id, title: "Linear equations", extractionStatus: "ready", loadTestRunId })
+        .returning()
+    )
+    const problemRows = yield* db
       .insert(problems)
       .values([
-        { assignmentId: assignment!.id, position: 0, label: "1a", text: "Solve 2x + 3 = 11", answerKey: "x = 4" },
-        { assignmentId: assignment!.id, position: 1, label: "1b", text: "Find 3x using your x", answerKey: "12" }
+        { assignmentId: assignment.id, position: 0, label: "1a", text: "Solve 2x + 3 = 11", answerKey: "x = 4" },
+        { assignmentId: assignment.id, position: 1, label: "1b", text: "Find 3x using your x", answerKey: "12" }
       ])
       .returning()
-    yield* db.insert(problemDependencies).values({ problemId: p2!.id, dependsOnProblemId: p1!.id })
+    const p1 = yield* first(problemRows)
+    const p2 = yield* first(problemRows.slice(1))
+    yield* db.insert(problemDependencies).values({ problemId: p2.id, dependsOnProblemId: p1.id })
     const lines = yield* db
       .insert(rubricLines)
       .values([
-        { problemId: p1!.id, position: 0, points: 1, description: "Correct setup" },
-        { problemId: p1!.id, position: 1, points: 1, description: "Correct answer" },
-        { problemId: p2!.id, position: 0, points: 2, description: "Correct method" }
+        { problemId: p1.id, position: 0, points: 1, description: "Correct setup" },
+        { problemId: p1.id, position: 1, points: 1, description: "Correct answer" },
+        { problemId: p2.id, position: 0, points: 2, description: "Correct method" }
       ])
       .returning()
     const joinCode = nextCode()
-    const [session] = yield* db
+    const sessionRows = yield* db
       .insert(classSessions)
       .values({
-        assignmentId: assignment!.id,
-        teacherId: teacher!.id,
+        assignmentId: assignment.id,
+        teacherId: teacher.id,
         joinCode,
         status: "live",
         startedAt: new Date(),
@@ -68,12 +79,12 @@ const seed = (options: { readonly loadTestRunId?: string } = {}) =>
       })
       .returning()
     return {
-      session: session!,
+      session: yield* first(sessionRows),
       joinCode,
-      p1: p1!,
-      p2: p2!,
-      p1Lines: lines.filter((l) => l.problemId === p1!.id),
-      p2Lines: lines.filter((l) => l.problemId === p2!.id)
+      p1,
+      p2,
+      p1Lines: lines.filter((l) => l.problemId === p1.id),
+      p2Lines: lines.filter((l) => l.problemId === p2.id)
     }
   })
 
@@ -137,10 +148,16 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
       expect(jobOf(retried)).toEqual(jobOf(first))
 
       const job = jobOf(first)
-      const input = yield* startGrading(job)
-      expect(Option.isSome(input)).toBe(true)
-      // A redelivery while the first attempt is in flight may grade again; the first result wins.
-      expect(Option.isSome(yield* startGrading(job))).toBe(true)
+      expect((yield* startGrading(job))._tag).toBe("Claimed")
+      // A redelivery while the first consumer holds the attempt does not grade it again.
+      expect((yield* startGrading(job))._tag).toBe("InProgress")
+      // Once the lease runs out (the consumer crashed), a redelivery takes the attempt over.
+      const db = yield* Db
+      yield* db
+        .update(grades)
+        .set({ claimedAt: new Date(Date.now() - (CLAIM_LEASE_SECONDS + 1) * 1000) })
+        .where(eq(grades.submissionId, job.submissionId))
+      expect((yield* startGrading(job))._tag).toBe("Claimed")
 
       const outcome: GraderOutcome = {
         _tag: "Sure",
@@ -152,7 +169,7 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
       }
       expect(yield* recordOutcome(job, outcome)).toBe("recorded")
       expect(yield* recordOutcome(job, outcome)).toBe("stale")
-      expect(Option.isNone(yield* startGrading(job))).toBe(true)
+      expect((yield* startGrading(job))._tag).toBe("Stale")
 
       const grade = Option.getOrThrow(yield* getGrade(first.submissionId))
       expect(grade.status._tag).toBe("Graded")
@@ -180,7 +197,9 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
         }
       })
       const s2 = yield* submit(session.id, student.id, p2.id)
-      const input = Option.getOrThrow(yield* startGrading(jobOf(s2)))
+      const claim = yield* startGrading(jobOf(s2))
+      if (claim._tag !== "Claimed") return yield* Effect.die("expected a claim")
+      const input = claim.input
       expect(input.problem.label).toBe("1b")
       expect(input.rubricLines).toHaveLength(1)
       expect(input.dependencies).toHaveLength(1)
@@ -243,9 +262,9 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
           reason: "Correct."
         }
       }
-      expect(Option.isNone(yield* startGrading(attempt1))).toBe(true)
+      expect((yield* startGrading(attempt1))._tag).toBe("Stale")
       expect(yield* recordOutcome(attempt1, sure)).toBe("stale")
-      expect(Option.isSome(yield* startGrading(attempt2))).toBe(true)
+      expect((yield* startGrading(attempt2))._tag).toBe("Claimed")
       expect(yield* recordOutcome(attempt2, sure)).toBe("recorded")
       const grade = Option.getOrThrow(yield* getGrade(s.submissionId))
       expect(grade.status._tag === "Graded" && grade.status.attempt).toBe(2)
@@ -269,7 +288,7 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
       )
       expect(Either.isLeft(over) && over.left._tag).toBe("LinePointsMismatch")
       const missing = yield* Effect.either(
-        scoreGrade(s.submissionId, [{ rubricLineId: p1Lines[0]!.id, points: 1 }])
+        scoreGrade(s.submissionId, [{ rubricLineId: (yield* first(p1Lines)).id, points: 1 }])
       )
       expect(Either.isLeft(missing) && missing.left._tag).toBe("LinePointsMismatch")
     }))
@@ -284,6 +303,18 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
         db.execute(sql`update grades set state = 'graded' where submission_id = ${s.submissionId}`)
       )
       expect(Either.isLeft(result)).toBe(true)
+    }))
+
+  it.effect("moves a grade with its submission when the teacher splits a student", () =>
+    Effect.gen(function* () {
+      const { session, joinCode, p1 } = yield* seed()
+      const { student: merged } = yield* join(joinCode, "Alex")
+      const { student: split } = yield* join(joinCode, "Alex M")
+      const s = yield* submit(session.id, merged.id, p1.id)
+      const db = yield* Db
+      yield* db.update(submissions).set({ studentId: split.id }).where(eq(submissions.id, s.submissionId))
+      const grade = Option.getOrThrow(yield* getGrade(s.submissionId))
+      expect(grade.studentId).toBe(split.id)
     }))
 
   it.effect("deletes everything a load-test run created and nothing else", () =>

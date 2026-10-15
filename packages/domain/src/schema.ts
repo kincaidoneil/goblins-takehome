@@ -16,6 +16,7 @@ import {
   type AnyPgColumn,
   boolean,
   check,
+  foreignKey,
   index,
   integer,
   jsonb,
@@ -25,6 +26,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  unique,
   uniqueIndex,
   uuid
 } from "drizzle-orm/pg-core"
@@ -308,7 +310,10 @@ export const submissions = pgTable(
     // A submitted problem is locked, so a student has at most one submission per problem.
     // This also makes an offline retry of the same submit a no-op.
     uniqueIndex().on(t.studentId, t.problemId),
-    index().on(t.sessionId)
+    // Target of the composite foreign key from `grades`, which keeps a grade's copies in step.
+    unique("submissions_grade_link").on(t.id, t.sessionId, t.studentId, t.problemId),
+    index().on(t.sessionId),
+    index().on(t.problemId)
   ]
 )
 
@@ -339,18 +344,13 @@ export const gradeSource = pgEnum("grade_source", [
 export const grades = pgTable(
   "grades",
   {
-    submissionId: uuid()
-      .primaryKey()
-      .references(() => submissions.id, { onDelete: "cascade" }),
-    sessionId: uuid()
-      .notNull()
-      .references(() => classSessions.id, { onDelete: "cascade" }),
-    studentId: uuid()
-      .notNull()
-      .references(() => students.id, { onDelete: "cascade" }),
-    problemId: uuid()
-      .notNull()
-      .references(() => problems.id, { onDelete: "cascade" }),
+    // The submission's id, session, student and problem, copied so Electric can filter grades
+    // without a join. A composite foreign key keeps them equal to the submission's: moving a
+    // submission to another student (a split) cascades here.
+    submissionId: uuid().primaryKey(),
+    sessionId: uuid().notNull(),
+    studentId: uuid().notNull(),
+    problemId: uuid().notNull(),
     state: gradeState().notNull().default("submitted"),
     /** Starts at 1. A teacher retry starts the next attempt. */
     attempt: integer().notNull().default(1),
@@ -377,12 +377,26 @@ export const grades = pgTable(
     points: integer(),
     gradedAt: timestamp({ withTimezone: true }),
 
+    // Pipeline timing, for the load test and usage reports. Teacher actions leave them alone.
+    /** When a consumer claimed the current attempt. A claim older than the lease can be taken over. */
+    claimedAt: timestamp({ withTimezone: true }),
+    /** When the pipeline recorded the current attempt's outcome. */
+    outcomeAt: timestamp({ withTimezone: true }),
+
     createdAt: createdAt(),
     updatedAt: updatedAt()
   },
   (t) => [
+    foreignKey({
+      name: "grades_submission_fk",
+      columns: [t.submissionId, t.sessionId, t.studentId, t.problemId],
+      foreignColumns: [submissions.id, submissions.sessionId, submissions.studentId, submissions.problemId]
+    })
+      .onDelete("cascade")
+      .onUpdate("cascade"),
     index().on(t.sessionId),
     index().on(t.studentId),
+    index().on(t.problemId),
     check("grades_attempt_positive", sql`${t.attempt} >= 1`),
     check("grades_max_points_positive", sql`${t.maxPoints} > 0`),
     check(

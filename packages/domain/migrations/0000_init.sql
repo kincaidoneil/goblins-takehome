@@ -67,6 +67,8 @@ CREATE TABLE "grades" (
 	"line_points" jsonb,
 	"points" integer,
 	"graded_at" timestamp with time zone,
+	"claimed_at" timestamp with time zone,
+	"outcome_at" timestamp with time zone,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "grades_attempt_positive" CHECK ("grades"."attempt" >= 1),
@@ -153,7 +155,8 @@ CREATE TABLE "submissions" (
 	"problem_id" uuid NOT NULL,
 	"whiteboard_url" text NOT NULL,
 	"submitted_at" timestamp with time zone NOT NULL,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "submissions_grade_link" UNIQUE("id","session_id","student_id","problem_id")
 );
 --> statement-breakpoint
 CREATE TABLE "teachers" (
@@ -181,10 +184,7 @@ ALTER TABLE "assignment_chat_messages" ADD CONSTRAINT "assignment_chat_messages_
 ALTER TABLE "assignments" ADD CONSTRAINT "assignments_teacher_id_teachers_id_fk" FOREIGN KEY ("teacher_id") REFERENCES "public"."teachers"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "class_sessions" ADD CONSTRAINT "class_sessions_assignment_id_assignments_id_fk" FOREIGN KEY ("assignment_id") REFERENCES "public"."assignments"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "class_sessions" ADD CONSTRAINT "class_sessions_teacher_id_teachers_id_fk" FOREIGN KEY ("teacher_id") REFERENCES "public"."teachers"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "grades" ADD CONSTRAINT "grades_submission_id_submissions_id_fk" FOREIGN KEY ("submission_id") REFERENCES "public"."submissions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "grades" ADD CONSTRAINT "grades_session_id_class_sessions_id_fk" FOREIGN KEY ("session_id") REFERENCES "public"."class_sessions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "grades" ADD CONSTRAINT "grades_student_id_students_id_fk" FOREIGN KEY ("student_id") REFERENCES "public"."students"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "grades" ADD CONSTRAINT "grades_problem_id_problems_id_fk" FOREIGN KEY ("problem_id") REFERENCES "public"."problems"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "grades" ADD CONSTRAINT "grades_submission_fk" FOREIGN KEY ("submission_id","session_id","student_id","problem_id") REFERENCES "public"."submissions"("id","session_id","student_id","problem_id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE "problem_dependencies" ADD CONSTRAINT "problem_dependencies_problem_id_problems_id_fk" FOREIGN KEY ("problem_id") REFERENCES "public"."problems"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "problem_dependencies" ADD CONSTRAINT "problem_dependencies_depends_on_problem_id_problems_id_fk" FOREIGN KEY ("depends_on_problem_id") REFERENCES "public"."problems"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "problems" ADD CONSTRAINT "problems_assignment_id_assignments_id_fk" FOREIGN KEY ("assignment_id") REFERENCES "public"."assignments"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -204,6 +204,7 @@ CREATE INDEX "class_sessions_assignment_id_index" ON "class_sessions" USING btre
 CREATE INDEX "class_sessions_load_test_run_id_index" ON "class_sessions" USING btree ("load_test_run_id");--> statement-breakpoint
 CREATE INDEX "grades_session_id_index" ON "grades" USING btree ("session_id");--> statement-breakpoint
 CREATE INDEX "grades_student_id_index" ON "grades" USING btree ("student_id");--> statement-breakpoint
+CREATE INDEX "grades_problem_id_index" ON "grades" USING btree ("problem_id");--> statement-breakpoint
 CREATE INDEX "model_calls_created_at_index" ON "model_calls" USING btree ("created_at");--> statement-breakpoint
 CREATE INDEX "model_calls_load_test_run_id_index" ON "model_calls" USING btree ("load_test_run_id");--> statement-breakpoint
 CREATE INDEX "model_calls_submission_id_index" ON "model_calls" USING btree ("submission_id");--> statement-breakpoint
@@ -213,4 +214,5 @@ CREATE UNIQUE INDEX "rubric_lines_problem_id_position_index" ON "rubric_lines" U
 CREATE UNIQUE INDEX "students_session_id_name_key_index" ON "students" USING btree ("session_id","name_key");--> statement-breakpoint
 CREATE UNIQUE INDEX "submissions_student_id_problem_id_index" ON "submissions" USING btree ("student_id","problem_id");--> statement-breakpoint
 CREATE INDEX "submissions_session_id_index" ON "submissions" USING btree ("session_id");--> statement-breakpoint
+CREATE INDEX "submissions_problem_id_index" ON "submissions" USING btree ("problem_id");--> statement-breakpoint
 CREATE INDEX "teachers_load_test_run_id_index" ON "teachers" USING btree ("load_test_run_id");

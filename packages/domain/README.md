@@ -22,7 +22,7 @@ import { DatabaseLive, Db, startGrading, recordOutcome } from "@goblins/domain"
 import { schema } from "@goblins/domain"
 
 const program = Effect.gen(function* () {
-  const input = yield* startGrading(job) // Option: None means the message is stale, ack it
+  const claim = yield* startGrading(job) // Claimed | Stale (ack) | InProgress (redeliver later)
   // ...call the model...
   yield* recordOutcome(job, outcome) // "recorded" | "stale"
 }).pipe(Effect.provide(DatabaseLive))
@@ -36,9 +36,13 @@ Queue delivery is at-least-once. Each grading attempt has a number; the queue me
 
 - A redelivered message after the result is written matches nothing and is acknowledged.
 - A message for an attempt the teacher has since retried or scored is stale and dropped.
-- A redelivery while the first delivery is still in flight can call the model twice; the first result wins. That costs one extra call in a rare case, and avoids a lease.
+- A redelivery while another consumer holds the attempt gets `InProgress`: leave the message for redelivery. A claim older than `CLAIM_LEASE_SECONDS` (120 s) can be taken over, which recovers from a consumer that crashed mid-call. So one message never pays for two model calls unless a call outlives the lease.
 
 `submitWork` is idempotent per student and problem. While the grade is still `submitted` it returns the job again, so a client retry also re-enqueues a message that was lost after the first write. `pendingJobs(sessionId)` lists grades still waiting, for a sweeper.
+
+`grades.claimed_at` and `grades.outcome_at` record when the pipeline claimed the current attempt and recorded its outcome; with `submissions.created_at` they give queue wait and model time for the load-test report. Teacher actions leave them alone.
+
+A teacher split moves a submission to another student by updating `submissions.student_id`; a composite foreign key carries the change to the grade's copies.
 
 ## Load-test data
 

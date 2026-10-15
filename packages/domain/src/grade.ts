@@ -6,7 +6,7 @@
  *                        -> CouldntGrade   retries ran out
  *   NeedsTeacher -> Graded                 teacher accepts or rescores
  *   CouldntGrade -> Graded                 teacher scores it
- *   NeedsTeacher | CouldntGrade -> Grading teacher retries
+ *   NeedsTeacher | CouldntGrade -> Submitted   teacher retries (a new attempt, queued)
  *   Graded -> Graded                       teacher overrides
  *
  * A `grades` row decodes into the `Grade` union here. Only `Graded` shows a score to the student.

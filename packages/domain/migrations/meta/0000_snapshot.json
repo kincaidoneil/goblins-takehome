@@ -1,5 +1,5 @@
 {
-  "id": "0db4f2d0-1bfe-4147-9726-7e36ed4b6486",
+  "id": "f40edb72-44ca-414b-8a6e-0e3a8b0528c1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -538,6 +538,18 @@
           "primaryKey": false,
           "notNull": false
         },
+        "claimed_at": {
+          "name": "claimed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "outcome_at": {
+          "name": "outcome_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp with time zone",
@@ -583,60 +595,42 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "grades_problem_id_index": {
+          "name": "grades_problem_id_index",
+          "columns": [
+            {
+              "expression": "problem_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
-        "grades_submission_id_submissions_id_fk": {
-          "name": "grades_submission_id_submissions_id_fk",
+        "grades_submission_fk": {
+          "name": "grades_submission_fk",
           "tableFrom": "grades",
           "tableTo": "submissions",
           "columnsFrom": [
-            "submission_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "grades_session_id_class_sessions_id_fk": {
-          "name": "grades_session_id_class_sessions_id_fk",
-          "tableFrom": "grades",
-          "tableTo": "class_sessions",
-          "columnsFrom": [
-            "session_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "grades_student_id_students_id_fk": {
-          "name": "grades_student_id_students_id_fk",
-          "tableFrom": "grades",
-          "tableTo": "students",
-          "columnsFrom": [
-            "student_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "grades_problem_id_problems_id_fk": {
-          "name": "grades_problem_id_problems_id_fk",
-          "tableFrom": "grades",
-          "tableTo": "problems",
-          "columnsFrom": [
+            "submission_id",
+            "session_id",
+            "student_id",
             "problem_id"
           ],
           "columnsTo": [
-            "id"
+            "id",
+            "session_id",
+            "student_id",
+            "problem_id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -1324,6 +1318,21 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "submissions_problem_id_index": {
+          "name": "submissions_problem_id_index",
+          "columns": [
+            {
+              "expression": "problem_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -1368,7 +1377,18 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "submissions_grade_link": {
+          "name": "submissions_grade_link",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "session_id",
+            "student_id",
+            "problem_id"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
