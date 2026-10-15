@@ -55,9 +55,25 @@ export const useTeacherAuth: () => TeacherAuth = clerkEnabled
   ? useClerkTeacherAuth
   : useLocalTeacherAuth;
 
-/** Wraps a button so clicking it opens Clerk's sign-in modal. Without Clerk, renders the button. */
-export function SignInTrigger({ children }: { readonly children: ReactElement }) {
-  return clerkEnabled ? <SignInButton mode="modal">{children}</SignInButton> : children;
+/**
+ * Wraps a button so clicking it opens Clerk's sign-in modal, returning to `redirectUrl` (default:
+ * the current page). Without Clerk, renders the button.
+ */
+export function SignInTrigger({
+  children,
+  redirectUrl,
+}: {
+  readonly children: ReactElement;
+  readonly redirectUrl?: string;
+}) {
+  if (!clerkEnabled) return children;
+  return redirectUrl === undefined ? (
+    <SignInButton mode="modal">{children}</SignInButton>
+  ) : (
+    <SignInButton mode="modal" forceRedirectUrl={redirectUrl} signUpForceRedirectUrl={redirectUrl}>
+      {children}
+    </SignInButton>
+  );
 }
 
 /** The signed-in teacher's account menu, when Clerk runs. */
