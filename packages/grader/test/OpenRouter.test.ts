@@ -2,8 +2,9 @@ import { createServer, type IncomingMessage, type ServerResponse } from "node:ht
 import type { AddressInfo } from "node:net";
 import { afterAll, beforeAll, describe, expect, it } from "@effect/vitest";
 import { Cause, ConfigProvider, Effect, Either, Exit, Layer, Redacted } from "effect";
-import type { CompletionRequest } from "../src/index.ts";
+import { BudgetExceeded, type CompletionRequest } from "../src/index.ts";
 import * as OpenRouter from "../src/OpenRouter.ts";
+import type * as SpendGuard from "../src/SpendGuard.ts";
 
 /** A fake OpenRouter: each test picks the response by model id. */
 type Reply = (req: IncomingMessage, res: ServerResponse, body: unknown) => void;
@@ -27,6 +28,16 @@ const ok = (content: string | null, finish = "stop") => ({
 
 const replies: Record<string, Reply> = {
   ok: (_req, res) => json(res, 200, ok("3/4")),
+  thinker: (_req, res) =>
+    json(res, 200, {
+      ...ok("3/4"),
+      usage: {
+        prompt_tokens: 100,
+        completion_tokens: 50,
+        cost: 0.0002,
+        completion_tokens_details: { reasoning_tokens: 40 },
+      },
+    }),
   "rate-limited": (_req, res) =>
     json(res, 429, { error: { code: 429, message: "slow down" } }, { "retry-after": "7" }),
   "server-error": (_req, res) => json(res, 502, { error: { code: 502, message: "upstream down" } }),
@@ -54,6 +65,17 @@ const replies: Record<string, Reply> = {
       { error: { code: 402, message: "spend limit in flight" } },
       { "retry-after": "3" },
     ),
+  "limited-mid-answer": (_req, res) =>
+    json(res, 200, {
+      ...ok("partial"),
+      choices: [
+        {
+          finish_reason: "error",
+          message: { role: "assistant", content: "partial" },
+          error: { code: 429, message: "upstream rate limit" },
+        },
+      ],
+    }),
   "cut-off": (_req, res) => json(res, 200, ok("partial", "length")),
   empty: (_req, res) => json(res, 200, ok(null)),
   "no-cost": (_req, res) =>
@@ -87,7 +109,10 @@ afterAll(() => {
 });
 
 const client = () =>
-  OpenRouter.make({ apiKey: Redacted.make("test"), timeoutMs: 500, baseUrl, appName: "test" });
+  OpenRouter.make(
+    { apiKey: Redacted.make("test"), timeoutMs: 500, baseUrl, appName: "test" },
+    noCap,
+  );
 
 const request = (model: string): CompletionRequest => ({
   model,
@@ -104,6 +129,8 @@ const request = (model: string): CompletionRequest => ({
   tag: { purpose: "grade" },
   jsonSchema: { name: "grade", schema: { type: "object" } },
 });
+
+const noCap: SpendGuard.SpendGuard = { check: Effect.void, add: () => Effect.void };
 
 const run = (model: string) => Effect.either(client().complete(request(model)));
 
@@ -168,6 +195,11 @@ describe("OpenRouter client", () => {
         retryAfterMs: 3000,
       });
       expect(tagOf(yield* run("cut-off"))).toMatchObject({ truncated: true });
+      expect(tagOf(yield* run("limited-mid-answer"))).toMatchObject({
+        _tag: "RateLimited",
+        mayBeBilled: true,
+        usage: { costUsd: 0.00042 },
+      });
       expect(tagOf(yield* run("cut-off"))).toMatchObject({
         _tag: "BadResponse",
         usage: { promptTokens: 1200, completionTokens: 80, costUsd: 0.00042 },
@@ -184,12 +216,15 @@ describe("OpenRouter client", () => {
 
   it.live("reports an unreachable host as ProviderError with status 0", () =>
     Effect.gen(function* () {
-      const unreachable = OpenRouter.make({
-        apiKey: Redacted.make("test"),
-        timeoutMs: 2_000,
-        baseUrl: "http://127.0.0.1:1",
-        appName: "test",
-      });
+      const unreachable = OpenRouter.make(
+        {
+          apiKey: Redacted.make("test"),
+          timeoutMs: 2_000,
+          baseUrl: "http://127.0.0.1:1",
+          appName: "test",
+        },
+        noCap,
+      );
       const result = yield* Effect.either(unreachable.complete(request("ok")));
       expect(Either.isLeft(result) && result.left).toMatchObject({
         _tag: "ProviderError",
@@ -230,6 +265,57 @@ describe("OpenRouter layer", () => {
         ),
       );
       expect(Exit.isSuccess(exit)).toBe(true);
+    }),
+  );
+});
+
+describe("OpenRouter reasoning and spend cap", () => {
+  it.effect("sends the reasoning effort and reports reasoning tokens", () =>
+    Effect.gen(function* () {
+      const result = yield* client().complete({
+        ...request("thinker"),
+        reasoning: { effort: "low" },
+      });
+      expect(lastBody).toMatchObject({ reasoning: { effort: "low" } });
+      expect(result.usage).toEqual({
+        promptTokens: 100,
+        completionTokens: 50,
+        costUsd: 0.0002,
+        reasoningTokens: 40,
+      });
+    }),
+  );
+
+  it.effect("refuses a call over the cap without sending it, and counts what calls cost", () =>
+    Effect.gen(function* () {
+      const added: Array<number> = [];
+      lastBody = undefined;
+      const capped = OpenRouter.make(
+        { apiKey: Redacted.make("test"), timeoutMs: 500, baseUrl, appName: "test" },
+        { check: new BudgetExceeded({ spentUsd: 20.01, capUsd: 20 }), add: () => Effect.void },
+      );
+      const refused = yield* Effect.either(capped.complete(request("ok")));
+      expect(Either.isLeft(refused) && refused.left).toMatchObject({ _tag: "BudgetExceeded" });
+      expect(lastBody).toBeUndefined();
+
+      const counting = OpenRouter.make(
+        { apiKey: Redacted.make("test"), timeoutMs: 500, baseUrl, appName: "test" },
+        { check: Effect.void, add: (usd) => Effect.sync(() => added.push(usd)) },
+      );
+      yield* counting.complete(request("ok"));
+      yield* Effect.either(counting.complete(request("cut-off")));
+      yield* Effect.either(counting.complete(request("error-mid-answer")));
+      expect(added).toEqual([0.00042, 0.00042, 0.00042]);
+    }),
+  );
+});
+
+describe("OpenRouter per-request timeout", () => {
+  it.live("lets a request wait longer than the client's default", () =>
+    Effect.gen(function* () {
+      // The client defaults to 500 ms; "slow" answers after 2 s.
+      const result = yield* client().complete({ ...request("slow"), timeoutMs: 5_000 });
+      expect(result.text).toBe("late");
     }),
   );
 });
