@@ -1,0 +1,24 @@
+.gb-tooltip-positioner {
+  z-index: var(--gb-z-popover);
+}
+
+.gb-tooltip {
+  max-width: 260px;
+  padding: var(--gb-space-2) var(--gb-space-3);
+  border-radius: var(--gb-radius-sm);
+  background: var(--gb-green-950);
+  color: var(--gb-paper-0);
+  font-size: var(--gb-text-xs);
+  font-weight: var(--gb-weight-medium);
+  line-height: var(--gb-leading-snug);
+  transform-origin: var(--transform-origin);
+  transition:
+    opacity var(--gb-duration-fast) var(--gb-ease-out),
+    scale var(--gb-duration-fast) var(--gb-ease-out);
+}
+
+.gb-tooltip[data-starting-style],
+.gb-tooltip[data-ending-style] {
+  opacity: 0;
+  scale: 0.96;
+}

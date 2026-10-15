@@ -1,0 +1,45 @@
+/*
+ * Opt-in document defaults: font, background, text color and focus ring.
+ * Import after tokens.css in an app's root stylesheet.
+ */
+
+html {
+  font-family: var(--gb-font-sans);
+  font-size: 100%;
+  color: var(--gb-color-text);
+  background: var(--gb-color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  /* Dialog backdrops are positioned against the body; see Dialog.css. */
+  position: relative;
+  min-height: 100dvh;
+  margin: 0;
+  font-size: var(--gb-text-md);
+  font-weight: var(--gb-weight-regular);
+  line-height: var(--gb-leading-normal);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  color: var(--gb-color-text-brand);
+  font-weight: var(--gb-weight-heavy);
+  line-height: var(--gb-leading-tight);
+  letter-spacing: var(--gb-tracking-heading);
+  text-wrap: balance;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gb-color-focus);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--gb-lime-200);
+}

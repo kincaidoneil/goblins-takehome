@@ -1,0 +1,102 @@
+.gb-score-chip {
+  --_bg: var(--gb-score-pending-bg);
+  --_fg: var(--gb-score-pending-fg);
+
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gb-space-1);
+  min-width: 52px;
+  height: 30px;
+  padding: 0 var(--gb-space-3);
+  border-radius: var(--gb-radius-full);
+  background: var(--_bg);
+  color: var(--_fg);
+  font-size: var(--gb-text-sm);
+  font-weight: var(--gb-weight-heavy);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.gb-score-chip[data-size="sm"] {
+  min-width: 40px;
+  height: 24px;
+  padding: 0 var(--gb-space-2);
+  font-size: var(--gb-text-xs);
+}
+
+.gb-score-chip svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.gb-score-chip[data-tone="full"] {
+  --_bg: var(--gb-score-full-bg);
+  --_fg: var(--gb-score-full-fg);
+}
+
+.gb-score-chip[data-tone="partial"] {
+  --_bg: var(--gb-score-partial-bg);
+  --_fg: var(--gb-score-partial-fg);
+}
+
+.gb-score-chip[data-tone="low"] {
+  --_bg: var(--gb-score-low-bg);
+  --_fg: var(--gb-score-low-fg);
+}
+
+.gb-score-chip[data-tone="needs"] {
+  --_bg: var(--gb-score-needs-bg);
+  --_fg: var(--gb-score-needs-fg);
+  box-shadow: inset 0 0 0 1.5px var(--gb-lilac-400);
+}
+
+.gb-score-chip[data-tone="failed"] {
+  --_bg: var(--gb-score-failed-bg);
+  --_fg: var(--gb-score-failed-fg);
+  outline: 1.5px dashed var(--gb-paper-400);
+  outline-offset: -1.5px;
+}
+
+.gb-score-chip[data-tone="check"] {
+  --_bg: var(--gb-sun-100);
+  --_fg: var(--gb-color-text-brand);
+}
+
+.gb-score-chip[data-tone="pending"] {
+  box-shadow: inset 0 0 0 1.5px var(--gb-color-border);
+}
+
+.gb-score-chip[data-tone="empty"] {
+  --_bg: transparent;
+  --_fg: var(--gb-color-text-subtle);
+  box-shadow: inset 0 0 0 1.5px var(--gb-color-border);
+}
+
+/* Three dots that pulse while the grader works. */
+.gb-score-chip-dots {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow:
+    -7px 0 0 currentColor,
+    7px 0 0 currentColor;
+  animation: gb-score-chip-pulse 1.2s var(--gb-ease-out) infinite;
+}
+
+@keyframes gb-score-chip-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gb-score-chip-dots {
+    animation: none;
+  }
+}
