@@ -85,12 +85,10 @@ describe("templates", () => {
       expect(last).toBe(pageCount);
     });
 
-    it("crops every diagram to a box inside one of its problem's pages", () => {
+    it("keeps every diagram's crop inside one of its problem's pages", () => {
       for (const problem of template.problems) {
         for (const { crop } of problem.diagrams) {
-          expect(crop, `problem ${problem.number}`).toBeDefined();
-          if (!crop) continue;
-          expect(problem.pages).toContain(crop.page);
+          expect(problem.pages, `problem ${problem.number}`).toContain(crop.page);
           expect(crop.x + crop.w).toBeLessThanOrEqual(1);
           expect(crop.y + crop.h).toBeLessThanOrEqual(1);
         }

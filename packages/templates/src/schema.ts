@@ -72,7 +72,7 @@ export type Crop = typeof Crop.Type;
  */
 export const Diagram = Schema.Struct({
   description: Schema.NonEmptyString,
-  crop: Schema.optional(Crop),
+  crop: Crop,
 });
 export type Diagram = typeof Diagram.Type;
 
