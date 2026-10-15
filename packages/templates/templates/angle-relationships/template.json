@@ -224,8 +224,8 @@
       "solution": "The w° angle and the 138° angle together make a straight angle along the slanted line, so w = 180 − 138 = 42. The three angles fill the right angle between ℓ and m, so 19 + x + 42 = 90 and x = 29.",
       "dependsOn": [],
       "review": {
-        "_tag": "Unsure",
-        "note": "The diagram shows 138°, but IM's alt text for this image says 128°. The key follows the diagram (x = 29, w = 42). With 128° the answer would be x = 19, w = 52."
+        "_tag": "Checked",
+        "note": "Reviewed by Kincaid on 2026-10-15: the key follows the diagram (138°, so x = 29 and w = 42), not IM's alt text, which says 128°."
       }
     }
   ]

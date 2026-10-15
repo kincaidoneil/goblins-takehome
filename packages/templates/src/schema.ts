@@ -9,10 +9,11 @@ export type ItemId = typeof ItemId.Type;
 
 /**
  * Whether a person has confirmed this answer. `Unsure` items need Kincaid's review before the
- * AI-quality stream treats them as ground truth.
+ * AI-quality stream treats them as ground truth. A `Checked` note records how a past doubt was
+ * settled.
  */
 export const Review = Schema.Union(
-  Schema.TaggedStruct("Checked", {}),
+  Schema.TaggedStruct("Checked", { note: Schema.optional(Schema.NonEmptyString) }),
   Schema.TaggedStruct("Unsure", { note: Schema.NonEmptyString }),
 );
 export type Review = typeof Review.Type;
