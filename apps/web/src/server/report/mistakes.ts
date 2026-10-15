@@ -9,21 +9,11 @@
  */
 import { createHash } from "node:crypto";
 import { Db, schema } from "@goblins/domain";
-import { ModelClient } from "@goblins/grader";
+import { Mistakes, Models } from "@goblins/grader";
 import { and, eq } from "drizzle-orm";
-import { Config, Duration, Effect, JSONSchema, Option, Schema } from "effect";
-import {
-  fromModel,
-  groupingPrompt,
-  ModelGrouping,
-  type ProblemMistakes,
-} from "../../report/mistakes";
+import { Duration, Effect, Option, Schema } from "effect";
+import { fromModel, ModelGrouping, type ProblemMistakes } from "../../report/mistakes";
 import type { ClassReport, ProblemStats } from "../../report/model";
-
-/** AI quality's pick: text only, about 2k tokens, about $0.001 per weak problem. */
-const ReportModel = Config.string("REPORT_MODEL").pipe(
-  Config.withDefault("anthropic/claude-haiku-5.5"),
-);
 
 const inputHash = (stats: ProblemStats): string =>
   createHash("sha256")
@@ -36,28 +26,36 @@ const inputHash = (stats: ProblemStats): string =>
     )
     .digest("base64url");
 
-const decodeAnswer = Schema.decodeUnknown(Schema.parseJson(ModelGrouping));
-const decodeCached = Schema.decodeUnknown(ModelGrouping);
+const decodeGrouping = Schema.decodeUnknown(ModelGrouping);
 
+/**
+ * AI quality's grouping call (`Mistakes.groupMistakes`, Claude Haiku). It returns no skill name,
+ * so the problem's label stands in.
+ */
 const askModel = (sessionId: string, stats: ProblemStats) =>
   Effect.gen(function* () {
-    const client = yield* ModelClient;
-    const model = yield* ReportModel;
-    const completion = yield* client.complete({
-      model,
-      messages: [
-        {
-          role: "system",
-          content: "You help math teachers read class results. Answer only with JSON.",
+    const result = yield* Mistakes.groupMistakes(
+      {
+        problem: {
+          label: stats.problem.label,
+          text: stats.problem.text,
+          rubric: stats.problem.rubricLines,
         },
-        { role: "user", content: groupingPrompt(stats) },
-      ],
-      tag: { purpose: "report", subjectId: sessionId },
-      maxTokens: 800,
-      temperature: 0,
-      jsonSchema: { name: "mistake_groups", schema: JSONSchema.make(ModelGrouping) },
+        grades: stats.misses.map((m) => ({
+          studentId: m.student.id,
+          points: m.points,
+          maxPoints: m.maxPoints,
+          reason: m.reason ?? "No reason recorded.",
+          lostLineIds: m.lostLines.map((l) => l.id),
+        })),
+      },
+      { purpose: "report", subjectId: sessionId },
+    );
+    const grouping = yield* decodeGrouping({
+      skill: `Problem ${stats.problem.label}`,
+      groups: result.mistakes.map((m) => ({ description: m.mistake, studentIds: m.studentIds })),
     });
-    return { grouping: yield* decodeAnswer(completion.text), model: completion.model };
+    return { grouping, model: Models.models.mistakes.model };
   }).pipe(Effect.timeout(Duration.seconds(20)));
 
 const groupProblem = (sessionId: string, stats: ProblemStats) =>
@@ -76,7 +74,7 @@ const groupProblem = (sessionId: string, stats: ProblemStats) =>
       })
       .from(schema.reportMistakeGroups)
       .where(key);
-    if (cached !== undefined) return fromModel(stats, yield* decodeCached(cached));
+    if (cached !== undefined) return fromModel(stats, yield* decodeGrouping(cached));
 
     const { grouping, model } = yield* askModel(sessionId, stats);
     yield* db
