@@ -301,6 +301,23 @@ export function buildReport(input: ReportInput): ClassReport {
   };
 }
 
+/**
+ * Removes everything that could name a student, for the shared page: names become "Student n",
+ * avatars a single one, and the grader's reasons go (the shared page shows only grouped
+ * mistakes). The share route runs this on the server, so names never reach the viewer.
+ */
+export function anonymize(input: ReportInput): ReportInput {
+  return {
+    problems: input.problems,
+    students: input.students.map((s, i) => ({
+      id: s.id,
+      displayName: `Student ${i + 1}`,
+      avatarId: 0,
+    })),
+    grades: input.grades.map((g) => ({ ...g, graderReason: null })),
+  };
+}
+
 /** "47%". Rounds to whole percents, which is all a teacher reads. */
 export const percent = (share: number): string => `${Math.round(share * 100)}%`;
 
