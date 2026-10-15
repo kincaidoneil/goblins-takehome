@@ -8,6 +8,7 @@ import type { Answer, Template } from "@goblins/templates";
 import { Array as Arr, Option } from "effect";
 import type { Extracted, ExtractedProblem, RubricLineInput } from "./extracted";
 import { referenceRubric } from "./reference-rubrics";
+import { teacherNotes } from "./rubric-notes";
 
 /**
  * Template answers are LaTeX without delimiters ("x = 4\sqrt{3}", "16\sqrt{3} square units").
@@ -80,7 +81,7 @@ const rubricAndNotes = (
   Option.match(referenceRubric(templateId, label), {
     onNone: () => ({ rubric: rubricFor(answer), gradingNotes: notesFor(answer, dependsOn) }),
     onSome: (reference) => {
-      const notes = reference.notes ?? "";
+      const notes = teacherNotes(reference.notes ?? "");
       const needsFollowThrough = dependsOn.length > 0 && !/follow-through/i.test(notes);
       return {
         rubric: Arr.map(reference.lines, (line) => ({

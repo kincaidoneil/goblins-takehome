@@ -4,9 +4,10 @@
  * `applyEdits` runs a batch in one transaction.
  */
 import { Db, SqlClient, schema } from "@goblins/domain";
-import { and, eq, gte, inArray, sql } from "drizzle-orm";
+import { and, asc, eq, gte, inArray, sql } from "drizzle-orm";
 import { Data, Effect, Schema } from "effect";
 import { RubricLineInput } from "./extracted";
+import { changesScoring, dropPointSentences } from "./rubric-notes";
 
 const ProblemId = Schema.UUID;
 
@@ -122,8 +123,23 @@ const applyOne = (draftId: string, edit: Edit) =>
           .set({ gradeWithPageImage: edit.value })
           .where(problemIn(edit.problemId));
         return;
-      case "SetRubric":
-        yield* findProblem(edit.problemId);
+      case "SetRubric": {
+        const problem = yield* findProblem(edit.problemId);
+        const before = yield* db
+          .select({ points: schema.rubricLines.points })
+          .from(schema.rubricLines)
+          .where(eq(schema.rubricLines.problemId, edit.problemId))
+          .orderBy(asc(schema.rubricLines.position));
+        // A note like "a bare answer earns both points" can't be allowed to contradict new points.
+        if (changesScoring(before, edit.lines)) {
+          const gradingNotes = dropPointSentences(problem.gradingNotes);
+          if (gradingNotes !== problem.gradingNotes) {
+            yield* db
+              .update(schema.problems)
+              .set({ gradingNotes })
+              .where(problemIn(edit.problemId));
+          }
+        }
         yield* db
           .delete(schema.rubricLines)
           .where(eq(schema.rubricLines.problemId, edit.problemId));
@@ -136,6 +152,7 @@ const applyOne = (draftId: string, edit: Edit) =>
           })),
         );
         return;
+      }
       case "AddProblem": {
         const position =
           edit.afterProblemId === null ? 0 : (yield* findProblem(edit.afterProblemId)).position + 1;
