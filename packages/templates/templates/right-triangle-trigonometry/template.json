@@ -1,0 +1,288 @@
+{
+  "id": "right-triangle-trigonometry",
+  "title": "Right Triangles and Trigonometry",
+  "description": "Special right triangles, the Pythagorean theorem and trig ratios, with a diagram for almost every problem.",
+  "course": "Geometry",
+  "band": "high-school",
+  "topic": "Right Triangle Trigonometry",
+  "features": ["diagrams", "dependent-parts"],
+  "source": {
+    "name": "IM 9–12 Math, Geometry, Unit 4: Right Triangle Trigonometry",
+    "lessons": [
+      {
+        "title": "Lesson 4: Ratios in Right Triangles",
+        "url": "https://im.kendallhunt.com/HS/students/2/4/4/practice.html"
+      },
+      {
+        "title": "Lesson 5: Working with Ratios in Right Triangles",
+        "url": "https://im.kendallhunt.com/HS/students/2/4/5/practice.html"
+      },
+      {
+        "title": "Lesson 6: Working with Trigonometric Ratios",
+        "url": "https://im.kendallhunt.com/HS/students/2/4/6/practice.html"
+      }
+    ],
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "Adapted from IM 9–12 Math Geometry by Illustrative Mathematics, CC BY 4.0.",
+    "changes": "Selected practice problems from three lessons, renumbered and laid out as one printable worksheet with answer space. Problem text and diagrams are unchanged."
+  },
+  "files": {
+    "pdf": "worksheet.pdf",
+    "pages": [
+      { "image": "page-1.png", "width": 1275, "height": 1650 },
+      { "image": "page-2.png", "width": 1275, "height": 1650 },
+      { "image": "page-3.png", "width": 1275, "height": 1650 }
+    ]
+  },
+  "problems": [
+    {
+      "_tag": "WithParts",
+      "number": 1,
+      "pages": [1],
+      "source": {
+        "url": "https://im.kendallhunt.com/HS/students/2/4/4/practice.html",
+        "problem": 4
+      },
+      "stem": "Triangle \\(ABC\\) is equilateral.",
+      "diagrams": [
+        {
+          "description": "Triangle ABC with A at the top, C at the bottom left and B at the bottom right. Side AC is labeled 8. Altitude AD is drawn as a dashed segment from A to D on CB, marked perpendicular to CB and labeled x. Angles C and B are marked congruent."
+        }
+      ],
+      "parts": [
+        {
+          "label": "a",
+          "text": "What is the value of \\(x\\)?",
+          "answer": {
+            "_tag": "Exact",
+            "value": "x = 4\\sqrt{3}",
+            "accept": ["x = \\sqrt{48}", "x ≈ 6.93"]
+          },
+          "solution": "The altitude of an equilateral triangle bisects the base, so CD = 4. In right triangle ACD, x² + 4² = 8², so x² = 48 and x = 4√3 ≈ 6.93.",
+          "dependsOn": [],
+          "review": { "_tag": "Checked" }
+        },
+        {
+          "label": "b",
+          "text": "What is the measure of angle \\(B\\)?",
+          "answer": { "_tag": "Exact", "value": "60°", "accept": ["60"] },
+          "solution": "Every angle of an equilateral triangle measures 180° ÷ 3 = 60°.",
+          "dependsOn": [],
+          "review": { "_tag": "Checked" }
+        }
+      ]
+    },
+    {
+      "_tag": "Whole",
+      "number": 2,
+      "pages": [1],
+      "source": {
+        "url": "https://im.kendallhunt.com/HS/students/2/4/4/practice.html",
+        "problem": 5
+      },
+      "text": "An equilateral triangle has side length 8 units. What is the area?",
+      "diagrams": [],
+      "answer": {
+        "_tag": "Exact",
+        "value": "16\\sqrt{3} square units",
+        "accept": [
+          "16\\sqrt{3}",
+          "\\approx 27.7 square units",
+          "\\frac12 \\cdot 8 \\cdot 4\\sqrt{3}"
+        ]
+      },
+      "solution": "This is the triangle from problem 1. Its height is x = 4√3, so the area is 1/2 · 8 · 4√3 = 16√3 ≈ 27.7 square units.",
+      "dependsOn": ["1a"],
+      "review": {
+        "_tag": "Unsure",
+        "note": "The worksheet never says problem 2 uses problem 1, but it is the same triangle and the expected method uses x from 1a. The dependency is ours, so a student who carries a wrong x from 1a gets method credit here. Kincaid to confirm that is the intended grading."
+      }
+    },
+    {
+      "_tag": "WithParts",
+      "number": 3,
+      "pages": [1],
+      "source": {
+        "url": "https://im.kendallhunt.com/HS/students/2/4/4/practice.html",
+        "problem": 8
+      },
+      "stem": "The quilt is made of squares with diagonals.\nThe length of \\(BD\\) is 4.",
+      "diagrams": [
+        {
+          "description": "Square ABCD with B top left, C top right, D bottom right and A bottom left. G, F, E and H are the midpoints of BC, CD, AD and AB. Segments GE and HF split it into four small squares, and each small square has both diagonals drawn. Together these form the big square's diagonals BD and AC through the center, and the inner square HEFG (a diamond) joining the midpoints. No lengths are labeled; the text gives BD = 4."
+        }
+      ],
+      "parts": [
+        {
+          "label": "a",
+          "text": "Find the length of \\(AE\\).",
+          "answer": {
+            "_tag": "Exact",
+            "value": "AE = \\sqrt{2}",
+            "accept": ["\\frac{2}{\\sqrt2}", "AE ≈ 1.41"]
+          },
+          "solution": "BD is the diagonal of square ABCD, so the side is 4/√2 = 2√2. E is the midpoint of AD, so AE = √2 ≈ 1.41.",
+          "dependsOn": [],
+          "review": { "_tag": "Checked" }
+        },
+        {
+          "label": "b",
+          "text": "Find the area of square \\(ABCD\\).",
+          "answer": { "_tag": "Exact", "value": "8 square units", "accept": ["8"] },
+          "solution": "The side is 2√2, so the area is (2√2)² = 8. Or: area = diagonal² ÷ 2 = 16 ÷ 2 = 8.",
+          "dependsOn": [],
+          "review": { "_tag": "Checked" }
+        }
+      ]
+    },
+    {
+      "_tag": "Whole",
+      "number": 4,
+      "pages": [2],
+      "source": {
+        "url": "https://im.kendallhunt.com/HS/students/2/4/5/practice.html",
+        "problem": 2
+      },
+      "text": "Kiran is flying a kite. He gets tired, so he stakes the kite into the ground. The kite is on a string that is 18 feet long and makes a 30 degree angle with the ground. How high is the kite?",
+      "diagrams": [
+        {
+          "description": "Right triangle formed by the kite string, the ground and a vertical segment from the kite down to the ground. The string is the hypotenuse, labeled 18, making a 30° angle with the ground at the stake. The right angle is where the vertical segment meets the ground."
+        }
+      ],
+      "answer": { "_tag": "Exact", "value": "9 feet", "accept": ["9"] },
+      "solution": "The height is opposite the 30° angle: 18 · sin 30° = 9 feet. In a 30-60-90 triangle the side opposite 30° is half the hypotenuse.",
+      "dependsOn": [],
+      "review": { "_tag": "Checked" }
+    },
+    {
+      "_tag": "Whole",
+      "number": 5,
+      "pages": [2],
+      "source": {
+        "url": "https://im.kendallhunt.com/HS/students/2/4/5/practice.html",
+        "problem": 6
+      },
+      "text": "What is the length of side \\(AB\\)?",
+      "diagrams": [
+        {
+          "description": "Right triangle ABC with the right angle at A (bottom left), B above A and C to the right of A. AC is labeled 6 and angle C is labeled 30°."
+        }
+      ],
+      "answer": {
+        "_tag": "Exact",
+        "value": "AB = 2\\sqrt{3}",
+        "accept": ["\\frac{6}{\\sqrt3}", "6\\tan 30^\\circ", "AB ≈ 3.46"]
+      },
+      "solution": "AB is opposite the 30° angle and AC is adjacent: AB = 6 · tan 30° = 6/√3 = 2√3 ≈ 3.46.",
+      "dependsOn": [],
+      "review": { "_tag": "Checked" }
+    },
+    {
+      "_tag": "Whole",
+      "number": 6,
+      "pages": [2],
+      "source": {
+        "url": "https://im.kendallhunt.com/HS/students/2/4/5/practice.html",
+        "problem": 8
+      },
+      "text": "Find the lengths of segments \\(AD\\) and \\(BD\\). Then check your answers using a different method.",
+      "diagrams": [
+        {
+          "description": "Triangle ABC with A at the bottom left, C at the bottom right and B above, near A. The angle at B is a right angle. Altitude BD is drawn from B to D on AC, with a right angle at D. DC is labeled 12 and BC is labeled 13."
+        }
+      ],
+      "answer": {
+        "_tag": "Exact",
+        "value": "AD = 25/12, BD = 5",
+        "accept": ["AD ≈ 2.08, BD = 5", "AD = 2 1/12"]
+      },
+      "solution": "In right triangle BDC, BD² + 12² = 13², so BD = 5. Triangles ADB and BDC are similar, so AD/BD = BD/DC: AD = 5²/12 = 25/12 ≈ 2.08. Check another way, for example with AB² = AD · AC: AC = 12 + 25/12 = 169/12, and AB² = 5² + (25/12)² = 4225/144 = (25/12)(169/12).",
+      "dependsOn": [],
+      "review": { "_tag": "Checked" }
+    },
+    {
+      "_tag": "Whole",
+      "number": 7,
+      "pages": [3],
+      "source": {
+        "url": "https://im.kendallhunt.com/HS/students/2/4/6/practice.html",
+        "problem": 2
+      },
+      "text": "Write an expression that can be used to find the length of \\(JH\\) and an expression that can be used to find the length of \\(GJ\\).",
+      "diagrams": [
+        {
+          "description": "Right triangle GHJ with the right angle at J (top). G is at the bottom left and H at the bottom right. Angle G is labeled 35° and the hypotenuse GH is labeled 9."
+        }
+      ],
+      "answer": {
+        "_tag": "Exact",
+        "value": "JH = 9\\sin(35^\\circ), GJ = 9\\cos(35^\\circ)",
+        "accept": ["JH = 9\\cos(55^\\circ), GJ = 9\\sin(55^\\circ)", "JH ≈ 5.16, GJ ≈ 7.37"]
+      },
+      "solution": "JH is opposite the 35° angle and GJ is adjacent to it, with hypotenuse 9: JH = 9 sin 35° ≈ 5.16 and GJ = 9 cos 35° ≈ 7.37.",
+      "dependsOn": [],
+      "review": { "_tag": "Checked" }
+    },
+    {
+      "_tag": "WithParts",
+      "number": 8,
+      "pages": [3],
+      "source": {
+        "url": "https://im.kendallhunt.com/HS/students/2/4/6/practice.html",
+        "problem": 4
+      },
+      "stem": "A triangle has sides with lengths 5, 12, and 13.",
+      "diagrams": [],
+      "parts": [
+        {
+          "label": "a",
+          "text": "Verify this is a Pythagorean triple.",
+          "answer": {
+            "_tag": "Open",
+            "sample": "5² + 12² = 25 + 144 = 169 = 13², and all three are whole numbers.",
+            "criteria": ["Shows 5² + 12² = 13² (25 + 144 = 169)"]
+          },
+          "solution": "25 + 144 = 169 = 13².",
+          "dependsOn": [],
+          "review": { "_tag": "Checked" }
+        },
+        {
+          "label": "b",
+          "text": "Approximate the acute angles in this triangle.",
+          "answer": {
+            "_tag": "Exact",
+            "value": "about 22.6° and 67.4°",
+            "accept": ["about 23° and 67°", "22.6°, 67.4°"]
+          },
+          "solution": "The smallest angle is opposite 5: tan θ = 5/12, θ ≈ 22.6°. The other acute angle is 90° − 22.6° ≈ 67.4°. Estimates within about 1° from a ratio table also earn credit.",
+          "dependsOn": [],
+          "review": { "_tag": "Checked" }
+        }
+      ]
+    },
+    {
+      "_tag": "Whole",
+      "number": 9,
+      "pages": [3],
+      "source": {
+        "url": "https://im.kendallhunt.com/HS/students/2/4/6/practice.html",
+        "problem": 7
+      },
+      "text": "Find the length of each leg.",
+      "diagrams": [
+        {
+          "description": "Right triangle PQR with the right angle at Q (bottom left). R is above Q and P is to the right of Q. The hypotenuse RP is labeled 4. Angle R is 30° and angle P is 60°."
+        }
+      ],
+      "answer": {
+        "_tag": "Exact",
+        "value": "QP = 2, RQ = 2\\sqrt{3}",
+        "accept": ["QP = 2, RQ ≈ 3.46", "QP = 4\\sin 30^\\circ, RQ = 4\\cos 30^\\circ"]
+      },
+      "solution": "QP is opposite the 30° angle, so QP = 4 · sin 30° = 2. RQ = 4 · cos 30° = 2√3 ≈ 3.46.",
+      "dependsOn": [],
+      "review": { "_tag": "Checked" }
+    }
+  ]
+}
