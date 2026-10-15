@@ -261,6 +261,18 @@ describe("grading pipeline", () => {
     }),
   );
 
+  it.effect("does not pay twice for an answer cut off at max tokens", () =>
+    Effect.gen(function* () {
+      const t = yield* setup({
+        script: () => Effect.fail(new BadResponse({ message: "cut off", truncated: true })),
+      });
+      yield* t.submit("g1");
+      yield* runUntilDone(t.queue.drained);
+      expect(yield* t.grade("g1")).toMatchObject({ state: "couldnt_grade" });
+      expect(yield* t.model.totalCalls).toBe(1);
+    }),
+  );
+
   it.effect("recovers from a single unusable answer", () =>
     Effect.gen(function* () {
       const t = yield* setup({

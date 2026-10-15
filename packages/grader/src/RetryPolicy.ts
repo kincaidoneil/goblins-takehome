@@ -65,9 +65,9 @@ export const decide = (input: {
     return { _tag: "GiveUp", reason: describe(error) };
   }
   const delay = backoff(deliveryCount, random);
+  const retryAfterMs =
+    error._tag === "RateLimited" || error._tag === "ProviderError" ? error.retryAfterMs : undefined;
   const hinted =
-    error._tag === "RateLimited" && error.retryAfterMs !== undefined
-      ? Duration.max(delay, Duration.millis(error.retryAfterMs))
-      : delay;
+    retryAfterMs === undefined ? delay : Duration.max(delay, Duration.millis(retryAfterMs));
   return { _tag: "Retry", after: hinted };
 };

@@ -11,7 +11,7 @@ import { Clock, Context, Duration, Effect, Layer, Option, Random, Schema } from 
 import * as CallLog from "./CallLog.ts";
 import { Grader } from "./Grader.ts";
 import { GradeStore, type StoreUnavailable } from "./GradeStore.ts";
-import { BadResponse, ModelClient, Timeout } from "./ModelClient.ts";
+import { BadResponse, isRetryable, ModelClient, Timeout } from "./ModelClient.ts";
 import * as RetryPolicy from "./RetryPolicy.ts";
 
 /** The queue message, owned by the domain package: `{ submissionId, attempt }`. */
@@ -124,7 +124,8 @@ export const handleGradeJob = (job: GradeJob, delivery: Delivery) =>
     const outcome = yield* oneTry.pipe(
       Effect.retry({
         times: RetryPolicy.policy.badResponseAttempts - 1,
-        while: (e) => e._tag === "BadResponse",
+        // A truncated answer would come back truncated again, so only other unusable answers retry.
+        while: (e) => e._tag === "BadResponse" && isRetryable(e),
       }),
       Effect.timeoutFail({
         duration: DELIVERY_BUDGET,
