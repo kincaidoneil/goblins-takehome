@@ -20,6 +20,7 @@ import {
   schema,
   submitWork,
 } from "@goblins/domain";
+import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { Duration, Effect, Layer, Option } from "effect";
@@ -287,6 +288,50 @@ layer(TestDatabase, { timeout: 120_000 })("pipeline on Postgres", (it) => {
       expect(swept.found).toBeGreaterThanOrEqual(1);
       yield* runUntilDone(p.queue.drained);
       expect(yield* stateOf(orphan.submissionId)).toEqual(Option.some("Graded"));
+    }),
+  );
+
+  it.effect("CallLog.postgres writes calls to model_calls, unknown cost as null", () =>
+    Effect.gen(function* () {
+      const log = yield* Effect.provide(CallLog.CallLog, CallLog.postgres);
+      const submissionId = crypto.randomUUID();
+      const base = {
+        startedAt: new Date(),
+        provider: "openrouter" as const,
+        purpose: "grade" as const,
+        modelRequested: "google/gemini-2.5-flash",
+        subjectId: submissionId,
+        attempt: 1,
+        latencyMs: 2100,
+      };
+      yield* log.record({
+        ...base,
+        status: "ok",
+        statusCode: 200,
+        model: "google/gemini-2.5-flash-001",
+        providerId: "gen-1",
+        cost: { promptTokens: 900, completionTokens: 60, costUsd: 0.0004, reasoningTokens: 10 },
+      });
+      yield* log.record({ ...base, status: "interrupted", cost: null, error: "stopped" });
+      const db = yield* Db;
+      const rows = yield* db
+        .select()
+        .from(schema.modelCalls)
+        .where(eq(schema.modelCalls.submissionId, submissionId));
+      expect(rows.map((r) => [r.status, r.costUsd, r.inputTokens, r.reasoningTokens])).toEqual(
+        expect.arrayContaining([
+          ["ok", 0.0004, 900, 10],
+          ["interrupted", null, null, null],
+        ]),
+      );
+      expect(rows.find((r) => r.status === "ok")).toMatchObject({
+        provider: "openrouter",
+        model: "google/gemini-2.5-flash",
+        modelAnswered: "google/gemini-2.5-flash-001",
+        providerId: "gen-1",
+        attempt: 1,
+        subjectId: null,
+      });
     }),
   );
 });
