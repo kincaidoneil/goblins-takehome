@@ -98,9 +98,14 @@ function at<T>(list: ReadonlyArray<T>, index: number): T {
   return item;
 }
 
+/** Maps any integer onto [0, CREATURE_COUNT), so out-of-range ids wrap around. */
+function wrapId(id: number): number {
+  return ((Math.trunc(id) % CREATURE_COUNT) + CREATURE_COUNT) % CREATURE_COUNT;
+}
+
 /** Creature `id` in [0, CREATURE_COUNT). Ids outside the range wrap around. */
 export function creature(id: number): Creature {
-  const i = ((Math.trunc(id) % CREATURE_COUNT) + CREATURE_COUNT) % CREATURE_COUNT;
+  const i = wrapId(id);
   return {
     id: i,
     name: at(NAMES, i),
@@ -121,7 +126,7 @@ export function randomCreatureId(
   taken: Iterable<number> = [],
   random: () => number = Math.random,
 ): number {
-  const used = new Set(taken);
+  const used = new Set(Array.from(taken, wrapId));
   const free = Array.from({ length: CREATURE_COUNT }, (_, id) => id).filter((id) => !used.has(id));
   const pool = free.length > 0 ? free : Array.from({ length: CREATURE_COUNT }, (_, id) => id);
   return at(pool, Math.floor(random() * pool.length));
