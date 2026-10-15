@@ -1,0 +1,30 @@
+{
+  "name": "@goblins/simulator",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./http": "./src/http.ts"
+  },
+  "bin": {
+    "goblins-simulate": "./src/cli.ts"
+  },
+  "scripts": {
+    "simulate": "tsx src/cli.ts",
+    "typecheck": "tsc -p .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@electric-sql/client": "^1.5.28",
+    "@goblins/mock-model": "workspace:*",
+    "effect": "^3.22.2",
+    "@goblins/templates": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}
