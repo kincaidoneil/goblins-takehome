@@ -323,17 +323,31 @@ export const recordOutcome = (lease: Lease, outcome: GraderOutcome) =>
   Effect.gen(function* () {
     const db = yield* Db
     const now = new Date()
-    // Check staleness first, so a superseded attempt is acknowledged rather than retried.
-    const [current] = yield* db
-      .select({ state: grades.state, claimId: grades.claimId })
-      .from(grades)
-      .where(eq(grades.submissionId, lease.submissionId))
-    if (current?.state !== "grading" || current.claimId !== lease.claimId) return "stale" as const
+    // A superseded attempt is acknowledged, never retried: check before validating, and again if
+    // validation fails, since the lease can be taken over in between.
+    const holdsLease = Effect.gen(function* () {
+      const [current] = yield* db
+        .select({ state: grades.state, claimId: grades.claimId })
+        .from(grades)
+        .where(eq(grades.submissionId, lease.submissionId))
+      return current?.state === "grading" && current.claimId === lease.claimId
+    })
+    if (!(yield* holdsLease)) return "stale" as const
 
-    const values = yield* (() => {
+    if (outcome._tag !== "Failed") {
+      const valid = yield* checkLinePoints(lease.submissionId, outcome.result.linePoints).pipe(
+        Effect.as(true),
+        Effect.catchTag("LinePointsMismatch", (mismatch) =>
+          Effect.flatMap(holdsLease, (holds) => (holds ? Effect.fail(mismatch) : Effect.succeed(false)))
+        )
+      )
+      if (!valid) return "stale" as const
+    }
+
+    const values = (() => {
       switch (outcome._tag) {
         case "Sure":
-          return Effect.as(checkLinePoints(lease.submissionId, outcome.result.linePoints), {
+          return {
             state: "graded" as const,
             outcomeAt: now,
             graderRead: outcome.result.read,
@@ -343,22 +357,18 @@ export const recordOutcome = (lease: Lease, outcome: GraderOutcome) =>
             linePoints: outcome.result.linePoints,
             points: totalPoints(outcome.result.linePoints),
             gradedAt: now
-          })
+          }
         case "Unsure":
-          return Effect.as(checkLinePoints(lease.submissionId, outcome.result.linePoints), {
+          return {
             state: "needs_teacher" as const,
             outcomeAt: now,
             graderRead: outcome.result.read,
             modelLinePoints: outcome.result.linePoints,
             graderReason: outcome.result.reason,
             flagReason: outcome.flagReason
-          })
+          }
         case "Failed":
-          return Effect.succeed({
-            state: "couldnt_grade" as const,
-            outcomeAt: now,
-            failureReason: outcome.failureReason
-          })
+          return { state: "couldnt_grade" as const, outcomeAt: now, failureReason: outcome.failureReason }
       }
     })()
     const updated = yield* db

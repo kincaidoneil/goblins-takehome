@@ -8,9 +8,12 @@
 export const normalizeName = (name: string): string =>
   name
     .normalize("NFKD")
-    .replace(/\p{M}/gu, "")
+    // Drop only the combining accents used on Latin, Greek and Cyrillic letters. Marks in other
+    // scripts (Devanagari vowel signs, for example) are part of the spelling and stay.
+    .replace(/[\u0300-\u036f]/g, "")
+    .normalize("NFC")
     .toLowerCase()
-    .replace(/[^\p{L}\p{N}]/gu, "")
+    .replace(/[^\p{L}\p{M}\p{N}]/gu, "")
 
 /** Collapses runs of whitespace and trims, keeping the student's own capitalization. */
 export const cleanDisplayName = (name: string): string => name.trim().replace(/\s+/g, " ")

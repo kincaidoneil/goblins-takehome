@@ -11,6 +11,9 @@ describe("normalizeName", () => {
   it("ignores accents", () => {
     expect(normalizeName("José")).toBe(normalizeName("jose"))
   })
+  it("keeps marks that are part of the spelling", () => {
+    expect(normalizeName("किरण")).not.toBe(normalizeName("करण"))
+  })
   it("keeps letters from any script", () => {
     expect(normalizeName("李 明")).toBe("李明")
   })
