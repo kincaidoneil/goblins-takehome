@@ -33,13 +33,16 @@ export interface ClassOptions {
 /** What the class's own dashboard shows, kept current by the teacher's subscriptions. */
 interface Dashboard {
   readonly students: Set<string>;
-  readonly grades: Map<string, { state: GradeState; points: number | null }>;
+  readonly grades: Map<
+    string,
+    { state: GradeState; points: number | null; maxPoints: number | null }
+  >;
 }
 
 /** What the simulated students did, for checking the dashboard against it. */
 interface Truth {
   readonly joined: Set<string>;
-  readonly acked: Map<string, FinalState>;
+  readonly acked: Map<string, { readonly state: FinalState; readonly fraction: number | null }>;
 }
 
 const sleepUntil = (epochMs: number) =>
@@ -114,7 +117,11 @@ export const runClass = (options: ClassOptions) =>
                   failureReason: row.failure_reason,
                 });
               }
-              dashboard.grades.set(row.submission_id, { state: row.state, points: row.points });
+              dashboard.grades.set(row.submission_id, {
+                state: row.state,
+                points: row.points,
+                maxPoints: row.max_points,
+              });
               if (row.state === "submitted") submitted++;
               else if (row.state === "grading") grading++;
               else final++;
@@ -159,9 +166,19 @@ export const runClass = (options: ClassOptions) =>
         );
 
         yield* sleepUntil(runStartMs + plan.startAtMs);
-        yield* api
+        const started = yield* api
           .setSessionStatus(target, options.teacher, session.sessionId, "start")
-          .pipe(Effect.tapError(setupFailed("start-session")), Effect.ignore);
+          .pipe(
+            Effect.retry({ times: 4, schedule: Schedule.exponential("1 second") }),
+            Effect.tapError(setupFailed("start-session")),
+            Effect.either,
+          );
+        if (Either.isLeft(started)) {
+          // The students would wait for a session that never goes live. Stop them; the class
+          // counts as failed and its planned submissions as never attempted.
+          yield* Effect.forEach(students, Fiber.interrupt, { discard: true });
+          return;
+        }
 
         // Every student has made their last submission (or given up).
         yield* Effect.forEach(doneSubmitting, Deferred.await, { discard: true });
@@ -175,14 +192,22 @@ export const runClass = (options: ClassOptions) =>
           });
         while (!allFinal() && Date.now() < drainDeadline) yield* Effect.sleep(1000);
 
+        // A grade the fixture does not predict: the wrong state, or (for a graded fixture) the
+        // wrong share of the points, e.g. partial.png graded 2/2.
         let unexpected = 0;
         for (const [id, expected] of truth.acked) {
-          const state = dashboard.grades.get(id)?.state;
-          if (
-            state !== undefined &&
-            state !== "couldnt_grade" &&
-            isFinal(state) &&
-            state !== expected
+          const grade = dashboard.grades.get(id);
+          if (grade === undefined || grade.state === "couldnt_grade" || !isFinal(grade.state)) {
+            continue;
+          }
+          if (grade.state !== expected.state) {
+            unexpected++;
+          } else if (
+            grade.state === "graded" &&
+            expected.fraction !== null &&
+            grade.points !== null &&
+            grade.maxPoints !== null &&
+            grade.points !== Math.round(expected.fraction * grade.maxPoints)
           ) {
             unexpected++;
           }
@@ -436,7 +461,10 @@ const submitWithRetry = (
         const response = result.right;
         switch (response._tag) {
           case "Accepted":
-            options.truth.acked.set(response.submissionId, whiteboard.expected);
+            options.truth.acked.set(response.submissionId, {
+              state: whiteboard.expected,
+              fraction: whiteboard.expectedFraction,
+            });
             recorder.record({
               type: "submitted",
               at: Date.now(),

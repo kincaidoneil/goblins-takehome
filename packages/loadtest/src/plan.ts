@@ -19,21 +19,21 @@ export const OUTAGE_FOR_S = 300;
 
 export const mockSpecFor = (
   scenario: ScenarioName,
-  options: { readonly startMs: number; readonly timeScale: number },
+  options: { readonly startMs: number; readonly timeScale: number; readonly profile: Profile },
 ): string => {
   const start = `start=${options.startMs}`;
   switch (scenario) {
     case "normal":
-      return `mode=sampled; profile=seed; ${start}`;
+      return `mode=sampled; profile=${options.profile}; ${start}`;
     case "rate-limit-storm":
     case "latency-doubling":
-      return `mode=sampled; profile=seed; scenario=${scenario}; ${start}`;
+      return `mode=sampled; profile=${options.profile}; scenario=${scenario}; ${start}`;
     case "provider-down":
-      return `mode=sampled; profile=seed; scenario=provider-down; at=${Math.round(
+      return `mode=sampled; profile=${options.profile}; scenario=provider-down; at=${Math.round(
         OUTAGE_AT_S * options.timeScale,
       )}; for=${OUTAGE_FOR_S}; ${start}`;
     case "replay":
-      return `mode=replay; recording=seed-window; ${start}`;
+      return `mode=replay; recording=${options.profile === "seed" ? "seed-window" : options.profile}; ${start}`;
   }
 };
 
@@ -44,20 +44,28 @@ export const conditionsFor = (scenario: ScenarioName): Conditions =>
  * What the mock's timing comes from. Every report names it, because every latency in the report
  * depends on it. Until real calls are logged, the seed profile is a guess (see mock-model).
  */
-export const describeMock = (scenario: ScenarioName): string => {
-  const seed =
-    "`seed` profile: guessed, not measured (log-normal latency, median 3.5 s, p95 9 s; 0.5% rate limits, 0.5% provider errors, 0.2% bad responses)";
+export const profiles = ["claude-haiku-5.5", "seed"] as const;
+export type Profile = (typeof profiles)[number];
+
+const profileText: Record<Profile, string> = {
+  "claude-haiku-5.5":
+    "`claude-haiku-5.5` profile: measured from 1,839 real grading calls (p50 3.9 s, p95 8.0 s, p99 11.4 s; no failures in the sample, measured at 8 concurrent calls)",
+  seed: "`seed` profile: guessed, not measured (log-normal latency, median 3.5 s, p95 9 s; about 1.2% errors)",
+};
+
+export const describeMock = (scenario: ScenarioName, profile: Profile): string => {
+  const base = profileText[profile];
   switch (scenario) {
     case "normal":
-      return seed;
+      return base;
     case "rate-limit-storm":
-      return `${seed}, plus a rate-limit storm (70% of calls get a 429 with Retry-After 2–10 s) in minutes 2–5`;
+      return `${base}, plus a rate-limit storm (70% of calls get a 429 with Retry-After 2–10 s) in minutes 2–5`;
     case "provider-down":
-      return `${seed}, plus the provider down for ${OUTAGE_FOR_S / 60} minutes (every call fails with no response)`;
+      return `${base}, plus the provider down for ${OUTAGE_FOR_S / 60} minutes (every call fails with no response)`;
     case "latency-doubling":
-      return `${seed}, with every latency doubled`;
+      return `${base}, with every latency doubled`;
     case "replay":
-      return "`seed-window` recording: synthetic, 10 minutes drawn from the seed profile with a 45-second burst of 429s at minute 4";
+      return `replay of the \`${profile === "seed" ? "seed-window" : profile}\` recording`;
   }
 };
 

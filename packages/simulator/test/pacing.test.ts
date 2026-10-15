@@ -34,10 +34,12 @@ describe("planClass", () => {
     expect(a).toEqual(b);
   });
 
-  it("compresses every interval by the time scale", () => {
+  it("compresses the working window but keeps the lobby and bell at real time", () => {
     const full = planClass(seededRng(3), testingDay, { students: 30, problems: 9 });
     const fast = planClass(seededRng(3), scaled(testingDay, 0.1), { students: 30, problems: 9 });
-    expect(classEndMs(fast)).toBeCloseTo(classEndMs(full) * 0.1, -2);
+    expect(fast.startAtMs).toBe(full.startAtMs);
+    const work = (plan: typeof full) => classEndMs(plan) - plan.startAtMs;
+    expect(work(fast)).toBeLessThan(work(full) * 0.2);
   });
 });
 

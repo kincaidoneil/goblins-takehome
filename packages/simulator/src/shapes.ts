@@ -143,6 +143,7 @@ export const TeacherGradeRow = Schema.Struct({
   submission_id: Schema.String,
   state: State,
   points: Schema.NullOr(Schema.Number),
+  max_points: Schema.NullOr(Schema.Number),
   failure_reason: Schema.NullOr(Schema.String),
 });
 
