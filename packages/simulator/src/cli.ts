@@ -72,7 +72,8 @@ const target = {
   baseUrl,
   token,
   runId,
-  mockSpec: `mode=sampled; profile=seed; start=${Date.now()}`,
+  // The mock's default profile: latency measured from real Haiku grading calls.
+  mockSpec: `mode=sampled; start=${Date.now()}`,
 };
 
 const summarize = (events: ReadonlyArray<SimEvent>) => {

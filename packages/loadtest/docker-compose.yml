@@ -24,8 +24,11 @@ services:
       interval: 1s
       retries: 30
   electric:
-    image: electricsql/electric:latest
+    image: electricsql/electric:1.8.1
     environment:
+      # Electric's default allows 300 concurrent initial shape requests; a bell spike of a
+      # thousand students needs more (web app lead's measurement, #104).
+      ELECTRIC_MAX_CONCURRENT_REQUESTS: '{"initial": 3000, "existing": 20000}'
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/goblins?sslmode=disable
       ELECTRIC_INSECURE: "true"
     ports: ["30002:3000"]

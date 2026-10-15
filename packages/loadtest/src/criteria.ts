@@ -112,10 +112,16 @@ export const attribute = (metrics: StepMetrics, failed: Criterion["id"]): string
       return "Unknown: no server timings to tell queue, consumer and sync apart";
     }
     case "submit-p99":
-      if (dbSaturated || (db.peakWaitingOnLock ?? 0) > 0)
-        return "Database: submit transactions waiting";
+      // Blame the database only on real evidence: most connections in use, or a sizable share of
+      // active queries waiting on locks. A few lock waits at peak explain nothing.
+      if (
+        dbSaturated ||
+        ((db.peakWaitingOnLock ?? 0) >= 5 &&
+          (db.peakWaitingOnLock ?? 0) >= 0.25 * (db.peakActive ?? 0))
+      )
+        return "Database: submit transactions waiting on locks or connections";
       if (submitServerErrors > 0) return "Submit function: errors and retries";
-      return "Submit function: slow responses (upload, DB write or cold starts)";
+      return "Submit function: slow responses (server CPU, whiteboard upload, queue publish or cold starts; no database evidence)";
     case "dashboard-p95": {
       const b = metrics.breakdown;
       if (b === null) {
