@@ -39,6 +39,10 @@ const SuccessBody = Schema.Struct({
     Schema.Struct({
       finish_reason: Schema.NullOr(Schema.String),
       message: Schema.Struct({ content: Schema.NullOr(Schema.String) }),
+      /** Set with `finish_reason: "error"` when the upstream provider failed partway through. */
+      error: Schema.optional(
+        Schema.Struct({ code: Schema.Union(Schema.Number, Schema.String), message: Schema.String }),
+      ),
     }),
   ),
   usage: Schema.optional(UsageBody),
@@ -110,15 +114,14 @@ const parseRetryAfterMs = (header: string | null, now: number): number | undefin
 };
 
 const errorForStatus = (status: number, retryAfter: string | null, text: string) => {
-  if (status === 429) {
-    const retryAfterMs = parseRetryAfterMs(retryAfter, Date.now());
-    return new RateLimited(retryAfterMs === undefined ? {} : { retryAfterMs });
-  }
+  const retryAfterMs = parseRetryAfterMs(retryAfter, Date.now());
+  const hint = retryAfterMs === undefined ? {} : { retryAfterMs };
+  if (status === 429) return new RateLimited(hint);
   const message = Option.match(decodeError(safeJson(text)), {
     onNone: () => text.slice(0, 500),
     onSome: (body) => body.error.message,
   });
-  return new ProviderError({ status, message });
+  return new ProviderError({ status, message, ...hint });
 };
 
 const safeJson = (text: string): unknown => {
@@ -151,11 +154,28 @@ const parseCompletion = (
   }
   const body = success.value;
   const usage = body.usage === undefined ? undefined : toUsage(body.usage);
-  const badResponse = (message: string) =>
-    Either.left(new BadResponse(usage === undefined ? { message } : { message, usage }));
+  const badResponse = (message: string, truncated = false) =>
+    Either.left(
+      new BadResponse({
+        message,
+        ...(truncated ? { truncated } : {}),
+        ...(usage === undefined ? {} : { usage }),
+      }),
+    );
   const choice = body.choices[0];
   if (choice === undefined) return badResponse("No choices in response");
-  if (choice.finish_reason === "length") return badResponse("Response cut off at max tokens");
+  if (choice.finish_reason === "error" || choice.error !== undefined) {
+    const code = choice.error?.code;
+    return Either.left(
+      code === 429
+        ? new RateLimited({})
+        : new ProviderError({
+            status: typeof code === "number" ? code : 502,
+            message: choice.error?.message ?? "The provider failed partway through the answer",
+          }),
+    );
+  }
+  if (choice.finish_reason === "length") return badResponse("Response cut off at max tokens", true);
   if (choice.message.content === null || choice.message.content.trim() === "") {
     return badResponse("Empty response");
   }

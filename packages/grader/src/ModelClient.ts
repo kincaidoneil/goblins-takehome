@@ -74,11 +74,18 @@ export class ProviderError extends Schema.TaggedError<ProviderError>()("Provider
    */
   status: Schema.Number,
   message: Schema.String,
+  /** The provider's `Retry-After`, when it sent one. Its presence makes the error retryable. */
+  retryAfterMs: Schema.optional(Schema.Number),
 }) {}
 
 /** The provider answered 200 but the body is unusable: malformed, empty, or cut off. */
 export class BadResponse extends Schema.TaggedError<BadResponse>()("BadResponse", {
   message: Schema.String,
+  /**
+   * The answer hit the max-token limit. Asking again with the same limit would
+   * pay for the same cut-off answer, so this is not retried.
+   */
+  truncated: Schema.optional(Schema.Boolean),
   /** Present when the provider reported usage, so the call log can still record the cost. */
   usage: Schema.optional(
     Schema.Struct({
@@ -92,17 +99,24 @@ export class BadResponse extends Schema.TaggedError<BadResponse>()("BadResponse"
 export type ModelError = RateLimited | Timeout | ProviderError | BadResponse;
 
 /**
- * Whether trying the same request again can succeed. A 4xx other than 429 means the
- * request itself is wrong (bad model id, too many tokens), so repeating it only spends money.
+ * Whether trying the same request again can succeed. A 4xx other than 408 or 429 means
+ * the request itself is wrong (bad model id, too many tokens), so repeating it only
+ * spends money, unless the provider said when to come back.
  */
 export const isRetryable = (error: ModelError): boolean => {
   switch (error._tag) {
     case "RateLimited":
     case "Timeout":
-    case "BadResponse":
       return true;
+    case "BadResponse":
+      return error.truncated !== true;
     case "ProviderError":
-      return error.status === 0 || error.status === 408 || error.status >= 500;
+      return (
+        error.retryAfterMs !== undefined ||
+        error.status === 0 ||
+        error.status === 408 ||
+        error.status >= 500
+      );
   }
 };
 

@@ -36,6 +36,24 @@ const replies: Record<string, Reply> = {
     json(res, 200, { error: { code: 503, message: "provider overloaded" } }),
   "rate-limited-in-200": (_req, res) =>
     json(res, 200, { error: { code: 429, message: "upstream rate limit" } }),
+  "error-mid-answer": (_req, res) =>
+    json(res, 200, {
+      ...ok("partial"),
+      choices: [
+        {
+          finish_reason: "error",
+          message: { role: "assistant", content: "partial" },
+          error: { code: 502, message: "upstream died" },
+        },
+      ],
+    }),
+  "spend-limit": (_req, res) =>
+    json(
+      res,
+      402,
+      { error: { code: 402, message: "spend limit in flight" } },
+      { "retry-after": "3" },
+    ),
   "cut-off": (_req, res) => json(res, 200, ok("partial", "length")),
   empty: (_req, res) => json(res, 200, ok(null)),
   "no-cost": (_req, res) =>
@@ -137,6 +155,17 @@ describe("OpenRouter client", () => {
         status: 503,
       });
       expect(tagOf(yield* run("rate-limited-in-200"))).toMatchObject({ _tag: "RateLimited" });
+      expect(tagOf(yield* run("error-mid-answer"))).toMatchObject({
+        _tag: "ProviderError",
+        status: 502,
+        message: "upstream died",
+      });
+      expect(tagOf(yield* run("spend-limit"))).toMatchObject({
+        _tag: "ProviderError",
+        status: 402,
+        retryAfterMs: 3000,
+      });
+      expect(tagOf(yield* run("cut-off"))).toMatchObject({ truncated: true });
       expect(tagOf(yield* run("cut-off"))).toMatchObject({
         _tag: "BadResponse",
         usage: { promptTokens: 1200, completionTokens: 80, costUsd: 0.00042 },

@@ -53,6 +53,10 @@ describe("ModelClient", () => {
     expect(isRetryable(new ProviderError({ status: 502, message: "bad gateway" }))).toBe(true);
     expect(isRetryable(new ProviderError({ status: 0, message: "connection reset" }))).toBe(true);
     expect(isRetryable(new ProviderError({ status: 402, message: "out of credits" }))).toBe(false);
+    expect(isRetryable(new BadResponse({ message: "cut off", truncated: true }))).toBe(false);
+    expect(
+      isRetryable(new ProviderError({ status: 402, message: "spend limit", retryAfterMs: 3000 })),
+    ).toBe(true);
     expect(isRetryable(new ProviderError({ status: 400, message: "bad model" }))).toBe(false);
   });
 });
