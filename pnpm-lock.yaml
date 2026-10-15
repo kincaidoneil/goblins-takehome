@@ -119,6 +119,28 @@ importers:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@22.20.5)(lightningcss@1.33.0)(tsx@4.23.15)
 
+  packages/mock-model:
+    dependencies:
+      '@goblins/grader':
+        specifier: workspace:*
+        version: link:../grader
+      effect:
+        specifier: ^3.22.2
+        version: 3.22.2
+    devDependencies:
+      '@effect/vitest':
+        specifier: ^0.30.0
+        version: 0.30.0(effect@3.22.2)(vitest@3.2.7(@types/node@22.20.5)(lightningcss@1.33.0)(tsx@4.23.15))
+      '@types/node':
+        specifier: ^22.20.5
+        version: 22.20.5
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@22.20.5)(lightningcss@1.33.0)(tsx@4.23.15)
+
   packages/templates:
     dependencies:
       effect:
@@ -149,6 +171,9 @@ importers:
       '@fontsource-variable/nunito':
         specifier: ^5.2.8
         version: 5.3.0
+      effect:
+        specifier: ^3.22.2
+        version: 3.22.2
     devDependencies:
       '@storybook/react-vite':
         specifier: 10.6.1

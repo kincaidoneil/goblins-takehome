@@ -148,6 +148,7 @@ const parseCompletion = (
             : new ProviderError({
                 status: typeof body.error.code === "number" ? body.error.code : 502,
                 message: body.error.message,
+                mayBeBilled: true,
               }),
       }),
     );
@@ -172,6 +173,8 @@ const parseCompletion = (
         : new ProviderError({
             status: typeof code === "number" ? code : 502,
             message: choice.error?.message ?? "The provider failed partway through the answer",
+            mayBeBilled: true,
+            ...(usage === undefined ? {} : { usage }),
           }),
     );
   }

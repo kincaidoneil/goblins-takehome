@@ -20,6 +20,8 @@ export const policy = {
   badResponseAttempts: 3,
   firstDelay: Duration.seconds(2),
   maxDelay: Duration.seconds(60),
+  /** Below the sweeper's 3-minute threshold for grades waiting in `submitted`. */
+  maxRetryAfter: Duration.minutes(2),
 };
 
 export type Decision =
@@ -67,7 +69,11 @@ export const decide = (input: {
   const delay = backoff(deliveryCount, random);
   const retryAfterMs =
     error._tag === "RateLimited" || error._tag === "ProviderError" ? error.retryAfterMs : undefined;
+  // Honor Retry-After, but never wait past `maxRetryAfter`: a grade released for longer
+  // than the sweeper's threshold would look lost and be sent again.
   const hinted =
-    retryAfterMs === undefined ? delay : Duration.max(delay, Duration.millis(retryAfterMs));
+    retryAfterMs === undefined
+      ? delay
+      : Duration.min(Duration.max(delay, Duration.millis(retryAfterMs)), policy.maxRetryAfter);
   return { _tag: "Retry", after: hinted };
 };

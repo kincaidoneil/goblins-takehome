@@ -7,7 +7,7 @@
  * acknowledge and retry calls.
  */
 import { GradeJob, type Lease } from "@goblins/domain";
-import { Clock, Context, Duration, Effect, Layer, Option, Random, Schema } from "effect";
+import { Clock, Context, Duration, Effect, Layer, Option, Random, Schedule, Schema } from "effect";
 import * as CallLog from "./CallLog.ts";
 import { Grader } from "./Grader.ts";
 import { GradeStore, type StoreUnavailable } from "./GradeStore.ts";
@@ -49,6 +49,9 @@ export type Disposition =
  */
 export const DELIVERY_BUDGET = Duration.seconds(100);
 
+/** Quick retries for writing a finished grade through a database blip: 0.2 s, 0.4 s, 0.8 s, 1.6 s. */
+const RECORD_RETRY = Schedule.intersect(Schedule.exponential("200 millis"), Schedule.recurs(4));
+
 /**
  * Picks the model for a grade. Load-test grades always go to the mock, whatever
  * the deploy is configured with, so a load test can never spend model budget.
@@ -89,6 +92,8 @@ export const handleGradeJob = (job: GradeJob, delivery: Delivery) =>
     const grader = yield* Grader;
     const router = yield* ModelRouter;
 
+    // The lease starts inside startGrading, so the budget is measured from before it.
+    const claimStartedMs = yield* Clock.currentTimeMillis;
     const claim = yield* store.startGrading(job);
     if (claim._tag === "Stale") return done("skipped");
     // Another delivery holds the lease. If it finishes, the next delivery sees Stale;
@@ -108,10 +113,21 @@ export const handleGradeJob = (job: GradeJob, delivery: Delivery) =>
       }),
     };
 
+    const remainingBudget = Duration.subtract(
+      DELIVERY_BUDGET,
+      Duration.millis((yield* Clock.currentTimeMillis) - claimStartedMs),
+    );
+
     // One try: grade, then record. A reply the rubric check rejects counts as an unusable answer.
     const oneTry = grader.grade(input, tag).pipe(
       Effect.flatMap((result) =>
         record(input.lease, result).pipe(
+          // A paid answer is worth a few quick tries to save; giving up here would
+          // leave the lease held and pay for the answer again after it expires.
+          Effect.retry({
+            schedule: RECORD_RETRY,
+            while: (e) => e._tag === "StoreUnavailable",
+          }),
           Effect.map((written) => ({ written, result })),
           Effect.catchTag("LinePointsMismatch", (e) =>
             Effect.fail(
@@ -128,7 +144,7 @@ export const handleGradeJob = (job: GradeJob, delivery: Delivery) =>
         while: (e) => e._tag === "BadResponse" && isRetryable(e),
       }),
       Effect.timeoutFail({
-        duration: DELIVERY_BUDGET,
+        duration: remainingBudget,
         onTimeout: () => new Timeout({ afterMs: Duration.toMillis(DELIVERY_BUDGET) }),
       }),
       Effect.provideService(ModelClient, router.forGrade(loadTestRunId)),

@@ -159,6 +159,8 @@ describe("OpenRouter client", () => {
         _tag: "ProviderError",
         status: 502,
         message: "upstream died",
+        mayBeBilled: true,
+        usage: { costUsd: 0.00042 },
       });
       expect(tagOf(yield* run("spend-limit"))).toMatchObject({
         _tag: "ProviderError",

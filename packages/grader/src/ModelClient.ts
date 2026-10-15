@@ -76,6 +76,18 @@ export class ProviderError extends Schema.TaggedError<ProviderError>()("Provider
   message: Schema.String,
   /** The provider's `Retry-After`, when it sent one. Its presence makes the error retryable. */
   retryAfterMs: Schema.optional(Schema.Number),
+  /**
+   * The failure came after the model started work (OpenRouter's errors inside a 200
+   * body), so the call may have been billed. With `usage`, the bill is known.
+   */
+  mayBeBilled: Schema.optional(Schema.Boolean),
+  usage: Schema.optional(
+    Schema.Struct({
+      promptTokens: Schema.Number,
+      completionTokens: Schema.Number,
+      costUsd: Schema.Number,
+    }),
+  ),
 }) {}
 
 /** The provider answered 200 but the body is unusable: malformed, empty, or cut off. */

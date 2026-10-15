@@ -46,6 +46,16 @@ describe("RetryPolicy", () => {
     expect(decision).toEqual({ _tag: "Retry", after: Duration.millis(20_000) });
   });
 
+  it("caps a long Retry-After below the sweeper's threshold", () => {
+    const decision = decide({
+      error: new RateLimited({ retryAfterMs: 600_000 }),
+      deliveryCount: 1,
+      age: Duration.zero,
+      random: 0.5,
+    });
+    expect(decision).toEqual({ _tag: "Retry", after: Duration.minutes(2) });
+  });
+
   it("gives up at once on errors retrying cannot fix", () => {
     const giveUp = (error: ProviderError | BadResponse) =>
       decide({ error, deliveryCount: 1, age: Duration.zero, random: 0.5 })._tag;
