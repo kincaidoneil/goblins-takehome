@@ -35,7 +35,12 @@ const seed = Effect.gen(function* () {
     .returning();
   if (problem === undefined) return yield* Effect.dieMessage("no problem row");
   yield* db.insert(schema.rubricLines).values([
-    { problemId: problem.id, position: 0, points: 1, description: "Subtracts 3 from both sides: 2x = 8" },
+    {
+      problemId: problem.id,
+      position: 0,
+      points: 1,
+      description: "Subtracts 3 from both sides: 2x = 8",
+    },
     { problemId: problem.id, position: 1, points: 1, description: "Correct answer: x = 4" },
   ]);
   const joinCode = randomJoinCode();
@@ -59,11 +64,24 @@ const report = (joinCode: string) =>
     const grades = yield* db
       .select()
       .from(schema.grades)
-      .where(inArray(schema.grades.sessionId, sessions.map((s) => s.id)));
-    const calls = grades.length === 0 ? [] : yield* db
-      .select()
-      .from(schema.modelCalls)
-      .where(inArray(schema.modelCalls.submissionId, grades.map((g) => g.submissionId)));
+      .where(
+        inArray(
+          schema.grades.sessionId,
+          sessions.map((s) => s.id),
+        ),
+      );
+    const calls =
+      grades.length === 0
+        ? []
+        : yield* db
+            .select()
+            .from(schema.modelCalls)
+            .where(
+              inArray(
+                schema.modelCalls.submissionId,
+                grades.map((g) => g.submissionId),
+              ),
+            );
     console.log(JSON.stringify({ grades, calls }, null, 2));
   });
 
