@@ -129,6 +129,22 @@
   font-weight: var(--gb-weight-bold);
 }
 
+/* The payoff in one click, for anyone deciding whether to try it. */
+.lp-sample {
+  display: inline-block;
+  margin-top: var(--gb-space-4);
+  color: var(--gb-color-text-brand);
+  font-weight: var(--gb-weight-bold);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--gb-color-border-brand);
+}
+
+.lp-sample:hover {
+  text-decoration-color: currentColor;
+}
+
 /* The payoff, shown above the drop zone only when the full worksheet falls below the fold. */
 .lp-proof {
   display: none;

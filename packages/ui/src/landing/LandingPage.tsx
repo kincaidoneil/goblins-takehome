@@ -111,6 +111,9 @@ export function LandingPage({
               onShowTemplates={showTemplates}
               {...(initialDropState === undefined ? {} : { initialState: initialDropState })}
             />
+            <a className="lp-sample" href="/report/demo">
+              See a sample class report <span aria-hidden="true">→</span>
+            </a>
           </div>
           <div className="lp-hero-visual">
             <GradedWorksheet />
