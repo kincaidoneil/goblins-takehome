@@ -9,8 +9,7 @@
     "typecheck": "pnpm -r --if-present typecheck",
     "lint": "biome check --error-on-warnings .",
     "format": "biome check --write .",
-    "test": "pnpm -r --if-present test",
-    "e2e": "playwright test"
+    "test": "pnpm -r --if-present test"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
