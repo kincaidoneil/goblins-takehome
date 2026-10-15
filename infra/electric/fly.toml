@@ -1,0 +1,46 @@
+# Self-hosted Electric for production, on Fly.io. Deploy with infra/electric/deploy.sh.
+# Secrets (set by the script, never in this file): DATABASE_URL, ELECTRIC_SECRET.
+app = "goblins-electric"
+primary_region = "iad" # Next to Neon (us-east-1) and Vercel functions (iad1).
+
+[build]
+  image = "electricsql/electric:1.8.1"
+
+[env]
+  ELECTRIC_PORT = "3000"
+  ELECTRIC_STORAGE_DIR = "/var/lib/electric/persistent"
+  ELECTRIC_REPLICATION_STREAM_ID = "prod"
+  # Close Neon connections after 5 idle minutes so Neon can scale to zero
+  # between class sessions. The next shape request reopens them.
+  ELECTRIC_REPLICATION_IDLE_TIMEOUT = "5min"
+
+# Shape logs and metadata. Must survive restarts.
+[[mounts]]
+  source = "electric_data"
+  destination = "/var/lib/electric/persistent"
+  initial_size = "1gb"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  # Clients hold long-poll requests open, one per subscribed shape. Fly's
+  # default limit of 25 connections per machine would queue a single class.
+  [http_service.concurrency]
+    type = "connections"
+    soft_limit = 8000
+    hard_limit = 10000
+
+  [[http_service.checks]]
+    method = "GET"
+    path = "/v1/health"
+    interval = "15s"
+    timeout = "5s"
+    grace_period = "30s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1gb"
