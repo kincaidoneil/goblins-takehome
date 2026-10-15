@@ -80,6 +80,8 @@ The grid fills while you talk.
 
 ### 2:10 Report and the Goblins pitch (25 s)
 
+End whenever the beats are covered: once the dashboard looks full and you've reviewed the flagged item. Don't wait for the simulator to finish. Grading already in progress still finishes, and those grades land in the report as it updates. Problems a simulated student hasn't submitted show as not submitted.
+
 Click **End session**. The report opens.
 
 1. The class summary, then the struggle section: the weakest problem and its common mistakes.
