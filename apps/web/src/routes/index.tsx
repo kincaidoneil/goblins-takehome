@@ -27,8 +27,7 @@ function Landing() {
       templates={TEMPLATE_SUMMARIES}
       onFiles={async (files) => toUploadResult(await startDraftFromUpload(files))}
       onTemplate={async (templateId) => toUploadResult(await startDraftFromTemplate(templateId))}
-      // The setup route belongs to the setup stream and isn't registered yet, so this is a plain href.
-      onStarted={(draftId) => void navigate({ href: `/setup/${draftId}` })}
+      onStarted={(draftId) => void navigate({ to: "/setup/$draftId", params: { draftId } })}
       signIn={
         <SignInButton mode="modal">
           <button type="button" className="lp-signin">
