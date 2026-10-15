@@ -28,8 +28,7 @@ pnpm monorepo. Each workstream owns one package and does not edit another stream
 
 - Each task gets its own worktree, branch and small PR against `main`. Merging to `main` deploys to production.
 - Before opening a PR, review your own diff. Then wait for CI and the Codex review, address every comment (fix it, or reply with a reason), rebase on `main`, and merge when green. You own your PR until it merges.
-- Codex reviews: fix every P1 and P2 finding. After two review rounds, merge on green CI and list any remaining minor findings as follow-ups in the PR description.
-- The "Vercel" status fails on PRs whose branch has no `apps/web` until #16 merges; it is a deploy status, not CI.
+- Merge on green CI; don't wait for the Codex review. Fix any P1 or P2 Codex finding that arrives later in a follow-up PR.
 - Rebase conflicts: `docs/decisions.md` merges by keeping both sides (`.gitattributes`), so check only that rows stay in date order. Resolve `docs/board.md` by hand: it holds current state. For `pnpm-lock.yaml`, run `git checkout origin/main -- pnpm-lock.yaml && pnpm install`, then commit the result. Never hand-edit the lockfile.
 - Done means evidence: CI and E2E passing, screenshots for UI, a preview URL. Say what you did not verify.
 - Never stop to wait for an answer. Record the assumption in `docs/decisions.md` and keep going. Send questions for Kincaid to the orchestrator session, each with a recommendation.
@@ -43,7 +42,7 @@ pnpm monorepo. Each workstream owns one package and does not edit another stream
 - Keep it simple. Do not build for scale the PRD does not ask for.
 - End-to-end tests (Playwright) over unit tests. Unit tests only where logic is dense.
 - UI components get Storybook stories. Check UI changes by screenshot.
-- Root commands: `pnpm lint` (Biome), `pnpm format`, `pnpm typecheck`, `pnpm test`, `pnpm e2e`. CI runs `lint`, `typecheck` and `test` on every PR, and E2E against each Vercel preview once it deploys.
+- Root commands: `pnpm lint` (Biome), `pnpm format`, `pnpm typecheck`, `pnpm test`, `pnpm e2e`. CI runs `lint`, `typecheck`, `test` and E2E on every PR. E2E builds the app and runs it against Postgres and Electric in Docker (`apps/web/docker-compose.yml`) with the mock model.
 - E2E tests live in `e2e/tests`. Use the `classroom` fixture from `e2e/fixtures.ts` for a teacher, a projector and any number of students, each on its own device. Run locally with `E2E_BASE_URL=http://localhost:3000 pnpm e2e`.
 - Each package's `tsconfig.json` extends `../../tsconfig.base.json` and its `package.json` defines `typecheck` (`tsc -p .`) and, if it has tests, `test` (Vitest). Root scripts run those in every package.
 
