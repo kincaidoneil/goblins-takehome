@@ -53,9 +53,9 @@ export const qstashConfig: Option.Option<QStashQueue.QStashConfig> = (() => {
 export const QStashGradeQueue = (config: QStashQueue.QStashConfig) => {
   const queue = QStashQueue.makeQueue(QStashQueue.makePublish(config));
   return Layer.succeed(GradeQueue, {
-    enqueue: (job) =>
+    enqueue: (job, dedupeKey) =>
       queue
-        .enqueue(job)
+        .enqueue(job, dedupeKey)
         .pipe(
           Effect.catchAll((error) =>
             Effect.logError("Grade job not sent; the sweeper will resend it", error),
