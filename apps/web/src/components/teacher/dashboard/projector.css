@@ -277,6 +277,7 @@
   filter: drop-shadow(0 0.25em 0.4em rgb(14 59 42 / 0.25));
 }
 
+/* biome-ignore lint/style/noDescendingSpecificity: the rider's avatar size; no earlier rule targets the same element */
 .pj-rider svg {
   width: clamp(56px, 7vw, 168px);
   height: clamp(56px, 7vw, 168px);
