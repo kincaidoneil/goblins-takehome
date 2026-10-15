@@ -283,6 +283,43 @@ importers:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.15)
 
+  packages/loadtest:
+    dependencies:
+      '@goblins/domain':
+        specifier: workspace:*
+        version: link:../domain
+      '@goblins/grader':
+        specifier: workspace:*
+        version: link:../grader
+      '@goblins/mock-model':
+        specifier: workspace:*
+        version: link:../mock-model
+      '@goblins/simulator':
+        specifier: workspace:*
+        version: link:../simulator
+      '@goblins/templates':
+        specifier: workspace:*
+        version: link:../templates
+      drizzle-orm:
+        specifier: ~0.45.4
+        version: 0.45.4(@electric-sql/pglite@0.5.10)(@types/pg@8.23.1)(pg@8.23.1)
+      effect:
+        specifier: ^3.22.2
+        version: 3.22.2
+    devDependencies:
+      '@types/node':
+        specifier: ^22.20.5
+        version: 22.20.5
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.15)
+
   packages/mock-model:
     dependencies:
       '@goblins/grader':
@@ -301,6 +338,34 @@ importers:
       '@types/node':
         specifier: ^22.20.5
         version: 22.20.5
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.15)
+
+  packages/simulator:
+    dependencies:
+      '@electric-sql/client':
+        specifier: ^1.5.28
+        version: 1.5.28
+      '@goblins/mock-model':
+        specifier: workspace:*
+        version: link:../mock-model
+      '@goblins/templates':
+        specifier: workspace:*
+        version: link:../templates
+      effect:
+        specifier: ^3.22.2
+        version: 3.22.2
+    devDependencies:
+      '@types/node':
+        specifier: ^22.20.5
+        version: 22.20.5
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
