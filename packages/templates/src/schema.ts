@@ -106,6 +106,8 @@ export const Template = Schema.Struct({
     lessons: Schema.NonEmptyArray(
       Schema.Struct({ title: Schema.NonEmptyString, url: Schema.String }),
     ),
+    /** The copyright notice the source supplies, which CC BY requires keeping. */
+    copyright: Schema.NonEmptyString,
     license: Schema.Literal("CC BY 4.0"),
     licenseUrl: Schema.Literal("https://creativecommons.org/licenses/by/4.0/"),
     /** Attribution to show wherever the worksheet is shown. */

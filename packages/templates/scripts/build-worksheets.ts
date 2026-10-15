@@ -32,7 +32,14 @@ const BuildSpec = Schema.Struct({
   title: Schema.String,
   course: Schema.String,
   topic: Schema.String,
-  source: Schema.Struct({ attribution: Schema.String }),
+  source: Schema.Struct({
+    name: Schema.String,
+    lessons: Schema.Array(Schema.Struct({ title: Schema.String, url: Schema.String })),
+    copyright: Schema.String,
+    licenseUrl: Schema.String,
+    attribution: Schema.String,
+    changes: Schema.String,
+  }),
   files: Schema.Struct({
     pages: Schema.Array(
       Schema.Struct({ image: Schema.String, width: Schema.Number, height: Schema.Number }),
@@ -101,6 +108,7 @@ const css = `
   .problem.split { break-inside: auto; }
   .problem > .n { position: absolute; left: 0; top: 0; font-weight: 700; font-size: 12.5pt; }
   .problem .work { height: 0.75in; }
+  .problem:last-of-type .work { height: 0.4in; }
   .problem p { margin: 0 0 6px; }
   ol { list-style: lower-alpha; margin: 4px 0 6px; padding-left: 24px; }
   ol > li { margin-bottom: 0.45in; break-inside: avoid; }
@@ -110,6 +118,7 @@ const css = `
   .g--row { display: flex; gap: 16px; align-items: flex-start; }
   .g--column { flex: 1; }
   .pp-aligned-lesson-address { display: none; }
+  .credits { break-inside: avoid; margin-top: 8px; padding-top: 6px; border-top: 1px solid #999; font-size: 7pt; line-height: 1.3; color: #444; }
 `;
 
 function worksheetHtml(spec: BuildSpec, bodies: ReadonlyArray<string>): string {
@@ -135,7 +144,22 @@ function worksheetHtml(spec: BuildSpec, bodies: ReadonlyArray<string>): string {
   <div class="sub">${spec.course} · ${spec.topic}</div>
 </header>
 ${problems}
+${credits(spec)}
 </body></html>`;
+}
+
+/**
+ * The notices CC BY 4.0 section 3(a) requires on a shared adaptation: the creators and copyright
+ * notice, the license and its link, the disclaimer, links to the source, and what we changed.
+ */
+function credits(spec: BuildSpec): string {
+  const { source } = spec;
+  const lessons = source.lessons.map((l) => `${l.title} (${l.url})`).join("; ");
+  return `<footer class="credits">
+  ${source.copyright} Licensed under CC BY 4.0 (${source.licenseUrl}); provided as is, without
+  warranties. The Illustrative Mathematics name and logo are not subject to the license.
+  Sources, from ${source.name}: ${lessons}. Changes: ${source.changes}
+</footer>`;
 }
 
 /** The text of each PDF page, from pdftotext. */

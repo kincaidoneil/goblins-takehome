@@ -69,6 +69,6 @@ To add a template, create `templates/<id>/template.json` with its problems' sour
 ## Licensing
 
 - IM 6–8 Math was originally developed by Open Up Resources and authored by Illustrative Mathematics, © 2017–2019 Open Up Resources, with adaptations © 2019 Illustrative Mathematics. IM 9–12 Math is © 2019 Illustrative Mathematics. Both are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-- CC BY allows commercial reuse and adaptation with attribution. Each `template.json` carries the attribution line (also printed in every page footer), the lessons used, and what we changed.
+- CC BY allows commercial reuse and adaptation with attribution. Each `template.json` carries the copyright notice, the attribution line, the lessons used, and what we changed. Every page footer carries the attribution line. The last page of each PDF has the notices CC BY 4.0 §3(a) requires: copyright, license name and link, disclaimer, source links and changes.
 - The Illustrative Mathematics name and logo are not under the Creative Commons license. We name IM only in attribution and never use the logo.
 - The answer keys are our own work, not IM's teacher materials.
