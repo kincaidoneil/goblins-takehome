@@ -13,30 +13,30 @@ app=goblins-electric
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 
-fly apps list --json | grep -q "\"$app\"" || fly apps create "$app"
+fly apps list --json | grep -q "\"$app\"" || fly apps create "$app" --org "${FLY_ORG:-personal}"
 
 # Electric needs Neon's direct (unpooled) connection for logical replication.
 vercel env pull "$tmp/prod.env" --environment production --yes >/dev/null
 database_url=$(grep '^DATABASE_URL_UNPOOLED=' "$tmp/prod.env" | cut -d= -f2- | tr -d '"')
 [ -n "$database_url" ] || { echo "DATABASE_URL_UNPOOLED missing on Vercel production" >&2; exit 1; }
 
-secret=$(grep '^ELECTRIC_SECRET=' "$tmp/prod.env" | cut -d= -f2- | tr -d '"' || true)
-new_secret=false
-if [ -z "$secret" ]; then
-  secret=$(openssl rand -hex 32)
-  new_secret=true
+# The Electric secret is created once and stored on both sides. Neither Fly nor
+# Vercel returns it afterwards, so a re-run leaves it alone.
+if fly secrets list --app "$app" | grep -q '^ELECTRIC_SECRET'; then
+  fly secrets set --app "$app" --stage DATABASE_URL="$database_url" >/dev/null
+  new_secret=""
+else
+  new_secret=$(openssl rand -hex 32)
+  fly secrets set --app "$app" --stage DATABASE_URL="$database_url" ELECTRIC_SECRET="$new_secret" >/dev/null
 fi
-
-fly secrets set --app "$app" --stage DATABASE_URL="$database_url" ELECTRIC_SECRET="$secret" >/dev/null
 fly deploy --app "$app" --config fly.toml --ha=false
 
 url="https://$app.fly.dev"
 curl -fsS "$url/v1/health" && echo
 
-if $new_secret; then
-  # Not --sensitive: sensitive values come back empty from `env pull`, and
-  # re-runs read this value back to keep Fly and Vercel in step.
-  printf %s "$secret" | vercel env add ELECTRIC_SECRET production --yes >/dev/null
+if [ -n "$new_secret" ]; then
+  vercel env rm ELECTRIC_SECRET production --yes >/dev/null 2>&1 || true
+  printf %s "$new_secret" | vercel env add ELECTRIC_SECRET production --yes >/dev/null
 fi
 vercel env rm ELECTRIC_URL production --yes >/dev/null 2>&1 || true
 printf %s "$url" | vercel env add ELECTRIC_URL production --yes >/dev/null
