@@ -141,7 +141,20 @@ export const parseMockSpec = (
   if (Either.isLeft(spec)) {
     return Either.left({ _tag: "ConfigError", source, message: spec.left.message });
   }
-  return Either.right(toConfig(spec.right));
+  const decoded = spec.right;
+  if (
+    decoded.mode === "sampled" &&
+    decoded.scenario === undefined &&
+    (decoded.at !== undefined || decoded.for !== undefined)
+  ) {
+    // A window without a scenario would be dropped, and the run would look configured when it isn't.
+    return Either.left({
+      _tag: "ConfigError",
+      source,
+      message: "`at` and `for` need a `scenario`",
+    });
+  }
+  return Either.right(toConfig(decoded));
 };
 
 const RUN_ID = /^[A-Za-z0-9_-]{1,64}$/;

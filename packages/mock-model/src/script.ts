@@ -86,6 +86,8 @@ export type ImageError =
   | { readonly _tag: "ImageTimedOut" };
 
 const DATA_URL = /^data:([^,]*?)(;base64)?,(.*)$/s;
+/** Strict base64: Node's decoder skips invalid characters instead of failing. */
+const BASE64 = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
 
 /**
  * Image bytes from a `data:` URL, or fetched from an http(s) URL as the
@@ -99,12 +101,16 @@ export const imageBytes = (
   const data = DATA_URL.exec(url);
   if (data !== null) {
     const payload = data[3] ?? "";
+    const malformed: ImageError = { _tag: "ImageUnavailable", message: "malformed data URL" };
+    if (payload === "" || (data[2] !== undefined && !BASE64.test(payload))) {
+      return Effect.fail(malformed);
+    }
     return Effect.try({
       try: () =>
         data[2] === undefined
           ? new TextEncoder().encode(decodeURIComponent(payload))
           : new Uint8Array(Buffer.from(payload, "base64")),
-      catch: (): ImageError => ({ _tag: "ImageUnavailable", message: "malformed data URL" }),
+      catch: () => malformed,
     });
   }
   return Effect.tryPromise({

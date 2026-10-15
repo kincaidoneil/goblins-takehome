@@ -81,6 +81,7 @@ describe("selectModel", () => {
 
   it.each([
     ["mode=sampled; scenario=meteor"],
+    ["mode=sampled; at=60; for=300"],
     ["mode=fixed; latency=-5"],
     ["mode=fixed; colour=blue"],
     ["mode=fixed; mode=fixed"],

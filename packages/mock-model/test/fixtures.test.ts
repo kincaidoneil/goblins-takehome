@@ -144,11 +144,17 @@ describe("image handling", () => {
   it.effect("a malformed data URL fails as the provider's 400", () =>
     Effect.gen(function* () {
       const client = yield* makeMockModelClient(fixed, { seed: 1 });
-      const result = yield* Effect.either(client.complete(withImageUrl("data:image/png,%")));
-      expect(Either.isLeft(result) && result.left).toMatchObject({
-        _tag: "ProviderError",
-        status: 400,
-      });
+      for (const url of [
+        "data:image/png,%",
+        "data:image/png;base64,%%",
+        "data:image/png;base64,",
+      ]) {
+        const result = yield* Effect.either(client.complete(withImageUrl(url)));
+        expect(Either.isLeft(result) && result.left).toMatchObject({
+          _tag: "ProviderError",
+          status: 400,
+        });
+      }
     }),
   );
 
