@@ -1,3 +1,4 @@
+import { SignInButton } from "@clerk/tanstack-react-start";
 import { LandingPage, TEMPLATE_SUMMARIES } from "@goblins/ui/landing";
 import landingCss from "@goblins/ui/landing.css?url";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -26,9 +27,14 @@ function Landing() {
       templates={TEMPLATE_SUMMARIES}
       onFiles={async (files) => toUploadResult(await startDraftFromUpload(files))}
       onTemplate={async (templateId) => toUploadResult(await startDraftFromTemplate(templateId))}
-      // The setup route belongs to the setup stream and isn't registered yet, so this is a plain href.
-      onStarted={(draftId) => void navigate({ href: `/setup/${draftId}` })}
-      signInHref="/sign-in"
+      onStarted={(draftId) => void navigate({ to: "/setup/$draftId", params: { draftId } })}
+      signIn={
+        <SignInButton mode="modal">
+          <button type="button" className="lp-signin">
+            Sign in
+          </button>
+        </SignInButton>
+      }
     />
   );
 }
