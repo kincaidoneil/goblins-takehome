@@ -11,13 +11,12 @@ import { Button } from "../components/Button";
 import { Dialog, DialogClose } from "../components/Dialog";
 import { cx } from "../cx";
 import {
-  BOARD_HEIGHT,
-  BOARD_WIDTH,
   EMPTY_DOC,
   ERASER_SIZE,
   INK_COLORS,
   type InkColor,
   PEN_SIZE,
+  pageSize,
   type Stroke,
   type WhiteboardDoc,
 } from "./doc";
@@ -67,6 +66,20 @@ export function Whiteboard({
   onChangeRef.current = onChange;
 
   const doc = history.present;
+  const page = pageSize(doc.shape);
+
+  // A blank board on a narrow screen becomes a portrait page, so a phone gets room to write.
+  // Re-checked whenever the board is blank again, e.g. after Clear.
+  const blank = doc.strokes.length === 0;
+  useEffect(() => {
+    if (!blank) return;
+    const narrow = window.matchMedia("(max-width: 600px)");
+    const pick = () =>
+      dispatch({ _tag: "SetShape", shape: narrow.matches ? "portrait" : "landscape" });
+    pick();
+    narrow.addEventListener("change", pick);
+    return () => narrow.removeEventListener("change", pick);
+  }, [blank]);
 
   const redraw = useCallback(() => {
     const ctx = ctxRef.current;
@@ -74,7 +87,8 @@ export function Whiteboard({
     if (ctx === null || el === null) return;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, el.width, el.height);
-    ctx.setTransform(el.width / BOARD_WIDTH, 0, 0, el.height / BOARD_HEIGHT, 0, 0);
+    const size = pageSize(doc.shape);
+    ctx.setTransform(el.width / size.width, 0, 0, el.height / size.height, 0, 0);
     drawDoc(ctx, doc);
   }, [doc]);
 
@@ -122,8 +136,8 @@ export function Whiteboard({
     event: { clientX: number; clientY: number; pressure: number; pointerType: string },
     rect: DOMRect,
   ) {
-    const x = ((event.clientX - rect.left) / rect.width) * BOARD_WIDTH;
-    const y = ((event.clientY - rect.top) / rect.height) * BOARD_HEIGHT;
+    const x = ((event.clientX - rect.left) / rect.width) * page.width;
+    const y = ((event.clientY - rect.top) / rect.height) * page.height;
     const pressure = event.pointerType === "pen" ? event.pressure : 0.5;
     return [
       Math.round(x * 10) / 10,
@@ -241,7 +255,7 @@ export function Whiteboard({
         </div>
         {accessory !== undefined && <div className="gb-board-accessory">{accessory}</div>}
       </div>
-      <div className="gb-board-surface">
+      <div className="gb-board-surface" data-shape={doc.shape}>
         <canvas
           ref={canvasRef}
           className="gb-board-canvas"

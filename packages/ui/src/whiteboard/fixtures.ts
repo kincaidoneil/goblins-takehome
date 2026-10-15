@@ -180,6 +180,7 @@ export function handwrite(text: string, x: number, y: number, size: number, seed
 /** A student solving 2x + 3 = 11, with a circled answer. */
 export const SOLVED_EQUATION: WhiteboardDoc = {
   version: 1,
+  shape: "landscape",
   strokes: [
     ...handwrite("2x+3=11", 80, 80, 90, 3),
     ...handwrite("2x=8", 80, 230, 90, 7),
@@ -199,3 +200,6 @@ export const SOLVED_EQUATION: WhiteboardDoc = {
     },
   ],
 };
+
+/** The same work on a phone's portrait page, with room left below it. */
+export const SOLVED_EQUATION_PORTRAIT: WhiteboardDoc = { ...SOLVED_EQUATION, shape: "portrait" };
