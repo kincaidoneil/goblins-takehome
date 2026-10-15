@@ -69,8 +69,9 @@ export class Timeout extends Schema.TaggedError<Timeout>()("Timeout", {
   afterMs: Schema.Number,
 }) {}
 
-/** The provider returned an error status (5xx, or a 4xx other than 429). */
+/** The provider returned an error status (5xx, or a 4xx other than 429), or no response at all. */
 export class ProviderError extends Schema.TaggedError<ProviderError>()("ProviderError", {
+  /** HTTP status, or 0 when the request never got a response (DNS, connection reset). */
   status: Schema.Number,
   message: Schema.String,
 }) {}
@@ -101,7 +102,7 @@ export const isRetryable = (error: ModelError): boolean => {
     case "BadResponse":
       return true
     case "ProviderError":
-      return error.status >= 500 || error.status === 408
+      return error.status === 0 || error.status === 408 || error.status >= 500
   }
 }
 
