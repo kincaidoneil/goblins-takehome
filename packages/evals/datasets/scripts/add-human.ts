@@ -9,7 +9,7 @@
  * rubric and expected points. Re-running replaces earlier copies.
  */
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { extname, join } from "node:path";
 import { createCanvas, loadImage } from "@napi-rs/canvas";
@@ -26,6 +26,12 @@ const handdraw = Schema.decodeUnknownSync(HanddrawList)(
 const dir = process.argv[2];
 if (!dir) {
   console.error("usage: dataset:add-human <folder of photos>");
+  process.exit(1);
+}
+if (!existsSync(dir)) {
+  console.error(
+    `No folder at ${dir}. Put the photos (1.jpg … 10.jpg) in a folder and pass its path.`,
+  );
   process.exit(1);
 }
 
