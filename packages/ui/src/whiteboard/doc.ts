@@ -14,22 +14,42 @@ export type InkColor = typeof InkColor.Type;
 export const PEN_SIZE = 4;
 export const ERASER_SIZE = 28;
 
+/** Generous bounds: strokes may run a little off the page, but nothing far outside it. */
+const MARGIN = 512;
+
+function validPoints(points: ReadonlyArray<number>): boolean {
+  if (points.length === 0 || points.length % 3 !== 0) return false;
+  for (let i = 0; i < points.length; i += 3) {
+    const x = points[i] ?? Number.NaN;
+    const y = points[i + 1] ?? Number.NaN;
+    const p = points[i + 2] ?? Number.NaN;
+    if (!(x >= -MARGIN && x <= BOARD_WIDTH + MARGIN)) return false;
+    if (!(y >= -MARGIN && y <= BOARD_HEIGHT + MARGIN)) return false;
+    if (!(p >= 0 && p <= 1)) return false;
+  }
+  return true;
+}
+
 /** x, y, pressure triples, flattened. Pressure is 0–1; mouse and finger use 0.5. */
 const Points = Schema.Array(Schema.Number).pipe(
-  Schema.filter((points) => points.length > 0 && points.length % 3 === 0, {
-    message: () => "points must be non-empty x, y, pressure triples",
+  Schema.filter(validPoints, {
+    message: () =>
+      "points must be non-empty x, y, pressure triples on or near the board, pressure 0–1",
   }),
 );
 
+/** Line widths in board units. */
+const Size = Schema.Number.pipe(Schema.between(0.5, 200));
+
 export const PenStroke = Schema.TaggedStruct("Pen", {
   color: InkColor,
-  size: Schema.Number.pipe(Schema.positive()),
+  size: Size,
   points: Points,
 });
 export type PenStroke = typeof PenStroke.Type;
 
 export const EraserStroke = Schema.TaggedStruct("Eraser", {
-  size: Schema.Number.pipe(Schema.positive()),
+  size: Size,
   points: Points,
 });
 export type EraserStroke = typeof EraserStroke.Type;
@@ -44,11 +64,6 @@ export const WhiteboardDoc = Schema.Struct({
 export type WhiteboardDoc = typeof WhiteboardDoc.Type;
 
 export const EMPTY_DOC: WhiteboardDoc = { version: 1, strokes: [] };
-
-/** True when nothing was drawn with the pen, so the app can block an empty Submit. */
-export function isDocEmpty(doc: WhiteboardDoc): boolean {
-  return !doc.strokes.some((stroke) => stroke._tag === "Pen");
-}
 
 /** Saved work, for localStorage or a server draft. */
 export function serializeDoc(doc: WhiteboardDoc): string {

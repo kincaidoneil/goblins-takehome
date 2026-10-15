@@ -36,7 +36,7 @@ export function drawStroke(ctx: CanvasRenderingContext2D, stroke: Stroke, from =
     if (from > 0) return;
     const p = point(stroke.points, 0);
     ctx.beginPath();
-    ctx.arc(p.x, p.y, widthAt(stroke.size, p.w) / 2, 0, Math.PI * 2);
+    ctx.arc(p.x, p.y, Math.max(0, widthAt(stroke.size, p.w) / 2), 0, Math.PI * 2);
     ctx.fill();
     return;
   }
@@ -78,6 +78,32 @@ function canvas(width: number, height: number): HTMLCanvasElement {
   el.width = width;
   el.height = height;
   return el;
+}
+
+/** Coarse grid for the blank check: a 4 px pen at 1024 wide still covers whole cells here. */
+const CHECK_WIDTH = 256;
+const CHECK_HEIGHT = 192;
+
+/**
+ * True when no ink is visible, so the app can block an empty Submit. A board
+ * with no pen strokes is empty without drawing anything; a board with eraser
+ * strokes is rendered small and checked for any remaining ink, since a student
+ * can erase everything back to blank.
+ */
+export function isDocEmpty(doc: WhiteboardDoc): boolean {
+  if (!doc.strokes.some((stroke) => stroke._tag === "Pen")) return true;
+  if (!doc.strokes.some((stroke) => stroke._tag === "Eraser")) return false;
+  if (typeof document === "undefined") return false;
+  const ctx = canvas(CHECK_WIDTH, CHECK_HEIGHT).getContext("2d", { willReadFrequently: true });
+  if (ctx === null) return false;
+  ctx.scale(CHECK_WIDTH / BOARD_WIDTH, CHECK_HEIGHT / BOARD_HEIGHT);
+  drawDoc(ctx, doc);
+  const alpha = ctx.getImageData(0, 0, CHECK_WIDTH, CHECK_HEIGHT).data;
+  for (let i = 3; i < alpha.length; i += 4) {
+    // Ignore faint antialiasing left at the edge of an erased stroke.
+    if ((alpha[i] ?? 0) > 48) return false;
+  }
+  return true;
 }
 
 export type RenderError = "CanvasUnavailable" | "EncodingFailed";

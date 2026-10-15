@@ -2,9 +2,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Either } from "effect";
 import { useState } from "react";
 import { Button } from "../components/Button";
-import { EMPTY_DOC, isDocEmpty, parseDoc, serializeDoc, type WhiteboardDoc } from "./doc";
+import { EMPTY_DOC, parseDoc, serializeDoc, type WhiteboardDoc } from "./doc";
 import { SOLVED_EQUATION } from "./fixtures";
-import { renderWhiteboardPng } from "./render";
+import { isDocEmpty, renderWhiteboardPng } from "./render";
 import { Whiteboard } from "./Whiteboard";
 
 const meta = {

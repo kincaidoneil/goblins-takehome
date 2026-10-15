@@ -42,11 +42,10 @@ export {
   type DecodeDocError,
   EMPTY_DOC,
   INK_COLORS,
-  isDocEmpty,
   parseDoc,
   type Stroke,
   serializeDoc,
   WhiteboardDoc,
 } from "./whiteboard/doc";
-export { type RenderError, renderWhiteboardPng } from "./whiteboard/render";
+export { isDocEmpty, type RenderError, renderWhiteboardPng } from "./whiteboard/render";
 export { type Tool, Whiteboard, type WhiteboardProps } from "./whiteboard/Whiteboard";
