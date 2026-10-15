@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import type { CompletionRequest, ModelError } from "@goblins/grader";
 import { Clock, Duration, Effect, Either } from "effect";
-import { type MockConfig, makeMockModelClient } from "../src/index.ts";
+import { type CallLogRow, type MockConfig, makeMockModelClient } from "../src/index.ts";
 
 export const fixtureBytes = (file: string): Uint8Array =>
   new Uint8Array(readFileSync(new URL(`../fixtures/${file}`, import.meta.url)));
@@ -78,3 +78,17 @@ export const share = (tally: Tally, tag: string, n: number): number => (tally[ta
 
 export const mean = (xs: ReadonlyArray<number>): number =>
   xs.reduce((a, b) => a + b, 0) / xs.length;
+
+/** A `model_calls` row for a real grading call, as Drizzle returns it. */
+export const modelCallRow = (overrides: Partial<CallLogRow> = {}): CallLogRow => ({
+  purpose: "grade",
+  provider: "openrouter",
+  model: "google/gemini-2.5-flash",
+  status: "ok",
+  latencyMs: 100,
+  inputTokens: 1800,
+  outputTokens: 200,
+  loadTestRunId: null,
+  createdAt: new Date(Date.UTC(2026, 9, 15)),
+  ...overrides,
+});

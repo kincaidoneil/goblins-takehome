@@ -1,4 +1,5 @@
 /** Shared helpers for the pipeline tests: a scripted model and a virtual-time runner. */
+import { type GradingInput, SubmissionId } from "@goblins/domain";
 import { Clock, Duration, Effect, Fiber, Option, Ref, TestClock } from "effect";
 import type { Completion, CompletionRequest, ModelError } from "../src/ModelClient.ts";
 
@@ -79,3 +80,33 @@ export const runUntilDone = <A, E, R>(
     const value = yield* Fiber.join(fiber);
     return { value, elapsed: Duration.millis((yield* Clock.currentTimeMillis) - start) };
   });
+
+/** A deterministic UUID per name, since submission and rubric-line ids are UUIDs. */
+export const uuid = (name: string) => {
+  let h = 0;
+  for (const c of name) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return `00000000-0000-4000-8000-${h.toString(16).padStart(12, "0")}`;
+};
+export const SETUP = uuid("line:setup");
+export const ANSWER = uuid("line:answer");
+export const sub = (name: string) => SubmissionId.make(uuid(`sub:${name}`));
+/** A reply scoring both rubric lines of `material` in full. */
+export const fullMarks = (unsure: string | null = null) => reply([SETUP, ANSWER], unsure);
+
+export const material = (loadTestRunId?: string): Omit<GradingInput, "lease"> => ({
+  whiteboardUrl: "data:image/png;base64,AA",
+  problem: {
+    label: "1",
+    text: "Solve 2x + 3 = 11",
+    answerKey: "x = 4",
+    diagramDescription: null,
+    gradingNotes: "",
+    pageImageUrls: [],
+  },
+  rubricLines: [
+    { id: SETUP, points: 1, description: "correct setup" },
+    { id: ANSWER, points: 1, description: "x = 4" },
+  ],
+  dependencies: [],
+  loadTestRunId: Option.fromNullable(loadTestRunId),
+});

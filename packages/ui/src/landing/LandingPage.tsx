@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { type ReactNode, useRef, useState } from "react";
 import { CreatureArt } from "../components/creatures";
 import { ScoreChip } from "../components/ScoreChip";
 import { DropZone, type DropZoneState } from "./DropZone";
@@ -11,11 +11,12 @@ export interface LandingPageProps {
   templates: ReadonlyArray<TemplateSummary>;
   /** The setup flow's entry point for an uploaded worksheet. */
   onFiles: (files: ReadonlyArray<File>) => Promise<UploadResult>;
-  /** The setup flow's entry point for a template. */
-  onTemplate: (templateId: string) => void;
+  /** The setup flow's entry point for a template. A rejection shows in the drop zone. */
+  onTemplate: (templateId: string) => Promise<UploadResult>;
   /** Navigates to the new draft's setup screen. */
   onStarted: (draftId: string) => void;
-  signInHref: string;
+  /** The header's sign-in control, e.g. Clerk's SignInButton wrapping an element with class "lp-signin". */
+  signIn: ReactNode;
   /** For stories: the drop zone's starting state. */
   dropZoneState?: DropZoneState;
 }
@@ -40,10 +41,36 @@ export function LandingPage({
   onFiles,
   onTemplate,
   onStarted,
-  signInHref,
+  signIn,
   dropZoneState,
 }: LandingPageProps) {
   const templatesRef = useRef<HTMLElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
+  // A failed template pick reports through the drop zone: remount it in the Problem state.
+  const [templateProblem, setTemplateProblem] = useState<{
+    key: number;
+    state: DropZoneState;
+  } | null>(null);
+  // One template at a time: a second click can't start a second draft or race the first.
+  const [pendingTemplate, setPendingTemplate] = useState<string | undefined>(undefined);
+  const pickTemplate = async (templateId: string) => {
+    if (pendingTemplate !== undefined) return;
+    setPendingTemplate(templateId);
+    const result = await onTemplate(templateId).catch(
+      (): UploadResult => ({ _tag: "Rejected", reason: "upload-failed" }),
+    );
+    setPendingTemplate(undefined);
+    if (result._tag === "Started") {
+      onStarted(result.draftId);
+      return;
+    }
+    setTemplateProblem((current) => ({
+      key: (current?.key ?? 0) + 1,
+      state: { _tag: "Problem", problem: result.reason },
+    }));
+    heroRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  const initialDropState = templateProblem?.state ?? dropZoneState;
   const showTemplates = () => {
     templatesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     templatesRef.current?.focus({ preventScroll: true });
@@ -58,13 +85,11 @@ export function LandingPage({
             Goblins <span className="lp-wordmark-sub">Grader</span>
           </span>
         </a>
-        <a className="lp-signin" href={signInHref}>
-          Sign in
-        </a>
+        {signIn}
       </header>
 
       <main>
-        <section className="lp-hero">
+        <section className="lp-hero" ref={heroRef}>
           <div className="lp-hero-copy">
             <p className="lp-eyebrow">Free for teachers</p>
             <h1 className="lp-title">Grade your next test for you.</h1>
@@ -83,10 +108,11 @@ export function LandingPage({
               </div>
             </div>
             <DropZone
+              key={templateProblem?.key ?? 0}
               onFiles={onFiles}
               onStarted={onStarted}
               onShowTemplates={showTemplates}
-              {...(dropZoneState === undefined ? {} : { initialState: dropZoneState })}
+              {...(initialDropState === undefined ? {} : { initialState: initialDropState })}
             />
           </div>
           <div className="lp-hero-visual">
@@ -109,7 +135,12 @@ export function LandingPage({
           </ol>
         </section>
 
-        <TemplatePicker ref={templatesRef} templates={templates} onPick={onTemplate} />
+        <TemplatePicker
+          ref={templatesRef}
+          templates={templates}
+          onPick={(id) => void pickTemplate(id)}
+          pendingId={pendingTemplate}
+        />
       </main>
 
       <footer className="lp-footer">

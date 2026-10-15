@@ -6,7 +6,7 @@
  */
 
 import { describe, expect, it } from "@effect/vitest";
-import { Attempt, type GradingInput, SubmissionId } from "@goblins/domain";
+import { Attempt } from "@goblins/domain";
 import { Duration, Effect, Fiber, Layer, Option, Ref, TestClock } from "effect";
 import * as CallLog from "../src/CallLog.ts";
 import {
@@ -28,42 +28,18 @@ import {
   Timeout,
 } from "../src/ModelClient.ts";
 import {
+  ANSWER,
   always,
   fakeModel,
   LATENCY,
+  material,
+  fullMarks as reply,
   reply as replyFor,
   runUntilDone,
   type Script,
+  SETUP,
+  sub,
 } from "./fixtures.ts";
-
-/** A deterministic UUID per name, since submission and rubric-line ids are UUIDs. */
-const uuid = (name: string) => {
-  let h = 0;
-  for (const c of name) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-  return `00000000-0000-4000-8000-${h.toString(16).padStart(12, "0")}`;
-};
-const SETUP = uuid("line:setup");
-const ANSWER = uuid("line:answer");
-const sub = (name: string) => SubmissionId.make(uuid(`sub:${name}`));
-const reply = (unsure: string | null = null) => replyFor([SETUP, ANSWER], unsure);
-
-const material = (loadTestRunId?: string): Omit<GradingInput, "lease"> => ({
-  whiteboardUrl: "data:image/png;base64,AA",
-  problem: {
-    label: "1",
-    text: "Solve 2x + 3 = 11",
-    answerKey: "x = 4",
-    diagramDescription: null,
-    gradingNotes: "",
-    pageImageUrls: [],
-  },
-  rubricLines: [
-    { id: SETUP, points: 1, description: "correct setup" },
-    { id: ANSWER, points: 1, description: "x = 4" },
-  ],
-  dependencies: [],
-  loadTestRunId: Option.fromNullable(loadTestRunId),
-});
 
 const setup = (options: { readonly script: Script; readonly concurrency?: number }) =>
   Effect.gen(function* () {
@@ -73,7 +49,11 @@ const setup = (options: { readonly script: Script; readonly concurrency?: number
     const loadTestModel = yield* fakeModel(always(reply()));
     const router: ModelRouter["Type"] = {
       forGrade: (runId) =>
-        CallLog.wrap(Option.isNone(runId) ? model.client : loadTestModel.client, log.service),
+        CallLog.wrap(
+          Option.isNone(runId) ? model.client : loadTestModel.client,
+          log.service,
+          "mock",
+        ),
     };
     const services = Layer.mergeAll(
       Layer.succeed(GradeStore.GradeStore, store.service),
@@ -473,6 +453,58 @@ describe("no lost submissions", () => {
       );
       yield* runUntilDone(queue.drained);
       expect(yield* t.grade("g1")).toMatchObject({ state: "graded" });
+    }),
+  );
+});
+
+describe("placeholderRender (mock answers in the placeholder's format)", () => {
+  const graded = (answer: Grader.MockAnswer) =>
+    Effect.gen(function* () {
+      const t = yield* setup({
+        script: ({ request }) =>
+          Effect.succeed({ ...reply(), text: Grader.placeholderRender(answer, request) }),
+      });
+      yield* t.submit("g1");
+      yield* runUntilDone(t.queue.drained);
+      return yield* t.grade("g1");
+    });
+
+  it.effect("a full-marks mock answer grades every rubric line in full", () =>
+    Effect.gen(function* () {
+      const g = yield* graded({ _tag: "Graded", score: 2, maxScore: 2, feedback: "Correct" });
+      expect(g).toMatchObject({
+        state: "graded",
+        outcome: Option.some({
+          _tag: "Sure",
+          result: {
+            linePoints: [
+              { rubricLineId: SETUP, points: 1 },
+              { rubricLineId: ANSWER, points: 1 },
+            ],
+          },
+        }),
+      });
+    }),
+  );
+
+  it.effect("a half-marks answer fills lines in order, and a flagged one needs the teacher", () =>
+    Effect.gen(function* () {
+      const half = yield* graded({ _tag: "Graded", score: 1, maxScore: 2, feedback: "Setup only" });
+      expect(half).toMatchObject({
+        outcome: Option.some({
+          result: {
+            linePoints: [
+              { rubricLineId: SETUP, points: 1 },
+              { rubricLineId: ANSWER, points: 0 },
+            ],
+          },
+        }),
+      });
+      const flagged = yield* graded({ _tag: "NeedsTeacher", reason: "Illegible" });
+      expect(flagged).toMatchObject({
+        state: "needs_teacher",
+        outcome: Option.some({ _tag: "Unsure", flagReason: "Illegible" }),
+      });
     }),
   );
 });

@@ -1,0 +1,139 @@
+.gb-grid-scroll {
+  max-width: 100%;
+  overflow: auto;
+  border-radius: var(--gb-radius-xl);
+  background: var(--gb-color-surface);
+  box-shadow: var(--gb-shadow-md);
+}
+
+.gb-grid {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--gb-text-sm);
+}
+
+.gb-grid th,
+.gb-grid td {
+  padding: var(--gb-space-2);
+  border-bottom: 1px solid var(--gb-color-border);
+  background: var(--gb-color-surface);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Header row and student column stay put while the grid scrolls. */
+.gb-grid thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--gb-paper-50);
+  color: var(--gb-color-text-muted);
+  font-weight: var(--gb-weight-bold);
+}
+
+.gb-grid tfoot > tr > * {
+  border-bottom: 0;
+  background: var(--gb-paper-50);
+}
+
+.gb-grid tbody tr:hover > * {
+  background: var(--gb-color-surface-tint);
+}
+
+.gb-grid .gb-grid-student,
+.gb-grid .gb-grid-corner {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  min-width: 180px;
+  padding-left: var(--gb-space-4);
+  text-align: left;
+}
+
+.gb-grid thead .gb-grid-corner {
+  z-index: 2;
+}
+
+.gb-grid-who {
+  display: flex;
+  align-items: center;
+  gap: var(--gb-space-2);
+  color: var(--gb-color-text);
+  font-weight: var(--gb-weight-bold);
+}
+
+.gb-grid .gb-grid-cell {
+  padding: 4px;
+}
+
+.gb-grid .gb-grid-total,
+.gb-grid .gb-grid-total-head {
+  padding-right: var(--gb-space-4);
+  color: var(--gb-color-text-brand);
+  font-weight: var(--gb-weight-heavy);
+  font-variant-numeric: tabular-nums;
+}
+
+.gb-grid .gb-grid-average {
+  color: var(--gb-color-text-muted);
+  font-weight: var(--gb-weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+.gb-grid .gb-grid-average-head {
+  color: var(--gb-color-text-muted);
+  font-weight: var(--gb-weight-bold);
+}
+
+.gb-grid-problem {
+  min-width: 56px;
+}
+
+.gb-grid-open {
+  display: inline-grid;
+  place-items: center;
+  padding: 2px;
+  border: 0;
+  border-radius: var(--gb-radius-full);
+  background: transparent;
+  cursor: pointer;
+  transition: transform var(--gb-duration-fast) var(--gb-ease-out);
+}
+
+.gb-grid-open:hover {
+  transform: scale(1.08);
+}
+
+.gb-grid-open:focus-visible {
+  outline: 2px solid var(--gb-color-focus);
+  outline-offset: 1px;
+}
+
+.gb-grid-mark {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  vertical-align: middle;
+  box-shadow: inset 0 0 0 2px var(--gb-color-border);
+}
+
+.gb-grid-mark[data-tone="pending"] {
+  box-shadow: inset 0 0 0 2px var(--gb-green-500);
+}
+
+.gb-grid-mark[data-tone="done"] {
+  background: var(--gb-green-500);
+  box-shadow: none;
+}
+
+/* Hidden mode: avatars are unique per class, so they'd identify students on a projector. */
+.gb-grid-anon {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gb-color-surface-sunken);
+}

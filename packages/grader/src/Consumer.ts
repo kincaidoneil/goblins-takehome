@@ -7,7 +7,18 @@
  * acknowledge and retry calls.
  */
 import { GradeJob, type Lease } from "@goblins/domain";
-import { Clock, Context, Duration, Effect, Layer, Option, Random, Schedule, Schema } from "effect";
+import {
+  Clock,
+  Config,
+  Context,
+  Duration,
+  Effect,
+  Layer,
+  Option,
+  Random,
+  Schedule,
+  Schema,
+} from "effect";
 import * as CallLog from "./CallLog.ts";
 import { Grader } from "./Grader.ts";
 import { GradeStore, type StoreUnavailable } from "./GradeStore.ts";
@@ -224,6 +235,12 @@ export class LoadTestModelClient extends Context.Tag("@goblins/grader/LoadTestMo
   ModelClient["Type"]
 >() {}
 
+/** Mirrors OpenRouter.layer's flag, to label logged calls with the provider that answered. */
+const ModelClientChoice = Config.literal(
+  "mock",
+  "openrouter",
+)("MODEL_CLIENT").pipe(Config.withDefault("mock"));
+
 /** Routes load-test grades to the mock and logs every call, real or mock. */
 export const ModelRouterLive = Layer.effect(
   ModelRouter,
@@ -231,8 +248,9 @@ export const ModelRouterLive = Layer.effect(
     const configured = yield* ModelClient;
     const loadTest = yield* LoadTestModelClient;
     const log = yield* CallLog.CallLog;
-    const configuredLogged = CallLog.wrap(configured, log);
-    const loadTestLogged = CallLog.wrap(loadTest, log);
+    const provider = (yield* ModelClientChoice) === "openrouter" ? "openrouter" : "mock";
+    const configuredLogged = CallLog.wrap(configured, log, provider);
+    const loadTestLogged = CallLog.wrap(loadTest, log, "mock");
     return {
       forGrade: (loadTestRunId) =>
         Option.isNone(loadTestRunId) ? configuredLogged : loadTestLogged,

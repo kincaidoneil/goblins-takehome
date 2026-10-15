@@ -17,9 +17,13 @@ const meta = {
   args: {
     templates: TEMPLATE_SUMMARIES,
     onFiles: stubUpload({ _tag: "Started", draftId: "draft_123" }),
-    onTemplate: () => {},
+    onTemplate: stubUpload({ _tag: "Started", draftId: "draft_template" }, 600),
     onStarted: () => {},
-    signInHref: "#sign-in",
+    signIn: (
+      <a className="lp-signin" href="#sign-in">
+        Sign in
+      </a>
+    ),
   },
 } satisfies Meta<typeof LandingPage>;
 
@@ -32,6 +36,12 @@ export const Uploading: Story = {
 };
 export const UnsupportedFile: Story = {
   args: { dropZoneState: { _tag: "Problem", problem: "unsupported" } },
+};
+export const SetupNotOpen: Story = {
+  args: {
+    onFiles: stubUpload({ _tag: "Rejected", reason: "unavailable" }),
+    onTemplate: stubUpload({ _tag: "Rejected", reason: "unavailable" }, 300),
+  },
 };
 export const UnreadablePhoto: Story = {
   args: {

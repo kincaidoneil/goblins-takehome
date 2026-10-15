@@ -2,6 +2,7 @@
  * The call log: one row per model call with latency, status, tokens and cost.
  * It feeds the usage report, cost-per-grade numbers and the mock model's replay.
  */
+import { Db, schema } from "@goblins/domain";
 import { Cause, Clock, Context, Effect, Exit, Layer, Option, Ref } from "effect";
 import {
   type BudgetExceeded,
@@ -25,10 +26,16 @@ export interface CallCost {
   readonly promptTokens: number;
   readonly completionTokens: number;
   readonly costUsd: number;
+  /** Of `completionTokens`, how many were reasoning, when the provider reports it. */
+  readonly reasoningTokens?: number;
 }
+
+/** Which client answered: the real provider or the mock. */
+export type Provider = "openrouter" | "mock";
 
 export interface CallLogEntry {
   readonly startedAt: Date;
+  readonly provider: Provider;
   readonly purpose: CallPurpose;
   readonly modelRequested: string;
   /** The model that answered; absent when the call failed before an answer. */
@@ -96,7 +103,13 @@ const failureFields = (
   }
 };
 
-const baseFields = (request: CompletionRequest, startedMs: number, endedMs: number) => ({
+const baseFields = (
+  provider: Provider,
+  request: CompletionRequest,
+  startedMs: number,
+  endedMs: number,
+) => ({
+  provider,
   startedAt: new Date(startedMs),
   purpose: request.tag.purpose,
   modelRequested: request.model,
@@ -111,7 +124,11 @@ const baseFields = (request: CompletionRequest, startedMs: number, endedMs: numb
  * caller abandons. Latency is measured here, not reported by the client, so the
  * mock and the real client are measured the same way.
  */
-export const wrap = (inner: ModelClient["Type"], log: CallLog["Type"]): ModelClient["Type"] => ({
+export const wrap = (
+  inner: ModelClient["Type"],
+  log: CallLog["Type"],
+  provider: Provider,
+): ModelClient["Type"] => ({
   complete: (request) =>
     // Only the provider call is interruptible. Once it settles, or is interrupted,
     // the row is written before the interruption can propagate.
@@ -119,7 +136,7 @@ export const wrap = (inner: ModelClient["Type"], log: CallLog["Type"]): ModelCli
       Effect.gen(function* () {
         const startedMs = yield* Clock.currentTimeMillis;
         const exit = yield* Effect.exit(restore(inner.complete(request)));
-        const base = baseFields(request, startedMs, yield* Clock.currentTimeMillis);
+        const base = baseFields(provider, request, startedMs, yield* Clock.currentTimeMillis);
         const entry = Exit.match(exit, {
           onSuccess: (completion): Option.Option<CallLogEntry> =>
             Option.some({
@@ -160,10 +177,59 @@ export const wrap = (inner: ModelClient["Type"], log: CallLog["Type"]): ModelCli
 });
 
 /** Replaces the provided ModelClient with one that logs every call. */
-export const withCallLog = Layer.effect(
-  ModelClient,
+export const withCallLog = (provider: Provider) =>
+  Layer.effect(
+    ModelClient,
+    Effect.gen(function* () {
+      return wrap(yield* ModelClient, yield* CallLog, provider);
+    }),
+  );
+
+/**
+ * Writes rows to the domain's `model_calls` table. A failed or stalled (over 5 s)
+ * insert is logged and dropped: losing a log row must never fail or hold a grade.
+ */
+export const postgres = Layer.effect(
+  CallLog,
   Effect.gen(function* () {
-    return wrap(yield* ModelClient, yield* CallLog);
+    const db = yield* Db;
+    return {
+      record: (entry) =>
+        db
+          .insert(schema.modelCalls)
+          .values({
+            purpose: entry.purpose,
+            provider: entry.provider,
+            model: entry.modelRequested,
+            modelAnswered: entry.model ?? null,
+            status: entry.status,
+            statusCode: entry.statusCode ?? null,
+            providerId: entry.providerId ?? null,
+            latencyMs: Math.round(entry.latencyMs),
+            inputTokens: entry.cost?.promptTokens ?? null,
+            outputTokens: entry.cost?.completionTokens ?? null,
+            reasoningTokens: entry.cost?.reasoningTokens ?? null,
+            costUsd: entry.cost?.costUsd ?? null,
+            // Grade calls carry the submission id; other calls keep their subject as text.
+            submissionId: entry.purpose === "grade" ? (entry.subjectId ?? null) : null,
+            subjectId: entry.purpose === "grade" ? null : (entry.subjectId ?? null),
+            attempt: entry.attempt ?? null,
+            errorMessage: entry.error ?? null,
+            loadTestRunId: entry.loadTestRunId ?? null,
+            createdAt: entry.startedAt,
+          })
+          .pipe(
+            Effect.asVoid,
+            // `wrap` records inside an uninterruptible region, so bound the insert here: a
+            // stalled database drops the row instead of holding the grade.
+            Effect.interruptible,
+            Effect.timeoutFail({
+              duration: "5 seconds",
+              onTimeout: () => "call log insert timed out after 5 s",
+            }),
+            Effect.catchAll((error) => Effect.logWarning("call log insert failed", error)),
+          ),
+    };
   }),
 );
 
