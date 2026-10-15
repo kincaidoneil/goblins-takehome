@@ -28,6 +28,7 @@ pnpm monorepo. Each workstream owns one package and does not edit another stream
 
 - Each task gets its own worktree, branch and small PR against `main`. Merging to `main` deploys to production.
 - Before opening a PR, review your own diff. Then wait for CI and the Codex review, address every comment (fix it, or reply with a reason), rebase on `main`, and merge when green. You own your PR until it merges.
+- Never use GitHub auto-merge (`gh pr merge --auto`): without branch protection it merges red PRs. Merge only after "Lint, typecheck, test" and "E2E" pass on the exact commit you pushed, with `gh pr merge --squash --match-head-commit <sha>`.
 - Merge on green CI; don't wait for the Codex review. Fix any P1 or P2 Codex finding that arrives later in a follow-up PR.
 - Rebase conflicts: `docs/decisions.md` merges by keeping both sides (`.gitattributes`), so check only that rows stay in date order. Resolve `docs/board.md` by hand: it holds current state. For `pnpm-lock.yaml`, run `git checkout origin/main -- pnpm-lock.yaml && pnpm install`, then commit the result. Never hand-edit the lockfile.
 - Done means evidence: CI and E2E passing, screenshots for UI, a preview URL. Say what you did not verify.
