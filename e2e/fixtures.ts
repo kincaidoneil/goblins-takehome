@@ -15,11 +15,8 @@ const laptop = devices["Desktop Chrome"];
 const phone = devices["Pixel 7"];
 
 export const test = base.extend<{ classroom: Classroom }>({
-  classroom: async ({ browser, baseURL, extraHTTPHeaders }, use) => {
-    const shared: BrowserContextOptions = {
-      ...(baseURL === undefined ? {} : { baseURL }),
-      ...(extraHTTPHeaders === undefined ? {} : { extraHTTPHeaders }),
-    };
+  classroom: async ({ browser, baseURL }, use) => {
+    const shared: BrowserContextOptions = baseURL === undefined ? {} : { baseURL };
     const teacherContext = await browser.newContext({ ...laptop, ...shared });
     const projectorContext = await browser.newContext({ ...laptop, ...shared });
     const contexts = [teacherContext, projectorContext];
