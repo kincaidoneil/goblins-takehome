@@ -58,7 +58,7 @@ export function LaunchDialog({
   const start = async () => {
     // Open the projector window inside the click, before any await, so it isn't blocked as a
     // popup; point it at the session once it exists.
-    const projector = window.open("about:blank", "goblins-projector");
+    const projector = window.open("about:blank", "goblins-projector", "popup");
     setState({ _tag: "Launching" });
     const result = await launch({ data: { draftId, timeLimitMinutes } });
     if (result._tag === "Ok") {
