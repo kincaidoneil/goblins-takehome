@@ -11,6 +11,8 @@ Put keys in `.env.local` at the root of the main checkout (`~/goblins-takehome/.
 - Vercel: project linked to GitHub; Neon (`goblins-db`, logical replication on) and Blob provisioned.
 - Clerk and OpenRouter keys in `.env.local`, copied to Vercel and GitHub secrets.
 - Repo stays private until submission; agents check CI by convention.
+- QStash: the shared `iad1` resource is connected to goblins-takehome; `QSTASH_*` are set on Vercel by the integration (free plan).
+- `CRON_SECRET` is set on Vercel for every environment. The every-minute sweeper cron needs it: without it, `/api/grading/sweep` answers 401 and stuck grades are never resent.
 
 ## Neon API key (optional)
 
