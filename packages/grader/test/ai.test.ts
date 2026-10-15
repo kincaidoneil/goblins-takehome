@@ -5,6 +5,7 @@ import { applyEdits, parseChatReply, type SetupProblem } from "../src/ai/chat.ts
 import { parseExtractReply } from "../src/ai/extract.ts";
 import { buildGradeMessages, parseGradeReply } from "../src/ai/grade.ts";
 import { grader, toGradeRequest } from "../src/ai/grader.ts";
+import { cleanGroups } from "../src/ai/mistakes.ts";
 import { ModelClient } from "../src/ModelClient.ts";
 
 const rubric = [
@@ -15,6 +16,8 @@ const rubric = [
 const reply = (lines: ReadonlyArray<{ lineId: string; points: number }>, needsTeacher = false) =>
   JSON.stringify({
     read: "x = 7",
+    unclearMarks: "",
+    conflictingAnswers: "",
     lines: lines.map((l) => ({ ...l, evidence: "..." })),
     reason: "Right.",
     needsTeacher,
@@ -45,6 +48,35 @@ describe("parseGradeReply", () => {
       rubric,
     );
     expect(Either.isRight(parsed)).toBe(true);
+  });
+
+  it("flags conflicting answers even when the model says it is sure", () => {
+    const text = JSON.stringify({
+      ...JSON.parse(
+        reply([
+          { lineId: "L1", points: 1 },
+          { lineId: "L2", points: 2 },
+        ]),
+      ),
+      conflictingAnswers: "c = 138 or c = 48",
+    });
+    expect(Either.getOrThrow(parseGradeReply(text, rubric)).verdict).toEqual({
+      _tag: "NeedsTeacher",
+      flagReason: "More than one answer: c = 138 or c = 48",
+    });
+  });
+
+  it("treats a flag reason without the flag as a flag", () => {
+    const text = JSON.stringify({
+      ...JSON.parse(
+        reply([
+          { lineId: "L1", points: 1 },
+          { lineId: "L2", points: 2 },
+        ]),
+      ),
+      flagReason: "Might be a 1.",
+    });
+    expect(Either.getOrThrow(parseGradeReply(text, rubric)).verdict._tag).toBe("NeedsTeacher");
   });
 
   it("turns needsTeacher into a NeedsTeacher verdict with its reason", () => {
@@ -287,8 +319,46 @@ describe("AiGrader.grader", () => {
     ),
   );
 
+  it.effect(
+    "sends a grade that lost points to the teacher when the earlier problem is missing",
+    () =>
+      Effect.gen(function* () {
+        const missing = {
+          ...input,
+          dependencies: [
+            { label: "3a", text: "Cost?", whiteboardUrl: Option.none(), graderRead: Option.none() },
+          ],
+        };
+        const out = yield* grader.grade(missing, { purpose: "grade" });
+        expect(out._tag === "Unsure" && out.flagReason).toContain("before the student answered 3a");
+      }).pipe(
+        Effect.provide(
+          replying(
+            reply([
+              { lineId: "L1", points: 0 },
+              { lineId: "L2", points: 2 },
+            ]),
+          ),
+        ),
+      ),
+  );
+
   it("sends an earlier problem's transcription when there is no earlier whiteboard", () => {
     const request = toGradeRequest(input);
     expect(request.earlierWork[0]?.work).toEqual({ _tag: "Read", read: "$1,500" });
+  });
+});
+
+describe("Mistakes.cleanGroups", () => {
+  it("drops unknown and repeated students and empty groups, largest group first", () => {
+    const groups = [
+      { mistake: "Used 90 instead of 180.", studentIds: ["a", "ghost"] },
+      { mistake: "Subtracted wrong.", studentIds: ["b", "c", "a"] },
+      { mistake: "Nothing.", studentIds: ["ghost"] },
+    ];
+    expect(cleanGroups(groups, new Set(["a", "b", "c"]))).toEqual([
+      { mistake: "Subtracted wrong.", studentIds: ["b", "c"] },
+      { mistake: "Used 90 instead of 180.", studentIds: ["a"] },
+    ]);
   });
 });

@@ -45,9 +45,33 @@ export const grader: Grader["Type"] = {
           linePoints: graded.lines.map((l) => ({ rubricLineId: l.lineId, points: l.points })),
           reason: graded.reason,
         };
-        return graded.verdict._tag === "Sure"
+        const reasons = [
+          ...(graded.verdict._tag === "NeedsTeacher" ? [graded.verdict.flagReason] : []),
+          ...missingFollowThrough(input, result.linePoints),
+        ];
+        return reasons.length === 0
           ? { _tag: "Sure" as const, result }
-          : { _tag: "Unsure" as const, result, flagReason: graded.verdict.flagReason };
+          : { _tag: "Unsure" as const, result, flagReason: reasons.join(" ") };
       }),
     ),
+};
+
+/**
+ * A student can submit a dependent problem before the one it uses. Without that earlier work the
+ * grader can't give follow-through credit, so a grade that lost points goes to the teacher
+ * instead of standing as final.
+ */
+const missingFollowThrough = (
+  input: GradingInput,
+  linePoints: ReadonlyArray<{ readonly points: number }>,
+): ReadonlyArray<string> => {
+  const missing = input.dependencies.filter(
+    (d) => Option.isNone(d.whiteboardUrl) && Option.isNone(d.graderRead),
+  );
+  const max = input.rubricLines.reduce((sum, l) => sum + l.points, 0);
+  const got = linePoints.reduce((sum, l) => sum + l.points, 0);
+  if (missing.length === 0 || got === max) return [];
+  return [
+    `Graded before the student answered ${missing.map((d) => d.label).join(" and ")}, so follow-through credit couldn't be checked.`,
+  ];
 };

@@ -84,13 +84,11 @@ export const gradeSystemPrompt = `You grade one student's handwritten work on on
 
 Work in this order:
 1. read: transcribe what is written on the student's whiteboard image, line by line, exactly as written. Copy only marks you can see on that image, never text from the problem or answer key; if the board is empty or has no real attempt, read is what little is there, or "(no work)". Keep the student's mistakes. Mark crossed-out work as [crossed out]. Describe drawings briefly (labels, marked angles, plotted points). If a character could be read two ways, write both: "2(?)8 (2 or 3)".
-2. lines: for each rubric line, in order, write the evidence (the work that earns or misses it), then award whole points from 0 to that line's maximum.
-3. reason: one sentence for the teacher, under 25 words, saying what was right and what was wrong.
-4. needsTeacher: decide last. Set it true when any of these holds, and false otherwise:
-   - a character you marked as unclear would change the points if read the other way;
-   - the student leaves two different final answers and neither is crossed out;
-   - the student did something the rubric and grading notes don't decide, such as an unusual method, form or drawing.
-   A wrong answer, a missing step, or messy but readable writing is not a reason. When true, still give your best-guess points, and say in flagReason what the teacher should check, in under 20 words. When false, flagReason is "".
+2. unclearMarks: look again at every digit, sign, decimal point and symbol in the student's answers. If any is written over another, smudged, or could reasonably be read two ways, and the two readings would score differently, name it and both readings: "final answer: 28 or 38 (tens digit written over)". Otherwise "".
+3. conflictingAnswers: if the student leaves two or more different answers to the same question and none is crossed out ("c = 138 or c = 48", two boxed answers), list them. Answers to different parts or different equations are not conflicting. Otherwise "".
+4. lines: for each rubric line, in order, write the evidence (the work that earns or misses it), then award whole points from 0 to that line's maximum. Score your best reading.
+5. reason: one sentence for the teacher, under 25 words, saying what was right and what was wrong.
+6. needsTeacher: true when the student did something the rubric and grading notes don't decide, such as an unusual method, form or drawing, and false otherwise. Unclear marks and conflicting answers already go to the teacher, so they don't need it. A wrong answer, a missing step, or messy but readable writing is not a reason. When true, say in flagReason what the teacher should check, in under 20 words. When false, flagReason is "".
 
 Rules:
 - The teacher's grading notes are rules. Apply them exactly, even when they are more generous than the rubric lines read on their own ("a correct answer with no work earns both points").
@@ -109,9 +107,19 @@ const promptId = (index: number) => `L${index + 1}`;
 export const replyJsonSchema = (rubric: ReadonlyArray<RubricLine>) => ({
   type: "object",
   additionalProperties: false,
-  required: ["read", "lines", "reason", "needsTeacher", "flagReason"],
+  required: [
+    "read",
+    "unclearMarks",
+    "conflictingAnswers",
+    "lines",
+    "reason",
+    "needsTeacher",
+    "flagReason",
+  ],
   properties: {
     read: { type: "string" },
+    unclearMarks: { type: "string" },
+    conflictingAnswers: { type: "string" },
     lines: {
       type: "array",
       items: {
@@ -134,6 +142,8 @@ export const replyJsonSchema = (rubric: ReadonlyArray<RubricLine>) => ({
 const Reply = Schema.parseJson(
   Schema.Struct({
     read: Schema.String,
+    unclearMarks: Schema.String,
+    conflictingAnswers: Schema.String,
     lines: Schema.Array(
       Schema.Struct({ lineId: Schema.String, evidence: Schema.String, points: Schema.Int }),
     ),
@@ -243,17 +253,29 @@ export const parseGradeReply = (
   if (byId.size !== rubric.length) {
     return Either.left({ _tag: "WrongLines", detail: "scored a line that is not in the rubric" });
   }
-  const flagReason = reply.flagReason.trim();
+  // The flag is decided here from what the model reported, not left to one yes/no from it.
+  const reasons = [
+    ...(reply.unclearMarks.trim() === "" ? [] : [`Hard to read: ${reply.unclearMarks.trim()}`]),
+    ...(reply.conflictingAnswers.trim() === ""
+      ? []
+      : [`More than one answer: ${reply.conflictingAnswers.trim()}`]),
+    // A reason without the flag is still a doubt, and a doubt goes to the teacher.
+    ...(reply.needsTeacher || reply.flagReason.trim() !== ""
+      ? [
+          reply.flagReason.trim() === ""
+            ? "The rubric doesn't decide this work."
+            : reply.flagReason.trim(),
+        ]
+      : []),
+  ];
   return Either.right({
     read: reply.read,
     lines,
     reason: reply.reason,
-    verdict: reply.needsTeacher
-      ? {
-          _tag: "NeedsTeacher",
-          flagReason: flagReason === "" ? "The grader was unsure." : flagReason,
-        }
-      : { _tag: "Sure" },
+    verdict:
+      reasons.length === 0
+        ? { _tag: "Sure" }
+        : { _tag: "NeedsTeacher", flagReason: reasons.join(" ") },
   });
 };
 

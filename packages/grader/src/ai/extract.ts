@@ -115,7 +115,8 @@ const replyJsonSchema = {
   },
 };
 
-const Label = Schema.String.pipe(Schema.pattern(/^[1-9][0-9]?[a-z]?$/));
+/** As printed: "4", "3b", "A2", "IV". Short and without spaces, since it names a whiteboard. */
+const Label = Schema.String.pipe(Schema.pattern(/^\S{1,12}$/));
 
 const Reply = Schema.parseJson(
   Schema.Struct({
