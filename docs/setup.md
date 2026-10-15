@@ -14,7 +14,15 @@ Put keys in `.env.local` at the root of the main checkout (`~/goblins-takehome/.
 
 ## Neon API key (optional)
 
-Only needed if previews don't get their own database branch through the Vercel integration. The Infra and CI stream asks for it if so.
+Only needed if the Infra and CI stream asks for it, for example to manage database branches the Vercel integration can't.
+
+1. In the Vercel dashboard, open Storage, then `goblins-db`, then "Open in Neon".
+2. In the Neon console, go to Organization settings, then API keys, and create a key named `goblins-agents`.
+3. Add it to `.env.local`:
+
+   ```
+   NEON_API_KEY=
+   ```
 
 ## Electric Cloud
 
