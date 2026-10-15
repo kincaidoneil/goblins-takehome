@@ -66,6 +66,15 @@ function JoinPage() {
               : "That's a long name. Try your first name and last initial.",
         });
         return;
+      case "SessionFull":
+        setStep({ ...step, error: "This class is full. Ask your teacher for help." });
+        return;
+      case "RateLimited":
+        setStep({
+          ...step,
+          error: "Too many tries from this network. Wait a minute and try again.",
+        });
+        return;
     }
   };
 

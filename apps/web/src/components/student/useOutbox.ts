@@ -52,6 +52,11 @@ export function useOutbox(owner: Owner, handlers: OutboxHandlers) {
         setItems((current) => current.filter((i) => i.problemId !== head.problemId));
       try {
         const result = await submit({ data: { sessionId, ...head } });
+        if (result._tag === "Err" && result.error._tag === "RateLimited") {
+          // Keep the work and back off, as for a network failure.
+          setFailures((n) => n + 1);
+          return;
+        }
         setFailures(0);
         if (result._tag === "Ok") {
           drop();

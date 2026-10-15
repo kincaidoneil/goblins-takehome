@@ -23,6 +23,7 @@ import { getTemplate } from "@goblins/templates";
 import { randomCreatureId } from "@goblins/ui";
 import { and, asc, eq } from "drizzle-orm";
 import { Effect, Option, Schema } from "effect";
+import { clientIp, joinAllowed, joinMissed, submitAllowed } from "../abuse";
 import { GradeQueue } from "../grading";
 import { type AppServices, run } from "../runtime";
 import { studentCookie, studentFromCookies } from "../student-identity";
@@ -73,8 +74,11 @@ const badSpec = (auth: LoadTestAuth) =>
 // Students
 
 export const joinRoute = async (request: Request) => {
-  const bad = badSpec(loadTestAuth(request));
+  const auth = loadTestAuth(request);
+  const bad = badSpec(auth);
   if (bad !== null) return bad;
+  // Load-test traffic comes from a few machines; only other requests count against limits.
+  const ip = auth._tag === "LoadTest" ? null : clientIp(request.headers);
   const body = await readJson(
     request,
     Schema.Struct({ joinCode: Schema.String, name: Schema.String }),
@@ -82,20 +86,25 @@ export const joinRoute = async (request: Request) => {
   if (Option.isNone(body)) return json(400, { error: "expected {joinCode, name}" });
   return respond(
     Effect.gen(function* () {
+      if (!(yield* joinAllowed(ip))) return json(429, { _tag: "RateLimited" });
       const code = parseJoinCodeInput(body.value.joinCode);
-      if (Option.isNone(code)) return json(404, { _tag: "SessionNotFound" });
+      if (Option.isNone(code)) {
+        yield* joinMissed(ip);
+        return json(404, { _tag: "SessionNotFound" });
+      }
       const joined = yield* joinSession({
         joinCode: code.value,
         name: body.value.name,
         pickAvatar: (taken) => randomCreatureId(taken),
       }).pipe(
-        Effect.map(Option.some),
+        Effect.map((value) => ({ _tag: "Joined", value }) as const),
         Effect.catchTags({
-          SessionNotFound: () => Effect.succeed(Option.none()),
-          InvalidName: () => Effect.succeed(Option.none()),
+          SessionFull: () => Effect.succeed(json(409, { _tag: "SessionFull" })),
+          InvalidName: () => Effect.succeed(json(400, { _tag: "InvalidName" })),
+          SessionNotFound: () => Effect.as(joinMissed(ip), json(404, { _tag: "SessionNotFound" })),
         }),
       );
-      if (Option.isNone(joined)) return json(404, { _tag: "SessionNotFound" });
+      if (joined instanceof Response) return joined;
       const { student, resumed } = joined.value;
       const db = yield* Db;
       const [session] = yield* db
@@ -159,6 +168,12 @@ export const submitRoute = async (request: Request) => {
     Effect.gen(function* () {
       const studentId = yield* studentFromCookies(cookies, sessionId);
       if (Option.isNone(studentId)) return json(409, { reason: "unknown_student" });
+      if (
+        auth._tag !== "LoadTest" &&
+        !(yield* submitAllowed(studentId.value, clientIp(request.headers)))
+      ) {
+        return json(429, { reason: "rate_limited" });
+      }
       const store = yield* WhiteboardStore;
       const hash = createHash("sha256").update(png).digest("hex");
       const cached = auth._tag === "LoadTest" ? storedByHash.get(hash) : undefined;
