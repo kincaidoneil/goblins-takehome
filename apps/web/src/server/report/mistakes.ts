@@ -15,8 +15,12 @@ import { Duration, Effect, Option, Schema } from "effect";
 import { fromModel, ModelGrouping, type ProblemMistakes } from "../../report/mistakes";
 import type { ClassReport, ProblemStats } from "../../report/model";
 
+/** Bump when the grouping call's output changes, so old cache rows are not served. */
+const GROUPING_VERSION = 2;
+
 const inputHash = (stats: ProblemStats): string =>
   createHash("sha256")
+    .update(`v${GROUPING_VERSION}:`)
     .update(
       JSON.stringify(
         stats.misses
@@ -56,9 +60,15 @@ const askModel = (sessionId: string, stats: ProblemStats) =>
       groups: result.mistakes.map((m) => ({ description: m.mistake, studentIds: m.studentIds })),
     });
     return { grouping, model: Models.models.mistakes.model };
-  }).pipe(Effect.timeout(Duration.seconds(45)));
+  }).pipe(Effect.timeout(Duration.seconds(60)));
 
-const groupProblem = (sessionId: string, stats: ProblemStats) =>
+/**
+ * `call`: on a cache miss, ask the model and cache the answer. `cache-only`: return a cached
+ * grouping or nothing, never waiting on the model.
+ */
+type Mode = "call" | "cache-only";
+
+const groupProblem = (sessionId: string, stats: ProblemStats, mode: Mode) =>
   Effect.gen(function* () {
     const db = yield* Db;
     const hash = inputHash(stats);
@@ -74,7 +84,8 @@ const groupProblem = (sessionId: string, stats: ProblemStats) =>
       })
       .from(schema.reportMistakeGroups)
       .where(key);
-    if (cached !== undefined) return fromModel(stats, yield* decodeGrouping(cached));
+    if (cached !== undefined) return Option.some(fromModel(stats, yield* decodeGrouping(cached)));
+    if (mode === "cache-only") return Option.none<ProblemMistakes>();
 
     const { grouping, model } = yield* askModel(sessionId, stats);
     yield* db
@@ -88,9 +99,8 @@ const groupProblem = (sessionId: string, stats: ProblemStats) =>
         model,
       })
       .onConflictDoNothing();
-    return fromModel(stats, grouping);
+    return Option.some(fromModel(stats, grouping));
   }).pipe(
-    Effect.map(Option.some),
     Effect.catchAll((error) =>
       Effect.logWarning("report: mistake grouping failed; using the rubric fallback", error).pipe(
         Effect.as(Option.none<ProblemMistakes>()),
@@ -98,8 +108,8 @@ const groupProblem = (sessionId: string, stats: ProblemStats) =>
     ),
   );
 
-/** Groupings for the report's weak problems. Problems whose grouping failed are left out. */
-export const mistakesFor = (sessionId: string, report: ClassReport) =>
-  Effect.forEach(report.weak, (stats) => groupProblem(sessionId, stats), {
+/** Groupings for the report's weak problems. Problems without one are left out. */
+export const mistakesFor = (sessionId: string, report: ClassReport, mode: Mode) =>
+  Effect.forEach(report.weak, (stats) => groupProblem(sessionId, stats, mode), {
     concurrency: "unbounded",
   }).pipe(Effect.map((results) => results.flatMap(Option.toArray)));
