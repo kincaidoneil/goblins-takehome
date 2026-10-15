@@ -14,6 +14,7 @@ import {
   testingDay,
 } from "@goblins/simulator";
 import { Cause, Effect, Exit, Fiber, Logger, LogLevel } from "effect";
+import type { Pricing } from "./budget.ts";
 import { type RampPlan, type ScenarioName, scenarios, stepClasses } from "./plan.ts";
 import { runLoadTest } from "./run.ts";
 import { cleanup } from "./server.ts";
@@ -38,6 +39,8 @@ Options:
   --run-id <id>             default lt-<UTC timestamp>
   --out <dir>               default packages/loadtest/reports
   --keep-data               do not delete the run's data afterward
+  --pricing <qstash|none>   queue billing; default qstash, or none for the local stand-in
+  --max-usd <n>             stop before the ledger passes this (default and ceiling: 25)
 Environment: LOAD_TEST_TOKEN (required), GOBLINS_URL`;
 
 const { values, positionals } = parseArgs({
@@ -56,6 +59,8 @@ const { values, positionals } = parseArgs({
     "run-id": { type: "string" },
     out: { type: "string", default: new URL("../reports", import.meta.url).pathname },
     "keep-data": { type: "boolean", default: false },
+    pricing: { type: "string" },
+    "max-usd": { type: "string", default: "25" },
     help: { type: "boolean", default: false },
   },
 });
@@ -121,6 +126,17 @@ if (command === "cleanup") {
   const templateId = values.template;
   const perStudent = submissionsPerStudent(templateId) ?? fail(`unknown template "${templateId}"`);
 
+  // The stand-in's queue is in memory; anything else is assumed to be QStash and charged.
+  const isStandIn = /^http:\/\/(localhost|127\.0\.0\.1):3190$/.test(baseUrl);
+  const pricing: Pricing =
+    values.pricing === undefined
+      ? isStandIn
+        ? "none"
+        : "qstash"
+      : values.pricing === "qstash" || values.pricing === "none"
+        ? values.pricing
+        : fail("--pricing must be qstash or none");
+
   const ramp: RampPlan = {
     studentsPerClass: positive("students-per-class", values["students-per-class"]),
     startClasses: positive("start-classes", values["start-classes"]),
@@ -144,6 +160,9 @@ if (command === "cleanup") {
     queue: values.queue,
     outDir: values.out,
     keepData: values["keep-data"],
+    pricing,
+    maxUsd: positive("max-usd", values["max-usd"]),
+    ledgerPath: new URL("../reports/ledger.json", import.meta.url).pathname,
   }).pipe(
     Effect.tap(({ dir, summary }) =>
       Effect.logInfo(

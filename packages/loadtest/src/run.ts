@@ -17,6 +17,16 @@ import {
 } from "@goblins/simulator";
 import { Duration, Effect, Fiber, Schedule } from "effect";
 import { analyzeStep } from "./analyze.ts";
+import {
+  appendLedger,
+  BUDGET_USD,
+  estimateMessages,
+  formatUsd,
+  type Pricing,
+  readLedger,
+  spentUsd,
+  usd,
+} from "./budget.ts";
 import { attribute, evaluate, verdictOf } from "./criteria.ts";
 import { conditionsFor, describeMock, mockSpecFor, type ScenarioName } from "./plan.ts";
 import { type RunHeader, type StepReport, summarize, writeReport } from "./report.ts";
@@ -38,6 +48,10 @@ export interface RunOptions {
   readonly queue: string;
   readonly outDir: string;
   readonly keepData: boolean;
+  readonly pricing: Pricing;
+  /** Stop before the ledger's total would pass this. Never above BUDGET_USD. */
+  readonly maxUsd: number;
+  readonly ledgerPath: string;
 }
 
 const commit = () => {
@@ -73,6 +87,21 @@ export const runLoadTest = (options: RunOptions) =>
     let stoppedBecause = "every planned step ran";
     let firstTeacher = 0;
 
+    const cap = Math.min(options.maxUsd, BUDGET_USD);
+    const stepEstimate = (classes: number) =>
+      estimateMessages(
+        options.scenario,
+        classes * options.studentsPerClass * options.submissionsPerStudent,
+      );
+    const runMessages = options.classesPerStep.reduce((sum, c) => sum + stepEstimate(c), 0);
+    const spentBefore = spentUsd(readLedger(options.ledgerPath));
+    yield* Effect.logInfo(
+      `projected queue cost if every step runs: ~${runMessages.toLocaleString("en-US")} QStash messages, ${formatUsd(usd(runMessages))}` +
+        (options.pricing === "qstash"
+          ? ` (ledger: ${formatUsd(spentBefore)} spent of the ${formatUsd(cap)} cap)`
+          : " (not charged: this target's queue is not metered)"),
+    );
+
     for (const [index, classes] of options.classesPerStep.entries()) {
       const step = index + 1;
       const runId = `${options.runId}-s${step}`;
@@ -97,6 +126,17 @@ export const runLoadTest = (options: RunOptions) =>
       };
       firstTeacher += classes;
       const students = classes * options.studentsPerClass;
+      if (options.pricing === "qstash") {
+        const spent = spentUsd(readLedger(options.ledgerPath));
+        const next = usd(stepEstimate(classes));
+        if (spent + next > cap) {
+          stoppedBecause = `step ${step} would cost about ${formatUsd(next)} and take the ledger from ${formatUsd(spent)} past the ${formatUsd(cap)} cap`;
+          break;
+        }
+        yield* Effect.logInfo(
+          `step ${step}: about ${formatUsd(next)} of QStash messages; ledger ${formatUsd(spent)} of ${formatUsd(cap)}`,
+        );
+      }
       yield* Effect.logInfo(
         `step ${step}: ${classes} classes, ${students} students, about ${Math.round(plannedDurationMs(simulation) / 60_000)} min of submissions plus drain`,
       );
@@ -150,6 +190,20 @@ export const runLoadTest = (options: RunOptions) =>
       }).pipe(Effect.provide(recorderLayer({ ndjsonPath: join(dir, `${runId}.ndjson`) })));
 
       steps.push(report);
+      if (options.pricing === "qstash") {
+        const messages = estimateMessages(options.scenario, report.metrics.load.submissionsAcked);
+        appendLedger(options.ledgerPath, {
+          runId,
+          step,
+          date: new Date().toISOString(),
+          target: options.baseUrl,
+          scenario: options.scenario,
+          students,
+          submissions: report.metrics.load.submissionsAcked,
+          estimatedMessages: messages,
+          estimatedUsd: Number(usd(messages).toFixed(4)),
+        });
+      }
       writeReport(dir, header, steps, summarize(steps, "the run is still in progress"));
       yield* Effect.logInfo(
         `step ${step}: ${report.verdict._tag}${report.criteria

@@ -1,0 +1,348 @@
+{
+  "header": {
+    "runId": "dryrun-standin-3classes",
+    "startedAt": "2026-10-15T16:03:24.012Z",
+    "target": "http://localhost:3190",
+    "commit": "42ea5c7",
+    "scenario": "normal",
+    "mock": "`seed` profile: guessed, not measured (log-normal latency, median 3.5 s, p95 9 s; 0.5% rate limits, 0.5% provider errors, 0.2% bad responses)",
+    "mockSpecExample": "mode=sampled; profile=seed; start=<step start>",
+    "queue": "STAND-IN, not the app: packages/loadtest stand-in server, in-memory queue (not QStash), grading concurrency 100, local Postgres and Electric in Docker",
+    "template": "angle-relationships",
+    "submissionsPerStudent": 9,
+    "timeScale": 0.05,
+    "generator": "one Node v22.22.0 process on macbookpro.lan (8 CPUs, 16 GB)"
+  },
+  "summary": {
+    "capacityStudents": null,
+    "firstFailures": [
+      {
+        "criterion": "Submit latency p99",
+        "step": 1,
+        "students": 90,
+        "component": "Submit function: slow responses (upload, DB write or cold starts)"
+      }
+    ],
+    "stoppedBecause": "step 1 failed submit-p99"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "runId": "dryrun-standin-3classes-s1",
+      "classes": 3,
+      "students": 90,
+      "metrics": {
+        "window": {
+          "startedAt": 1792080204078,
+          "endedAt": 1792080336489,
+          "minutes": 2.20685
+        },
+        "load": {
+          "plannedStudents": 90,
+          "studentsJoined": 90,
+          "classesFailed": 0,
+          "studentsFailed": 0,
+          "plannedSubmissions": 810,
+          "submissionsAcked": 810,
+          "peakSubmitsPerSecond": 13.2,
+          "meanSubmitsPerSecond": 6.1173165371457054
+        },
+        "submitRequestMs": {
+          "count": 810,
+          "p50": 25,
+          "p95": 4965,
+          "p99": 8276,
+          "max": 9441
+        },
+        "submitAckMs": {
+          "count": 810,
+          "p50": 25,
+          "p95": 4965,
+          "p99": 8276,
+          "max": 9441
+        },
+        "submitRetries": 0,
+        "submitToDashboardMs": {
+          "count": 810,
+          "p50": 5633,
+          "p95": 26420,
+          "p99": 30418,
+          "max": 31849
+        },
+        "breakdown": {
+          "queueWaitMs": {
+            "count": 810,
+            "p50": 19,
+            "p95": 4180,
+            "p99": 6891,
+            "max": 10702
+          },
+          "gradingMs": {
+            "count": 810,
+            "p50": 3970,
+            "p95": 11522,
+            "p99": 14723,
+            "max": 16897
+          },
+          "syncLagMs": {
+            "count": 810,
+            "p50": 360,
+            "p95": 13576,
+            "p99": 18209,
+            "max": 25175
+          },
+          "attemptsOverOne": 0
+        },
+        "grades": {
+          "byState": {
+            "graded": 715,
+            "needs_teacher": 95,
+            "couldnt_grade": 0
+          },
+          "failureRate": 0,
+          "failureReasons": {},
+          "unexpectedStates": 0
+        },
+        "lost": {
+          "count": 0,
+          "byKind": {}
+        },
+        "pipeline": {
+          "peakQueued": 49,
+          "peakInFlight": 101,
+          "series": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              5,
+              0,
+              0
+            ],
+            [
+              10,
+              0,
+              0
+            ],
+            [
+              15,
+              0,
+              11
+            ],
+            [
+              20,
+              1,
+              35
+            ],
+            [
+              25,
+              0,
+              37
+            ],
+            [
+              30,
+              1,
+              31
+            ],
+            [
+              35,
+              0,
+              35
+            ],
+            [
+              40,
+              0,
+              37
+            ],
+            [
+              45,
+              0,
+              43
+            ],
+            [
+              50,
+              1,
+              38
+            ],
+            [
+              55,
+              0,
+              39
+            ],
+            [
+              60,
+              2,
+              43
+            ],
+            [
+              65,
+              1,
+              42
+            ],
+            [
+              70,
+              1,
+              42
+            ],
+            [
+              75,
+              3,
+              41
+            ],
+            [
+              80,
+              38,
+              31
+            ],
+            [
+              85,
+              29,
+              50
+            ],
+            [
+              90,
+              15,
+              74
+            ],
+            [
+              95,
+              4,
+              54
+            ],
+            [
+              100,
+              1,
+              16
+            ],
+            [
+              105,
+              1,
+              19
+            ],
+            [
+              110,
+              0,
+              19
+            ],
+            [
+              115,
+              1,
+              14
+            ],
+            [
+              120,
+              0,
+              13
+            ],
+            [
+              125,
+              2,
+              9
+            ],
+            [
+              130,
+              0,
+              4
+            ]
+          ]
+        },
+        "transitionShare": 0.019753086419753086,
+        "correctness": {
+          "resumes": 2,
+          "resumeFailures": 0,
+          "dashboardStudentMismatches": 0
+        },
+        "errors": {
+          "requests": {
+            "shape: HTTP 502": 1
+          },
+          "shapeErrors": 0,
+          "classFailures": {},
+          "studentFailures": {}
+        },
+        "sync": {
+          "requests": 5332,
+          "requestsPerSecond": 40.26855774822334,
+          "liveRequests": 4946,
+          "byView": {
+            "session": 24,
+            "students": 77,
+            "grades": 1750,
+            "my-session": 751,
+            "my-grades": 2730
+          },
+          "catchUpMs": {
+            "count": 386,
+            "p50": 52,
+            "p95": 1079,
+            "p99": 1400,
+            "max": 1542
+          }
+        },
+        "database": {
+          "samples": 25,
+          "peakConnections": 61,
+          "maxConnections": 200,
+          "peakActive": 35,
+          "peakWaitingOnLock": 0,
+          "peakCommitsPerSecond": 225,
+          "deadlocks": 0
+        },
+        "generator": {
+          "peakEventLoopDelayP99Ms": 193,
+          "peakCpuPercent": 30,
+          "peakOpenRequests": 248,
+          "peakHeapMb": 95,
+          "limited": false
+        }
+      },
+      "criteria": [
+        {
+          "id": "lost",
+          "label": "Lost submissions",
+          "bar": "0",
+          "measured": "0",
+          "pass": true
+        },
+        {
+          "id": "submit-p99",
+          "label": "Submit latency p99",
+          "bar": "< 1 s",
+          "measured": "8.28 s",
+          "pass": false
+        },
+        {
+          "id": "dashboard-p95",
+          "label": "Submit to grade on dashboard p95",
+          "bar": "< 30 s",
+          "measured": "26.42 s",
+          "pass": true
+        },
+        {
+          "id": "failures",
+          "label": "Grades that fail",
+          "bar": "< 0.1%",
+          "measured": "0.00% (0)",
+          "pass": true
+        }
+      ],
+      "verdict": {
+        "_tag": "Fail",
+        "failed": [
+          "submit-p99"
+        ]
+      },
+      "attribution": {
+        "submit-p99": "Submit function: slow responses (upload, DB write or cold starts)"
+      },
+      "cleanup": {
+        "classSessions": 3,
+        "assignments": 3,
+        "teachers": 3,
+        "modelCalls": 0
+      }
+    }
+  ]
+}
