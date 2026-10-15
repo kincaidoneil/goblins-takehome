@@ -70,7 +70,7 @@ importers:
         version: 0.19.0
       nitro:
         specifier: 3.0.260610-beta
-        version: 3.0.260610-beta(@electric-sql/pglite@0.5.10)(@vercel/blob@2.8.2)(@vercel/functions@3.10.1(ws@8.22.0))(chokidar@5.0.0)(drizzle-orm@0.45.4(@electric-sql/pglite@0.5.10)(@types/pg@8.23.1)(pg@8.23.1))(jiti@2.7.0)(lru-cache@11.5.3)(rollup@4.64.7)(vite@8.3.4(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))
+        version: 3.0.260610-beta(@electric-sql/pglite@0.5.10)(@vercel/blob@2.8.2)(@vercel/functions@3.10.1(ws@8.22.0))(chokidar@5.0.0)(dotenv@17.2.2)(drizzle-orm@0.45.4(@electric-sql/pglite@0.5.10)(@types/pg@8.23.1)(pg@8.23.1))(jiti@2.7.0)(lru-cache@11.5.3)(rollup@4.64.7)(vite@8.3.4(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))
       pdfjs-dist:
         specifier: ^6.4.299
         version: 6.4.299
@@ -114,6 +114,12 @@ importers:
 
   e2e:
     devDependencies:
+      '@clerk/backend':
+        specifier: ^3.23.2
+        version: 3.23.2(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@clerk/testing':
+        specifier: 2.2.45
+        version: 2.2.45(@playwright/test@1.64.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@goblins/domain':
         specifier: workspace:*
         version: link:../packages/domain
@@ -638,6 +644,18 @@ packages:
       '@tanstack/react-start': ^1.168.10
       react: ^18.0.0 || ~19.0.3 || ~19.1.4 || ~19.2.3 || ~19.3.0-0
       react-dom: ^18.0.0 || ~19.0.3 || ~19.1.4 || ~19.2.3 || ~19.3.0-0
+
+  '@clerk/testing@2.2.45':
+    resolution: {integrity: sha512-fYig7nFIMNP12yPT1mS6NvEgmheJlWvPDB3fn4DZ0fHULOP90qVWsDtlF94DS9CVfyzrGU5prOrOj2dWzzbPCQ==}
+    engines: {node: '>=20.9.0'}
+    peerDependencies:
+      '@playwright/test': ^1
+      cypress: ^13 || ^14 || ^15
+    peerDependenciesMeta:
+      '@playwright/test':
+        optional: true
+      cypress:
+        optional: true
 
   '@drizzle-team/brocli@0.10.2':
     resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
@@ -2699,6 +2717,10 @@ packages:
   dom-accessibility-api@0.6.3:
     resolution: {integrity: sha512-7ZgogeTnjuHbo+ct10G9Ffp0mif17idi0IyWNVA/wcwcm7NPOD/WEHVP3n7n3MhXqxoIYm8d6MuZohYWIZ4T3w==}
 
+  dotenv@17.2.2:
+    resolution: {integrity: sha512-Sf2LSQP+bOlhKWWyhFsn0UsfdK/kCWRv1iuA2gXAwt3dyNabr6QSj00I2V10pidqz69soatm9ZwZvpQMTIOd5Q==}
+    engines: {node: '>=12'}
+
   drizzle-kit@0.31.11:
     resolution: {integrity: sha512-YCYqxTLIB2OCqf6w9/Vef13baBVbwQIPcbT4Y56AfO6B9ajZhDhD8Jkveg/hJvT/iuMloKD/IYYkyMMNhr7Kqg==}
     hasBin: true
@@ -4277,6 +4299,17 @@ snapshots:
       react-dom: 19.3.0(react@19.3.0)
       tslib: 2.8.1
 
+  '@clerk/testing@2.2.45(@playwright/test@1.64.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
+    dependencies:
+      '@clerk/backend': 3.23.2(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@clerk/shared': 4.40.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      dotenv: 17.2.2
+    optionalDependencies:
+      '@playwright/test': 1.64.1
+    transitivePeerDependencies:
+      - react
+      - react-dom
+
   '@drizzle-team/brocli@0.10.2': {}
 
   '@effect/experimental@0.61.1(@effect/platform@0.97.2(effect@3.22.2))(effect@3.22.2)':
@@ -5829,6 +5862,8 @@ snapshots:
 
   dom-accessibility-api@0.6.3: {}
 
+  dotenv@17.2.2: {}
+
   drizzle-kit@0.31.11:
     dependencies:
       '@drizzle-team/brocli': 0.10.2
@@ -6242,7 +6277,7 @@ snapshots:
 
   nf3@0.3.24: {}
 
-  nitro@3.0.260610-beta(@electric-sql/pglite@0.5.10)(@vercel/blob@2.8.2)(@vercel/functions@3.10.1(ws@8.22.0))(chokidar@5.0.0)(drizzle-orm@0.45.4(@electric-sql/pglite@0.5.10)(@types/pg@8.23.1)(pg@8.23.1))(jiti@2.7.0)(lru-cache@11.5.3)(rollup@4.64.7)(vite@8.3.4(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)):
+  nitro@3.0.260610-beta(@electric-sql/pglite@0.5.10)(@vercel/blob@2.8.2)(@vercel/functions@3.10.1(ws@8.22.0))(chokidar@5.0.0)(dotenv@17.2.2)(drizzle-orm@0.45.4(@electric-sql/pglite@0.5.10)(@types/pg@8.23.1)(pg@8.23.1))(jiti@2.7.0)(lru-cache@11.5.3)(rollup@4.64.7)(vite@8.3.4(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)):
     dependencies:
       consola: 3.4.2
       crossws: 0.4.15(srvx@0.11.22)
@@ -6259,6 +6294,7 @@ snapshots:
       unenv: 2.0.0-rc.24
       unstorage: 2.0.0-alpha.7(@vercel/blob@2.8.2)(@vercel/functions@3.10.1(ws@8.22.0))(chokidar@5.0.0)(db0@0.3.4(@electric-sql/pglite@0.5.10)(drizzle-orm@0.45.4(@electric-sql/pglite@0.5.10)(@types/pg@8.23.1)(pg@8.23.1)))(lru-cache@11.5.3)(ofetch@2.0.0-alpha.3)
     optionalDependencies:
+      dotenv: 17.2.2
       jiti: 2.7.0
       rollup: 4.64.7
       vite: 8.3.4(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)
