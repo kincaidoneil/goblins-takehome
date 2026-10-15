@@ -69,14 +69,17 @@ export function Whiteboard({
   const page = pageSize(doc.shape);
 
   // A blank board on a narrow screen becomes a portrait page, so a phone gets room to write.
+  // Re-checked whenever the board is blank again, e.g. after Clear.
+  const blank = doc.strokes.length === 0;
   useEffect(() => {
+    if (!blank) return;
     const narrow = window.matchMedia("(max-width: 600px)");
     const pick = () =>
       dispatch({ _tag: "SetShape", shape: narrow.matches ? "portrait" : "landscape" });
     pick();
     narrow.addEventListener("change", pick);
     return () => narrow.removeEventListener("change", pick);
-  }, []);
+  }, [blank]);
 
   const redraw = useCallback(() => {
     const ctx = ctxRef.current;

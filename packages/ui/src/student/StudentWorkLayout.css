@@ -1,7 +1,8 @@
 .gb-work {
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: minmax(260px, 2fr) minmax(0, 3fr);
+  /* The problem column is as wide as its content needs (a one-line problem stays narrow); the board takes the rest. */
+  grid-template-columns: fit-content(440px) minmax(0, 1fr);
   grid-template-areas:
     "progress progress"
     "problem board";
@@ -30,6 +31,8 @@
   flex-direction: column;
   gap: var(--gb-space-5);
   min-width: 0;
+  /* Wide but never taller than the window: the board is 4:3, below the strip and above Submit. */
+  max-width: calc((100dvh - 300px) * 4 / 3);
 }
 
 @media (max-width: 860px) {
@@ -45,5 +48,19 @@
 
   .gb-work-problem {
     position: static;
+  }
+
+  .gb-work-board {
+    max-width: none;
+  }
+
+  /* The board is tall on a phone; Submit stays in reach at the bottom of the screen. */
+  .gb-work-submit {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    margin: 0 calc(-1 * var(--gb-space-4)) calc(-1 * var(--gb-space-6));
+    padding: var(--gb-space-4) var(--gb-space-4) var(--gb-space-3);
+    background: linear-gradient(to bottom, rgb(244 245 240 / 0), var(--gb-color-bg) 35%);
   }
 }

@@ -13,6 +13,7 @@
 @import "./components/Toast.css";
 @import "./components/Tooltip.css";
 @import "./whiteboard/Whiteboard.css";
+@import "./student/ProblemPanel.css";
 @import "./student/StudentWorkLayout.css";
 @import "./student/SubmitButton.css";
 @import "./student/SubmitTransition.css";

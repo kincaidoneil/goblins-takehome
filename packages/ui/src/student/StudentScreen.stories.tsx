@@ -5,12 +5,18 @@ import { Button } from "../components/Button";
 import type { GradeStatus } from "../components/grade";
 import { ProgressStrip, type StripProblem } from "../components/ProgressStrip";
 import { EMPTY_DOC, type WhiteboardDoc } from "../whiteboard/doc";
-import { SOLVED_EQUATION } from "../whiteboard/fixtures";
+import { SOLVED_EQUATION, SOLVED_EQUATION_PORTRAIT } from "../whiteboard/fixtures";
 import { isDocEmpty } from "../whiteboard/render";
 import { Whiteboard } from "../whiteboard/Whiteboard";
+import { ProblemPanel } from "./ProblemPanel";
 import { StudentWorkLayout } from "./StudentWorkLayout";
 import { SubmitButton, type SubmitState } from "./SubmitButton";
 import { SubmitTransition } from "./SubmitTransition";
+
+/** A right triangle with labeled sides, standing in for a cropped worksheet region. */
+const TRIANGLE = `data:image/svg+xml,${encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260"><rect width="400" height="260" fill="#fff"/><path d="M60 220 H340 L60 40 Z" fill="none" stroke="#1e2b24" stroke-width="3" stroke-linejoin="round"/><path d="M60 200 h20 v20" fill="none" stroke="#1e2b24" stroke-width="2"/><g font-family="Helvetica, Arial" font-size="22" fill="#1e2b24"><text x="190" y="248">8 cm</text><text x="18" y="136">6 cm</text><text x="210" y="120">x</text><text x="44" y="34">A</text><text x="40" y="244">B</text><text x="346" y="244">C</text></g></svg>`,
+)}`;
 
 const PROBLEMS = [
   { id: "p1", label: "1", text: "Solve 3(x − 4) = 12x." },
@@ -19,31 +25,31 @@ const PROBLEMS = [
   {
     id: "p4",
     label: "4",
-    text: "Noah says x = 7 solves 4x − 6 = 2x + 8. Is he right? Show how you know.",
+    text: "Triangle ABC has a right angle at B. Find the length of side x.",
+    figure: {
+      src: TRIANGLE,
+      alt: "Right triangle ABC with the right angle at B, AB = 6 cm, BC = 8 cm, hypotenuse AC labeled x.",
+    },
   },
   { id: "p5", label: "5", text: "Solve 12(5 + 2y) = 4y − (6 − 9y)." },
 ] as const;
 
-/** The app's problem panel, mocked for the story. */
-function ProblemPanel({ index }: { index: number }) {
+/** The app's problem panel, built from the problem data. */
+function Problem({ index }: { index: number }) {
   const problem = PROBLEMS[index] ?? PROBLEMS[0];
   return (
-    <div className="story-problem">
-      <div className="story-problem-head">
-        <span>
-          Problem {problem.label} of {PROBLEMS.length}
-        </span>
-        <span>2 points</span>
-      </div>
-      <p>{problem.text}</p>
-    </div>
+    <ProblemPanel
+      label={problem.label}
+      total={PROBLEMS.length}
+      points={2}
+      {...("figure" in problem ? { figure: problem.figure } : {})}
+    >
+      {problem.text}
+    </ProblemPanel>
   );
 }
 
 const style = `
-.story-problem { padding: 24px; border-radius: 22px; background: #fff; box-shadow: var(--gb-shadow-md); }
-.story-problem-head { display: flex; justify-content: space-between; color: var(--gb-color-text-muted); font-size: 14px; font-weight: 700; }
-.story-problem p { margin: 12px 0 0; font-size: 22px; font-weight: 600; line-height: 1.35; color: var(--gb-color-text); }
 .story-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; color: var(--gb-color-text-brand); font-weight: 800; }
 `;
 
@@ -132,7 +138,7 @@ function StudentScreen({ start, gradeAfterMs }: ScreenProps) {
             />
           </>
         }
-        problem={<ProblemPanel index={index} />}
+        problem={<Problem index={index} />}
         board={
           <Whiteboard
             key={boardKey}
@@ -189,6 +195,18 @@ export const Submitting: Story = {
 
 export const QueuedOffline: Story = {
   args: { start: { index: 2, doc: SOLVED_EQUATION, phase: { _tag: "Working" }, offline: true } },
+};
+
+/** A geometry problem: its diagram sits under the text, so the student doesn't need "See worksheet". */
+export const WithDiagram: Story = {
+  args: { start: { index: 3, doc: EMPTY_DOC, phase: { _tag: "Working" }, offline: false } },
+};
+
+/** On a phone the page is portrait (3:4), so there is room to write. */
+export const PhonePortrait: Story = {
+  args: {
+    start: { index: 2, doc: SOLVED_EQUATION_PORTRAIT, phase: { _tag: "Working" }, offline: false },
+  },
 };
 
 /** The grade arrives after the transition, so it fills in on the strip instead. */
