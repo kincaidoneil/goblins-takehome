@@ -24,16 +24,18 @@ export interface WorksheetPage {
  */
 export function Workspace({
   sessionId,
+  studentId,
   problem,
   pages,
   onSubmit,
 }: {
   sessionId: string;
+  studentId: string;
   problem: WorkspaceProblem;
   pages: ReadonlyArray<WorksheetPage>;
   onSubmit: (png: string) => void;
 }) {
-  const board = useStrokeHistory(sessionId, problem.id);
+  const board = useStrokeHistory({ sessionId, studentId }, problem.id);
   const [tool, setTool] = useState<Tool>("pen");
   const inked = hasInk(board.strokes);
 
