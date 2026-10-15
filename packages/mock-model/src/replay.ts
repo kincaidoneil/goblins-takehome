@@ -64,3 +64,28 @@ export const makeReplayer = (recording: Recording): Replayer => {
 
   return { lengthMs, callAt, fateAt: (elapsedMs, rng) => fateOfCall(callAt(elapsedMs, rng)) };
 };
+
+/**
+ * Shortens idle stretches in a recording: any gap between consecutive calls
+ * longer than `maxGapMs` becomes `gapMs`. Recordings taken from batch runs
+ * (evals) have long pauses between batches; without this, a short replay would
+ * stretch the nearest call across the whole pause.
+ */
+export const closeIdleGaps = (
+  calls: readonly [LoggedCall, ...Array<LoggedCall>],
+  maxGapMs = 3 * BUCKET_MS,
+  gapMs = BUCKET_MS,
+): readonly [LoggedCall, ...Array<LoggedCall>] => {
+  const [head, ...tail] = [...calls].sort((a, b) => a.startedAt - b.startedAt);
+  const sorted: readonly [LoggedCall, ...Array<LoggedCall>] = [head ?? calls[0], ...tail];
+  let shift = 0;
+  let previous = sorted[0].startedAt;
+  const closed = sorted.map((call) => {
+    const gap = call.startedAt - previous;
+    if (gap > maxGapMs) shift += gap - gapMs;
+    previous = call.startedAt;
+    return { ...call, startedAt: call.startedAt - shift };
+  });
+  const [first, ...rest] = closed;
+  return [first ?? sorted[0], ...rest];
+};

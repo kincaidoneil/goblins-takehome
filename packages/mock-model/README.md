@@ -6,7 +6,7 @@ A mock `ModelClient` (the interface in `@goblins/grader`) for development, E2E t
 
 Two calls, one where the request arrives and one where grading runs:
 
-1. `authorizeLoadTest({ env, loadTestHeader, mockSpecHeader })` in the request handler. The request is load-test traffic only when `x-goblins-load-test` is `<LOAD_TEST_TOKEN>:<runId>`. A missing or wrong token, or an unset `LOAD_TEST_TOKEN`, returns `undefined` and the request takes the normal path. With a valid token, `x-goblins-mock-model` picks the mock spec (default `mode=sampled; profile=seed`). The web app stores the returned `{ runId, spec }` with the submission, never the token.
+1. `authorizeLoadTest({ env, loadTestHeader, mockSpecHeader })` in the request handler. The request is load-test traffic only when `x-goblins-load-test` is `<LOAD_TEST_TOKEN>:<runId>`. A missing or wrong token, or an unset `LOAD_TEST_TOKEN`, returns `undefined` and the request takes the normal path. With a valid token, `x-goblins-mock-model` picks the mock spec (default `mode=sampled; profile=claude-haiku-5.5`). The web app stores the returned `{ runId, spec }` with the submission, never the token.
 2. `selectModel({ env, loadTest })` in the grading consumer returns `Real` or `Mock(config)`:
    - a stored load-test run always gets its mock, even in production;
    - otherwise `MODEL_CLIENT=openrouter` selects the real model, and nothing else spends money;
@@ -16,8 +16,8 @@ Two calls, one where the request arrives and one where grading runs:
 
 ```
 mode=fixed; latency=500
-mode=sampled; profile=seed; scenario=provider-down; at=60; for=300; start=1760000000000
-mode=replay; recording=seed-window; start=1760000000000
+mode=sampled; profile=claude-haiku-5.5; scenario=provider-down; at=60; for=300; start=1760000000000
+mode=replay; recording=claude-haiku-5.5; start=1760000000000
 ```
 
 `latency` is milliseconds. `start` is the run's start in epoch milliseconds; `at` and `for` are seconds after `start` and override a scenario's default window. A load-test header with a scenario or replay must include `start`, or it is rejected: scenarios and replay depend only on time since `start`, so every serverless instance sees an outage at the same moment without sharing state.
@@ -59,14 +59,28 @@ To add a fixture: add the PNG to `fixtures/` (the sources are in `fixtures/white
 
 Completion text for graded and needs-teacher outcomes comes from `renderJson`. Pass `render` to `layer(config, { render })` to match the grader's output schema. It receives the answer and the request, since the grader's format has one entry per rubric line in the request; the app wiring passes the active grader's renderer.
 
-## Seed data: guessed, not measured
+## Profiles and recordings
 
-No real calls have been logged yet. Until they are:
+| Name | Kind | Source |
+|---|---|---|
+| `claude-haiku-5.5` (default) | measured profile and recording | 1,839 real grading calls to `anthropic/claude-haiku-5.5` through OpenRouter, from AI quality's eval run on 2026-10-15 |
+| `seed` | guessed profile | log-normal latency, median 3.5 s and p95 9 s; 0.5% rate limits, 0.5% provider errors, 0.2% bad responses |
+| `seed-window` | synthetic recording | 10 minutes at 5 calls per second from the seed profile, with a 45-second burst of 429s at minute 4 |
 
-- The `seed` profile is a guess: log-normal latency with median 3.5 s and p95 9 s, 0.5% rate limits, 0.5% provider errors, 0.2% bad responses, 1,800 prompt and 250 completion tokens.
-- The `seed-window` recording is synthetic: 10 minutes at 5 calls per second drawn from the seed profile, with a 45-second burst of 429s at minute 4.
+The measured calls have p50 3.9 s, p95 8.0 s, p99 11.4 s and a maximum of 33 s. Limits of that sample:
 
-Load-test reports must say which profile or recording a run used. Once real grading calls are logged, select rows from the domain `model_calls` table, build a profile and a recording with `profileFromCallLog` and `recordingFromCallLog`, and add them to `src/registry.ts`. Only real grading calls count: `provider = 'openrouter'`, `purpose` `grade` or `eval`, no load-test run id. The table stores no HTTP status or Retry-After, so replayed provider errors are 502s and replayed 429s have no retry hint.
+- **Almost no failures.** All 1,839 imported calls succeeded. The eval run had one other failure, of unknown status, that was dropped from the export for lacking a latency: about 0.05% (1 in 1,840). So the `claude-haiku-5.5` profile produces no errors by itself. Use the scenarios to test failure handling, or the `seed` profile for a background error rate.
+- **Low concurrency.** The calls came from a laptop at 8 concurrent, not from Vercel functions under load. Provider latency at testing-day volume may be higher; `latency-doubling` covers that case.
+
+Load-test reports must say which profile or recording a run used.
+
+To import new calls, export them as JSONL (either `model_calls` rows or the grader's `CallLogEntry` export), then run:
+
+```bash
+node packages/mock-model/scripts/import-calls.ts calls.jsonl <name> <model> "<source>"
+```
+
+That validates every line, keeps only real grading calls for `<model>` (`provider = 'openrouter'`, `purpose` `grade` or `eval`, no load-test run id, not `interrupted`), shortens idle gaps over 30 s to 10 s so replays of batch runs stay dense, and writes `src/data/<name>.ts`. A grader `CallLogEntry` counts as an OpenRouter call only when its `providerId` is an OpenRouter generation id (`gen-…`). Register the result in `src/registry.ts`. Rows without a status code replay provider errors as 502s, and replayed 429s carry no retry hint.
 
 ## Tests
 
