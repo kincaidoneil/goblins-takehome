@@ -46,21 +46,28 @@ async function toBase64(blob: Blob): Promise<string> {
  */
 export function Workspace({
   sessionId,
+  studentId,
   problem,
   total,
   pages,
   onSubmit,
 }: {
   sessionId: string;
+  studentId: string;
   problem: WorkspaceProblem;
   /** How many problems the assignment has, for "Problem 3 of 8". */
   total: number;
   pages: ReadonlyArray<WorksheetPage>;
   onSubmit: (png: string) => void;
 }) {
-  const [doc, setDoc] = useState<WhiteboardDoc>(() => loadBoard(sessionId, problem.id));
+  const [doc, setDoc] = useState<WhiteboardDoc>(() =>
+    loadBoard({ sessionId, studentId }, problem.id),
+  );
   const [exporting, setExporting] = useState(false);
-  useEffect(() => saveBoard(sessionId, problem.id, doc), [sessionId, problem.id, doc]);
+  useEffect(
+    () => saveBoard({ sessionId, studentId }, problem.id, doc),
+    [sessionId, studentId, problem.id, doc],
+  );
 
   const own = pages.filter((page) => problem.pageNumbers.includes(page.pageNumber));
   // A problem with a diagram shows its page beside the text, so the student needn't open the worksheet.

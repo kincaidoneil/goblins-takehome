@@ -2,35 +2,28 @@
  * The signed-in teacher. Clerk owns sign-in; the first request after sign-in creates the
  * teacher's row.
  *
- * Local mode: with `AUTH_MODE=local` (set in `local.env` for development and local E2E runs),
- * every request is the same local teacher and Clerk is not consulted. It is ignored on Vercel,
- * so no deployed environment can turn it on.
+ * The Clerk user comes from `RequestContext`, never from `auth()` inside an effect (see
+ * request-context.ts). Local mode is described in teacher-mode.ts.
  */
-import { auth, clerkClient } from "@clerk/tanstack-react-start/server";
+import { clerkClient } from "@clerk/tanstack-react-start/server";
 import { Db, schema } from "@goblins/domain";
 import { eq } from "drizzle-orm";
 import { Data, Effect } from "effect";
+import { RequestContext } from "./request-context";
+import { localTeacherMode } from "./teacher-mode";
 
 export class NotSignedIn extends Data.TaggedError("NotSignedIn") {}
 
 export type Teacher = typeof schema.teachers.$inferSelect;
 
-export const localTeacherMode =
-  process.env.AUTH_MODE === "local" && process.env.VERCEL === undefined;
+export { localTeacherMode } from "./teacher-mode";
 
-const LOCAL_TEACHER = { clerkUserId: "local_teacher", name: "Ms. Rivera", email: null };
-
-/** The Clerk user id of the request, or null when signed out. */
-export const signedInUserId = localTeacherMode
-  ? Effect.succeed<string | null>(LOCAL_TEACHER.clerkUserId)
-  : Effect.map(
-      Effect.promise(() => auth()),
-      ({ userId }) => userId,
-    );
+/** The signed-in Clerk user id, resolved at the handler boundary by `run`. */
+export const signedInUserId = Effect.map(RequestContext, (request) => request.clerkUserId);
 
 const profile = (userId: string) =>
   localTeacherMode
-    ? Effect.succeed(LOCAL_TEACHER)
+    ? Effect.succeed({ clerkUserId: userId, name: "Ms. Rivera", email: null })
     : Effect.map(
         Effect.promise(() => clerkClient().users.getUser(userId)),
         (user) => {

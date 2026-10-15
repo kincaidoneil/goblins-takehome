@@ -12,7 +12,7 @@ import {
   useToast,
 } from "@goblins/ui";
 import { useLiveQuery } from "@tanstack/react-db";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { CellDetail } from "../../../components/teacher/dashboard/CellDetail";
 import {
@@ -207,6 +207,7 @@ function SessionControls(props: {
   readonly canStart: boolean;
 }) {
   const [ending, setEnding] = useState(false);
+  const navigate = useNavigate();
   const status = props.session?.status;
   return (
     <div className="flex shrink-0 items-center gap-2">
@@ -263,9 +264,14 @@ function SessionControls(props: {
                 onClick={async () => {
                   setEnding(true);
                   await endSession({ data: { sessionId: props.sessionId } });
+                  // Ending the session produces the report (PRD, "Live dashboard").
+                  await navigate({
+                    to: "/sessions/$sessionId/report",
+                    params: { sessionId: props.sessionId },
+                  });
                 }}
               >
-                End session
+                End and see the report
               </Button>
             </>
           }

@@ -16,11 +16,20 @@ export type OutboxItem = typeof OutboxItem.Type;
 
 const Outbox = Schema.parseJson(Schema.Array(OutboxItem));
 
+/**
+ * Whose work it is. Keys include the student, so a second student on a shared device never sees,
+ * or sends, the first student's strokes or queued submissions.
+ */
+export interface Owner {
+  readonly sessionId: string;
+  readonly studentId: string;
+}
+
 // "board" rather than the old "strokes" key: work saved by the previous whiteboard is a different
 // shape, and starting that problem's board fresh is better than misreading it.
-const boardKey = (sessionId: string, problemId: string) =>
-  `goblins:board:${sessionId}:${problemId}`;
-const outboxKey = (sessionId: string) => `goblins:outbox:${sessionId}`;
+const boardKey = (owner: Owner, problemId: string) =>
+  `goblins:board:${owner.sessionId}:${owner.studentId}:${problemId}`;
+const outboxKey = (owner: Owner) => `goblins:outbox:${owner.sessionId}:${owner.studentId}`;
 
 // Storage can be unavailable (private mode, full quota). Work then lives in memory only.
 const read = (key: string): string | null => {
@@ -40,19 +49,19 @@ const write = (key: string, value: string | null) => {
   }
 };
 
-export const loadBoard = (sessionId: string, problemId: string): WhiteboardDoc => {
-  const saved = read(boardKey(sessionId, problemId));
+export const loadBoard = (owner: Owner, problemId: string): WhiteboardDoc => {
+  const saved = read(boardKey(owner, problemId));
   return saved === null ? EMPTY_DOC : Either.getOrElse(parseDoc(saved), () => EMPTY_DOC);
 };
 
-export const saveBoard = (sessionId: string, problemId: string, doc: WhiteboardDoc) =>
-  write(boardKey(sessionId, problemId), doc.strokes.length === 0 ? null : serializeDoc(doc));
+export const saveBoard = (owner: Owner, problemId: string, doc: WhiteboardDoc) =>
+  write(boardKey(owner, problemId), doc.strokes.length === 0 ? null : serializeDoc(doc));
 
-export const clearBoard = (sessionId: string, problemId: string) =>
-  write(boardKey(sessionId, problemId), null);
+export const clearBoard = (owner: Owner, problemId: string) =>
+  write(boardKey(owner, problemId), null);
 
-export const loadOutbox = (sessionId: string): ReadonlyArray<OutboxItem> =>
-  Option.getOrElse(Schema.decodeUnknownOption(Outbox)(read(outboxKey(sessionId))), () => []);
+export const loadOutbox = (owner: Owner): ReadonlyArray<OutboxItem> =>
+  Option.getOrElse(Schema.decodeUnknownOption(Outbox)(read(outboxKey(owner))), () => []);
 
-export const saveOutbox = (sessionId: string, items: ReadonlyArray<OutboxItem>) =>
-  write(outboxKey(sessionId), items.length === 0 ? null : Schema.encodeSync(Outbox)(items));
+export const saveOutbox = (owner: Owner, items: ReadonlyArray<OutboxItem>) =>
+  write(outboxKey(owner), items.length === 0 ? null : Schema.encodeSync(Outbox)(items));

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { type SubmitError, submit } from "../../server/fns/student";
-import { clearBoard, loadOutbox, type OutboxItem, saveOutbox } from "./storage";
+import { clearBoard, loadOutbox, type OutboxItem, type Owner, saveOutbox } from "./storage";
 
 const MAX_BACKOFF_MS = 30_000;
 
@@ -16,8 +16,9 @@ export interface OutboxHandlers {
  * failure keeps the item and retries with backoff, and right away when the browser comes back
  * online. Retrying is safe because the server's submit is idempotent.
  */
-export function useOutbox(sessionId: string, handlers: OutboxHandlers) {
-  const [items, setItems] = useState<ReadonlyArray<OutboxItem>>(() => loadOutbox(sessionId));
+export function useOutbox(owner: Owner, handlers: OutboxHandlers) {
+  const { sessionId, studentId } = owner;
+  const [items, setItems] = useState<ReadonlyArray<OutboxItem>>(() => loadOutbox(owner));
   const [sending, setSending] = useState(false);
   /** Failed attempts in a row. Above zero means we're waiting on the network. */
   const [failures, setFailures] = useState(0);
@@ -27,7 +28,7 @@ export function useOutbox(sessionId: string, handlers: OutboxHandlers) {
   const handlersRef = useRef(handlers);
   handlersRef.current = handlers;
 
-  useEffect(() => saveOutbox(sessionId, items), [sessionId, items]);
+  useEffect(() => saveOutbox({ sessionId, studentId }, items), [sessionId, studentId, items]);
 
   useEffect(() => {
     const onOnline = () => {
@@ -54,7 +55,7 @@ export function useOutbox(sessionId: string, handlers: OutboxHandlers) {
         setFailures(0);
         if (result._tag === "Ok") {
           drop();
-          clearBoard(sessionId, head.problemId);
+          clearBoard({ sessionId, studentId }, head.problemId);
           handlersRef.current.onSent(head.problemId);
         } else if (result.error._tag === "SessionNotLive" || result.error._tag === "NotJoined") {
           // Nothing else in the queue can be accepted either.
@@ -72,7 +73,7 @@ export function useOutbox(sessionId: string, handlers: OutboxHandlers) {
       }
     }, delay);
     return () => window.clearTimeout(timer);
-  }, [items, sending, failures, wake, sessionId]);
+  }, [items, sending, failures, wake, sessionId, studentId]);
 
   return {
     items,
