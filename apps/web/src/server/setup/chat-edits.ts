@@ -7,6 +7,24 @@ import { Option } from "effect";
 import type { Draft } from "./draft";
 import type { Edit } from "./edits";
 
+/**
+ * The model sometimes repeats the points in a line's text ("1 pt: correct setup"). The points
+ * column already shows them, so the prefix is dropped.
+ */
+const POINTS_PREFIX = /^\s*\d+\s*(?:pts?|points?)\s*[:.\-–—]\s*/i;
+
+export const cleanRubric = <L extends { readonly points: number; readonly description: string }>(
+  lines: readonly [L, ...ReadonlyArray<L>],
+): readonly [L, ...Array<L>] => {
+  const clean = (line: L): L => {
+    const stripped = line.description.replace(POINTS_PREFIX, "");
+    if (stripped === line.description || stripped === "") return line;
+    return { ...line, description: `${stripped.charAt(0).toUpperCase()}${stripped.slice(1)}` };
+  };
+  const [first, ...rest] = lines;
+  return [clean(first), ...rest.map(clean)];
+};
+
 /** The draft as the chat model sees it: problems keyed by label, links as labels. */
 export const toSetupProblems = (draft: Draft): ReadonlyArray<Chat.SetupProblem> => {
   const labelOf = new Map(draft.problems.map((p) => [p.id, p.label]));
@@ -57,7 +75,7 @@ export const toAppEdits = (
           diagramDescription: edit.problem.diagramDescription,
           pageNumbers: [...edit.problem.pageNumbers],
           gradingNotes: edit.problem.gradingNotes,
-          rubric: [first, ...rest],
+          rubric: cleanRubric([first, ...rest]),
         },
       });
       continue;
@@ -69,7 +87,7 @@ export const toAppEdits = (
       case "SetRubric": {
         const [first, ...rest] = edit.rubric;
         if (first === undefined) return Option.none();
-        out.push({ _tag: "SetRubric", problemId, lines: [first, ...rest] });
+        out.push({ _tag: "SetRubric", problemId, lines: cleanRubric([first, ...rest]) });
         break;
       }
       case "SetGradingNotes":
