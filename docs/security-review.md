@@ -2,7 +2,7 @@
 
 Reviewed 2026-10-15 against `main` at `6f4bab7`. The review was read-only. It covered every `/api` route, every server function, the shape proxy, the load-test and queue endpoints, setup, share links, environment configuration and dependencies. Against production (https://goblins-takehome-three.vercel.app and `goblins-electric.fly.dev`), it sent only a few unauthenticated GET and POST requests to check that each gate refuses. It did not sign in, join a session or create data.
 
-No Critical findings. One High finding: anyone can spend the model budget. It has two entry points, setup and grading, and both were sent to the orchestrator as soon as they were found.
+No Critical findings. Two High findings, both about spending the model budget: one through setup, one through grading. Both went to the orchestrator as soon as they were found. Two Medium and nine Low findings follow.
 
 ## Findings
 
