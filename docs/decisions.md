@@ -40,3 +40,15 @@ One line of reasoning per decision. Newest last. The fixed decisions in [prd.md]
 | 2026-10-15 | Infra | Whiteboard Blob store `goblins-whiteboards` is private | Student work should not sit at guessable public URLs; the app reads blobs server-side or through short-lived signed URLs |
 | 2026-10-15 | Infra | `OPENROUTER_API_KEY` is set only on Vercel production; previews and CI use the mock | A preview or CI run can't spend the $20 budget by accident |
 | 2026-10-15 | Infra | Vercel Authentication is off for previews; E2E needs no bypass secret | Previews run the mock model on their own throwaway Neon branch, so there is nothing to protect, and a bypass secret would reach PR code, page requests to third-party hosts and uploaded Playwright traces |
+| 2026-10-15 | Domain | Effect 3.22 (not 4) with drizzle-orm 0.45 and @effect/sql 0.52 across all packages | The PRD fixes @effect/sql-drizzle, whose latest release supports only Effect 3 and drizzle-orm < 0.50 |
+| 2026-10-15 | Domain | Grade writes are conditional UPDATEs keyed on an attempt number, with a 120 s claim lease | At-least-once delivery then changes nothing twice, and a redelivery during an in-flight call does not pay for a second model call |
+| 2026-10-15 | Domain | Points are whole numbers, per rubric line | AP-style rubrics award whole points; integers keep sums exact |
+| 2026-10-15 | Domain | Join codes are six digits, unique among sessions that have not ended | Easy to read off a projector and type on a phone's number pad; Kahoot does the same |
+| 2026-10-15 | Domain | Names match after Unicode normalization, dropping accents, case, spaces and punctuation | "maya r" resumes "Maya R." as the PRD asks, and "jose" resumes "José" |
+| 2026-10-15 | Domain | Before sign-in, a draft assignment belongs to a random id in a cookie; sign-in at launch claims it | The PRD asks for setup without sign-in and no lost work at launch |
+| 2026-10-15 | Domain | Tables Electric syncs carry `session_id` directly (submissions, grades, students) | An Electric shape is one table with a `where` clause; it cannot join |
+| 2026-10-15 | Domain | Load-test rows are tagged at the teacher, assignment and class session; the rest goes by cascade | One tag per ownership root is enough to exclude and delete a run |
+| 2026-10-15 | Domain | Domain tests run on PGlite over its socket server | Real Postgres semantics (check constraints, partial indexes) through the production client, with no Docker in CI |
+| 2026-10-15 | Domain | A teacher score works from any grade state and supersedes an in-flight attempt | "The teacher always has the last word"; the late model result is dropped as stale |
+| 2026-10-15 | Domain | A teacher retry queues a new attempt in `submitted`, not `grading` | `submitted` means queued and `grading` means claimed, so the load test can count queued and in-flight grades apart |
+| 2026-10-15 | Domain | The rubric is locked once an assignment launches; the app enforces it | Grades store `max_points` at submit time, and editing a live rubric would change what earlier students were graded against |
