@@ -1,3 +1,9 @@
+export * as Chat from "./ai/chat.ts";
+export * as Extract from "./ai/extract.ts";
+export * as Grade from "./ai/grade.ts";
+export * as AiGrader from "./ai/grader.ts";
+export * as Mistakes from "./ai/mistakes.ts";
+export * as Models from "./ai/models.ts";
 export * as CallLog from "./CallLog.ts";
 export * as Consumer from "./Consumer.ts";
 export * as Grader from "./Grader.ts";
