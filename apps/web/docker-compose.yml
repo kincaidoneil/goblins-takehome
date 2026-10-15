@@ -17,6 +17,9 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/goblins?sslmode=disable
       ELECTRIC_INSECURE: "true"
+      # Default is 300 concurrent initial (snapshot) requests; a class bell exceeds it and every
+      # extra request gets a 503 with Retry-After 8-10 s. Production sets the same on Fly.
+      ELECTRIC_MAX_CONCURRENT_REQUESTS: '{"initial": 3000, "existing": 20000}'
     ports: ["30001:3000"]
     depends_on:
       postgres:
