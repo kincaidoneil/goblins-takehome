@@ -1,0 +1,115 @@
+.gb-board {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gb-space-2);
+  min-width: 0;
+}
+
+.gb-board-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gb-space-2);
+}
+
+.gb-board-group {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--gb-radius-md);
+  background: var(--gb-color-surface);
+  box-shadow: var(--gb-shadow-xs);
+}
+
+.gb-board-accessory {
+  margin-left: auto;
+}
+
+/* 44px targets: big enough for a finger on a phone or a Chromebook touchscreen. */
+.gb-board-tool {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--gb-radius-sm);
+  background: transparent;
+  color: var(--gb-color-text-brand);
+  cursor: pointer;
+  transition:
+    background-color var(--gb-duration-fast) var(--gb-ease-out),
+    transform var(--gb-duration-fast) var(--gb-ease-out);
+}
+
+.gb-board-tool:hover:enabled {
+  background: var(--gb-color-surface-tint);
+}
+
+.gb-board-tool:active:enabled {
+  transform: scale(0.92);
+}
+
+.gb-board-tool[aria-pressed="true"] {
+  background: var(--gb-lime-100);
+  box-shadow: inset 0 0 0 2px var(--gb-green-500);
+}
+
+.gb-board-tool:disabled {
+  color: var(--gb-color-text-subtle);
+  cursor: default;
+  opacity: 0.5;
+}
+
+.gb-board-tool:focus-visible {
+  outline: 2px solid var(--gb-color-focus);
+  outline-offset: 1px;
+}
+
+.gb-board-tool svg {
+  width: 22px;
+  height: 22px;
+}
+
+.gb-board-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.5);
+}
+
+/* The page keeps the board's 4:3 shape, so strokes map 1:1 onto the 1024 × 768 export. */
+.gb-board-surface {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--gb-radius-lg);
+  background-color: var(--gb-paper-0);
+  background-image: radial-gradient(circle, rgb(30 43 36 / 0.12) 1px, transparent 1.5px);
+  background-size: 24px 24px;
+  background-position: 12px 12px;
+  box-shadow:
+    0 0 0 1px var(--gb-color-border),
+    var(--gb-shadow-md);
+}
+
+.gb-board-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* No scrolling, zooming, text selection or callouts while drawing. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  cursor: crosshair;
+}
+
+.gb-board-canvas[data-tool="Eraser"] {
+  cursor: cell;
+}
+
+.gb-board[data-disabled] .gb-board-canvas {
+  cursor: default;
+}
