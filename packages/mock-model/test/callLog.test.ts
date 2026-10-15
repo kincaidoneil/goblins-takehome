@@ -120,6 +120,42 @@ describe("call log import", () => {
     ]);
   });
 
+  it("imports the grader's own CallLogEntry: provider kept, tokens from cost, failures included", () => {
+    const base = {
+      startedAt: "2026-10-15T09:00:00Z",
+      purpose: "grade",
+      modelRequested: "google/gemini-2.5-flash",
+      latencyMs: 4000,
+    };
+    const rows = [
+      {
+        ...base,
+        provider: "openrouter",
+        status: "ok",
+        statusCode: 200,
+        providerId: "gen-1",
+        cost: { promptTokens: 1800, completionTokens: 200, costUsd: 0.001 },
+      },
+      {
+        ...base,
+        provider: "openrouter",
+        status: "rate_limited",
+        statusCode: 429,
+        cost: { promptTokens: 0, completionTokens: 0, costUsd: 0 },
+      },
+      { ...base, provider: "openrouter", status: "timeout", cost: null },
+      { ...base, provider: "mock", status: "ok", providerId: "mock-0-1", cost: null },
+    ].map(rowFromExport);
+    const recording = recordingFromCallLog(rows, { source: "test" });
+    if (Either.isLeft(recording)) throw new Error("expected a recording");
+    const calls = recording.right.calls;
+    expect(calls.map((c) => c.outcome).sort()).toEqual(["Ok", "RateLimited", "Timeout"]);
+    expect(calls.find((c) => c.outcome === "Ok")).toMatchObject({
+      promptTokens: 1800,
+      completionTokens: 200,
+    });
+  });
+
   it("closes idle gaps over 30 s to 10 s and keeps dense stretches as they are", () => {
     const recording = recordingFromCallLog(
       [0, 2_000, 1_400_000, 1_401_000].map((t) =>

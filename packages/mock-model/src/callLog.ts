@@ -122,16 +122,26 @@ export const recordingFromCallLog = (
 ): Either.Either<Recording, CallLogError> =>
   Either.map(toLoggedCalls(rows, options.model), (calls) => ({ source: options.source, calls }));
 
-/** A grader `CallLogEntry` as exported to JSONL. */
+const Tokens = Schema.optional(Schema.NullOr(Schema.Number));
+
+/**
+ * A grader `CallLogEntry` serialized to JSONL. The grader's own entries carry
+ * `provider` and nest usage in `cost`; flat exports (AI quality's eval run) put
+ * `promptTokens` and `completionTokens` at the top level and omit `provider`.
+ */
 const CallLogEntryExport = Schema.Struct({
   startedAt: Schema.String,
+  provider: Schema.optional(Schema.String),
   purpose: Schema.String,
   modelRequested: Schema.String,
   status: Schema.String,
   statusCode: Schema.optional(Schema.NullOr(Schema.Number)),
   latencyMs: Schema.Number,
-  promptTokens: Schema.optional(Schema.NullOr(Schema.Number)),
-  completionTokens: Schema.optional(Schema.NullOr(Schema.Number)),
+  cost: Schema.optional(
+    Schema.NullOr(Schema.Struct({ promptTokens: Schema.Number, completionTokens: Schema.Number })),
+  ),
+  promptTokens: Tokens,
+  completionTokens: Tokens,
   /** The completion id: OpenRouter's start with `gen-`, the mock's with `mock-`. */
   providerId: Schema.optional(Schema.NullOr(Schema.String)),
   loadTestRunId: Schema.optional(Schema.NullOr(Schema.String)),
@@ -140,9 +150,9 @@ const decodeEntry = Schema.decodeUnknownEither(CallLogEntryExport);
 
 /**
  * Maps a grader `CallLogEntry` export to a `model_calls` row, and passes
- * anything else through to be validated as a row. An entry has no provider
- * field, so it counts as an OpenRouter call only with an OpenRouter generation
- * id; its load-test run id is kept, so mock and load-test entries stay out.
+ * anything else through to be validated as a row. The entry's `provider` is
+ * kept; a flat export without one counts as OpenRouter only with an OpenRouter
+ * generation id. The load-test run id is kept, so load-test entries stay out.
  */
 export const rowFromExport = (raw: unknown): unknown => {
   const entry = decodeEntry(raw);
@@ -150,13 +160,13 @@ export const rowFromExport = (raw: unknown): unknown => {
   const e = entry.right;
   return {
     purpose: e.purpose,
-    provider: e.providerId?.startsWith("gen-") === true ? "openrouter" : "unknown",
+    provider: e.provider ?? (e.providerId?.startsWith("gen-") === true ? "openrouter" : "unknown"),
     model: e.modelRequested,
     status: e.status,
     statusCode: e.statusCode ?? null,
     latencyMs: e.latencyMs,
-    inputTokens: e.promptTokens ?? null,
-    outputTokens: e.completionTokens ?? null,
+    inputTokens: e.cost?.promptTokens ?? e.promptTokens ?? null,
+    outputTokens: e.cost?.completionTokens ?? e.completionTokens ?? null,
     loadTestRunId: e.loadTestRunId ?? null,
     createdAt: new Date(Date.parse(e.startedAt) + e.latencyMs).toISOString(),
   };
