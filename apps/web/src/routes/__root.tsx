@@ -1,4 +1,3 @@
-import { ClerkProvider } from "@clerk/tanstack-react-start";
 import {
   createRootRoute,
   HeadContent,
@@ -8,6 +7,7 @@ import {
 } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { LiveStatusBanner } from "../components/LiveStatusBanner";
+import { AuthProvider } from "../lib/auth";
 import appCss from "../styles.css?url";
 
 export const Route = createRootRoute({
@@ -48,7 +48,7 @@ function RootDocument({ children }: { readonly children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <ClerkProvider>{children}</ClerkProvider>
+        <AuthProvider>{children}</AuthProvider>
         <Scripts />
       </body>
     </html>
