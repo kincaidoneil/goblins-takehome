@@ -23,6 +23,7 @@ import {
   needsYouQueue,
   studentLabel,
 } from "../../../components/teacher/dashboard/model";
+import { ProjectorLink } from "../../../components/teacher/dashboard/ProjectorLink";
 import { TeacherHeader } from "../../../components/teacher/TeacherHeader";
 import {
   type SessionRow,
@@ -39,7 +40,7 @@ export const Route = createFileRoute("/sessions/$sessionId/")({
   // Live data comes from Electric in the browser.
   ssr: false,
   loader: ({ params }) => getSession({ data: { sessionId: params.sessionId } }),
-  head: () => ({ meta: [{ title: "Dashboard · Goblins Auto-Grader" }] }),
+  head: () => ({ meta: [{ title: "Dashboard · Goblins Grader" }] }),
   component: DashboardPage,
 });
 
@@ -240,19 +241,9 @@ function SessionControls(props: {
         {props.hideNames ? "Show names and scores" : "Hide names and scores"}
       </Button>
       {status !== "ended" && (
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={() =>
-            window.open(
-              `/sessions/${props.sessionId}/projector`,
-              `projector-${props.sessionId}`,
-              "popup,width=1280,height=800",
-            )
-          }
-        >
+        <ProjectorLink sessionId={props.sessionId} variant="secondary" size="sm">
           Open projector
-        </Button>
+        </ProjectorLink>
       )}
       {status === "lobby" && (
         <Button
@@ -437,11 +428,16 @@ function Grid(props: {
   const [splitting, setSplitting] = useState<StudentRow | null>(null);
   if (props.students.length === 0) {
     return (
-      <Card className="py-12 text-center">
-        <p className="text-lg">No one has joined yet.</p>
-        <p className="mt-1 text-text-muted">
-          Students join from the projector screen with the code.
-        </p>
+      <Card className="flex flex-col items-center gap-4 py-12 text-center">
+        <div>
+          <p className="text-lg">No one has joined yet.</p>
+          <p className="mt-1 text-text-muted">
+            Put the projector screen up. Students join with the code shown there.
+          </p>
+        </div>
+        <ProjectorLink sessionId={props.sessionId} variant="primary" size="md">
+          Open the projector
+        </ProjectorLink>
       </Card>
     );
   }

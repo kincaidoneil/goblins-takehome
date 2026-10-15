@@ -15,7 +15,7 @@ export function TeacherHeader({ children }: { readonly children?: ReactNode }) {
           >
             G
           </span>
-          <span className="hidden sm:inline">Auto-Grader</span>
+          <span className="hidden sm:inline">Goblins Grader</span>
         </Link>
         <div className="flex min-w-0 flex-1 items-center gap-3">{children}</div>
         {isSignedIn === true && <AccountButton />}
