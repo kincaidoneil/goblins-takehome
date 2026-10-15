@@ -538,3 +538,22 @@ export const modelCalls = pgTable(
   },
   (t) => [index().on(t.createdAt), index().on(t.loadTestRunId), index().on(t.submissionId)],
 );
+
+// ---------------------------------------------------------------------------
+// Rate limits
+
+/**
+ * One row per throttled action (an upload, a setup chat message) per caller key (an IP or a
+ * draft owner), so anonymous callers can't spend the model budget. Rows older than a day are
+ * deleted as new ones arrive.
+ */
+export const rateLimitEvents = pgTable(
+  "rate_limit_events",
+  {
+    id: id(),
+    action: text().notNull(),
+    key: text().notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [index().on(t.action, t.key, t.createdAt)],
+);

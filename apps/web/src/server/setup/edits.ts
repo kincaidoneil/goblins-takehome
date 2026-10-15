@@ -20,14 +20,17 @@ export const TextField = Schema.Literal(
 );
 export type TextField = typeof TextField.Type;
 
+/** Long enough for any worksheet problem; short enough that a draft can't be padded out. */
+const Text = Schema.String.pipe(Schema.maxLength(2000));
+
 export const NewProblem = Schema.Struct({
-  label: Schema.NonEmptyString,
-  text: Schema.String,
-  answerKey: Schema.String,
-  diagramDescription: Schema.NullOr(Schema.String),
-  pageNumbers: Schema.Array(Schema.Int.pipe(Schema.positive())),
-  gradingNotes: Schema.String,
-  rubric: Schema.NonEmptyArray(RubricLineInput),
+  label: Schema.NonEmptyString.pipe(Schema.maxLength(10)),
+  text: Text,
+  answerKey: Text,
+  diagramDescription: Schema.NullOr(Text),
+  pageNumbers: Schema.Array(Schema.Int.pipe(Schema.positive())).pipe(Schema.maxItems(20)),
+  gradingNotes: Text,
+  rubric: Schema.NonEmptyArray(RubricLineInput).pipe(Schema.maxItems(12)),
 });
 export type NewProblem = typeof NewProblem.Type;
 
@@ -36,7 +39,7 @@ export const Edit = Schema.Union(
   Schema.TaggedStruct("SetField", {
     problemId: ProblemId,
     field: TextField,
-    value: Schema.String.pipe(Schema.maxLength(10_000)),
+    value: Schema.String.pipe(Schema.maxLength(4000)),
   }),
   Schema.TaggedStruct("SetGradeWithPageImage", { problemId: ProblemId, value: Schema.Boolean }),
   Schema.TaggedStruct("SetRubric", {
@@ -58,8 +61,11 @@ export type Edit = typeof Edit.Type;
 
 /** An edit named a problem that is not in this draft, or would remove its last problem. */
 export class EditRejected extends Data.TaggedError("EditRejected")<{
-  readonly reason: "unknown_problem" | "last_problem" | "empty_label";
+  readonly reason: "unknown_problem" | "last_problem" | "empty_label" | "too_many_problems";
 }> {}
+
+/** A worksheet with more problems than this is a packet, not an assignment. */
+export const MAX_PROBLEMS = 50;
 
 // Positions are unique per assignment and the constraint is not deferrable, so shifting a range
 // moves it out of the way first and then back to its new place.
@@ -152,6 +158,13 @@ const applyOne = (draftId: string, edit: Edit) =>
         return;
       }
       case "AddProblem": {
+        const [count] = yield* db
+          .select({ n: sql<number>`count(*)::int` })
+          .from(schema.problems)
+          .where(eq(schema.problems.assignmentId, draftId));
+        if ((count?.n ?? 0) >= MAX_PROBLEMS) {
+          return yield* Effect.fail(new EditRejected({ reason: "too_many_problems" }));
+        }
         const position =
           edit.afterProblemId === null ? 0 : (yield* findProblem(edit.afterProblemId)).position + 1;
         yield* shiftFrom(draftId, position, 1);

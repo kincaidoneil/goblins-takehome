@@ -24,6 +24,7 @@ import type { Draft } from "./draft";
 import type { Edit } from "./edits";
 import type { Extracted, ExtractedProblem } from "./extracted";
 import { extractedFromTemplate } from "./from-template";
+import { CHAT_HISTORY_TURNS, ensureSetupBudget } from "./limits";
 
 export interface PageImage {
   readonly pageNumber: number;
@@ -43,7 +44,7 @@ export interface ChatReply {
  * Which model setup uses. Unset means the mock; any value other than `mock` or `openrouter` is a
  * misconfiguration, and setup refuses rather than quietly using the stubs.
  */
-const modelMode = (): "mock" | "openrouter" | "invalid" => {
+export const modelMode = (): "mock" | "openrouter" | "invalid" => {
   const value = process.env.MODEL_CLIENT ?? "mock";
   return value === "mock" || value === "openrouter" ? value : "invalid";
 };
@@ -110,6 +111,16 @@ export const extractWorksheet = (
 
 const extractWithModel = (draftId: string, pages: ReadonlyArray<PageImage>) =>
   Effect.gen(function* () {
+    yield* ensureSetupBudget.pipe(
+      Effect.catchTag("SetupBudgetSpent", () =>
+        Effect.fail(
+          new Unreadable({
+            message:
+              "Reading new worksheets is paused for now. Start from a template, or try again later.",
+          }),
+        ),
+      ),
+    );
     const result = yield* Extract.extractWorksheet(
       pages.map((page) => page.imageUrl),
       { purpose: "extract", subjectId: draftId },
@@ -183,12 +194,24 @@ const COULD_NOT_CHANGE =
 
 const chatWithModel = (draft: Draft, message: string) =>
   Effect.gen(function* () {
+    const spent = yield* ensureSetupBudget.pipe(
+      Effect.as(false),
+      Effect.catchTag("SetupBudgetSpent", () => Effect.succeed(true)),
+    );
+    if (spent) {
+      return {
+        reply: "The chat is paused for now. You can still edit any problem directly.",
+        edits: [],
+      } satisfies ChatReply;
+    }
     const problems = toSetupProblems(draft);
     const result = yield* Chat.chatEdit(
       {
         problems,
         pageImageUrls: draft.pages.map((page) => page.imageUrl).filter(fetchable),
-        history: draft.chat.map((turn) => ({ role: turn.role, content: turn.content })),
+        history: draft.chat
+          .slice(-CHAT_HISTORY_TURNS)
+          .map((turn) => ({ role: turn.role, content: turn.content })),
         message,
       },
       { purpose: "rubric-chat", subjectId: draft.id },

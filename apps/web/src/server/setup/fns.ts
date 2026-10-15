@@ -4,7 +4,7 @@
  */
 import { Db, schema } from "@goblins/domain";
 import { createServerFn } from "@tanstack/react-start";
-import { getRequestUrl } from "@tanstack/react-start/server";
+import { getRequestIP, getRequestUrl } from "@tanstack/react-start/server";
 import { Effect, Option, Schema } from "effect";
 import { err, ok } from "../result";
 import { run } from "../runtime";
@@ -12,7 +12,8 @@ import { currentTeacher, signedInUserId } from "../teacher";
 import { type Draft, ensureEditable, loadDraft, ownedAssignment, whileEditable } from "./draft";
 import { applyEdits, Edit } from "./edits";
 import { claimDrafts, launchDraft } from "./launch";
-import { editByChat } from "./setup-ai";
+import { CHAT_MESSAGES_PER_DRAFT, callerKeys, takeToken } from "./limits";
+import { editByChat, modelMode } from "./setup-ai";
 import { startTemplateDraft, startUploadDraft } from "./start";
 import {
   draftOwnerForRequest,
@@ -31,7 +32,7 @@ export const startDraftFromUpload = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const files = data.getAll("page").filter((entry): entry is File => entry instanceof File);
     const owner = draftOwnerForRequest();
-    const result = await run(startUploadDraft(files, owner.id));
+    const result = await run(startUploadDraft(files, owner.id, requestIp()));
     if (result._tag === "Ok") saveDraftOwner(owner);
     return result;
   });
@@ -94,6 +95,38 @@ export const editDraft = createServerFn({ method: "POST" })
     );
   });
 
+/** The caller's IP, read in the handler's own context (never inside an effect). */
+const requestIp = (): string | undefined => getRequestIP({ xForwardedFor: true }) ?? undefined;
+
+const LIMIT_REPLIES = {
+  perDraft:
+    "This assignment has reached its chat limit. You can still edit any problem directly by clicking it.",
+  hourly:
+    "That's a lot of requests in the last hour. Try again later, or edit the problem directly.",
+} as const;
+
+/**
+ * The chat, within its limits: messages per draft always, and an hourly rate per IP and owner when
+ * the real model is in use (the mock costs nothing).
+ */
+const chatWithinLimits = (draft: Draft, message: string, viewer: Viewer, ip: string | undefined) =>
+  Effect.gen(function* () {
+    const sent = draft.chat.filter((turn) => turn.role === "teacher").length;
+    if (sent >= CHAT_MESSAGES_PER_DRAFT) return { reply: LIMIT_REPLIES.perDraft, edits: [] };
+    if (modelMode() === "openrouter") {
+      const owner = Option.getOrElse(
+        Option.orElse(viewer.teacherId, () => viewer.draftOwnerId),
+        () => draft.id,
+      );
+      const limited = yield* takeToken("chat", callerKeys(ip, owner)).pipe(
+        Effect.as(false),
+        Effect.catchTag("RateLimited", () => Effect.succeed(true)),
+      );
+      if (limited) return { reply: LIMIT_REPLIES.hourly, edits: [] };
+    }
+    return yield* editByChat(draft, message);
+  });
+
 /** Which problems an edit batch touched, so the screen can point them out. */
 const touched = (before: Draft, after: Draft): ReadonlyArray<string> =>
   after.problems
@@ -114,6 +147,7 @@ export const sendChatMessage = createServerFn({ method: "POST" })
   )
   .handler(({ data }) => {
     const draftOwnerId = readDraftOwner();
+    const ip = requestIp();
     return run(
       Effect.gen(function* () {
         const viewer = yield* viewerFor(draftOwnerId);
@@ -123,7 +157,7 @@ export const sendChatMessage = createServerFn({ method: "POST" })
         yield* db
           .insert(schema.assignmentChatMessages)
           .values({ assignmentId: data.draftId, role: "teacher", content: data.message });
-        const { reply, edits } = yield* editByChat(before, data.message);
+        const { reply, edits } = yield* chatWithinLimits(before, data.message, viewer, ip);
         // A reply whose edits don't apply is the model's mistake, not the teacher's: say so.
         const applied = yield* whileEditable(data.draftId, applyEdits(data.draftId, edits)).pipe(
           Effect.as(reply),
