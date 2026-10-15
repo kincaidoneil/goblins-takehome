@@ -26,8 +26,13 @@ export interface TemplateSummary {
   problemCount: number;
   /** Plain-language tags, such as "Diagrams". */
   tags: ReadonlyArray<string>;
-  /** Publisher and license. */
-  source: string;
+  /** The attribution CC BY requires wherever the worksheet is shown. */
+  attribution: string;
+  licenseUrl: string;
+  /** What we changed from the source, as CC BY requires. */
+  changes: string;
+  /** The publisher's page for the first lesson the problems come from. */
+  sourceUrl: string | undefined;
   /** Undefined when a template has no thumbnail yet; the card shows a blank page. */
   thumbnailUrl: string | undefined;
 }
@@ -47,7 +52,10 @@ export function toSummary(template: Template): TemplateSummary {
     course: template.course,
     problemCount: template.problems.length,
     tags: template.features.map((feature) => TAGS[feature]),
-    source: `Illustrative Mathematics · ${template.source.license}`,
+    attribution: template.source.attribution,
+    licenseUrl: template.source.licenseUrl,
+    changes: template.source.changes,
+    sourceUrl: template.source.lessons[0]?.url,
     thumbnailUrl: THUMBNAILS[template.id],
   };
 }

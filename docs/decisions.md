@@ -142,3 +142,5 @@ One line of reasoning per decision. Newest last. The fixed decisions in [prd.md]
 | 2026-10-15 | Infra | The deploy only needs to run for about 72 hours, the review window | Kincaid's call: cost is fine at this scale, so reliability wins every cost trade-off |
 | 2026-10-15 | Sync | Removed `ELECTRIC_REPLICATION_IDLE_TIMEOUT`; Electric keeps its Neon connection open | Over 72 hours the extra Neon compute is within the free plan. Staying connected avoids a reconnect and a Neon cold start on the first request after a quiet spell, for example at the start of the demo |
 | 2026-10-15 | Infra | `apps/web/vercel.json` skips a deploy when neither `apps/web`, `packages/` nor the lockfile changed | The Hobby plan's deploy rate limit was hit. Docs, CI and infra-only commits don't need a deploy |
+
+| 2026-10-15 | Report | The teacher's report loads a server snapshot with the page and switches to the live collections once they are ready; when sync is off (previews have no Electric) it keeps the snapshot, and the app-wide banner says live updates are off | The report is complete on every environment, and live wherever sync works |
