@@ -143,7 +143,11 @@ const pipeline = (options: {
       Layer.succeed(Grader.Grader, Grader.placeholder),
       Layer.succeed(ModelRouter, {
         forGrade: (runId) =>
-          CallLog.wrap(Option.isNone(runId) ? model.client : loadTestModel.client, log.service),
+          CallLog.wrap(
+            Option.isNone(runId) ? model.client : loadTestModel.client,
+            log.service,
+            "mock",
+          ),
       }),
     );
     const queue = yield* InProcessQueue.make({

@@ -6,7 +6,13 @@
  */
 import type { GradingInput, ModelResult } from "@goblins/domain";
 import { Context, Effect, Option, Schema } from "effect";
-import { BadResponse, type CallTag, ModelClient, type ModelError } from "./ModelClient.ts";
+import {
+  BadResponse,
+  type CallTag,
+  type CompletionRequest,
+  ModelClient,
+  type ModelError,
+} from "./ModelClient.ts";
 
 /**
  * The grader is either sure, or gives a best guess and says why the teacher should check.
@@ -146,4 +152,60 @@ export const placeholder: Grader["Type"] = {
         ? { _tag: "Sure" as const, result }
         : { _tag: "Unsure" as const, result, flagReason: reply.unsure };
     }),
+};
+
+/**
+ * What a scripted mock answer says, matching `Answer` in `packages/mock-model`
+ * (declared here so the grader does not depend on the mock).
+ */
+export type MockAnswer =
+  | {
+      readonly _tag: "Graded";
+      readonly score: number;
+      readonly maxScore: number;
+      readonly feedback: string;
+    }
+  | { readonly _tag: "NeedsTeacher"; readonly reason: string }
+  | { readonly _tag: "Text"; readonly text: string };
+
+/** Rubric lines as `placeholder` writes them into its prompt: `[<id>] <points> pt: ...`. */
+const rubricLinesIn = (request: CompletionRequest) =>
+  request.messages
+    .flatMap((m) =>
+      typeof m.content === "string"
+        ? [m.content]
+        : m.content.flatMap((part) => (part.type === "text" ? [part.text] : [])),
+    )
+    .flatMap((text) =>
+      [...text.matchAll(/^\[([0-9a-f-]{36})\] (\d+) pt:/gm)].map((m) => ({
+        id: m[1] ?? "",
+        points: Number(m[2]),
+      })),
+    );
+
+/**
+ * Renders a mock answer as the reply `placeholder` expects, for the rubric lines in
+ * the request. A Graded score is spread over the lines in order; a NeedsTeacher
+ * answer scores nothing and gives its reason as `unsure`. Pass it to the mock as
+ * `MockModel.layer(config, { render: Grader.placeholderRender })`.
+ */
+export const placeholderRender = (answer: MockAnswer, request: CompletionRequest): string => {
+  if (answer._tag === "Text") return answer.text;
+  const lines = rubricLinesIn(request);
+  const total = lines.reduce((sum, l) => sum + l.points, 0);
+  let remaining =
+    answer._tag === "Graded" && answer.maxScore > 0
+      ? Math.round((total * answer.score) / answer.maxScore)
+      : 0;
+  const scored = lines.map((l) => {
+    const points = Math.min(l.points, remaining);
+    remaining -= points;
+    return { rubricLineId: l.id, points };
+  });
+  return JSON.stringify({
+    read: answer._tag === "Graded" ? answer.feedback : "",
+    lines: scored,
+    reason: answer._tag === "Graded" ? answer.feedback : answer.reason,
+    unsure: answer._tag === "NeedsTeacher" ? answer.reason : null,
+  });
 };

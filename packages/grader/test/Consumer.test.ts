@@ -49,7 +49,11 @@ const setup = (options: { readonly script: Script; readonly concurrency?: number
     const loadTestModel = yield* fakeModel(always(reply()));
     const router: ModelRouter["Type"] = {
       forGrade: (runId) =>
-        CallLog.wrap(Option.isNone(runId) ? model.client : loadTestModel.client, log.service),
+        CallLog.wrap(
+          Option.isNone(runId) ? model.client : loadTestModel.client,
+          log.service,
+          "mock",
+        ),
     };
     const services = Layer.mergeAll(
       Layer.succeed(GradeStore.GradeStore, store.service),
@@ -449,6 +453,58 @@ describe("no lost submissions", () => {
       );
       yield* runUntilDone(queue.drained);
       expect(yield* t.grade("g1")).toMatchObject({ state: "graded" });
+    }),
+  );
+});
+
+describe("placeholderRender (mock answers in the placeholder's format)", () => {
+  const graded = (answer: Grader.MockAnswer) =>
+    Effect.gen(function* () {
+      const t = yield* setup({
+        script: ({ request }) =>
+          Effect.succeed({ ...reply(), text: Grader.placeholderRender(answer, request) }),
+      });
+      yield* t.submit("g1");
+      yield* runUntilDone(t.queue.drained);
+      return yield* t.grade("g1");
+    });
+
+  it.effect("a full-marks mock answer grades every rubric line in full", () =>
+    Effect.gen(function* () {
+      const g = yield* graded({ _tag: "Graded", score: 2, maxScore: 2, feedback: "Correct" });
+      expect(g).toMatchObject({
+        state: "graded",
+        outcome: Option.some({
+          _tag: "Sure",
+          result: {
+            linePoints: [
+              { rubricLineId: SETUP, points: 1 },
+              { rubricLineId: ANSWER, points: 1 },
+            ],
+          },
+        }),
+      });
+    }),
+  );
+
+  it.effect("a half-marks answer fills lines in order, and a flagged one needs the teacher", () =>
+    Effect.gen(function* () {
+      const half = yield* graded({ _tag: "Graded", score: 1, maxScore: 2, feedback: "Setup only" });
+      expect(half).toMatchObject({
+        outcome: Option.some({
+          result: {
+            linePoints: [
+              { rubricLineId: SETUP, points: 1 },
+              { rubricLineId: ANSWER, points: 0 },
+            ],
+          },
+        }),
+      });
+      const flagged = yield* graded({ _tag: "NeedsTeacher", reason: "Illegible" });
+      expect(flagged).toMatchObject({
+        state: "needs_teacher",
+        outcome: Option.some({ _tag: "Unsure", flagReason: "Illegible" }),
+      });
     }),
   );
 });

@@ -22,7 +22,7 @@ const setup = async (answer: () => Effect.Effect<Completion, ModelError>) => {
       Layer.succeed(GradeStore.GradeStore, store.service),
       Layer.succeed(Grader.Grader, Grader.placeholder),
       Layer.succeed(ModelRouter, {
-        forGrade: () => CallLog.wrap({ complete: () => answer() }, log.service),
+        forGrade: () => CallLog.wrap({ complete: () => answer() }, log.service, "mock"),
       }),
     ),
   );
