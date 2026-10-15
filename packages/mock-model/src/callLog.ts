@@ -42,9 +42,15 @@ export type CallLogError =
 const toEpochMs = (value: string | Date): number =>
   typeof value === "string" ? new Date(value).getTime() : value.getTime();
 
-/** Only real grading calls describe the provider: not the mock's own rows, not load-test traffic. */
+/**
+ * Only real grading calls describe the provider: app grades and eval runs
+ * (the same grading prompt, run offline), not the mock's own rows, other
+ * purposes or load-test traffic.
+ */
 const isRealGradeCall = (row: CallLogRow): boolean =>
-  row.provider === "openrouter" && row.purpose === "grade" && row.loadTestRunId === null;
+  row.provider === "openrouter" &&
+  (row.purpose === "grade" || row.purpose === "eval") &&
+  row.loadTestRunId === null;
 
 const decodeRow = Schema.decodeUnknownEither(CallLogRow);
 

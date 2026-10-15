@@ -40,6 +40,7 @@ describe("call log import", () => {
   it("uses only real grading calls: not mock rows, other purposes, load tests or other models", () => {
     const rows = [
       modelCallRow(),
+      modelCallRow({ purpose: "eval" }),
       modelCallRow({ provider: "mock" }),
       modelCallRow({ purpose: "extract" }),
       modelCallRow({ loadTestRunId: "lt-42" }),
@@ -49,7 +50,7 @@ describe("call log import", () => {
       source: "test",
       model: "google/gemini-2.5-flash",
     });
-    expect(Either.isRight(recording) && recording.right.calls.length).toBe(1);
+    expect(Either.isRight(recording) && recording.right.calls.length).toBe(2);
   });
 
   it("accepts createdAt as an ISO string from a JSON export", () => {
