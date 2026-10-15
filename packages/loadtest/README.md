@@ -20,6 +20,9 @@ LOAD_TEST_TOKEN=local NODE_ENV=production PORT=3290 AUTH_MODE=local \
   STUDENT_COOKIE_SECRET=local node --env-file=.env.local apps/web/.output/server/index.mjs
 LOAD_TEST_TOKEN=local pnpm --filter @goblins/loadtest loadtest ramp --url http://localhost:3290 --pricing none
 
+# Several app processes on one port, as a rough stand-in for several Vercel instances
+WORKERS=6 SERVER_ENTRY=$PWD/apps/web/.output/server/index.mjs NODE_ENV=production PORT=3290 … node packages/loadtest/scripts/cluster.mjs
+
 # Smoke test against a deploy: one class of 30, same command and report
 LOAD_TEST_TOKEN=<token> pnpm --filter @goblins/loadtest loadtest scenario normal --url https://<app> --start-classes 1 --time-scale 0.1
 ```
