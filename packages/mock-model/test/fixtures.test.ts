@@ -41,8 +41,19 @@ describe("fixed mode answers each fixture as scripted", () => {
           throw new Error(`${file} should answer`);
         }
         const { texts } = yield* callsAt(fixed, 0, 1, fixtureBytes(file));
-        expect(texts).toEqual([renderJson(outcome)]);
+        expect(texts).toEqual([renderJson(outcome, request(undefined))]);
       }
+    }),
+  );
+
+  it.effect("passes the request to a custom render, for formats keyed on the request", () =>
+    Effect.gen(function* () {
+      const client = yield* makeMockModelClient(fixed, {
+        seed: 1,
+        render: (answer, req) => `${answer._tag} for ${req.tag.subjectId ?? "?"}`,
+      });
+      const result = yield* client.complete(request(fixtureBytes("partial.png"), "grade-7"));
+      expect(result.text).toBe("Graded for grade-7");
     }),
   );
 

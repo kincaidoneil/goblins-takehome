@@ -176,7 +176,12 @@ export const makeMockModelClient = (config: MockConfig, options: MockOptions = {
           return yield* Effect.fail(toModelError(fate.failure, readMs + fate.latencyMs));
         }
         const answer = yield* answerOf(scripted, key, attempts, fate.latencyMs);
-        return { id, model: request.model, text: render(answer), usage: usageFor(config, rng) };
+        return {
+          id,
+          model: request.model,
+          text: render(answer, request),
+          usage: usageFor(config, rng),
+        };
       });
 
     return ModelClient.of({ complete });

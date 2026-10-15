@@ -46,8 +46,12 @@ export const defaultAnswer: Answer = {
   feedback: "Correct.",
 };
 
-/** Turns an answer into completion text. The grader stream supplies its own when its output schema lands. */
-export type Render = (answer: Answer) => string;
+/**
+ * Turns an answer into completion text. It gets the request too, because the
+ * grader's output format depends on it (one entry per rubric line). The app
+ * passes the active grader's renderer; `renderJson` is a generic default.
+ */
+export type Render = (answer: Answer, request: CompletionRequest) => string;
 
 export const renderJson: Render = (answer) => {
   switch (answer._tag) {

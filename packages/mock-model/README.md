@@ -57,7 +57,7 @@ This only works if the fixture bytes reach the model request unchanged. If the a
 
 To add a fixture: add the PNG to `fixtures/` (the sources are in `fixtures/whiteboards.html`), add an entry to `src/fixtures.ts`, and run the tests. They check every hash and print the right one on a mismatch.
 
-Completion text for graded and needs-teacher outcomes comes from `renderJson`. Pass `render` to `layer(config, { render })` to match the grader's output schema.
+Completion text for graded and needs-teacher outcomes comes from `renderJson`. Pass `render` to `layer(config, { render })` to match the grader's output schema. It receives the answer and the request, since the grader's format has one entry per rubric line in the request; the app wiring passes the active grader's renderer.
 
 ## Seed data: guessed, not measured
 
