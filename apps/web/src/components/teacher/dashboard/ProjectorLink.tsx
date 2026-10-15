@@ -21,8 +21,10 @@ export function ProjectorLink(props: {
       data-variant={props.variant}
       data-size={props.size}
       onClick={(event) => {
+        // If this tab is itself the projector window, a named open would replace it.
+        if (window.name === name) return;
         const opened = window.open(href, name, "popup,width=1280,height=800");
-        if (opened !== null) event.preventDefault();
+        if (opened !== null && opened !== window) event.preventDefault();
       }}
     >
       {props.children}
