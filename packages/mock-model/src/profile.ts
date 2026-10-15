@@ -125,11 +125,23 @@ export const sampleUsage = (
   switch (profile._tag) {
     case "Parametric":
       return { promptTokens: profile.tokens.prompt, completionTokens: profile.tokens.completion };
-    case "Empirical": {
-      const call = pick(profile.calls, rng);
-      return { promptTokens: call.promptTokens, completionTokens: call.completionTokens };
-    }
+    case "Empirical":
+      return usageOfCalls(profile.calls, rng);
   }
+};
+
+/**
+ * Token usage drawn from the successful calls only. Failed calls often have
+ * no usage (logged as 0), and a mocked success should not report zero tokens.
+ */
+export const usageOfCalls = (
+  calls: ReadonlyArray<LoggedCall>,
+  rng: Rng,
+): { promptTokens: number; completionTokens: number } => {
+  const [head, ...tail] = calls.filter((call) => call.outcome === "Ok");
+  if (head === undefined) return { promptTokens: 0, completionTokens: 0 };
+  const call = pick([head, ...tail], rng);
+  return { promptTokens: call.promptTokens, completionTokens: call.completionTokens };
 };
 
 export const pick = <A>(items: readonly [A, ...Array<A>], rng: Rng): A =>

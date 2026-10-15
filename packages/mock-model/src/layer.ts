@@ -11,7 +11,7 @@ import { Clock, Effect, Layer, Random } from "effect";
 import { DEFAULT_TIMEOUT_MS, type MockConfig } from "./config.ts";
 import { type Fate, type Rng, seededRng, toModelError } from "./fate.ts";
 import { fixtureByHash } from "./fixtures.ts";
-import { pick, sampleFate, sampleUsage } from "./profile.ts";
+import { sampleFate, sampleUsage, usageOfCalls } from "./profile.ts";
 import { profiles, recordings } from "./registry.ts";
 import { makeReplayer } from "./replay.ts";
 import { applyScenario } from "./scenario.ts";
@@ -62,14 +62,8 @@ const usageFor = (config: MockConfig, rng: Rng): Usage => {
       return { promptTokens: 0, completionTokens: 0, costUsd: 0 };
     case "Sampled":
       return { ...sampleUsage(profiles[config.profile], rng), costUsd: 0 };
-    case "Replay": {
-      const call = pick(recordings[config.recording].calls, rng);
-      return {
-        promptTokens: call.promptTokens,
-        completionTokens: call.completionTokens,
-        costUsd: 0,
-      };
-    }
+    case "Replay":
+      return { ...usageOfCalls(recordings[config.recording].calls, rng), costUsd: 0 };
   }
 };
 

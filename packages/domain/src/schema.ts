@@ -444,6 +444,38 @@ export const grades = pgTable(
 );
 
 // ---------------------------------------------------------------------------
+// Report
+
+/**
+ * The report's common mistakes for one weak problem, as a model grouped them from the graders'
+ * reasons. Cached so a report or a shared link opened many times pays for one call. The key
+ * includes a hash of the grades it was made from, so a resolved or rescored grade makes a new
+ * row instead of serving a stale grouping.
+ */
+export const reportMistakeGroups = pgTable(
+  "report_mistake_groups",
+  {
+    sessionId: uuid()
+      .notNull()
+      .references(() => classSessions.id, { onDelete: "cascade" }),
+    problemId: uuid()
+      .notNull()
+      .references(() => problems.id, { onDelete: "cascade" }),
+    /** Hash of the missed grades the grouping was made from (ids, points and reasons). */
+    inputHash: text().notNull(),
+    /** The skill the problem practices, in a few words. */
+    skill: text().notNull(),
+    /** `[{ description, studentIds }]`, validated by the report before use. */
+    groups: jsonb()
+      .$type<ReadonlyArray<{ description: string; studentIds: ReadonlyArray<string> }>>()
+      .notNull(),
+    model: text().notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [primaryKey({ columns: [t.sessionId, t.problemId, t.inputHash] })],
+);
+
+// ---------------------------------------------------------------------------
 // Model call log
 
 export const modelCallStatus = pgEnum("model_call_status", [
@@ -480,6 +512,8 @@ export const modelCalls = pgTable(
     latencyMs: integer().notNull(),
     inputTokens: integer(),
     outputTokens: integer(),
+    /** Reasoning tokens, when the model reports them separately. */
+    reasoningTokens: integer(),
     costUsd: numeric({ precision: 12, scale: 8, mode: "number" }),
     /** Set for grading calls. Not a foreign key: the log outlives deleted submissions. */
     submissionId: uuid(),

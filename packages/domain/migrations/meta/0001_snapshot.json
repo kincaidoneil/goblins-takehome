@@ -1,5 +1,5 @@
 {
-  "id": "712cb378-3c9f-4737-aed6-197711d4be59",
+  "id": "1c36b090-ce39-4d85-9f1c-17703e76fb34",
   "prevId": "b31dddba-c13f-41c1-b825-588175647097",
   "version": "7",
   "dialect": "postgresql",
@@ -695,30 +695,12 @@
           "primaryKey": false,
           "notNull": true
         },
-        "model_answered": {
-          "name": "model_answered",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "status": {
           "name": "status",
           "type": "model_call_status",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
-        },
-        "status_code": {
-          "name": "status_code",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "provider_id": {
-          "name": "provider_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         },
         "latency_ms": {
           "name": "latency_ms",
@@ -747,12 +729,6 @@
         "submission_id": {
           "name": "submission_id",
           "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "subject_id": {
-          "name": "subject_id",
-          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -1032,6 +1008,86 @@
           "value": "\"problems\".\"position\" >= 0"
         }
       },
+      "isRLSEnabled": false
+    },
+    "public.report_mistake_groups": {
+      "name": "report_mistake_groups",
+      "schema": "",
+      "columns": {
+        "session_id": {
+          "name": "session_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "problem_id": {
+          "name": "problem_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "input_hash": {
+          "name": "input_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "skill": {
+          "name": "skill",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "groups": {
+          "name": "groups",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "model": {
+          "name": "model",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "report_mistake_groups_session_id_class_sessions_id_fk": {
+          "name": "report_mistake_groups_session_id_class_sessions_id_fk",
+          "tableFrom": "report_mistake_groups",
+          "tableTo": "class_sessions",
+          "columnsFrom": ["session_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "report_mistake_groups_problem_id_problems_id_fk": {
+          "name": "report_mistake_groups_problem_id_problems_id_fk",
+          "tableFrom": "report_mistake_groups",
+          "tableTo": "problems",
+          "columnsFrom": ["problem_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "report_mistake_groups_session_id_problem_id_input_hash_pk": {
+          "name": "report_mistake_groups_session_id_problem_id_input_hash_pk",
+          "columns": ["session_id", "problem_id", "input_hash"]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
       "isRLSEnabled": false
     },
     "public.rubric_lines": {
@@ -1550,7 +1606,7 @@
     "public.model_call_status": {
       "name": "model_call_status",
       "schema": "public",
-      "values": ["ok", "rate_limited", "timeout", "provider_error", "bad_response", "interrupted"]
+      "values": ["ok", "rate_limited", "timeout", "provider_error", "bad_response"]
     }
   },
   "schemas": {},
