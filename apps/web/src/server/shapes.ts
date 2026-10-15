@@ -21,7 +21,7 @@ export class Forbidden extends Data.TaggedError("Forbidden") {}
 export class UnknownView extends Data.TaggedError("UnknownView") {}
 
 const sessionColumns = ["id", "assignment_id", "join_code", "status", "time_limit_minutes", "started_at", "ended_at"]
-const studentColumns = ["id", "session_id", "display_name", "avatar", "created_at"]
+const studentColumns = ["id", "session_id", "display_name", "avatar_id", "created_at"]
 const gradeColumnsForTeacher = [
   "submission_id",
   "session_id",
