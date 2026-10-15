@@ -40,6 +40,8 @@ pnpm monorepo. Each workstream owns one package and does not edit another stream
 - Keep it simple. Do not build for scale the PRD does not ask for.
 - End-to-end tests (Playwright) over unit tests. Unit tests only where logic is dense.
 - UI components get Storybook stories. Check UI changes by screenshot.
+- Root commands: `pnpm lint` (Biome), `pnpm format`, `pnpm typecheck`, `pnpm test`, `pnpm e2e`. CI runs the first three on every PR, plus E2E against the Vercel preview.
+- Each package's `tsconfig.json` extends `../../tsconfig.base.json` and its `package.json` defines `typecheck` (`tsc -p .`) and, if it has tests, `test` (Vitest). Root scripts run those in every package.
 
 ## Models and money
 
