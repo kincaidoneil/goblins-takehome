@@ -35,6 +35,9 @@ importers:
       '@goblins/mock-model':
         specifier: workspace:*
         version: link:../../packages/mock-model
+      '@goblins/templates':
+        specifier: workspace:*
+        version: link:../../packages/templates
       '@goblins/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -68,6 +71,9 @@ importers:
       nitro:
         specifier: 3.0.260610-beta
         version: 3.0.260610-beta(@electric-sql/pglite@0.5.10)(@vercel/blob@2.8.2)(@vercel/functions@3.10.1(ws@8.22.0))(chokidar@5.0.0)(drizzle-orm@0.45.4(@electric-sql/pglite@0.5.10)(@types/pg@8.23.1)(pg@8.23.1))(jiti@2.7.0)(lru-cache@11.5.3)(rollup@4.64.7)(vite@8.3.4(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))
+      pdfjs-dist:
+        specifier: ^6.4.299
+        version: 6.4.299
       qrcode.react:
         specifier: ^4.2.0
         version: 4.2.0(react@19.3.0)
@@ -184,6 +190,9 @@ importers:
 
   packages/evals:
     dependencies:
+      '@goblins/grader':
+        specifier: workspace:*
+        version: link:../grader
       '@goblins/templates':
         specifier: workspace:*
         version: link:../templates
@@ -221,6 +230,9 @@ importers:
       '@types/node':
         specifier: ^22.20.5
         version: 22.20.5
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
       typescript:
         specifier: 7.0.2
         version: 7.0.2
@@ -277,6 +289,43 @@ importers:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.15)
 
+  packages/loadtest:
+    dependencies:
+      '@goblins/domain':
+        specifier: workspace:*
+        version: link:../domain
+      '@goblins/grader':
+        specifier: workspace:*
+        version: link:../grader
+      '@goblins/mock-model':
+        specifier: workspace:*
+        version: link:../mock-model
+      '@goblins/simulator':
+        specifier: workspace:*
+        version: link:../simulator
+      '@goblins/templates':
+        specifier: workspace:*
+        version: link:../templates
+      drizzle-orm:
+        specifier: ~0.45.4
+        version: 0.45.4(@electric-sql/pglite@0.5.10)(@types/pg@8.23.1)(pg@8.23.1)
+      effect:
+        specifier: ^3.22.2
+        version: 3.22.2
+    devDependencies:
+      '@types/node':
+        specifier: ^22.20.5
+        version: 22.20.5
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.15)
+
   packages/mock-model:
     dependencies:
       '@goblins/grader':
@@ -295,6 +344,34 @@ importers:
       '@types/node':
         specifier: ^22.20.5
         version: 22.20.5
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.15)
+
+  packages/simulator:
+    dependencies:
+      '@electric-sql/client':
+        specifier: ^1.5.28
+        version: 1.5.28
+      '@goblins/mock-model':
+        specifier: workspace:*
+        version: link:../mock-model
+      '@goblins/templates':
+        specifier: workspace:*
+        version: link:../templates
+      effect:
+        specifier: ^3.22.2
+        version: 3.22.2
+    devDependencies:
+      '@types/node':
+        specifier: ^22.20.5
+        version: 22.20.5
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -3270,6 +3347,10 @@ packages:
   pathval@2.0.1:
     resolution: {integrity: sha512-//nshmD55c46FuFw26xV/xFAaB5HF9Xdap7HJBBnrKdAd6/GxDBaNA1870O79+9ueg61cZLSVc+OaFlfmObYVQ==}
     engines: {node: '>= 14.16'}
+
+  pdfjs-dist@6.4.299:
+    resolution: {integrity: sha512-AVl138zALtfaAPvADulE0PZThbYzCBS79nL4pOSL/6Sm/4AH5A21BD9VHt97OlCuzJuCpmeZtAtkinisF4Vb1g==}
+    engines: {node: '>=22.13.0 || >=24'}
 
   pg-cloudflare@1.4.1:
     resolution: {integrity: sha512-6PQbsFWZcp9EmJEwy5cGQ2La+AMWpP46lgbb8X+U/XsHIUweYDNCpeuKck5RxL2MdVFi7krbbEi5nX4Zh7JhrQ==}
@@ -6306,6 +6387,10 @@ snapshots:
   pathe@2.0.3: {}
 
   pathval@2.0.1: {}
+
+  pdfjs-dist@6.4.299:
+    optionalDependencies:
+      '@napi-rs/canvas': 1.0.11
 
   pg-cloudflare@1.4.1:
     optional: true

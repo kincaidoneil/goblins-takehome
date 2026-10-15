@@ -1,0 +1,2285 @@
+{
+ "spec": "mistralai/mistral-small-2603",
+ "limit": null,
+ "summary": {
+  "cases": 230,
+  "exact": 26,
+  "lineAgreement": 0.8026315789473685,
+  "meanAbsError": 0.39473684210526316,
+  "flagged": 6,
+  "autoCorrect": 25,
+  "autoUnder": 1,
+  "autoOver": 6,
+  "flagRecall": {
+   "should": 3,
+   "did": 2
+  },
+  "falseFlags": {
+   "shouldNot": 27,
+   "did": 1
+  },
+  "failed": 192,
+  "meanCostUsd": 0.00006081123913043477,
+  "p50LatencyMs": 2802,
+  "p95LatencyMs": 4233,
+  "meanCompletionTokens": 194.68421052631578
+ },
+ "outcomes": [
+  {
+   "_tag": "Graded",
+   "caseId": "ar-1-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "∠A + ∠C = 180°\n74 + C = 180\nC = 180 - 74\nC = 106°",
+   "reason": "Correct method and answer, though no units shown.",
+   "costUsd": 0.0003834,
+   "latencyMs": 2686,
+   "attempts": 1,
+   "promptTokens": 1904,
+   "completionTokens": 163
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-1-answer-only",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "C = 106",
+   "reason": "Correct answer but no work shown; one point earned for final answer.",
+   "costUsd": 0.0003462,
+   "latencyMs": 2802,
+   "attempts": 1,
+   "promptTokens": 1904,
+   "completionTokens": 101
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-1-used-90",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "supplementary\nA + C = 90\n74 + C = 90\nC = 90 - 74\nC = 16°",
+   "reason": "Used the wrong relationship (90° instead of 180°) and arrived at an incorrect answer.",
+   "costUsd": 0.0003768,
+   "latencyMs": 2323,
+   "attempts": 1,
+   "promptTokens": 1904,
+   "completionTokens": 152
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-1-borrow-slip",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "A + C = 180\nC = 180 - 74\n\n  180\n-  74\n------\n  116\n\n∠C = 116°\n\n[Drawing: Two angles side by side. Left angle at A with rays AB (right) and AE (up-right), labeled 74°. Right angle at C with rays CD (right) and CF (up-left), marked with arc and labeled ∠C = 116°]",
+   "reason": "Correct method but miscalculated the subtraction, leading to wrong final answer.",
+   "costUsd": 0.0004266,
+   "latencyMs": 2905,
+   "attempts": 1,
+   "promptTokens": 1904,
+   "completionTokens": 235
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-1-overwritten-digit",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Check if crossed-out answer should be considered.",
+   "read": "A + C = 180\n180 - 74\n[crossed out] U = 106",
+   "reason": "Correct method used but final answer crossed out and not clearly restated.",
+   "costUsd": 0.000375,
+   "latencyMs": 3816,
+   "attempts": 1,
+   "promptTokens": 1904,
+   "completionTokens": 149
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2a-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "pair 1: ∠DCM and ∠DMC\n27 + 63 = 90\n\npair 2: ∠MGF and ∠GMF\n26 + 64 = 90\n\n[drawing of square CDFG with point M on DF, segments CM and GM drawn, angles labeled as described]",
+   "reason": "Correctly named two different pairs of complementary angles.",
+   "costUsd": 0.000368295,
+   "latencyMs": 3368,
+   "attempts": 1,
+   "promptTokens": 2131,
+   "completionTokens": 201
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2a-corner-pairs",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "corners of a square = 90\n∠MCG = 90 - 27 = 63\n∠CGM = 90 - 26 = 64\n\n1) ∠DCM + ∠MGC\n2) ∠MGF + ∠CGM",
+   "reason": "Correctly identified two different complementary angle pairs.",
+   "costUsd": 0.000358695,
+   "latencyMs": 3188,
+   "attempts": 1,
+   "promptTokens": 2131,
+   "completionTokens": 185
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2a-measures-only",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "27° and 63°\n26° and 64°\nthey both add up to 90",
+   "reason": "Correctly identified two different pairs of complementary angles by measure.",
+   "costUsd": 0.000329295,
+   "latencyMs": 2921,
+   "attempts": 1,
+   "promptTokens": 2131,
+   "completionTokens": 136
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2a-wrong-vertex",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "∠CDM (27) + ∠CMD (63) = 90\n∠GMF (64) + ∠MGF (26) = 90",
+   "reason": "Correctly identified two different pairs of complementary angles.",
+   "costUsd": 0.00042225,
+   "latencyMs": 2231,
+   "attempts": 1,
+   "promptTokens": 2131,
+   "completionTokens": 171
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2a-used-180",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Clarify if student meant supplementary or complementary angles.",
+   "read": "complementary = 180\n\n∠D and ∠F (90 + 90)\n∠C and ∠G (90 + 90)",
+   "reason": "Correctly identified two pairs of complementary angles (90° + 90° = 180°), but confused complementary with supplementary.",
+   "costUsd": 0.000353895,
+   "latencyMs": 2437,
+   "attempts": 1,
+   "promptTokens": 2131,
+   "completionTokens": 177
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-2b-straight-angle",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2b-triangle",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "triangle CDM\n∠DCM, ∠CDM, ∠DMC\n27 + 90 + 63 = 180\n[drawing: square CDFG with C top left, D top right, F bottom right, G bottom left; point M on DF; segments CM and GM drawn; angles labeled: ∠DCM = 27°, ∠DMC = 63°, ∠GMF = 64°, ∠MGF = 26°; right angles at square corners]",
+   "reason": "Correctly named three angles summing to 180° but did not use the straight angle or triangle CMG.",
+   "costUsd": 0.00045045,
+   "latencyMs": 3370,
+   "attempts": 1,
+   "promptTokens": 2051,
+   "completionTokens": 238
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2b-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no work)",
+   "reason": "No work shown; no angles named.",
+   "costUsd": 0.00034365,
+   "latencyMs": 2073,
+   "attempts": 1,
+   "promptTokens": 2051,
+   "completionTokens": 60
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-2b-measures-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-2b-wrong-vertex",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-3-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-3-c-complementary",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-3-adjacent-as-vertical",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-3-crossed-out-messy",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-3-two-answers",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-4-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-4-answer-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-4-used-180",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-4-triangle-sum",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-4-subtraction-slip",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-4-overwritten-digit",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-5-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-5-no-explanation",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-5-complementary-impossible",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-5-idk",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-5-forgot-halve",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-5-drawings-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-6-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-6-answer-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-6-used-180",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-6-straight-line",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-6-copied-problem",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-7-messy-diagram",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-7-halve-difference",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-7-forgot-second-x",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-7-answer-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-7-borrow-slip",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-8-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-8-w-from-right-angle",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-8-x-used-180",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-8-borrow-slip",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-8-blank",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-8-overwritten-digit",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-1-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-1-distribute-first-term",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-1-moved-without-sign",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-1-unsimplified-messy",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-1-answer-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-1-divide-by-3",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-2-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-2-answer-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-2-distribute-first-term",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-2-sign-move",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-2-messy-overwrite",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-3-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-3-distribute-fractions",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-3-sign-error",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-3-partial-distribute",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-3-checks-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-3-blank",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-4-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-4-unlike-and-distribute",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-4-zero-no-solution",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-4-mostly-answer-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-4-ambiguous-sign",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-5-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-5-forgot-6",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-5-sign-and-distribute",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-5-distribute-thirds",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-5-near-blank",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-5-messy-crossed-out",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-6-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-6-resolved-no-step",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-6-wrong-step",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-6-right-step-slip",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-6-near-blank",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-6-messy-annotated",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-7-correct-both",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-7-fixed-72-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-7-fixed-sign-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-7-decimal",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-7-two-answers",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-7-crossed-out-thin",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-8-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-8-agrees",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-8-no-reason",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-8-negative-example",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-8-partly-agrees",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-8-messy-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-1-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-1-table",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-1-per-pizza",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-1-fee-one-pizza",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-1-answer-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-1-blank",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-2a-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-2a-table",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-2a-flipped-lin",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-2a-whole-bag",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-2a-near-blank",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-2b-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-2b-flipped",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-2b-fraction",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-2b-overwrite",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3a-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3a-forgot-flat-rate",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3a-fee-every-hour",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3a-answer-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3a-one-wrong",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3b-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3b-ft-forgot-fee",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3b-misses-points",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3b-ft-fee-every-hour",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3b-unlabeled",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3b-axes-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3c-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3c-total-over-hours",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3c-cost-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3c-ft-fee-every-hour",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3c-ft-slip",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3c-overwrite",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-4-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-4-point-slope",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-4-run-over-rise",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-4-b-is-5",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-4-crossed",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5a-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5a-elena-85",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5a-no-difference",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5a-compares-time",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5a-blank",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5b-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5b-mi-per-min",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5b-misread-graph",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5b-tyler-times",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5c-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5c-bigger-faster",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5c-ft-misread",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5c-misread-bigger",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5c-mph",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-6a-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-6a-answer-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-6a-total-cost",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-6a-divide-total",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-6a-idk",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-6b-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-6b-zero",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-6b-first-class",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-6b-crossed",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-6b-blank",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7a-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7a-swapped",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7a-t-h-swapped",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7a-forgot-start",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7a-recursive",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7a-messy",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7b-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7b-plugs-t",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7b-subtract-first",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7b-ft-swapped",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7b-swapped-slip",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7b-overwrite",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1a-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1a-trig-sin60",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1a-full-base-zero",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1a-added-squares",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1a-guess-4",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1a-squared-slip",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1a-messy-ambiguous",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1a-blank",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1a-crossed-out",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1b-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1b-answer-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1b-thirty",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1b-near-blank",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1b-overwritten",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-2-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-2-follow-through-root5",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-2-follow-through-4",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-2-carried-wrong",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-2-sqrt3-over-4",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-2-side-as-height",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-2-two-answers",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-2-near-blank",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-3a-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-3a-bd-as-side",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-3a-forgot-halve",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-3a-messy-crossed",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-3b-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-3b-diagonal",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-3b-bd-as-side",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-3b-small-squares",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-4-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-4-cos",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-4-radians",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Teacher should check if -0.988 was meant to be sin 30° value.",
+   "read": "sin 30 = h/18\nh = 18 sin 30\n= 18(-0.988)\n= -17.8??\nh = -17.8 ft",
+   "reason": "Correct setup but incorrect calculation and final answer.",
+   "costUsd": 0.000320445,
+   "latencyMs": 3150,
+   "attempts": 3,
+   "promptTokens": 1936,
+   "completionTokens": 170
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-4-answer-only",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-5-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "tan 30° = AB/6\nAB = 6 tan 30°\nAB ≈ 6(0.577)\n[AB ≈ 3.46]\nRight triangle ABC with right angle at A, points labeled A (bottom left), B (top), C (right). AC labeled 6, angle at C labeled 30°.",
+   "reason": "Correct setup and calculation, but answer form not exact (approximate).",
+   "costUsd": 0.000326595,
+   "latencyMs": 2265,
+   "attempts": 3,
+   "promptTokens": 1893,
+   "completionTokens": 191
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-5-tan-upside-down",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Check if 0.577 was meant to represent √3 (≈1.732) or tan 30° (≈0.577).",
+   "read": "tan 30 = b/AB\nAB = b/tan 30\nAB = 6/0.577\n[AB ≈ 10.4]\nRight triangle ABC with right angle at A, AC labeled 6, angle C labeled 30°, AB labeled with a question mark.",
+   "reason": "Correct setup but incorrect calculation led to wrong final answer.",
+   "costUsd": 0.000357195,
+   "latencyMs": 2343,
+   "attempts": 3,
+   "promptTokens": 1893,
+   "completionTokens": 242
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-5-30-60-90",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "30-60-90: x : x√3 : 2x\nlong leg AC = 6 = x√3\nx = 6/√3 = 6√3/3\n[boxed] AB = 2√3\n\nRight triangle ABC with right angle at A, angle C = 30°, AC = 6, AB labeled x, BC labeled 2x",
+   "reason": "Correct setup and answer, but no explicit tan 30° = AB/6 step.",
+   "costUsd": 0.00041655,
+   "latencyMs": 3563,
+   "attempts": 3,
+   "promptTokens": 1893,
+   "completionTokens": 221
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-5-half-of-6",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "side across from 30° is half\nAB = 1/2 · 6\n[crossed out] AB = 3",
+   "reason": "Correct setup but wrong final answer due to misapplying the 30-60-90 ratio.",
+   "costUsd": 0.000308595,
+   "latencyMs": 2749,
+   "attempts": 3,
+   "promptTokens": 1893,
+   "completionTokens": 161
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-5-near-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "tan 30 =",
+   "reason": "No work shown; correct answer would earn L2 only.",
+   "costUsd": 0.000266595,
+   "latencyMs": 2451,
+   "attempts": 2,
+   "promptTokens": 1893,
+   "completionTokens": 91
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "BD² + 12² = 13²\nBD² = 169 - 144 = 25\nBD = 5\n[ADB ~ BDC]\nAD/BD = BD/DC\nAD/5 = 5/12\nAD = 25/12 ≈ 2.08\n\nDrawing: Triangle ABC with right angle at B, altitude BD to AC, DC labeled 12, BC labeled 13, right angle at D.\n\ncheck: AB² = AD · AC\nAC = 12 + 2.08 = 14.08\nAD · AC = 2.08 · 14.08 ≈ 29.3\nAB² = 5² + 2.08² ≈ 29.3 ok",
+   "reason": "Correctly found BD and AD using Pythagorean theorem and similar triangles, and verified with a different method.",
+   "costUsd": 0.0005607,
+   "latencyMs": 4126,
+   "attempts": 1,
+   "promptTokens": 2058,
+   "completionTokens": 420
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-trig-check",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "BD = √(169 - 144) = √25 = 5\nAD/5 = 5/12\nAD = 25/12 ≈ 2.08\ncheck w/ trig\ntan C = 5/12 ∠C ≈ 22.6°\n∠ABD = ∠C ≈ 22.6°\nAD = 5 tan 22.6° ≈ 2.08 yes\nDiagram: Right triangle ABC with right angle at B. Altitude BD to AC, right angle at D. DC labeled 12, BC labeled 13. Points A, D, C colinear on base, B above.",
+   "reason": "Correctly found BD and AD using Pythagorean theorem and similar triangles, then verified with trigonometry.",
+   "costUsd": 0.0005325,
+   "latencyMs": 4173,
+   "attempts": 1,
+   "promptTokens": 2058,
+   "completionTokens": 373
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-restate-check",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "BD² = 13² - 12² = 25\nBD = 5\n\nAD/5 = 5/12\n[crossed out] AD = 5/12\nAD = 25/12\n\ncheck: 5² + 12²\n= 25 + 144 = 169 = 13² ok\n\nDrawing: Right triangle ABC with right angle at B, altitude BD to AC, DC labeled 12, BC labeled 13, right angle at D.",
+   "reason": "Correctly found BD and AD using Pythagorean theorem and similar triangles, and verified with a different method.",
+   "costUsd": 0.0004827,
+   "latencyMs": 2938,
+   "attempts": 1,
+   "promptTokens": 2058,
+   "completionTokens": 290
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-wrong-ratio",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Teacher should verify if AD/5 = 5/12 was intended or if ratio was miswritten.",
+   "read": "BD^2 + 144 = 169 → BD = 5\nAD/12 = 5/13\nAD = 60/13 ≈ 4.62\nDiagram: Triangle ABC with right angle at B, altitude BD to AC, DC labeled 12, BC labeled 13, BD labeled 5, and AD ≈ 4.62.\ncheck: AB^2 = AD · AC\nAC = 12 + 4.62 = 16.62\nAD · AC ≈ 76.8\nAB^2 = 25 + 4.62^2 ≈ 46.3\n?? doesn't match",
+   "reason": "Correctly found BD = 5 but used wrong ratio for AD and failed the check due to incorrect values.",
+   "costUsd": 0.0005421,
+   "latencyMs": 3489,
+   "attempts": 1,
+   "promptTokens": 2058,
+   "completionTokens": 389
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-messy-crossed",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "A-D = 13 - 12 = 1\nBD² = 169 - 144 = 25, BD = 5\n\nsimilar Δs: AD = 5²/12 = 25/12\n\ncheck AB² = AD · AC\nAD · AC = 25/12 · 169/12 = 4225/144\nAB² = 5² + (25/12)² = 3600/144 + 625/144 = 4225/144 ok",
+   "reason": "All steps are correct and the check confirms the answers.",
+   "costUsd": 0.0005091,
+   "latencyMs": 3234,
+   "attempts": 1,
+   "promptTokens": 2058,
+   "completionTokens": 334
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-near-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "BD = ?\nAD = ?\nDrawing: right triangle ABC with right angle at B, altitude BD to hypotenuse AC, right angle at D. DC labeled 12, BC labeled 13.",
+   "reason": "No work was shown for BD, AD, or a check.",
+   "costUsd": 0.0004041,
+   "latencyMs": 3081,
+   "attempts": 1,
+   "promptTokens": 2058,
+   "completionTokens": 159
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-7-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "∠H opp 35°, G adj\nJH = 9 sin 35° ≈ 5.16\nGJ = 9 cos 35° ≈ 7.37\nRight triangle GHJ with right angle at J, angle G = 35°, hypotenuse GH = 9, sides JH and GJ labeled.",
+   "reason": "Correct expressions for both JH and GJ using sine and cosine of 35°.",
+   "costUsd": 0.000333045,
+   "latencyMs": 3777,
+   "attempts": 1,
+   "promptTokens": 1964,
+   "completionTokens": 184
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-7-swapped",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "sin 35 = GJ/9\nGJ = 9 sin 35 ≈ 5.16\n\ncos 35 = JH/9\nJH = 9 cos 35 ≈ 7.37\n\nRight triangle GHJ with right angle at J, angle G labeled 35°, hypotenuse GH labeled 9, side GJ opposite angle H, side JH opposite angle G.",
+   "reason": "Correct expressions for both sides using right trig functions, but swapped labels for JH and GJ.",
+   "costUsd": 0.000351045,
+   "latencyMs": 1969,
+   "attempts": 1,
+   "promptTokens": 1964,
+   "completionTokens": 214
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-7-angle-55",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "∠H = 180 - 90 - 35 = 55°\nJH = 9 cos 55°\nGJ = 9 sin 55°\n[Drawing: Right triangle GHJ with right angle at J, angle G labeled 35°, hypotenuse GH labeled 9, angle H labeled 55°]",
+   "reason": "Correct expressions using equivalent trigonometric forms for both lengths.",
+   "costUsd": 0.000343845,
+   "latencyMs": 2465,
+   "attempts": 1,
+   "promptTokens": 1964,
+   "completionTokens": 202
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-7-pythagoras",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "JH = 9 sin 35° ≈ 5.16\n\nGJ = √(9² - 5.16²)\n      = √(81 - 26.63)\n      = √54.37 ≈ 7.37",
+   "reason": "Correct expressions and calculations for both JH and GJ using the right method.",
+   "costUsd": 0.000348645,
+   "latencyMs": 1885,
+   "attempts": 1,
+   "promptTokens": 1964,
+   "completionTokens": 210
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8a-correct",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "5² + 12² = 13²\n25 + 144 = 169\n169 = 169 yes",
+   "reason": "Correctly showed 5² + 12² = 13² with arithmetic and conclusion.",
+   "costUsd": 0.0003579,
+   "latencyMs": 2760,
+   "attempts": 1,
+   "promptTokens": 1822,
+   "completionTokens": 141
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8a-statement-only",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Yes! 5, 12, 13 is a Pythagorean triple (its on the list)",
+   "reason": "Correct conclusion but no work shown to verify the triple.",
+   "costUsd": 0.000266565,
+   "latencyMs": 2110,
+   "attempts": 1,
+   "promptTokens": 1822,
+   "completionTokens": 106
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8a-doubled",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "5^2 + 12^2 = 13^2\n10 + 24 = 34\n13^2 = 26\n34 ≠ 26 not a triple",
+   "reason": "Correctly showed 5² + 12² = 13² but made arithmetic errors in follow-up steps.",
+   "costUsd": 0.000283365,
+   "latencyMs": 1964,
+   "attempts": 1,
+   "promptTokens": 1822,
+   "completionTokens": 134
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8a-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no work)",
+   "reason": "No work shown to verify the Pythagorean triple.",
+   "costUsd": 0.000096045,
+   "latencyMs": 1816,
+   "attempts": 1,
+   "promptTokens": 1822,
+   "completionTokens": 63
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8b-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "tan θ = 5/12\nθ = tan⁻¹(5/12)\nθ ≈ 22.6°\nother = 90 - 22.6\n= 67.4°\n[right triangle drawing with sides labeled 5, 12, 13 and angle θ marked]",
+   "reason": "Correct method and both angles found within 1° of key values.",
+   "costUsd": 0.000330795,
+   "latencyMs": 4233,
+   "attempts": 1,
+   "promptTokens": 1905,
+   "completionTokens": 195
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8b-radians",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "tan⁻¹(5/12) = 0.39\n90 - 0.39 = 89.61\nangles: 0.39° and 89.61°",
+   "reason": "Both angles are incorrect due to miscalculation of tan⁻¹(5/12) and subtraction.",
+   "costUsd": 0.000333195,
+   "latencyMs": 4508,
+   "attempts": 1,
+   "promptTokens": 1905,
+   "completionTokens": 199
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8b-wrong-hypotenuse",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "sin θ = 5/12\nθ = sin⁻¹(5/12) ≈ 24.6°\n90 - 24.6 = 65.4°",
+   "reason": "Correct method but angles are off by about 2°, so both points earned.",
+   "costUsd": 0.00039795,
+   "latencyMs": 2927,
+   "attempts": 1,
+   "promptTokens": 1905,
+   "completionTokens": 187
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8b-messy-overwrite",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Check if 62.4° is a calculation error or misread of 67.4°.",
+   "read": "θ = tan⁻¹(5/12)\nθ ≈ 22.6°\nother = 90 - θ\n≈ 62.4°",
+   "reason": "Correct first angle but wrong subtraction for the second angle.",
+   "costUsd": 0.000321795,
+   "latencyMs": 2677,
+   "attempts": 1,
+   "promptTokens": 1905,
+   "completionTokens": 180
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-8b-ratio-table",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-9-correct",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-9-swapped",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "RQ = 4 sin 30° = 2\nQP = 4 cos 30° = 2√3",
+   "reason": "Legs are swapped; correct trig values but assigned to wrong sides.",
+   "costUsd": 0.000321345,
+   "latencyMs": 1871,
+   "attempts": 1,
+   "promptTokens": 1934,
+   "completionTokens": 172
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-9-30-60-90",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "short leg = 1/2 hyp\nQP = 2\nlong leg = 2√3 ≈ 3.46\nRQ = 2√3\n[Drawing: right triangle PQR with right angle at Q, hypotenuse RP labeled 4, angle at R marked 30°, angle at P marked 60°]",
+   "reason": "Correctly found both legs using 30-60-90 relationships.",
+   "costUsd": 0.000339345,
+   "latencyMs": 2352,
+   "attempts": 1,
+   "promptTokens": 1934,
+   "completionTokens": 202
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-9-pythagoras-slip",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-9-unlabeled",
+   "error": "rate limited",
+   "costUsd": 0,
+   "attempts": 3
+  }
+ ]
+}

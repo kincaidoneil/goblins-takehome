@@ -1,0 +1,321 @@
+[
+ {
+  "label": "1",
+  "pages": [
+   1
+  ],
+  "text": "A restaurant offers delivery for their pizzas. The total cost is a delivery fee added to the price of the pizzas. One customer pays $25 to have 2 pizzas delivered. Another customer pays $58 for 5 pizzas. How many pizzas are delivered to a customer who pays $80?",
+  "diagramDescription": null,
+  "answerKey": "7 pizzas. Slope = (58 - 25)/(5 - 2) = 11 dollars per pizza. Fee: 25 - 2(11) = 3, so cost = \\(11n + 3\\). Set 11n + 3 = 80, so n = 77/11 = 7. Check: 11(7) + 3 = 80.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: finds the price per pizza of $11 from the two customers, e.g. (58 - 25)/(5 - 2)"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: finds the $3 delivery fee or writes a correct equation such as 11p + 3 = total cost (or an equivalent method)"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: answer: 7 pizzas"
+   }
+  ],
+  "gradingNotes": "Units do not matter. Any correct method that gives 7 pizzas earns full credit.",
+  "dependsOn": []
+ },
+ {
+  "label": "2a",
+  "pages": [
+   1
+  ],
+  "text": "The graph shows the relationship between the number of cups of flour and the number of cups of sugar in Lin's favorite brownie recipe. The table shows the amounts of flour and sugar needed for Noah's favorite brownie recipe.\n\n| cups of sugar | cups of flour |\n|---|---|\n| 3/2 | 1 |\n| 3 | 2 |\n| 4 1/2 | 3 |\n\nNoah and Lin buy a 12-cup bag of sugar and divide it evenly to make their recipes. If they each use all their sugar, how much flour do they each need?",
+  "diagramDescription": "Graph of Lin's recipe. Horizontal axis labeled 'cups of sugar', marked 1 through 5, gridlines at each whole number. Vertical axis labeled 'cups of flour', marked 1 through 4, gridlines at each half cup. Plotted points (read against gridlines): (1, 0.5), (2, 1), (3, 1.5), (4, 2), (5, 2.5). The points lie on a straight line through the origin.",
+  "answerKey": "Each person gets 12 / 2 = 6 cups of sugar. Lin: the graph shows flour = half the sugar, so 6 cups sugar needs 3 cups flour. Noah: the table ratio is 2 cups flour per 3 cups sugar, so 6 cups sugar needs (2/3)(6) = 4 cups flour. Check: 4 / 6 = 2/3 matches the table row 3 : 2. Answer: Lin needs 3 cups of flour, Noah needs 4 cups of flour.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: each person gets 6 cups of sugar (12 divided by 2)"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: Lin needs 3 cups of flour (from the graph ratio of 1 flour to 2 sugar, or equivalent)"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: Noah needs 4 cups of flour (from the table ratio of 2 flour to 3 sugar, or equivalent)"
+   }
+  ],
+  "gradingNotes": "Units do not matter. Accept 3 and 4 with or without the word cups.",
+  "dependsOn": []
+ },
+ {
+  "label": "2b",
+  "pages": [
+   1
+  ],
+  "text": "The graph shows the relationship between the number of cups of flour and the number of cups of sugar in Lin's favorite brownie recipe. The table shows the amounts of flour and sugar needed for Noah's favorite brownie recipe.\n\n| cups of sugar | cups of flour |\n|---|---|\n| 3/2 | 1 |\n| 3 | 2 |\n| 4 1/2 | 3 |\n\nNoah and Lin buy a 10-cup bag of flour and divide it evenly to make their recipes. If they each use all their flour, how much sugar do they each need?",
+  "diagramDescription": "Graph of Lin's recipe. Horizontal axis labeled 'cups of sugar', marked 1 through 5, gridlines at each whole number. Vertical axis labeled 'cups of flour', marked 1 through 4, gridlines at each half cup. Plotted points (read against gridlines): (1, 0.5), (2, 1), (3, 1.5), (4, 2), (5, 2.5). The points lie on a straight line through the origin.",
+  "answerKey": "Each person gets 10 / 2 = 5 cups of flour. Lin: flour = half the sugar, so sugar = 2 x 5 = 10 cups. Noah: sugar = (3/2) x flour, so sugar = 1.5 x 5 = 7.5 cups (7 1/2). Check: 5 cups flour with 7 1/2 cups sugar matches the table row 4 1/2 : 3 scaled up by 5/3. Answer: Lin needs 10 cups of sugar, Noah needs 7 1/2 cups of sugar.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: each person gets 5 cups of flour (10 divided by 2)"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: Lin needs 10 cups of sugar"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: Noah needs 7 1/2 cups of sugar (accept 7.5)"
+   }
+  ],
+  "gradingNotes": "Units do not matter. Accept 7.5 or 7 1/2 for Noah.",
+  "dependsOn": []
+ },
+ {
+  "label": "3a",
+  "pages": [
+   1
+  ],
+  "text": "To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\n\nHow much would the painting company charge to paint a house that needs 20 hours of labor? A house that needs 50 hours?",
+  "diagramDescription": null,
+  "answerKey": "Cost = 500 + 50h. For 20 hours: 500 + 50(20) = 500 + 1000 = $1500. For 50 hours: 500 + 50(50) = 500 + 2500 = $3000. Check: the 50-hour cost minus the 20-hour cost is 1500 for 30 extra hours, which is 50 per hour.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: uses 500 + 50 times the hours (or equivalent) for both houses"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: answers: $1500 for 20 hours and $3000 for 50 hours"
+   }
+  ],
+  "gradingNotes": "Dollar signs are optional.",
+  "dependsOn": []
+ },
+ {
+  "label": "3b",
+  "pages": [
+   2
+  ],
+  "text": "To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\n\nDraw a line representing the relationship between x, the number of hours it takes the painting company to finish the house, and y, the total cost of painting the house. Label the two points from the earlier question on your graph.",
+  "diagramDescription": "Blank coordinate grid. Horizontal axis labeled 'x (hours)' with tick labels 10, 20, 30, 40, 50, 60; the grid runs from 0 to about 65 hours. Vertical axis labeled 'y (dollars)' with tick labels 1,000, 2,000, 3,000, 4,000; the grid runs from 0 to about 4,500 dollars. Gridlines are finer than the labeled ticks. Students draw the line and label the two points from 3a.",
+  "answerKey": "The line is y = 50x + 500. It starts at (0, 500) on the y-axis, passes through (20, 1500) and (50, 3000), and rises 50 dollars for each hour. Points to label: (20, 1500) and (50, 3000). A full-credit graph is a straight line with positive slope, with the two points labeled and the line crossing the y-axis at 500 (or passing through both labeled points).",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: draws a straight line with positive slope on the graph, starting at or above the origin region, that passes through the points (20, 1500) and (50, 3000)"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: labels both points (20, 1500) and (50, 3000) from part a on the line"
+   }
+  ],
+  "gradingNotes": "Accept a line that matches the student's own part a values if they computed them differently (follow-through). The line should not pass through the origin. Tolerance for plotting is about half a grid square.",
+  "dependsOn": [
+   "3a"
+  ]
+ },
+ {
+  "label": "3c",
+  "pages": [
+   2
+  ],
+  "text": "To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\n\nFind the slope of the line. What is the meaning of the slope in this context?",
+  "diagramDescription": null,
+  "answerKey": "Slope = (3000 - 1500)/(50 - 20) = 1500/30 = 50 dollars per hour. Meaning: every additional hour of painting labor adds $50 to the total cost; it is the hourly labor charge.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: slope of 50 found from the two points in 3a or the student's own line (follow-through: correct for the student's points)"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: explains that the slope is the cost per additional hour of labor, $50 per hour"
+   }
+  ],
+  "gradingNotes": "Accept 50 dollars per hour or 50 dollars for each hour. The meaning must refer to the hourly labor charge or cost per hour; saying only 50 is not enough.",
+  "dependsOn": [
+   "3a",
+   "3b"
+  ]
+ },
+ {
+  "label": "4",
+  "pages": [
+   2
+  ],
+  "text": "Write an equation for the line that passes through (2, 5) and (6, 7).",
+  "diagramDescription": null,
+  "answerKey": "Slope = (7 - 5)/(6 - 2) = 2/4 = 1/2. Using (2, 5): y - 5 = (1/2)(x - 2), so y = (1/2)x + 4. Check (6, 7): (1/2)(6) + 4 = 7. Answer: y = 1/2 x + 4.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: finds slope 1/2 from the two points"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: correct equation y = 1/2 x + 4 or an equivalent form such as y - 5 = 1/2(x - 2)"
+   }
+  ],
+  "gradingNotes": "Accept any equivalent form, such as 2y = x + 8 or x - 2y = -8.",
+  "dependsOn": []
+ },
+ {
+  "label": "5a",
+  "pages": [
+   3
+  ],
+  "text": "Tyler and Elena are on the cross country team.\n\nTyler's distances and times for a training run are shown on the graph. The graph has horizontal axis 'distance (miles)' and vertical axis 'time (minutes)'. A straight line passes through the origin and rises steeply.\n\nElena's distances and times for a training run are given by the equation y = 8.5x, where x represents distance in miles and y represents time in minutes.\n\nWho ran farther in 10 minutes? How much farther? Explain how you know.",
+  "diagramDescription": "Graph with horizontal axis labeled 'distance (miles)', marked 1, 2, 3, 4, with minor gridlines at 0.2 mile intervals. Vertical axis labeled 'time (minutes)', marked 2, 4, 6, 8, 10 with minor gridlines every 0.5 minute. A single straight line starts at the origin (0, 0) and rises steeply, passing through about (1, 8.3-8.4) and leaving the top of the plotted area near (1.44, 12). Reading at 10 minutes gives about 1.2 miles for Tyler.",
+  "answerKey": "Elena: 10 = 8.5x, so x = 10/8.5 = about 1.18 miles. Tyler: reading the graph at 10 minutes gives about 1.2 miles. Tyler ran slightly farther, by roughly 0.02 mile (about 0.02 x 5280 = about 100 feet). The difference is very small and depends on reading the graph, so a teacher should accept Tyler with a small margin or an answer that the two are nearly equal if the student explains a reasonable reading. The key values are the comparison method and the answer being Tyler, by a very small amount.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: finds Elena's distance in 10 minutes, about 1.18 miles (10 = 8.5x or 10 / 8.5)"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: reads Tyler's distance at 10 minutes from the graph, about 1.2 miles"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: states who ran farther with an explanation comparing the two distances, and gives the difference"
+   }
+  ],
+  "gradingNotes": "Because the difference is small, accept either Tyler (slightly farther) or a reasonable 'nearly equal' answer if the student's graph reading supports it and the explanation compares distances at 10 minutes. Accept difference values from about 0.01 to 0.05 mile. Units about miles are expected for the difference.",
+  "dependsOn": []
+ },
+ {
+  "label": "5b",
+  "pages": [
+   3
+  ],
+  "text": "Tyler and Elena are on the cross country team.\n\nTyler's distances and times for a training run are shown on the graph. The graph has horizontal axis 'distance (miles)' and vertical axis 'time (minutes)'. A straight line passes through the origin and rises steeply.\n\nElena's distances and times for a training run are given by the equation y = 8.5x, where x represents distance in miles and y represents time in minutes.\n\nCalculate each runner's pace in minutes per mile.",
+  "diagramDescription": "Graph with horizontal axis labeled 'distance (miles)', marked 1, 2, 3, 4, with minor gridlines at 0.2 mile intervals. Vertical axis labeled 'time (minutes)', marked 2, 4, 6, 8, 10 with minor gridlines every 0.5 minute. A single straight line starts at the origin (0, 0) and rises steeply, passing through about (1, 8.3-8.4) and leaving the top of the plotted area near (1.44, 12).",
+  "answerKey": "Elena: y = 8.5x, so minutes per mile = 8.5. Tyler: from the graph, 1 mile takes about 8.3 to 8.4 minutes (equivalently, 12 minutes at about 1.44 miles gives 12/1.44, about 8.3 minutes per mile). Answer: Elena 8.5 minutes per mile; Tyler about 8.3 minutes per mile.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: Elena's pace is 8.5 minutes per mile (from the coefficient of x)"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: Tyler's pace is read from a point on his line, about 8.3 minutes per mile (divide time by distance for one point, accept a reading within about 8.2 to 8.5)"
+   }
+  ],
+  "gradingNotes": "Accept pace in minutes per mile written as 8.5 min/mi. Tyler's value depends on graph reading; accept any reasonable reading between 8.2 and 8.5 with work shown. Units are required here.",
+  "dependsOn": []
+ },
+ {
+  "label": "5c",
+  "pages": [
+   3
+  ],
+  "text": "Tyler and Elena are on the cross country team.\n\nTyler's distances and times for a training run are shown on the graph. The graph has horizontal axis 'distance (miles)' and vertical axis 'time (minutes)'. A straight line passes through the origin and rises steeply.\n\nElena's distances and times for a training run are given by the equation y = 8.5x, where x represents distance in miles and y represents time in minutes.\n\nWho ran faster during the training run? Explain or show your reasoning.",
+  "diagramDescription": "Graph with horizontal axis labeled 'distance (miles)', marked 1, 2, 3, 4, with minor gridlines at 0.2 mile intervals. Vertical axis labeled 'time (minutes)', marked 2, 4, 6, 8, 10 with minor gridlines every 0.5 minute. A single straight line starts at the origin (0, 0) and rises steeply, passing through about (1, 8.3-8.4) and leaving the top of the plotted area near (1.44, 12).",
+  "answerKey": "A smaller pace means faster running. Tyler's pace is about 8.3 minutes per mile and Elena's is 8.5 minutes per mile, so Tyler ran slightly faster. Sample full-credit answer: Tyler, because he runs each mile in about 8.3 minutes while Elena takes 8.5 minutes per mile.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: explains that the runner with the smaller minutes-per-mile pace is faster"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: names the faster runner using the student's own paces from 5b (follow-through: correct for the student's values)"
+   }
+  ],
+  "gradingNotes": "Follow-through: if the student's 5b paces are different, the faster runner must match the student's smaller pace. Accept reasoning that compares distances in the same time (from 5a) as an alternative.",
+  "dependsOn": [
+   "5b"
+  ]
+ },
+ {
+  "label": "6a",
+  "pages": [
+   4
+  ],
+  "text": "Customers at the gym pay a membership fee to join and then a fee for each class they attend. Here is a graph that represents the situation.\n\nWhat does the slope of the line shown by the points mean in this situation?",
+  "diagramDescription": "Graph with horizontal axis labeled 'number of classes', marked 1 through 8. Vertical axis labeled 'cost in dollars', marked 20, 40, 60, ..., 200. Plotted points (read against gridlines): (0, 60), (1, 80), (2, 100), (3, 120), (4, 140), (5, 160), (6, 180), (7, 200). The points lie on a straight line rising 20 dollars for each class.",
+  "answerKey": "Slope = (200 - 60)/(7 - 0) = 140/7 = 20 dollars per class. Meaning: each class attended costs 20 dollars extra, which is the per-class fee.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: states the slope is 20 (dollars per class), from the points on the graph"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: explains the slope is the fee for each class attended, $20 per class"
+   }
+  ],
+  "gradingNotes": "Accept 'each class costs 20 dollars' as the meaning. The meaning must refer to the cost per class.",
+  "dependsOn": []
+ },
+ {
+  "label": "6b",
+  "pages": [
+   4
+  ],
+  "text": "Customers at the gym pay a membership fee to join and then a fee for each class they attend. Here is a graph that represents the situation.\n\nWhat does the vertical intercept mean in this situation?",
+  "diagramDescription": "Graph with horizontal axis labeled 'number of classes', marked 1 through 8. Vertical axis labeled 'cost in dollars', marked 20, 40, 60, ..., 200. Plotted points (read against gridlines): (0, 60), (1, 80), (2, 100), (3, 120), (4, 140), (5, 160), (6, 180), (7, 200). The point (0, 60) is on the vertical axis.",
+  "answerKey": "The vertical intercept is at (0, 60). With 0 classes, the cost is 60 dollars. Meaning: the membership fee, paid to join the gym, is 60 dollars.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: identifies the intercept value as 60 dollars"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: explains it is the membership fee paid (cost with zero classes attended)"
+   }
+  ],
+  "gradingNotes": "Accept 'the cost before attending any classes' as equivalent to the membership fee.",
+  "dependsOn": []
+ },
+ {
+  "label": "7a",
+  "pages": [
+   4
+  ],
+  "text": "The graph shows the height in inches, h, of a bamboo plant t months after it has been planted.\n\nWrite an equation that describes the relationship between h and t.",
+  "diagramDescription": "Graph with horizontal axis labeled 't (months)', marked 1 through 15 with gridlines at each month. Vertical axis labeled 'h (inches)', marked 5, 10, 15, ..., 50 with gridlines every 1 inch-ish. A straight line starts at about (0, 12) on the vertical axis and rises through about (5, 24) and (10, 39), reaching about (14, 54) at the top right.",
+  "answerKey": "The line starts at height about 12 inches when t = 0 and rises about 3 inches per month. Slope = (54 - 12)/14 = 3. Equation: h = 3t + 12. Check: at t = 10, h = 42; the graph shows the line near 40 at t = 9 to 10, consistent with the reading.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: slope of 3 inches per month, from two points on the line"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: starting height of 12 inches and an equation such as h = 3t + 12 (or an equivalent form)"
+   }
+  ],
+  "gradingNotes": "Accept an intercept reading between 11.5 and 12.5 and slope between 2.9 and 3.1 if the student's equation is consistent with the graph. Accept h = 12 + 3t.",
+  "dependsOn": []
+ },
+ {
+  "label": "7b",
+  "pages": [
+   4
+  ],
+  "text": "The graph shows the height in inches, h, of a bamboo plant t months after it has been planted.\n\nAfter how many months will the bamboo plant be 66 inches tall? Explain or show your reasoning.",
+  "diagramDescription": "Graph with horizontal axis labeled 't (months)', marked 1 through 15 with gridlines at each month. Vertical axis labeled 'h (inches)', marked 5, 10, 15, ..., 50. A straight line starts at about (0, 12) and rises to about (14, 54) at the top right, leaving the top of the plotted area around t = 14.3.",
+  "answerKey": "Use h = 3t + 12 from 7a. Set 66 = 3t + 12, so 3t = 54 and t = 18. Answer: 18 months. Check: 3(18) + 12 = 66.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: sets up 66 = 3t + 12 or an equivalent method from the student's own equation from 7a (follow-through)"
+   },
+   {
+    "points": 1,
+    "text": "1 pt: answer: 18 months"
+   }
+  ],
+  "gradingNotes": "Follow-through: if the student's equation from 7a differs, accept the time that their equation gives for h = 66. Accept 18 months and a graph-based answer near 18 months.",
+  "dependsOn": [
+   "7a"
+  ]
+ }
+]

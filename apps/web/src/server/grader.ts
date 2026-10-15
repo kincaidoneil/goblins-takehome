@@ -11,6 +11,7 @@
  */
 import { DatabaseLive } from "@goblins/domain";
 import {
+  AiGrader,
   CallLog,
   Consumer,
   Grader,
@@ -23,19 +24,26 @@ import * as MockModel from "@goblins/mock-model";
 import { Config, Effect, Layer, ManagedRuntime, Option, Redacted } from "effect";
 import { GradeQueue } from "./grading";
 
-/** QStash settings, present only in a production deploy with the integration connected. */
+/**
+ * QStash settings. On in a production deploy with the integration connected, or
+ * anywhere with `GRADER_QUEUE=qstash`, which the load test's local ramp uses with
+ * QStash's local dev server (`QSTASH_URL=http://127.0.0.1:8080`).
+ */
 export const qstashConfig: Option.Option<QStashQueue.QStashConfig> = (() => {
   const env = process.env;
   const token = env.QSTASH_TOKEN;
   const current = env.QSTASH_CURRENT_SIGNING_KEY;
   const next = env.QSTASH_NEXT_SIGNING_KEY;
   const host = env.GRADER_PUBLIC_HOST ?? env.VERCEL_PROJECT_PRODUCTION_URL;
+  const consumerUrl =
+    env.GRADER_CONSUMER_URL ?? (host === undefined ? undefined : `https://${host}/api/queue/grade`);
+  const enabled = env.VERCEL_ENV === "production" || env.GRADER_QUEUE === "qstash";
   if (
-    env.VERCEL_ENV !== "production" ||
+    !enabled ||
     token === undefined ||
     current === undefined ||
     next === undefined ||
-    host === undefined
+    consumerUrl === undefined
   ) {
     return Option.none();
   }
@@ -44,8 +52,9 @@ export const qstashConfig: Option.Option<QStashQueue.QStashConfig> = (() => {
     baseUrl: env.QSTASH_URL ?? "https://qstash.upstash.io",
     currentSigningKey: Redacted.make(current),
     nextSigningKey: Redacted.make(next),
-    consumerUrl: `https://${host}/api/queue/grade`,
-    parallelism: Number(env.GRADER_PARALLELISM ?? "100"),
+    consumerUrl,
+    // The free plan caps parallelism at 10; the local dev server allows more.
+    parallelism: Number(env.GRADER_PARALLELISM ?? "10"),
   });
 })();
 
@@ -87,12 +96,27 @@ const loadTestModel = Layer.effect(Consumer.LoadTestModelClient, ModelClient).pi
   Layer.provide(mockModel),
 );
 
+/**
+ * Which grader runs. Real grades on OpenRouter use AI quality's evaluated grader
+ * (`AiGrader`). On the mock, and for every load-test grade (always on the mock),
+ * the placeholder grader runs, because the mock answers in its reply format.
+ */
+const gradeWith = Layer.effect(
+  Grader.Grader,
+  Effect.map(Effect.orDie(ModelChoice), (choice) => ({
+    grade: (input, tag) =>
+      choice === "openrouter" && Option.isNone(input.loadTestRunId)
+        ? AiGrader.grader.grade(input, tag)
+        : Grader.placeholder.grade(input, tag),
+  })),
+);
+
 const graderServices = Layer.mergeAll(
   Consumer.ModelRouterLive.pipe(
     Layer.provide(Layer.mergeAll(configuredModel, loadTestModel, CallLog.postgres)),
   ),
   GradeStore.postgres,
-  Layer.succeed(Grader.Grader, Grader.placeholder),
+  gradeWith,
 ).pipe(Layer.provide(DatabaseLive), Layer.orDie);
 
 /** Built on the first delivery, so routes that never grade don't open a second pool. */

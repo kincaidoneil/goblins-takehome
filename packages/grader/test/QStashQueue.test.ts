@@ -122,4 +122,10 @@ describe("QStash route handler", () => {
     ]);
     expect(published[0]?.envelope.enqueuedAt).toBeTypeOf("number");
   });
+
+  it("turns our keys into deduplication ids QStash accepts (no colons)", () => {
+    expect(QStashQueue.toDeduplicationId(`grade:${sub("g1")}:1:delivery:4`)).toBe(
+      `grade_${sub("g1")}_1_delivery_4`,
+    );
+  });
 });

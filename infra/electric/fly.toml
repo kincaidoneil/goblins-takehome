@@ -10,9 +10,6 @@ primary_region = "iad" # Next to Neon (us-east-1) and Vercel functions (iad1).
   ELECTRIC_PORT = "3000"
   ELECTRIC_STORAGE_DIR = "/var/lib/electric/persistent"
   ELECTRIC_REPLICATION_STREAM_ID = "prod"
-  # Close Neon connections after 5 idle minutes so Neon can scale to zero
-  # between class sessions. The next shape request reopens them.
-  ELECTRIC_REPLICATION_IDLE_TIMEOUT = "5min"
 
 # Shape logs and metadata. Must survive restarts.
 [[mounts]]

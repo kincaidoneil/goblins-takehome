@@ -1,31 +1,33 @@
 name: E2E
 
-# Vercel reports each deploy to GitHub as a deployment. When a preview finishes
-# deploying, run the Playwright suite against it. The check attaches to the
-# deployed commit, so it shows on the PR.
+# Runs the Playwright suite against the app built from this commit, with
+# Postgres and Electric in Docker (apps/web/docker-compose.yml) and the mock
+# model. Previews have no Electric, so they can't run the live flows.
 on:
-  deployment_status:
+  pull_request:
+  push:
+    branches: [main]
 
-# The job runs code from the deployed commit, so its token can only read.
+# The job runs code from the PR, so its token can only read.
 permissions:
   contents: read
 
 concurrency:
-  group: e2e-${{ github.event.deployment.sha }}
+  group: e2e-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   e2e:
-    name: E2E against preview
-    if: >-
-      github.event.deployment_status.state == 'success' &&
-      startsWith(github.event.deployment.environment, 'Preview')
+    name: E2E
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      MODEL_CLIENT: mock
+      VITE_CLERK_PUBLISHABLE_KEY: ${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}
+      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.deployment.sha }}
           persist-credentials: false
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
@@ -33,10 +35,27 @@ jobs:
           node-version-file: .node-version
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Start Postgres and Electric
+        run: docker compose -f apps/web/docker-compose.yml up -d --wait
+      - name: Migrate
+        run: pnpm --filter @goblins/domain db:migrate
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:55432/goblins
+      - run: pnpm --filter @goblins/web build
+      - name: Start the app
+        working-directory: apps/web
+        run: |
+          PORT=3000 nohup node --env-file=local.env .output/server/index.mjs > ../../server.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf -o /dev/null http://localhost:3000 && exit 0; sleep 1; done
+          cat ../../server.log; exit 1
       - run: pnpm --filter @goblins/e2e exec playwright install --with-deps chromium
       - run: pnpm e2e
         env:
-          E2E_BASE_URL: ${{ github.event.deployment_status.environment_url || github.event.deployment_status.target_url }}
+          E2E_BASE_URL: http://localhost:3000
+      - if: failure()
+        run: |
+          cat server.log
+          docker compose -f apps/web/docker-compose.yml logs --tail 100
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
@@ -44,4 +63,5 @@ jobs:
           path: |
             e2e/playwright-report
             e2e/test-results
+            server.log
           retention-days: 7
