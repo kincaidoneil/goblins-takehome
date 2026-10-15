@@ -6,8 +6,8 @@ import { DiagramCrop } from "@goblins/domain";
 import { Schema } from "effect";
 
 export const RubricLineInput = Schema.Struct({
-  points: Schema.Int.pipe(Schema.positive()),
-  description: Schema.NonEmptyString,
+  points: Schema.Int.pipe(Schema.between(1, 20)),
+  description: Schema.NonEmptyString.pipe(Schema.maxLength(500)),
 });
 export type RubricLineInput = typeof RubricLineInput.Type;
 

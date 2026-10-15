@@ -97,6 +97,9 @@ function Play() {
           case "NotJoined":
             setView({ _tag: "NotJoined" });
             return;
+          case "RateLimited":
+            // The outbox keeps the work and retries; it never reports this here.
+            return;
           case "UnknownProblem":
           case "InvalidImage":
             // Not expected from this client. The problem unlocks with its strokes intact.

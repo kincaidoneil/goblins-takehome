@@ -9,7 +9,8 @@ import { templatePageUrls } from "../../setup/template-pages";
 import { err, ok } from "../result";
 import { runtime } from "../runtime";
 import { markExtractionFailed, saveExtracted } from "./draft";
-import { extractTemplate, extractWorksheet } from "./setup-ai";
+import { callerKeys, takeToken } from "./limits";
+import { extractTemplate, extractWorksheet, modelMode } from "./setup-ai";
 import { deleteStored, storeFile } from "./storage";
 import { newDraftOwner, viewerFor } from "./viewer";
 
@@ -81,7 +82,11 @@ const rejected = (reason: "unsupported" | "too-many" | "too-large" | "upload-fai
  * Starts a draft from page images: stores every page first, then writes the draft and its pages in
  * one transaction, so a failed upload leaves no draft behind. Extraction runs after the response.
  */
-export const startUploadDraft = (files: ReadonlyArray<File>, draftOwnerId: string) =>
+export const startUploadDraft = (
+  files: ReadonlyArray<File>,
+  draftOwnerId: string,
+  ip: string | undefined,
+) =>
   Effect.gen(function* () {
     if (files.length === 0 || !files.every((file) => PAGE_TYPES.includes(file.type))) {
       return rejected("unsupported");
@@ -89,6 +94,35 @@ export const startUploadDraft = (files: ReadonlyArray<File>, draftOwnerId: strin
     if (files.length > MAX_PAGES) return rejected("too-many");
     if (files.reduce((sum, file) => sum + file.size, 0) > MAX_UPLOAD_BYTES) {
       return rejected("too-large");
+    }
+
+    const viewer = yield* viewerFor(Option.some(draftOwnerId));
+    const owner = newDraftOwner(viewer, draftOwnerId);
+    const db = yield* Db;
+
+    // Real extraction costs money, so uploads are rate-limited per IP and per owner. A throttled
+    // upload opens as a draft that explains why, with nothing stored.
+    if (modelMode() === "openrouter") {
+      const limited = yield* takeToken(
+        "upload",
+        callerKeys(ip, owner.teacherId ?? owner.draftOwnerId ?? draftOwnerId),
+      ).pipe(
+        Effect.as(false),
+        Effect.catchTag("RateLimited", () => Effect.succeed(true)),
+      );
+      if (limited) {
+        const [throttled] = yield* db
+          .insert(schema.assignments)
+          .values({
+            ...owner,
+            extractionStatus: "failed",
+            extractionFailureReason:
+              "You've uploaded several worksheets in the last hour. Try again later, or start from a template.",
+          })
+          .returning({ id: schema.assignments.id });
+        if (throttled === undefined) return yield* Effect.die("assignment insert returned no row");
+        return ok({ _tag: "Started", draftId: throttled.id } as const);
+      }
     }
 
     const draftId = crypto.randomUUID();
@@ -110,8 +144,6 @@ export const startUploadDraft = (files: ReadonlyArray<File>, draftOwnerId: strin
     }
     const pages = urls.map((imageUrl, index) => ({ pageNumber: index + 1, imageUrl }));
 
-    const viewer = yield* viewerFor(Option.some(draftOwnerId));
-    const db = yield* Db;
     const sql = yield* SqlClient;
     yield* sql
       .withTransaction(

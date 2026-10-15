@@ -6,17 +6,25 @@ import { auth } from "@clerk/tanstack-react-start/server";
 import { DatabaseLive } from "@goblins/domain";
 import { getCookies } from "@tanstack/react-start/server";
 import { Effect, Layer, ManagedRuntime, Option } from "effect";
+import { cappedGradeQueue } from "./abuse";
 import { QStashGradeQueue, qstashConfig } from "./grader";
 import { InlineMockGradeQueue } from "./grading";
 import { RequestContext } from "./request-context";
 import { LOCAL_TEACHER_COOKIE, LOCAL_TEACHER_ID, localTeacherMode } from "./teacher-mode";
 import { WhiteboardStoreLive } from "./whiteboards";
 
-/** QStash and the real grading pipeline in production; the inline scripted mock elsewhere. */
-const GradeQueueLive = Option.match(qstashConfig, {
-  onNone: () => InlineMockGradeQueue,
-  onSome: QStashGradeQueue,
-});
+/**
+ * QStash and the real grading pipeline in production; the inline scripted mock elsewhere. Either
+ * way, behind the per-teacher hourly cap (abuse.ts).
+ */
+const GradeQueueLive = cappedGradeQueue.pipe(
+  Layer.provide(
+    Option.match(qstashConfig, {
+      onNone: () => InlineMockGradeQueue,
+      onSome: QStashGradeQueue,
+    }),
+  ),
+);
 
 export const runtime = ManagedRuntime.make(
   Layer.mergeAll(GradeQueueLive, WhiteboardStoreLive).pipe(Layer.provideMerge(DatabaseLive)),

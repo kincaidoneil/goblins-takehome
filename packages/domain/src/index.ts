@@ -6,4 +6,5 @@ export * from "./grades";
 export * from "./join-code";
 export * from "./load-test";
 export * from "./names";
+export * from "./rate-limit";
 export * as schema from "./schema";
