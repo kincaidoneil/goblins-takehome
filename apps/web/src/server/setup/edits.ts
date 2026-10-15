@@ -7,7 +7,7 @@ import { Db, SqlClient, schema } from "@goblins/domain";
 import { and, asc, eq, gte, inArray, sql } from "drizzle-orm";
 import { Data, Effect, Schema } from "effect";
 import { RubricLineInput } from "./extracted";
-import { changesScoring, dropPointSentences } from "./rubric-notes";
+import { notesAfterRubricChange } from "./rubric-notes";
 
 const ProblemId = Schema.UUID;
 
@@ -126,19 +126,17 @@ const applyOne = (draftId: string, edit: Edit) =>
       case "SetRubric": {
         const problem = yield* findProblem(edit.problemId);
         const before = yield* db
-          .select({ points: schema.rubricLines.points })
+          .select({
+            points: schema.rubricLines.points,
+            description: schema.rubricLines.description,
+          })
           .from(schema.rubricLines)
           .where(eq(schema.rubricLines.problemId, edit.problemId))
           .orderBy(asc(schema.rubricLines.position));
-        // A note like "a bare answer earns both points" can't be allowed to contradict new points.
-        if (changesScoring(before, edit.lines)) {
-          const gradingNotes = dropPointSentences(problem.gradingNotes);
-          if (gradingNotes !== problem.gradingNotes) {
-            yield* db
-              .update(schema.problems)
-              .set({ gradingNotes })
-              .where(problemIn(edit.problemId));
-          }
+        // A note like "a bare answer earns both points" can't be allowed to contradict the new rubric.
+        const gradingNotes = notesAfterRubricChange(problem.gradingNotes, before, edit.lines);
+        if (gradingNotes !== problem.gradingNotes) {
+          yield* db.update(schema.problems).set({ gradingNotes }).where(problemIn(edit.problemId));
         }
         yield* db
           .delete(schema.rubricLines)
