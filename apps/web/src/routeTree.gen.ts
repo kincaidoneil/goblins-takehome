@@ -12,12 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as JoinRouteImport } from './routes/join'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
+import { Route as ApiLiveRouteImport } from './routes/api/live'
 import { Route as ApiShapeRouteImport } from './routes/api/shape'
 import { Route as PlaySessionIdRouteImport } from './routes/play/$sessionId'
 import { Route as ReportDemoRouteImport } from './routes/report/demo'
 import { Route as ShareTokenRouteImport } from './routes/share/$token'
 import { Route as ShareDemoRouteImport } from './routes/share/demo'
 import { Route as ApiGradingSweepRouteImport } from './routes/api/grading/sweep'
+import { Route as ApiQueueGradeRouteImport } from './routes/api/queue/grade'
 import { Route as SessionsSessionIdIndexRouteImport } from './routes/sessions/$sessionId/index'
 import { Route as SessionsSessionIdProjectorRouteImport } from './routes/sessions/$sessionId/projector'
 import { Route as SessionsSessionIdReportRouteImport } from './routes/sessions/$sessionId/report'
@@ -35,6 +37,11 @@ const JoinRoute = JoinRouteImport.update({
 const ApiHealthRoute = ApiHealthRouteImport.update({
   id: '/api/health',
   path: '/api/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLiveRoute = ApiLiveRouteImport.update({
+  id: '/api/live',
+  path: '/api/live',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiShapeRoute = ApiShapeRouteImport.update({
@@ -67,6 +74,11 @@ const ApiGradingSweepRoute = ApiGradingSweepRouteImport.update({
   path: '/api/grading/sweep',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiQueueGradeRoute = ApiQueueGradeRouteImport.update({
+  id: '/api/queue/grade',
+  path: '/api/queue/grade',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SessionsSessionIdIndexRoute = SessionsSessionIdIndexRouteImport.update({
   id: '/sessions/$sessionId/',
   path: '/sessions/$sessionId/',
@@ -88,12 +100,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/join': typeof JoinRoute
   '/api/health': typeof ApiHealthRoute
+  '/api/live': typeof ApiLiveRoute
   '/api/shape': typeof ApiShapeRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/share/$token': typeof ShareTokenRoute
   '/share/demo': typeof ShareDemoRoute
   '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/api/queue/grade': typeof ApiQueueGradeRoute
   '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
   '/sessions/$sessionId/report': typeof SessionsSessionIdReportRoute
   '/sessions/$sessionId/': typeof SessionsSessionIdIndexRoute
@@ -102,12 +116,14 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/join': typeof JoinRoute
   '/api/health': typeof ApiHealthRoute
+  '/api/live': typeof ApiLiveRoute
   '/api/shape': typeof ApiShapeRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/share/$token': typeof ShareTokenRoute
   '/share/demo': typeof ShareDemoRoute
   '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/api/queue/grade': typeof ApiQueueGradeRoute
   '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
   '/sessions/$sessionId/report': typeof SessionsSessionIdReportRoute
   '/sessions/$sessionId': typeof SessionsSessionIdIndexRoute
@@ -117,12 +133,14 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/join': typeof JoinRoute
   '/api/health': typeof ApiHealthRoute
+  '/api/live': typeof ApiLiveRoute
   '/api/shape': typeof ApiShapeRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/share/$token': typeof ShareTokenRoute
   '/share/demo': typeof ShareDemoRoute
   '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/api/queue/grade': typeof ApiQueueGradeRoute
   '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
   '/sessions/$sessionId/report': typeof SessionsSessionIdReportRoute
   '/sessions/$sessionId/': typeof SessionsSessionIdIndexRoute
@@ -133,12 +151,14 @@ export interface FileRouteTypes {
     | '/'
     | '/join'
     | '/api/health'
+    | '/api/live'
     | '/api/shape'
     | '/play/$sessionId'
     | '/report/demo'
     | '/share/$token'
     | '/share/demo'
     | '/api/grading/sweep'
+    | '/api/queue/grade'
     | '/sessions/$sessionId/projector'
     | '/sessions/$sessionId/report'
     | '/sessions/$sessionId/'
@@ -147,12 +167,14 @@ export interface FileRouteTypes {
     | '/'
     | '/join'
     | '/api/health'
+    | '/api/live'
     | '/api/shape'
     | '/play/$sessionId'
     | '/report/demo'
     | '/share/$token'
     | '/share/demo'
     | '/api/grading/sweep'
+    | '/api/queue/grade'
     | '/sessions/$sessionId/projector'
     | '/sessions/$sessionId/report'
     | '/sessions/$sessionId'
@@ -161,12 +183,14 @@ export interface FileRouteTypes {
     | '/'
     | '/join'
     | '/api/health'
+    | '/api/live'
     | '/api/shape'
     | '/play/$sessionId'
     | '/report/demo'
     | '/share/$token'
     | '/share/demo'
     | '/api/grading/sweep'
+    | '/api/queue/grade'
     | '/sessions/$sessionId/projector'
     | '/sessions/$sessionId/report'
     | '/sessions/$sessionId/'
@@ -176,12 +200,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   JoinRoute: typeof JoinRoute
   ApiHealthRoute: typeof ApiHealthRoute
+  ApiLiveRoute: typeof ApiLiveRoute
   ApiShapeRoute: typeof ApiShapeRoute
   PlaySessionIdRoute: typeof PlaySessionIdRoute
   ReportDemoRoute: typeof ReportDemoRoute
   ShareTokenRoute: typeof ShareTokenRoute
   ShareDemoRoute: typeof ShareDemoRoute
   ApiGradingSweepRoute: typeof ApiGradingSweepRoute
+  ApiQueueGradeRoute: typeof ApiQueueGradeRoute
   SessionsSessionIdProjectorRoute: typeof SessionsSessionIdProjectorRoute
   SessionsSessionIdReportRoute: typeof SessionsSessionIdReportRoute
   SessionsSessionIdIndexRoute: typeof SessionsSessionIdIndexRoute
@@ -208,6 +234,13 @@ declare module '@tanstack/react-router' {
       path: '/api/health'
       fullPath: '/api/health'
       preLoaderRoute: typeof ApiHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/live': {
+      id: '/api/live'
+      path: '/api/live'
+      fullPath: '/api/live'
+      preLoaderRoute: typeof ApiLiveRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/shape': {
@@ -252,6 +285,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiGradingSweepRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/queue/grade': {
+      id: '/api/queue/grade'
+      path: '/api/queue/grade'
+      fullPath: '/api/queue/grade'
+      preLoaderRoute: typeof ApiQueueGradeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sessions/$sessionId/': {
       id: '/sessions/$sessionId/'
       path: '/sessions/$sessionId'
@@ -280,12 +320,14 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   JoinRoute: JoinRoute,
   ApiHealthRoute: ApiHealthRoute,
+  ApiLiveRoute: ApiLiveRoute,
   ApiShapeRoute: ApiShapeRoute,
   PlaySessionIdRoute: PlaySessionIdRoute,
   ReportDemoRoute: ReportDemoRoute,
   ShareTokenRoute: ShareTokenRoute,
   ShareDemoRoute: ShareDemoRoute,
   ApiGradingSweepRoute: ApiGradingSweepRoute,
+  ApiQueueGradeRoute: ApiQueueGradeRoute,
   SessionsSessionIdProjectorRoute: SessionsSessionIdProjectorRoute,
   SessionsSessionIdReportRoute: SessionsSessionIdReportRoute,
   SessionsSessionIdIndexRoute: SessionsSessionIdIndexRoute,
