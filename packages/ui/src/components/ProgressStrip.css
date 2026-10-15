@@ -1,3 +1,14 @@
+/* Scrolls sideways when the problems don't fit; padding keeps the current tile's lift visible. */
+.gb-strip {
+  overflow-x: auto;
+  padding: var(--gb-space-1) var(--gb-space-1) var(--gb-space-2);
+  scrollbar-width: none;
+}
+
+.gb-strip::-webkit-scrollbar {
+  display: none;
+}
+
 .gb-strip-list {
   display: flex;
   gap: var(--gb-space-2);
@@ -7,8 +18,7 @@
 }
 
 .gb-strip-item {
-  flex: 1 1 0;
-  min-width: 32px;
+  flex: 1 0 40px;
   max-width: 72px;
 }
 

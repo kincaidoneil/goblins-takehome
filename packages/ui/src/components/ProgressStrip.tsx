@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { cx } from "../cx";
 import { type GradeStatus, scoreBand } from "./grade";
 
@@ -50,8 +51,15 @@ function describe(problem: StripProblem): string {
  * are buttons, submitted ones show their score as it arrives.
  */
 export function ProgressStrip({ problems, currentId, onSelect, className }: ProgressStripProps) {
+  const navRef = useRef<HTMLElement>(null);
+  // On a narrow screen the strip scrolls; keep the current problem in view.
+  useEffect(() => {
+    navRef.current
+      ?.querySelector(`[data-problem-id="${CSS.escape(currentId)}"]`)
+      ?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }, [currentId]);
   return (
-    <nav className={cx("gb-strip", className)} aria-label="Problems">
+    <nav ref={navRef} className={cx("gb-strip", className)} aria-label="Problems">
       <ol className="gb-strip-list">
         {problems.map((problem) => {
           const open = problem.status.state === "not-started";
@@ -61,6 +69,7 @@ export function ProgressStrip({ problems, currentId, onSelect, className }: Prog
               <button
                 type="button"
                 className="gb-strip-tile"
+                data-problem-id={problem.id}
                 data-tone={tone(problem.status)}
                 data-current={current || undefined}
                 disabled={!open}

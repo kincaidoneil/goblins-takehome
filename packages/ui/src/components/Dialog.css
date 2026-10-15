@@ -1,5 +1,9 @@
+/*
+ * Absolute, not fixed: a fixed backdrop can leave gaps on iOS 26+ Safari after
+ * scrolling. Needs `body { position: relative }`, which base.css sets.
+ */
 .gb-dialog-backdrop {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: var(--gb-z-dialog);
   background: var(--gb-color-overlay);
