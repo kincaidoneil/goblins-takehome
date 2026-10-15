@@ -51,7 +51,7 @@ const fakeClient = Layer.succeed(ModelClient, {
 
 const withLog = Effect.gen(function* () {
   const log = yield* CallLog.inMemory;
-  const layer = CallLog.withCallLog.pipe(
+  const layer = CallLog.withCallLog("openrouter").pipe(
     Layer.provide(fakeClient),
     Layer.provide(Layer.succeed(CallLog.CallLog, log.service)),
   );
