@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "ignoreCommand": "[ \"$VERCEL_ENV\" = production ] && exit 1; base=\"$VERCEL_GIT_PREVIOUS_SHA\"; [ -n \"$base\" ] && git cat-file -e \"$base^{commit}\" 2>/dev/null || exit 1; git diff --quiet \"$base\" HEAD -- . ../../packages ../../pnpm-lock.yaml ../../package.json ../../pnpm-workspace.yaml ../../tsconfig.base.json",
+  "ignoreCommand": "sh scripts/ignore-build.sh",
   "crons": [
     {
       "path": "/api/grading/sweep",
