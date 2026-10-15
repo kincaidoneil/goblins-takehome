@@ -1,4 +1,4 @@
-# Local Postgres and Electric for development and E2E. Production uses Neon and Electric Cloud.
+# Local Postgres and Electric for development and E2E. Production uses Neon and self-hosted Electric on Fly.io (same image version).
 name: goblins
 services:
   postgres:
@@ -13,7 +13,7 @@ services:
       interval: 1s
       retries: 30
   electric:
-    image: electricsql/electric:latest
+    image: electricsql/electric:1.8.1
     environment:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/goblins?sslmode=disable
       ELECTRIC_INSECURE: "true"

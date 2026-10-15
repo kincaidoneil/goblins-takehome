@@ -8,6 +8,7 @@
  * waiting job at once, which development and E2E use.
  */
 import { stuckJobs } from "@goblins/domain";
+import { Consumer } from "@goblins/grader";
 import { createFileRoute } from "@tanstack/react-router";
 import { Config, Effect, Option, Redacted } from "effect";
 import { fromQStash } from "../../../server/grader";
@@ -32,7 +33,12 @@ const sweep = (request: Request) =>
     const now = localTeacherMode && new URL(request.url).searchParams.get("now") === "1";
     const jobs = yield* stuckJobs({ queuedSeconds: now ? 0 : 180, limit: 500 });
     const queue = yield* GradeQueue;
-    yield* Effect.forEach(jobs, (job) => queue.enqueue(job), { discard: true });
+    const nowMs = Date.now();
+    yield* Effect.forEach(
+      jobs,
+      (job) => queue.enqueue(job, Consumer.sweepIdempotencyKey(job, nowMs)),
+      { discard: true },
+    );
     return Response.json({ resent: jobs.length });
   });
 

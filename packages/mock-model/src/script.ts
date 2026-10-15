@@ -1,4 +1,3 @@
-import { createHash } from "node:crypto";
 /**
  * Scripted content: what a mocked call answers.
  *
@@ -136,7 +135,8 @@ export const imageBytes = (
   });
 };
 
-// node:crypto rather than crypto.subtle: the web app type-checks this file with the DOM
-// lib, whose `digest` rejects a Uint8Array over a possibly shared buffer.
 export const sha256Hex = (bytes: Uint8Array): Effect.Effect<string> =>
-  Effect.sync(() => createHash("sha256").update(bytes).digest("hex"));
+  // Copying gives an ArrayBuffer-backed array, which the DOM's BufferSource type requires.
+  Effect.promise(() => crypto.subtle.digest("SHA-256", new Uint8Array(bytes))).pipe(
+    Effect.map((digest) => Buffer.from(digest).toString("hex")),
+  );

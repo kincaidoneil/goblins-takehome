@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Schema } from "effect";
 import { useMemo } from "react";
-import { anonymize, SharedReport } from "../../report/components/SharedReport";
+import { SharedReport } from "../../report/components/SharedReport";
 import { DEMO_ASSIGNMENT, DEMO_MISTAKES, demoClass } from "../../report/fixture";
+import { anonymize } from "../../report/model";
 
 const Search = Schema.Struct({
   case: Schema.optionalWith(Schema.Literal("struggled", "did-well"), {

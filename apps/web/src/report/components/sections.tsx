@@ -343,7 +343,9 @@ function StruggleCard({
     >
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex flex-col gap-1">
-          <span className="text-sm font-bold text-text-muted">Problem {stats.problem.label}</span>
+          {mistakes.skill !== `Problem ${stats.problem.label}` && (
+            <span className="text-sm font-bold text-text-muted">Problem {stats.problem.label}</span>
+          )}
           <h3 className="text-lg">{mistakes.skill}</h3>
         </div>
         <div className="text-right">
