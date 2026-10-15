@@ -4,9 +4,10 @@ import type { Result } from "../server/result";
 const PROBLEM: Record<string, UploadProblem> = {
   Unsupported: "unsupported",
   TooLarge: "too-large",
+  TooMany: "too-many",
+  MixedPdf: "mixed-pdf",
   Unreadable: "unreadable",
-  NotReady: "unavailable",
-  TemplateNotFound: "upload-failed",
+  UploadFailed: "upload-failed",
 };
 
 /** Maps a setup entry point's result onto what the landing page shows. */
