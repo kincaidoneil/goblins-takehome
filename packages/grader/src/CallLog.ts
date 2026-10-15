@@ -73,15 +73,14 @@ const failureFields = (
       // The provider may have finished and billed the call after we stopped waiting.
       return { status: "timeout", cost: null, error: `no response after ${error.afterMs} ms` };
     case "ProviderError":
-      return error.status === 0
-        ? // The request may have reached the provider before the connection dropped.
-          { status: "provider_error", cost: null, error: error.message }
-        : {
-            status: "provider_error",
-            statusCode: error.status,
-            cost: NOT_BILLED,
-            error: error.message,
-          };
+      return {
+        status: "provider_error",
+        ...(error.status === 0 ? {} : { statusCode: error.status }),
+        // Known usage wins. Otherwise a dropped connection, or a failure after the model
+        // started work, may have been billed: unknown, not free.
+        cost: error.usage ?? (error.status === 0 || error.mayBeBilled === true ? null : NOT_BILLED),
+        error: error.message,
+      };
     case "BadResponse":
       return {
         status: "bad_response",
@@ -129,8 +128,10 @@ export const wrap = (inner: ModelClient["Type"], log: CallLog["Type"]): ModelCli
           onFailure: (cause): Option.Option<CallLogEntry> =>
             Option.match(Cause.failureOption(cause), {
               onSome: (error) =>
-                // A call the spend cap refused never reached the provider, so it is not a call.
-                error._tag === "BudgetExceeded"
+                // A call refused by the spend cap, or stopped by a failed check before it, never
+                // reached the provider, so it is not a call.
+                error._tag === "BudgetExceeded" ||
+                (error._tag === "ProviderError" && error.notSent === true)
                   ? Option.none()
                   : Option.some({ ...base, ...failureFields(error) }),
               onNone: () =>

@@ -54,6 +54,7 @@ export const make = (options: {
         return yield* new ProviderError({
           status: 0,
           message: `could not read the key's spend to check the cap: ${String(fetched.left)}`,
+          notSent: true,
         });
       }),
     );
@@ -83,11 +84,13 @@ export const fetchOpenRouterUsage = (options: {
   readonly baseUrl: string;
 }) =>
   Effect.gen(function* () {
-    const response = yield* Effect.tryPromise(() =>
+    // Bounded: every real call waits on this check, so a hung request must not hang them all.
+    const response = yield* Effect.tryPromise((signal) =>
       fetch(`${options.baseUrl}/key`, {
+        signal,
         headers: { Authorization: `Bearer ${Redacted.value(options.apiKey)}` },
       }).then(async (res) => ({ status: res.status, body: await res.text() })),
-    );
+    ).pipe(Effect.timeoutFail({ duration: "5 seconds", onTimeout: () => "GET /key timed out" }));
     if (response.status !== 200) return yield* Effect.fail(`GET /key answered ${response.status}`);
     const body = yield* Schema.decodeUnknown(Schema.parseJson(KeyResponse))(response.body);
     return body.data.usage;

@@ -29,6 +29,14 @@ const outcome = (model: string): Effect.Effect<Completion, ModelError> => {
       });
     case "slow":
       return Effect.fail(new Timeout({ afterMs: 1500 }));
+    case "embedded":
+      return Effect.fail(
+        new ProviderError({ status: 503, message: "upstream died", mayBeBilled: true }),
+      );
+    case "unsent":
+      return Effect.fail(
+        new ProviderError({ status: 0, message: "spend check failed", notSent: true }),
+      );
     case "reset":
       return Effect.fail(new ProviderError({ status: 0, message: "connection reset" }));
     default:
@@ -56,7 +64,7 @@ describe("withCallLog", () => {
       const { log, layer } = yield* withLog;
       yield* Effect.gen(function* () {
         const client = yield* ModelClient;
-        for (const model of ["good", "limited", "slow", "reset"]) {
+        for (const model of ["good", "limited", "slow", "reset", "embedded", "unsent"]) {
           const fiber = yield* Effect.fork(Effect.either(client.complete(request(model))));
           yield* TestClock.adjust("1500 millis");
           yield* fiber.await;
@@ -85,6 +93,7 @@ describe("withCallLog", () => {
         // These may have been billed after we stopped listening, so the cost is unknown, not zero.
         { modelRequested: "slow", status: "timeout", cost: null },
         { modelRequested: "reset", status: "provider_error", cost: null },
+        { modelRequested: "embedded", status: "provider_error", statusCode: 503, cost: null },
       ]);
     }),
   );

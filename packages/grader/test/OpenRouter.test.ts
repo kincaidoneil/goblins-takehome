@@ -175,6 +175,8 @@ describe("OpenRouter client", () => {
         _tag: "ProviderError",
         status: 502,
         message: "upstream died",
+        mayBeBilled: true,
+        usage: { costUsd: 0.00042 },
       });
       expect(tagOf(yield* run("spend-limit"))).toMatchObject({
         _tag: "ProviderError",
@@ -286,7 +288,8 @@ describe("OpenRouter reasoning and spend cap", () => {
       );
       yield* counting.complete(request("ok"));
       yield* Effect.either(counting.complete(request("cut-off")));
-      expect(added).toEqual([0.00042, 0.00042]);
+      yield* Effect.either(counting.complete(request("error-mid-answer")));
+      expect(added).toEqual([0.00042, 0.00042, 0.00042]);
     }),
   );
 });

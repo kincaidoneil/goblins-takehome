@@ -69,7 +69,7 @@ React components built on [Base UI](https://base-ui.com), one file each in [src/
 
 ![The 48 creatures](docs/avatars.jpg)
 
-48 creatures, drawn in code from parts: 8 colors from the palette, 6 head tops (goblin ears, bear ears, bunny ears, horns, antenna, sprout), 3 head shapes, 4 eye styles and 4 mouths. Every creature has a different color and head-top pair, so a class of 30 never has two that look alike at a glance. Each has a name for its accessible label. Assign one with `randomCreatureId()` and render it with `<Avatar kind="creature" creatureId={id} />`. The art is original; nothing is traced from Goblins.
+48 creatures, drawn in code from parts: 8 colors from the palette, 6 head tops (goblin ears, bear ears, bunny ears, horns, antenna, sprout), 3 head shapes, 4 eye styles and 4 mouths. Every creature has a different color and head-top pair, so a class of 30 never has two that look alike at a glance. Each has a name for its accessible label. Assign one with `randomCreatureId(takenIds)`, which picks from the creatures no one in the session has yet, and render it with `<Avatar kind="creature" creatureId={id} />`. The art is original; nothing is traced from Goblins.
 
 ## Using it
 
