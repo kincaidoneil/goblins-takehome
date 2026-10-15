@@ -19,7 +19,13 @@ export const OUTAGE_FOR_S = 300;
 
 export const mockSpecFor = (
   scenario: ScenarioName,
-  options: { readonly startMs: number; readonly timeScale: number; readonly profile: Profile },
+  options: {
+    readonly startMs: number;
+    readonly timeScale: number;
+    readonly profile: Profile;
+    /** Seconds after the start, overriding the scenario's default window. */
+    readonly window?: { readonly at: number; readonly for: number };
+  },
 ): string => {
   const start = `start=${options.startMs}`;
   switch (scenario) {
@@ -27,11 +33,14 @@ export const mockSpecFor = (
       return `mode=sampled; profile=${options.profile}; ${start}`;
     case "rate-limit-storm":
     case "latency-doubling":
-      return `mode=sampled; profile=${options.profile}; scenario=${scenario}; ${start}`;
-    case "provider-down":
-      return `mode=sampled; profile=${options.profile}; scenario=provider-down; at=${Math.round(
-        OUTAGE_AT_S * options.timeScale,
-      )}; for=${OUTAGE_FOR_S}; ${start}`;
+      return options.window === undefined
+        ? `mode=sampled; profile=${options.profile}; scenario=${scenario}; ${start}`
+        : `mode=sampled; profile=${options.profile}; scenario=${scenario}; at=${options.window.at}; for=${options.window.for}; ${start}`;
+    case "provider-down": {
+      const at = options.window?.at ?? Math.round(OUTAGE_AT_S * options.timeScale);
+      const length = options.window?.for ?? OUTAGE_FOR_S;
+      return `mode=sampled; profile=${options.profile}; scenario=provider-down; at=${at}; for=${length}; ${start}`;
+    }
     case "replay":
       return `mode=replay; recording=${options.profile === "seed" ? "seed-window" : options.profile}; ${start}`;
   }

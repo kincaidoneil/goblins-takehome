@@ -27,6 +27,10 @@ const usage = `Usage:
 
 Options:
   --url <origin>            app to test (default: $GOBLINS_URL, else http://localhost:3190)
+  --lobby-seconds <n>       joining time before the first bell (default 60)
+  --bell-seconds <n>        classes start within this window (default 120; 0 = everyone at once)
+  --scenario-at <s>         scenario window start, seconds into the step (with --scenario-for)
+  --scenario-for <s>        scenario window length in seconds
   --time-scale <x>          compress every interval; 1 = real testing day (default 1)
   --students-per-class <n>  default 30
   --start-classes <n>       classes in the first step (default 33, i.e. 990 students)
@@ -67,6 +71,10 @@ const { values, positionals } = parseArgs({
     "keep-data": { type: "boolean", default: false },
     pricing: { type: "string" },
     "max-usd": { type: "string", default: "25" },
+    "lobby-seconds": { type: "string", default: "60" },
+    "bell-seconds": { type: "string", default: "120" },
+    "scenario-at": { type: "string" },
+    "scenario-for": { type: "string" },
     "i-have-vercel-approval": { type: "boolean", default: false },
     help: { type: "boolean", default: false },
   },
@@ -75,6 +83,11 @@ const { values, positionals } = parseArgs({
 const fail = (message: string): never => {
   console.error(`${message}\n\n${usage}`);
   process.exit(2);
+};
+
+const nonNegative = (name: string, raw: string): number => {
+  const n = Number(raw);
+  return Number.isFinite(n) && n >= 0 ? n : fail(`--${name} must be zero or more`);
 };
 
 const positive = (name: string, raw: string): number => {
@@ -182,7 +195,18 @@ if (command === "cleanup") {
     studentsPerClass: ramp.studentsPerClass,
     templateId,
     submissionsPerStudent: perStudent,
-    pace: scaled(testingDay, positive("time-scale", values["time-scale"])),
+    pace: {
+      ...scaled(testingDay, positive("time-scale", values["time-scale"])),
+      lobbyMs: nonNegative("lobby-seconds", values["lobby-seconds"]) * 1000,
+      bellSpreadMs: nonNegative("bell-seconds", values["bell-seconds"]) * 1000,
+    },
+    window:
+      values["scenario-at"] === undefined || values["scenario-for"] === undefined
+        ? undefined
+        : {
+            at: nonNegative("scenario-at", values["scenario-at"]),
+            for: positive("scenario-for", values["scenario-for"]),
+          },
     seed: positive("seed", values.seed),
     drainMs: positive("drain-minutes", values["drain-minutes"]) * 60_000,
     submitGiveUpMs: 5 * 60_000,
