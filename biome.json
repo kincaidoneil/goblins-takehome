@@ -33,8 +33,7 @@
         "noExplicitAny": "error"
       },
       "style": {
-        "noNonNullAssertion": "error",
-        "noDescendingSpecificity": "off"
+        "noNonNullAssertion": "error"
       }
     }
   },
