@@ -56,7 +56,7 @@ export function ProblemPanel({
         {action}
       </div>
       <div className="gb-problem-text">{children}</div>
-      {figure !== undefined && <Figure figure={figure} />}
+      {figure !== undefined && <CroppedFigure figure={figure} />}
     </div>
   );
 }
@@ -64,8 +64,12 @@ export function ProblemPanel({
 /** US Letter, until the page image loads. */
 const LETTER = 8.5 / 11;
 
-/** The page, cropped to the figure: the box keeps the crop's shape and the page is offset in it. */
-function Figure({ figure }: { figure: ProblemFigure }) {
+/**
+ * A problem's figure, cropped from its worksheet page: the box keeps the crop's shape and the page
+ * is offset inside it. As wide as its container, up to 260px tall (160px on phones). With `onOpen`
+ * it is a button with a Zoom hint.
+ */
+export function CroppedFigure({ figure }: { figure: ProblemFigure }) {
   const [pageRatio, setPageRatio] = useState(LETTER);
   const { x, y, w, h } = figure.crop;
   const aspect = (w / h) * pageRatio;

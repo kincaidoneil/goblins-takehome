@@ -44,6 +44,7 @@ export {
   type WorksheetViewerProps,
 } from "./components/WorksheetViewer";
 export {
+  CroppedFigure,
   type FigureCrop,
   type ProblemFigure,
   ProblemPanel,
