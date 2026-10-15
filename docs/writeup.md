@@ -46,7 +46,7 @@ The criteria were set in the [PRD](prd.md#quality-bar) before the first run.
 | Grades that fail, normal conditions | < 0.1% | 0% |
 | Grades that fail, provider down for 5 minutes | 0% | 0% (at 300 students) |
 
-Every bar held at 510 students in one testing window, measured on one laptop. 1,000 is not verified, because the laptop driving the load ran out before the system did. **Ship for testing windows up to 510 students, once QStash is on pay-as-you-go.** The 510 run used QStash at parallelism 100; production's free plan allows 10 grades in flight and 1,000 messages a day (about three classes). A 1,000-student window also needs the load split across several generator machines to verify it.
+**Ship.** At the highest load one machine could generate (510 students at 4× pace, the submit rate of about 2,000 real students), every bar held and nothing in the implementation failed. Scaling from here is a serving change, not a code change: QStash's paid plan runs 100 grades at once, about 23 a second, against about 6 a second at peak for a 1,000-student testing window; Vercel Functions scale out on their own; Electric and Postgres scale by adding machines. Production today is on QStash's free plan (10 grades in flight, 1,000 messages a day, about three classes), so moving to pay-as-you-go comes first. Before a large rollout, I'd confirm it with a 1,000-student run on paid production infrastructure, generating the load from several machines; on one laptop, the 990-student run ran out of load generator before the system failed.
 
 ## Cost
 
