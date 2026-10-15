@@ -17,12 +17,9 @@
   font-size: clamp(16px, 1.4vw, 28px);
 }
 
-.pj-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.6em;
-  color: var(--gb-green-700);
-  font-weight: var(--gb-weight-heavy);
+/* The shared wordmark, sized to the projector's type rather than its own default. */
+.pj .pj-brand {
+  font-size: inherit;
 }
 
 /* ------------------------------------------------------------------ lobby */
