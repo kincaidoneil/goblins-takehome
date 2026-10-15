@@ -8,6 +8,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { and, asc, eq } from "drizzle-orm";
 import { Effect, Option, Schema } from "effect";
+import { clientIp, submitAllowed } from "../abuse";
 import { GradeQueue } from "../grading";
 import { err, ok } from "../result";
 import { run } from "../runtime";
@@ -137,7 +138,9 @@ export type SubmitError =
   | { readonly _tag: "SessionNotLive" }
   /** The problem is not in this session's assignment. */
   | { readonly _tag: "UnknownProblem" }
-  | { readonly _tag: "InvalidImage" };
+  | { readonly _tag: "InvalidImage" }
+  /** Too many sends in a minute. The outbox keeps the work and tries again later. */
+  | { readonly _tag: "RateLimited" };
 
 const isPng = (bytes: Uint8Array) => PNG_SIGNATURE.every((byte, i) => bytes[i] === byte);
 
@@ -150,11 +153,15 @@ export const submit = createServerFn({ method: "POST" })
   .validator(Schema.standardSchemaV1(SubmitInput))
   .handler(({ data }) => {
     const cookies = requestCookies();
+    const ip = clientIp(getRequest().headers);
     return run(
       Effect.gen(function* () {
         const studentId = yield* studentFromCookies(cookies, data.sessionId);
         if (Option.isNone(studentId))
           return err<SubmitError>({ _tag: "NotJoined", joinCode: null });
+        if (!(yield* submitAllowed(studentId.value, ip))) {
+          return err<SubmitError>({ _tag: "RateLimited" });
+        }
 
         const png = new Uint8Array(Buffer.from(data.png, "base64"));
         if (!isPng(png)) return err<SubmitError>({ _tag: "InvalidImage" });

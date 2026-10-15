@@ -538,3 +538,20 @@ export const modelCalls = pgTable(
   },
   (t) => [index().on(t.createdAt), index().on(t.loadTestRunId), index().on(t.submissionId)],
 );
+
+// ---------------------------------------------------------------------------
+// Abuse limits
+
+/**
+ * Fixed-window request counters for the join, submit and grading limits (see rate-limit.ts).
+ * One row per key and window; windows older than a day are deleted as new ones open.
+ */
+export const rateLimits = pgTable(
+  "rate_limits",
+  {
+    key: text().notNull(),
+    windowStart: timestamp({ withTimezone: true }).notNull(),
+    count: integer().notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.key, t.windowStart] }), index().on(t.windowStart)],
+);

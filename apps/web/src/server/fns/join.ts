@@ -1,8 +1,9 @@
 import { joinSession, parseJoinCodeInput } from "@goblins/domain";
 import { randomCreatureId } from "@goblins/ui";
 import { createServerFn } from "@tanstack/react-start";
-import { setCookie } from "@tanstack/react-start/server";
+import { getRequest, setCookie } from "@tanstack/react-start/server";
 import { Effect, Option, Schema } from "effect";
+import { clientIp, joinAllowed, joinMissed } from "../abuse";
 import { err, ok } from "../result";
 import { run } from "../runtime";
 import { studentCookie } from "../student-identity";
@@ -19,10 +20,15 @@ const JoinInput = Schema.Struct({ joinCode: Schema.String, name: Schema.String }
 export const join = createServerFn({ method: "POST" })
   .validator(Schema.standardSchemaV1(JoinInput))
   .handler(async ({ data }) => {
+    const ip = clientIp(getRequest().headers);
     const result = await run(
       Effect.gen(function* () {
+        if (!(yield* joinAllowed(ip))) return err({ _tag: "RateLimited" } as const);
         const joinCode = parseJoinCodeInput(data.joinCode);
-        if (Option.isNone(joinCode)) return err({ _tag: "SessionNotFound" } as const);
+        if (Option.isNone(joinCode)) {
+          yield* joinMissed(ip);
+          return err({ _tag: "SessionNotFound" } as const);
+        }
         const { student, resumed } = yield* joinSession({
           joinCode: joinCode.value,
           name: data.name,
@@ -41,7 +47,9 @@ export const join = createServerFn({ method: "POST" })
         });
       }).pipe(
         Effect.catchTags({
-          SessionNotFound: () => Effect.succeed(err({ _tag: "SessionNotFound" } as const)),
+          SessionNotFound: () =>
+            Effect.as(joinMissed(ip), err({ _tag: "SessionNotFound" } as const)),
+          SessionFull: () => Effect.succeed(err({ _tag: "SessionFull" } as const)),
           InvalidName: (e) =>
             Effect.succeed(err({ _tag: "InvalidName", reason: e.reason } as const)),
         }),

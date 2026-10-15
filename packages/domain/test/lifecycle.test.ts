@@ -8,6 +8,7 @@ import { Effect, Either, Option } from "effect";
 import {
   acceptGrade,
   CLAIM_LEASE_SECONDS,
+  consume,
   Db,
   deleteLoadTestRun,
   type GradeJob,
@@ -15,6 +16,7 @@ import {
   getGrade,
   JoinCode,
   joinSession,
+  MAX_STUDENTS_PER_SESSION,
   recordOutcome,
   releaseClaim,
   retryGrade,
@@ -22,6 +24,7 @@ import {
   startGrading,
   stuckJobs,
   submitWork,
+  usedUp,
 } from "../src/index";
 import {
   assignments,
@@ -153,6 +156,37 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
 
       const empty = yield* Effect.either(join(joinCode, " .. "));
       expect(Either.isLeft(empty) && empty.left._tag).toBe("InvalidName");
+    }),
+  );
+
+  it.effect("caps a class at 60 new names but lets its students resume", () =>
+    Effect.gen(function* () {
+      const { joinCode } = yield* seed();
+      for (let i = 0; i < MAX_STUDENTS_PER_SESSION; i++) yield* join(joinCode, `Student ${i}`);
+      const extra = yield* Effect.either(join(joinCode, "One More"));
+      expect(Either.isLeft(extra) && extra.left._tag).toBe("SessionFull");
+      const back = yield* join(joinCode, "student 0");
+      expect(back.resumed).toBe(true);
+
+      const loadTest = yield* seed({ loadTestRunId: `cap-${crypto.randomUUID()}` });
+      for (let i = 0; i <= MAX_STUDENTS_PER_SESSION; i++) {
+        yield* join(loadTest.joinCode, `Student ${i}`);
+      }
+    }),
+  );
+
+  it.effect("rate limits count within a window and deny without counting", () =>
+    Effect.gen(function* () {
+      const limit = { key: `test:${crypto.randomUUID()}`, max: 3, windowSeconds: 60 };
+      const at = new Date("2026-10-15T12:00:10Z");
+      const results = [];
+      for (let i = 0; i < 5; i++) results.push(yield* consume(limit, at));
+      expect(results).toEqual([true, true, true, false, false]);
+      expect(yield* usedUp(limit, at)).toBe(true);
+      // The next window starts fresh.
+      const later = new Date("2026-10-15T12:01:00Z");
+      expect(yield* usedUp(limit, later)).toBe(false);
+      expect(yield* consume(limit, later)).toBe(true);
     }),
   );
 

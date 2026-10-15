@@ -19,6 +19,15 @@ export class SessionNotFound extends Data.TaggedError("SessionNotFound")<{
   readonly joinCode: string;
 }> {}
 
+/** The session has `MAX_STUDENTS_PER_SESSION` students and this name isn't one of them. */
+export class SessionFull extends Data.TaggedError("SessionFull") {}
+
+/**
+ * A class is at most this many students. It bounds what one session can cost in grading if its
+ * code leaks. Load-test sessions are exempt: the load test puts hundreds in one class.
+ */
+export const MAX_STUDENTS_PER_SESSION = 60;
+
 export class InvalidName extends Data.TaggedError("InvalidName")<{
   readonly reason: "empty" | "too_long";
 }> {}
@@ -26,7 +35,8 @@ export class InvalidName extends Data.TaggedError("InvalidName")<{
 /**
  * Joins the open session with this code, or resumes the student with the same name (PRD, "Names").
  * Late joins are normal. `pickAvatar` runs only for a new student and gets the creature ids
- * already taken in the session, so the caller can avoid repeats.
+ * already taken in the session, so the caller can avoid repeats. A new name fails with
+ * `SessionFull` once the class has `MAX_STUDENTS_PER_SESSION` students.
  */
 export const joinSession = (input: {
   readonly joinCode: JoinCode;
@@ -46,7 +56,7 @@ export const joinSession = (input: {
     return yield* sqlClient.withTransaction(
       Effect.gen(function* () {
         const [session] = yield* db
-          .select({ id: classSessions.id })
+          .select({ id: classSessions.id, loadTestRunId: classSessions.loadTestRunId })
           .from(classSessions)
           .where(
             and(
@@ -61,9 +71,17 @@ export const joinSession = (input: {
         }
 
         const taken = yield* db
-          .select({ avatarId: students.avatarId })
+          .select({ avatarId: students.avatarId, nameKey: students.nameKey })
           .from(students)
           .where(eq(students.sessionId, session.id));
+        // A full class still lets its own students resume, through the conflict below.
+        if (
+          session.loadTestRunId === null &&
+          taken.length >= MAX_STUDENTS_PER_SESSION &&
+          !taken.some((row) => row.nameKey === nameKey)
+        ) {
+          return yield* Effect.fail(new SessionFull());
+        }
         const [created] = yield* db
           .insert(students)
           .values({
