@@ -1,25 +1,18 @@
 /**
- * Scripted content: what a mocked call answers, chosen from a marker in the
- * request text so E2E tests can force every grade state.
+ * Scripted content: what a mocked call answers.
  *
- * Markers look like `[[mock:<kind> key=value key="quoted value"]]` and may sit
- * in any text part of any message. The first valid marker wins.
- *
- *   [[mock:graded score=3 max=4 feedback="Good work"]]
- *   [[mock:needs-teacher reason="Work is illegible"]]
- *   [[mock:fail error=Timeout until=1760000000000]]
- *   [[mock:malformed]]
- *   [[mock:text value="any completion text"]]
- *
- * `fail` fails every call until the epoch-millisecond `until` (or always, if
- * absent). A deadline keeps the mock stateless across serverless instances
- * while still letting a test watch a failed grade succeed on retry.
+ * The answer is keyed on the whiteboard image in the request. The mock hashes
+ * the image bytes and looks the hash up in the fixture table
+ * (`src/fixtures.ts`); E2E tests and the class simulator submit those same
+ * pre-drawn images, so prompts stay free of test-only text. An image that
+ * matches no fixture gets an outcome derived from its hash, so the same image
+ * always gets the same grade.
  */
-
 import type { CompletionRequest } from "@goblins/grader";
-import { type FailureKind, failureKinds } from "./fate.ts";
+import { Effect } from "effect";
+import type { Failure } from "./fate.ts";
 
-export type Scripted =
+export type Answer =
   | {
       readonly _tag: "Graded";
       readonly score: number;
@@ -27,21 +20,33 @@ export type Scripted =
       readonly feedback: string;
     }
   | { readonly _tag: "NeedsTeacher"; readonly reason: string }
-  | { readonly _tag: "Fails"; readonly error: FailureKind; readonly untilMs: number | undefined }
+  /** Raw completion text, such as a reply that is not the JSON the grader asked for. */
   | { readonly _tag: "Text"; readonly text: string };
 
-/** A scripted outcome that answers rather than fails. */
-export type Answer = Exclude<Scripted, { readonly _tag: "Fails" }>;
+export type Scripted =
+  | Answer
+  | { readonly _tag: "FailsAlways"; readonly failure: Failure }
+  | {
+      /**
+       * Fails the first `times` calls for each grade (`tag.subjectId`), then
+       * answers `afterwards`. The count lives in memory on one instance, which holds
+       * for a test that fails once and retries seconds later.
+       */
+      readonly _tag: "FailsFirst";
+      readonly failure: Failure;
+      readonly times: number;
+      readonly afterwards: Answer;
+    };
 
-/** Answer when the request has no marker, and after a scripted failure's deadline. */
-export const defaultScripted: Answer = {
+/** Answer when the request has no image. */
+export const defaultAnswer: Answer = {
   _tag: "Graded",
   score: 1,
   maxScore: 1,
   feedback: "Correct.",
 };
 
-/** Turns a scripted grade into completion text. The grader stream supplies its own when its output schema lands. */
+/** Turns an answer into completion text. The grader stream supplies its own when its output schema lands. */
 export type Render = (answer: Answer) => string;
 
 export const renderJson: Render = (answer) => {
@@ -60,102 +65,55 @@ export const renderJson: Render = (answer) => {
   }
 };
 
-const MARKER = /\[\[mock:([a-z-]+)((?:\s+[a-zA-Z]+=(?:"[^"]*"|[^\s\]]+))*)\s*\]\]/g;
-const ARG = /([a-zA-Z]+)=(?:"([^"]*)"|([^\s\]]+))/g;
+/** Outcome for an image that matches no fixture: 70% correct, 15% incorrect, 15% flagged. */
+export const fallbackFor = (sha256: string): Answer => {
+  const bucket = Number.parseInt(sha256.slice(0, 8), 16) % 100;
+  if (bucket < 70) return defaultAnswer;
+  if (bucket < 85) return { _tag: "Graded", score: 0, maxScore: 1, feedback: "Incorrect." };
+  return { _tag: "NeedsTeacher", reason: "The grader could not read this work with confidence." };
+};
 
-const parseArgs = (raw: string): ReadonlyMap<string, string> => {
-  const args = new Map<string, string>();
-  for (const match of raw.matchAll(ARG)) {
-    const key = match[1];
-    const value = match[2] ?? match[3];
-    if (key !== undefined && value !== undefined) args.set(key, value);
+/** URL of the first image in the request, if any. */
+export const imageUrlOf = (request: CompletionRequest): string | undefined => {
+  for (const message of request.messages) {
+    if (message.role !== "user" || typeof message.content === "string") continue;
+    for (const part of message.content) if (part.type === "image") return part.url;
   }
-  return args;
+  return undefined;
 };
 
-const finite = (value: string | undefined): number | undefined => {
-  if (value === undefined) return undefined;
-  const n = Number(value);
-  return Number.isFinite(n) ? n : undefined;
-};
+export interface ImageUnavailable {
+  readonly _tag: "ImageUnavailable";
+  readonly message: string;
+}
 
-const isFailureKind = (value: string): value is FailureKind =>
-  failureKinds.some((kind) => kind === value);
+const DATA_URL = /^data:([^,]*?)(;base64)?,(.*)$/s;
 
-const fromMarker = (kind: string, args: ReadonlyMap<string, string>): Scripted | undefined => {
-  switch (kind) {
-    case "graded": {
-      const maxScore = finite(args.get("max")) ?? 1;
-      const score = finite(args.get("score")) ?? maxScore;
-      return {
-        _tag: "Graded",
-        score,
-        maxScore,
-        feedback: args.get("feedback") ?? "Graded by mock.",
-      };
-    }
-    case "needs-teacher":
-      return {
-        _tag: "NeedsTeacher",
-        reason: args.get("reason") ?? "Mock flagged this for the teacher.",
-      };
-    case "fail": {
-      const error = args.get("error") ?? "ProviderError";
-      return isFailureKind(error)
-        ? { _tag: "Fails", error, untilMs: finite(args.get("until")) }
-        : undefined;
-    }
-    case "malformed":
-      return { _tag: "Text", text: "mock: this is not the JSON you asked for" };
-    case "text": {
-      const value = args.get("value");
-      return value === undefined ? undefined : { _tag: "Text", text: value };
-    }
-    default:
-      return undefined;
+/** Image bytes from a `data:` URL, or fetched from an http(s) URL as the provider would. */
+export const imageBytes = (url: string): Effect.Effect<Uint8Array, ImageUnavailable> => {
+  const data = DATA_URL.exec(url);
+  if (data !== null) {
+    const payload = data[3] ?? "";
+    return Effect.succeed(
+      data[2] === undefined
+        ? new TextEncoder().encode(decodeURIComponent(payload))
+        : new Uint8Array(Buffer.from(payload, "base64")),
+    );
   }
+  return Effect.tryPromise({
+    try: async (signal) => {
+      const response = await fetch(url, { signal });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return new Uint8Array(await response.arrayBuffer());
+    },
+    catch: (cause) => ({
+      _tag: "ImageUnavailable" as const,
+      message: `could not fetch image: ${cause instanceof Error ? cause.message : String(cause)}`,
+    }),
+  });
 };
 
-const textsOf = (request: CompletionRequest): Array<string> =>
-  request.messages.flatMap((message) =>
-    typeof message.content === "string"
-      ? [message.content]
-      : message.content.flatMap((part) => (part.type === "text" ? [part.text] : [])),
+export const sha256Hex = (bytes: Uint8Array): Effect.Effect<string> =>
+  Effect.promise(() => crypto.subtle.digest("SHA-256", bytes)).pipe(
+    Effect.map((digest) => Buffer.from(digest).toString("hex")),
   );
-
-/** The scripted answer for a request: its first valid marker, else the default. */
-export const scriptedFor = (request: CompletionRequest): Scripted => {
-  for (const text of textsOf(request)) {
-    for (const match of text.matchAll(MARKER)) {
-      const scripted = fromMarker(match[1] ?? "", parseArgs(match[2] ?? ""));
-      if (scripted !== undefined) return scripted;
-    }
-  }
-  return defaultScripted;
-};
-
-/** A scripted failure past its `until` deadline answers like an unmarked request. */
-export const scriptedAt = (
-  scripted: Scripted,
-  nowMs: number,
-): Answer | Extract<Scripted, { readonly _tag: "Fails" }> =>
-  scripted._tag === "Fails" && scripted.untilMs !== undefined && nowMs >= scripted.untilMs
-    ? defaultScripted
-    : scripted;
-
-/** Builds a marker string. Tests and the simulator use this instead of hand-writing markers. */
-export const marker = (scripted: Scripted): string => {
-  const q = (s: string) => `"${s.replaceAll('"', "'")}"`;
-  switch (scripted._tag) {
-    case "Graded":
-      return `[[mock:graded score=${scripted.score} max=${scripted.maxScore} feedback=${q(scripted.feedback)}]]`;
-    case "NeedsTeacher":
-      return `[[mock:needs-teacher reason=${q(scripted.reason)}]]`;
-    case "Fails":
-      return scripted.untilMs === undefined
-        ? `[[mock:fail error=${scripted.error}]]`
-        : `[[mock:fail error=${scripted.error} until=${scripted.untilMs}]]`;
-    case "Text":
-      return `[[mock:text value=${q(scripted.text)}]]`;
-  }
-};

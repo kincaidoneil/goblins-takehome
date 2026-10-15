@@ -1,16 +1,32 @@
+import { readFileSync } from "node:fs";
 import type { CompletionRequest, ModelError } from "@goblins/grader";
 import { Clock, Duration, Effect, Either } from "effect";
 import { type MockConfig, makeMockModelClient } from "../src/index.ts";
 
-export const request = (text = "Grade this."): CompletionRequest => ({
+export const fixtureBytes = (file: string): Uint8Array =>
+  new Uint8Array(readFileSync(new URL(`../fixtures/${file}`, import.meta.url)));
+
+/** A grading request carrying `image` as a data URL, or no image at all. */
+export const request = (
+  image: Uint8Array | undefined,
+  subjectId = "grade-1",
+): CompletionRequest => ({
   model: "test/model",
-  tag: { purpose: "grade" },
+  tag: { purpose: "grade", subjectId },
   messages: [
+    { role: "system", content: "Grade the student's work." },
     {
       role: "user",
       content: [
-        { type: "text", text },
-        { type: "image", url: "data:," },
+        { type: "text", text: "Problem 1: Solve 2x + 3 = 11" },
+        ...(image === undefined
+          ? []
+          : [
+              {
+                type: "image" as const,
+                url: `data:image/png;base64,${Buffer.from(image).toString("base64")}`,
+              },
+            ]),
       ],
     },
   ],
@@ -37,12 +53,12 @@ const frozenClock = (nowMs: number, slept: Array<number>): Clock.Clock => ({
  * Makes `n` calls at `atMs` after the run anchor (the configs used here anchor
  * at 0) and tallies their outcomes and the latency each one slept for.
  */
-export const callsAt = (config: MockConfig, atMs: number, n: number, text?: string) => {
+export const callsAt = (config: MockConfig, atMs: number, n: number, image?: Uint8Array) => {
   const latencies: Array<number> = [];
   return Effect.gen(function* () {
     const client = yield* makeMockModelClient(config, { seed: 42 });
     const results = yield* Effect.all(
-      Array.from({ length: n }, () => Effect.either(client.complete(request(text)))),
+      Array.from({ length: n }, () => Effect.either(client.complete(request(image)))),
     );
     const tally: Tally = {};
     const texts: Array<string> = [];

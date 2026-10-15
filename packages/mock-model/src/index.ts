@@ -1,6 +1,7 @@
 export * from "./callLog.ts";
 export * from "./config.ts";
 export * from "./fate.ts";
+export * from "./fixtures.ts";
 export { layer, type MockOptions, makeMockModelClient } from "./layer.ts";
 export * from "./profile.ts";
 export * from "./registry.ts";

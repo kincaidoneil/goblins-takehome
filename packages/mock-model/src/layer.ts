@@ -3,23 +3,28 @@ import {
   type CompletionRequest,
   ModelClient,
   type ModelError,
+  ProviderError,
   type Usage,
 } from "@goblins/grader";
 import { Clock, Effect, Layer, Random } from "effect";
 import { DEFAULT_TIMEOUT_MS, type MockConfig } from "./config.ts";
-import {
-  type Failure,
-  type FailureKind,
-  type Fate,
-  type Rng,
-  seededRng,
-  toModelError,
-} from "./fate.ts";
+import { type Fate, type Rng, seededRng, toModelError } from "./fate.ts";
+import { fixtureByHash } from "./fixtures.ts";
 import { pick, sampleFate, sampleUsage } from "./profile.ts";
 import { profiles, recordings } from "./registry.ts";
 import { makeReplayer } from "./replay.ts";
 import { applyScenario } from "./scenario.ts";
-import { type Render, renderJson, scriptedAt, scriptedFor } from "./script.ts";
+import {
+  type Answer,
+  defaultAnswer,
+  fallbackFor,
+  imageBytes,
+  imageUrlOf,
+  type Render,
+  renderJson,
+  type Scripted,
+  sha256Hex,
+} from "./script.ts";
 
 export interface MockOptions {
   /** Completion text for scripted grades. Defaults to `renderJson`. */
@@ -72,16 +77,30 @@ const capAtTimeout = (fate: Fate, timeoutMs: number): Fate =>
     ? { _tag: "Fail", latencyMs: timeoutMs, failure: { _tag: "Timeout" } }
     : fate;
 
-const failureOf = (kind: FailureKind): Failure => {
-  switch (kind) {
-    case "RateLimited":
-      return { _tag: "RateLimited", retryAfterMs: 1000 };
-    case "Timeout":
-      return { _tag: "Timeout" };
-    case "ProviderError":
-      return { _tag: "ProviderError", status: 503 };
-    case "BadResponse":
-      return { _tag: "BadResponse" };
+interface Resolved {
+  readonly scripted: Scripted;
+  /** Identifies one grade's image, for counting `FailsFirst` attempts. */
+  readonly key: string;
+}
+
+const answerOf = (
+  scripted: Scripted,
+  key: string,
+  attempts: Map<string, number>,
+  latencyMs: number,
+): Effect.Effect<Answer, ModelError> => {
+  switch (scripted._tag) {
+    case "FailsAlways":
+      return Effect.fail(toModelError(scripted.failure, latencyMs));
+    case "FailsFirst": {
+      const seen = attempts.get(key) ?? 0;
+      attempts.set(key, seen + 1);
+      return seen < scripted.times
+        ? Effect.fail(toModelError(scripted.failure, latencyMs))
+        : Effect.succeed(scripted.afterwards);
+    }
+    default:
+      return Effect.succeed(scripted);
   }
 };
 
@@ -92,6 +111,8 @@ const failureOf = (kind: FailureKind): Failure => {
  * and failure) from the configured timing source at the time elapsed since the
  * run anchor, sleep for the latency, then fail or answer. A sampled failure
  * wins over a scripted answer; a scripted failure wins over a sampled success.
+ * Each call reads its image first, as the provider would, so a load test puts
+ * the same read load on image storage as real grading.
  */
 export const makeMockModelClient = (config: MockConfig, options: MockOptions = {}) =>
   Effect.gen(function* () {
@@ -102,25 +123,40 @@ export const makeMockModelClient = (config: MockConfig, options: MockOptions = {
     const rng = seededRng(options.seed ?? (yield* Random.nextInt));
     const timing = timingFor(config);
     let calls = 0;
+    /** Calls seen per grade and image, for `FailsFirst` fixtures. */
+    const attempts = new Map<string, number>();
+
+    /** The scripted outcome for a request's image, or the provider's 400 when the image can't be read. */
+    const scriptFor = (request: CompletionRequest) => {
+      const url = imageUrlOf(request);
+      if (url === undefined) return Effect.succeed<Resolved>({ scripted: defaultAnswer, key: "" });
+      return imageBytes(url).pipe(
+        Effect.flatMap(sha256Hex),
+        Effect.map(
+          (hash): Resolved => ({
+            scripted: fixtureByHash.get(hash)?.outcome ?? fallbackFor(hash),
+            key: `${request.tag.subjectId ?? ""}:${hash}`,
+          }),
+        ),
+        Effect.mapError(
+          (error): ModelError =>
+            new ProviderError({ status: 400, message: `mock: ${error.message}` }),
+        ),
+      );
+    };
 
     const complete = (request: CompletionRequest): Effect.Effect<Completion, ModelError> =>
       Effect.gen(function* () {
         const now = yield* Clock.currentTimeMillis;
         const id = `mock-${anchorMs}-${++calls}`;
+        const { scripted, key } = yield* scriptFor(request);
         const fate = capAtTimeout(timing(now - anchorMs, rng), timeoutMs);
         yield* Effect.sleep(fate.latencyMs);
-        if (fate._tag === "Fail")
+        if (fate._tag === "Fail") {
           return yield* Effect.fail(toModelError(fate.failure, fate.latencyMs));
-        const scripted = scriptedAt(scriptedFor(request), now);
-        if (scripted._tag === "Fails") {
-          return yield* Effect.fail(toModelError(failureOf(scripted.error), fate.latencyMs));
         }
-        return {
-          id,
-          model: request.model,
-          text: render(scripted),
-          usage: usageFor(config, rng),
-        };
+        const answer = yield* answerOf(scripted, key, attempts, fate.latencyMs);
+        return { id, model: request.model, text: render(answer), usage: usageFor(config, rng) };
       });
 
     return ModelClient.of({ complete });
