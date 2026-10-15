@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { loadStrokes, type Stroke, saveStrokes } from "./storage";
+import { loadStrokes, type Owner, type Stroke, saveStrokes } from "./storage";
 
 type History = {
   readonly present: ReadonlyArray<Stroke>;
@@ -10,15 +10,16 @@ type History = {
 const MAX_UNDO = 100;
 
 /** One problem's whiteboard strokes with undo, kept in localStorage as they change. */
-export function useStrokeHistory(sessionId: string, problemId: string) {
+export function useStrokeHistory(owner: Owner, problemId: string) {
+  const { sessionId, studentId } = owner;
   const [history, setHistory] = useState<History>(() => ({
-    present: loadStrokes(sessionId, problemId),
+    present: loadStrokes(owner, problemId),
     past: [],
   }));
 
   useEffect(
-    () => saveStrokes(sessionId, problemId, history.present),
-    [sessionId, problemId, history.present],
+    () => saveStrokes({ sessionId, studentId }, problemId, history.present),
+    [sessionId, studentId, problemId, history.present],
   );
 
   const push = (next: (present: ReadonlyArray<Stroke>) => ReadonlyArray<Stroke>) =>
