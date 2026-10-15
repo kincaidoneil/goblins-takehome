@@ -166,8 +166,8 @@
       "solution": "60 + 24y = 4y − 5 + 9y = 13y − 5, so 11y = −65 and y = −65/11 ≈ −5.91. Check: both sides equal −900/11.",
       "dependsOn": [],
       "review": {
-        "_tag": "Unsure",
-        "note": "Clare's work has two errors in the same step (12 · 5 written as 72, and −(5 − 9y) written as −5 − 9y). The key gives full credit for naming either one plus the correct solution; Kincaid may want both required."
+        "_tag": "Checked",
+        "note": "Reviewed by Kincaid on 2026-10-15: Clare's work has two errors in one step (12 · 5 written as 72, and −(5 − 9y) written as −5 − 9y); naming either one, with the correct solution, earns full credit."
       }
     },
     {
