@@ -25,9 +25,18 @@ export type OutboxItem = typeof OutboxItem.Type;
 const Strokes = Schema.parseJson(Schema.Array(Stroke));
 const Outbox = Schema.parseJson(Schema.Array(OutboxItem));
 
-const strokesKey = (sessionId: string, problemId: string) =>
-  `goblins:strokes:${sessionId}:${problemId}`;
-const outboxKey = (sessionId: string) => `goblins:outbox:${sessionId}`;
+/**
+ * Whose work it is. Keys include the student, so a second student on a shared device never sees,
+ * or sends, the first student's strokes or queued submissions.
+ */
+export interface Owner {
+  readonly sessionId: string;
+  readonly studentId: string;
+}
+
+const strokesKey = (owner: Owner, problemId: string) =>
+  `goblins:strokes:${owner.sessionId}:${owner.studentId}:${problemId}`;
+const outboxKey = (owner: Owner) => `goblins:outbox:${owner.sessionId}:${owner.studentId}`;
 
 // Storage can be unavailable (private mode, full quota). Work then lives in memory only.
 const read = (key: string): string | null => {
@@ -47,20 +56,20 @@ const write = (key: string, value: string | null) => {
   }
 };
 
-export const loadStrokes = (sessionId: string, problemId: string): ReadonlyArray<Stroke> =>
+export const loadStrokes = (owner: Owner, problemId: string): ReadonlyArray<Stroke> =>
   Option.getOrElse(
-    Schema.decodeUnknownOption(Strokes)(read(strokesKey(sessionId, problemId))),
+    Schema.decodeUnknownOption(Strokes)(read(strokesKey(owner, problemId))),
     () => [],
   );
 
-export const saveStrokes = (sessionId: string, problemId: string, strokes: ReadonlyArray<Stroke>) =>
+export const saveStrokes = (owner: Owner, problemId: string, strokes: ReadonlyArray<Stroke>) =>
   write(
-    strokesKey(sessionId, problemId),
+    strokesKey(owner, problemId),
     strokes.length === 0 ? null : Schema.encodeSync(Strokes)(strokes),
   );
 
-export const loadOutbox = (sessionId: string): ReadonlyArray<OutboxItem> =>
-  Option.getOrElse(Schema.decodeUnknownOption(Outbox)(read(outboxKey(sessionId))), () => []);
+export const loadOutbox = (owner: Owner): ReadonlyArray<OutboxItem> =>
+  Option.getOrElse(Schema.decodeUnknownOption(Outbox)(read(outboxKey(owner))), () => []);
 
-export const saveOutbox = (sessionId: string, items: ReadonlyArray<OutboxItem>) =>
-  write(outboxKey(sessionId), items.length === 0 ? null : Schema.encodeSync(Outbox)(items));
+export const saveOutbox = (owner: Owner, items: ReadonlyArray<OutboxItem>) =>
+  write(outboxKey(owner), items.length === 0 ? null : Schema.encodeSync(Outbox)(items));

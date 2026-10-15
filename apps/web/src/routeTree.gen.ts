@@ -20,6 +20,7 @@ import { Route as SetupDraftIdRouteImport } from './routes/setup/$draftId'
 import { Route as ShareTokenRouteImport } from './routes/share/$token'
 import { Route as ShareDemoRouteImport } from './routes/share/demo'
 import { Route as ApiGradingSweepRouteImport } from './routes/api/grading/sweep'
+import { Route as ApiQueueGradeRouteImport } from './routes/api/queue/grade'
 import { Route as SessionsSessionIdIndexRouteImport } from './routes/sessions/$sessionId/index'
 import { Route as SessionsSessionIdProjectorRouteImport } from './routes/sessions/$sessionId/projector'
 import { Route as SessionsSessionIdReportRouteImport } from './routes/sessions/$sessionId/report'
@@ -80,6 +81,11 @@ const ApiGradingSweepRoute = ApiGradingSweepRouteImport.update({
   path: '/api/grading/sweep',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiQueueGradeRoute = ApiQueueGradeRouteImport.update({
+  id: '/api/queue/grade',
+  path: '/api/queue/grade',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SessionsSessionIdIndexRoute = SessionsSessionIdIndexRouteImport.update({
   id: '/sessions/$sessionId/',
   path: '/sessions/$sessionId/',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/share/$token': typeof ShareTokenRoute
   '/share/demo': typeof ShareDemoRoute
   '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/api/queue/grade': typeof ApiQueueGradeRoute
   '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
   '/sessions/$sessionId/report': typeof SessionsSessionIdReportRoute
   '/setup/template/$templateId': typeof SetupTemplateTemplateIdRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/share/$token': typeof ShareTokenRoute
   '/share/demo': typeof ShareDemoRoute
   '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/api/queue/grade': typeof ApiQueueGradeRoute
   '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
   '/sessions/$sessionId/report': typeof SessionsSessionIdReportRoute
   '/setup/template/$templateId': typeof SetupTemplateTemplateIdRoute
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/share/$token': typeof ShareTokenRoute
   '/share/demo': typeof ShareDemoRoute
   '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/api/queue/grade': typeof ApiQueueGradeRoute
   '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
   '/sessions/$sessionId/report': typeof SessionsSessionIdReportRoute
   '/setup/template/$templateId': typeof SetupTemplateTemplateIdRoute
@@ -168,6 +177,7 @@ export interface FileRouteTypes {
     | '/share/$token'
     | '/share/demo'
     | '/api/grading/sweep'
+    | '/api/queue/grade'
     | '/sessions/$sessionId/projector'
     | '/sessions/$sessionId/report'
     | '/setup/template/$templateId'
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
     | '/share/$token'
     | '/share/demo'
     | '/api/grading/sweep'
+    | '/api/queue/grade'
     | '/sessions/$sessionId/projector'
     | '/sessions/$sessionId/report'
     | '/setup/template/$templateId'
@@ -202,6 +213,7 @@ export interface FileRouteTypes {
     | '/share/$token'
     | '/share/demo'
     | '/api/grading/sweep'
+    | '/api/queue/grade'
     | '/sessions/$sessionId/projector'
     | '/sessions/$sessionId/report'
     | '/setup/template/$templateId'
@@ -220,6 +232,7 @@ export interface RootRouteChildren {
   ShareTokenRoute: typeof ShareTokenRoute
   ShareDemoRoute: typeof ShareDemoRoute
   ApiGradingSweepRoute: typeof ApiGradingSweepRoute
+  ApiQueueGradeRoute: typeof ApiQueueGradeRoute
   SessionsSessionIdProjectorRoute: typeof SessionsSessionIdProjectorRoute
   SessionsSessionIdReportRoute: typeof SessionsSessionIdReportRoute
   SetupTemplateTemplateIdRoute: typeof SetupTemplateTemplateIdRoute
@@ -305,6 +318,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiGradingSweepRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/queue/grade': {
+      id: '/api/queue/grade'
+      path: '/api/queue/grade'
+      fullPath: '/api/queue/grade'
+      preLoaderRoute: typeof ApiQueueGradeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sessions/$sessionId/': {
       id: '/sessions/$sessionId/'
       path: '/sessions/$sessionId'
@@ -348,6 +368,7 @@ const rootRouteChildren: RootRouteChildren = {
   ShareTokenRoute: ShareTokenRoute,
   ShareDemoRoute: ShareDemoRoute,
   ApiGradingSweepRoute: ApiGradingSweepRoute,
+  ApiQueueGradeRoute: ApiQueueGradeRoute,
   SessionsSessionIdProjectorRoute: SessionsSessionIdProjectorRoute,
   SessionsSessionIdReportRoute: SessionsSessionIdReportRoute,
   SetupTemplateTemplateIdRoute: SetupTemplateTemplateIdRoute,

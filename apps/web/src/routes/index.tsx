@@ -1,3 +1,4 @@
+import { SignInButton } from "@clerk/tanstack-react-start";
 import { LandingPage, TEMPLATE_SUMMARIES } from "@goblins/ui/landing";
 import landingCss from "@goblins/ui/landing.css?url";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -27,7 +28,13 @@ function Landing() {
       onFiles={async (files) => toUploadResult(await startDraftFromUpload(files))}
       onTemplate={async (templateId) => toUploadResult(await startDraftFromTemplate(templateId))}
       onStarted={(draftId) => void navigate({ to: "/setup/$draftId", params: { draftId } })}
-      signInHref="/sign-in"
+      signIn={
+        <SignInButton mode="modal">
+          <button type="button" className="lp-signin">
+            Sign in
+          </button>
+        </SignInButton>
+      }
     />
   );
 }

@@ -2,6 +2,7 @@
  * The call log: one row per model call with latency, status, tokens and cost.
  * It feeds the usage report, cost-per-grade numbers and the mock model's replay.
  */
+import { Db, schema } from "@goblins/domain";
 import { Cause, Clock, Context, Effect, Exit, Layer, Option, Ref } from "effect";
 import {
   type BudgetExceeded,
@@ -25,6 +26,8 @@ export interface CallCost {
   readonly promptTokens: number;
   readonly completionTokens: number;
   readonly costUsd: number;
+  /** Of `completionTokens`, how many were reasoning, when the provider reports it. */
+  readonly reasoningTokens?: number;
 }
 
 /** Which client answered: the real provider or the mock. */
@@ -181,6 +184,54 @@ export const withCallLog = (provider: Provider) =>
       return wrap(yield* ModelClient, yield* CallLog, provider);
     }),
   );
+
+/**
+ * Writes rows to the domain's `model_calls` table. A failed or stalled (over 5 s)
+ * insert is logged and dropped: losing a log row must never fail or hold a grade.
+ */
+export const postgres = Layer.effect(
+  CallLog,
+  Effect.gen(function* () {
+    const db = yield* Db;
+    return {
+      record: (entry) =>
+        db
+          .insert(schema.modelCalls)
+          .values({
+            purpose: entry.purpose,
+            provider: entry.provider,
+            model: entry.modelRequested,
+            modelAnswered: entry.model ?? null,
+            status: entry.status,
+            statusCode: entry.statusCode ?? null,
+            providerId: entry.providerId ?? null,
+            latencyMs: Math.round(entry.latencyMs),
+            inputTokens: entry.cost?.promptTokens ?? null,
+            outputTokens: entry.cost?.completionTokens ?? null,
+            reasoningTokens: entry.cost?.reasoningTokens ?? null,
+            costUsd: entry.cost?.costUsd ?? null,
+            // Grade calls carry the submission id; other calls keep their subject as text.
+            submissionId: entry.purpose === "grade" ? (entry.subjectId ?? null) : null,
+            subjectId: entry.purpose === "grade" ? null : (entry.subjectId ?? null),
+            attempt: entry.attempt ?? null,
+            errorMessage: entry.error ?? null,
+            loadTestRunId: entry.loadTestRunId ?? null,
+            createdAt: entry.startedAt,
+          })
+          .pipe(
+            Effect.asVoid,
+            // `wrap` records inside an uninterruptible region, so bound the insert here: a
+            // stalled database drops the row instead of holding the grade.
+            Effect.interruptible,
+            Effect.timeoutFail({
+              duration: "5 seconds",
+              onTimeout: () => "call log insert timed out after 5 s",
+            }),
+            Effect.catchAll((error) => Effect.logWarning("call log insert failed", error)),
+          ),
+    };
+  }),
+);
 
 /** Keeps rows in memory. For tests and for local runs without a database. */
 export const inMemory = Effect.gen(function* () {
