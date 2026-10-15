@@ -18,7 +18,17 @@ export function TeacherHeader({ children }: { readonly children?: ReactNode }) {
           <span className="hidden sm:inline">Goblins Grader</span>
         </Link>
         <div className="flex min-w-0 flex-1 items-center gap-3">{children}</div>
-        {isSignedIn === true && <AccountButton />}
+        {isSignedIn === true && (
+          <>
+            <Link
+              to="/classes"
+              className="shrink-0 font-bold text-brand text-sm no-underline hover:underline"
+            >
+              My classes
+            </Link>
+            <AccountButton />
+          </>
+        )}
       </div>
     </header>
   );
