@@ -61,7 +61,15 @@
     box-shadow var(--gb-duration-base) var(--gb-ease-out);
 }
 
-.lp-template:hover {
+.lp-template:disabled {
+  cursor: progress;
+}
+
+.lp-template:disabled:not([aria-busy="true"]) {
+  opacity: 0.6;
+}
+
+.lp-template:hover:enabled {
   box-shadow: var(--gb-shadow-lg);
   transform: translateY(-3px);
 }
@@ -149,4 +157,29 @@
   padding-bottom: var(--gb-space-5);
   color: var(--gb-color-text-subtle);
   font-size: var(--gb-text-xs);
+}
+
+.lp-credits {
+  max-width: 820px;
+  margin: var(--gb-space-6) auto 0;
+  color: var(--gb-color-text-muted);
+  font-size: var(--gb-text-xs);
+}
+
+.lp-credits summary {
+  cursor: pointer;
+  font-weight: var(--gb-weight-bold);
+  text-align: center;
+}
+
+.lp-credits ul {
+  display: grid;
+  gap: var(--gb-space-2);
+  margin: var(--gb-space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lp-credits a {
+  color: var(--gb-color-text-brand);
 }

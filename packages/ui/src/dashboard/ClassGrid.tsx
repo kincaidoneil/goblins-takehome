@@ -74,13 +74,19 @@ export function ClassGrid({
             return (
               <tr key={student.id}>
                 <th scope="row" className="gb-grid-student">
-                  <Avatar
-                    kind="creature"
-                    creatureId={student.creatureId}
-                    size="sm"
-                    name={hidden ? "" : student.name}
-                  />
-                  <span>{hidden ? `Student ${row + 1}` : student.name}</span>
+                  <span className="gb-grid-who">
+                    {hidden ? (
+                      <span className="gb-grid-anon" aria-hidden="true" />
+                    ) : (
+                      <Avatar
+                        kind="creature"
+                        creatureId={student.creatureId}
+                        size="sm"
+                        name={student.name}
+                      />
+                    )}
+                    {hidden ? `Student ${row + 1}` : student.name}
+                  </span>
                 </th>
                 {problems.map((problem) => {
                   const cell = status(student.id, problem.id);
