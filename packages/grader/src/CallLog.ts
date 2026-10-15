@@ -2,7 +2,7 @@
  * The call log: one row per model call with latency, status, tokens and cost.
  * It feeds the usage report, cost-per-grade numbers and the mock model's replay.
  */
-import { Clock, Context, Effect, Layer, Ref } from "effect";
+import { Cause, Clock, Context, Effect, Exit, Layer, Option, Ref } from "effect";
 import {
   type CallPurpose,
   type CompletionRequest,
@@ -108,35 +108,42 @@ const baseFields = (request: CompletionRequest, startedMs: number, endedMs: numb
  */
 export const wrap = (inner: ModelClient["Type"], log: CallLog["Type"]): ModelClient["Type"] => ({
   complete: (request) =>
-    Effect.gen(function* () {
-      const startedMs = yield* Clock.currentTimeMillis;
-      const result = yield* Effect.either(inner.complete(request)).pipe(
-        Effect.onInterrupt(() =>
-          Effect.flatMap(Clock.currentTimeMillis, (endedMs) =>
-            log.record({
-              ...baseFields(request, startedMs, endedMs),
-              status: "interrupted",
-              cost: null,
-              error: "the caller stopped waiting",
-            }),
-          ),
-        ),
-      );
-      const base = baseFields(request, startedMs, yield* Clock.currentTimeMillis);
-      yield* log.record(
-        result._tag === "Right"
-          ? {
+    // Only the provider call is interruptible. Once it settles, or is interrupted,
+    // the row is written before the interruption can propagate.
+    Effect.uninterruptibleMask((restore) =>
+      Effect.gen(function* () {
+        const startedMs = yield* Clock.currentTimeMillis;
+        const exit = yield* Effect.exit(restore(inner.complete(request)));
+        const base = baseFields(request, startedMs, yield* Clock.currentTimeMillis);
+        yield* log.record(
+          Exit.match(exit, {
+            onSuccess: (completion): CallLogEntry => ({
               ...base,
               status: "ok",
               statusCode: 200,
-              model: result.right.model,
-              providerId: result.right.id,
-              cost: result.right.usage,
-            }
-          : { ...base, ...failureFields(result.left) },
-      );
-      return yield* result;
-    }),
+              model: completion.model,
+              providerId: completion.id,
+              cost: completion.usage,
+            }),
+            onFailure: (cause): CallLogEntry =>
+              Option.match(Cause.failureOption(cause), {
+                onSome: (error) => ({ ...base, ...failureFields(error) }),
+                onNone: () =>
+                  Cause.isInterruptedOnly(cause)
+                    ? {
+                        ...base,
+                        status: "interrupted",
+                        cost: null,
+                        error: "the caller stopped waiting",
+                      }
+                    : // A defect in the client: the request may or may not have gone out.
+                      { ...base, status: "provider_error", cost: null, error: Cause.pretty(cause) },
+              }),
+          }),
+        );
+        return yield* exit;
+      }),
+    ),
 });
 
 /** Replaces the provided ModelClient with one that logs every call. */
