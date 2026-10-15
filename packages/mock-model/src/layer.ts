@@ -4,6 +4,7 @@ import {
   ModelClient,
   type ModelError,
   ProviderError,
+  Timeout,
   type Usage,
 } from "@goblins/grader";
 import { Clock, Effect, Layer, Random } from "effect";
@@ -19,7 +20,7 @@ import {
   defaultAnswer,
   fallbackFor,
   imageBytes,
-  imageUrlOf,
+  imageUrlsOf,
   type Render,
   renderJson,
   type Scripted,
@@ -127,21 +128,33 @@ export const makeMockModelClient = (config: MockConfig, options: MockOptions = {
     const attempts = new Map<string, number>();
 
     /** The scripted outcome for a request's image, or the provider's 400 when the image can't be read. */
-    const scriptFor = (request: CompletionRequest) => {
-      const url = imageUrlOf(request);
-      if (url === undefined) return Effect.succeed<Resolved>({ scripted: defaultAnswer, key: "" });
-      return imageBytes(url).pipe(
-        Effect.flatMap(sha256Hex),
-        Effect.map(
-          (hash): Resolved => ({
-            scripted: fixtureByHash.get(hash)?.outcome ?? fallbackFor(hash),
-            key: `${request.tag.subjectId ?? ""}:${hash}`,
-          }),
-        ),
+    /**
+     * The scripted outcome for a request. A request can carry more than the
+     * submitted whiteboard (a diagram, earlier work), so every image is read:
+     * the first that matches a fixture decides, else the last image's hash
+     * does. Reading is bounded by the model timeout, as the provider's fetch
+     * would be. An unreadable image fails as the provider's 400.
+     */
+    const scriptFor = (request: CompletionRequest): Effect.Effect<Resolved, ModelError> => {
+      const urls = imageUrlsOf(request);
+      if (urls.length === 0) return Effect.succeed({ scripted: defaultAnswer, key: "" });
+      return Effect.forEach(urls, (url) =>
+        Effect.flatMap(imageBytes(url, timeoutMs), sha256Hex),
+      ).pipe(
         Effect.mapError(
           (error): ModelError =>
-            new ProviderError({ status: 400, message: `mock: ${error.message}` }),
+            error._tag === "ImageTimedOut"
+              ? new Timeout({ afterMs: timeoutMs })
+              : new ProviderError({ status: 400, message: `mock: ${error.message}` }),
         ),
+        Effect.map((hashes): Resolved => {
+          const fixture = hashes.flatMap((hash) => fixtureByHash.get(hash) ?? []).at(0);
+          const hash = fixture?.sha256 ?? hashes.at(-1) ?? "";
+          return {
+            scripted: fixture?.outcome ?? fallbackFor(hash),
+            key: `${request.tag.subjectId ?? ""}:${hash}`,
+          };
+        }),
       );
     };
 

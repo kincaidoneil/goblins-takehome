@@ -73,24 +73,29 @@ export const fallbackFor = (sha256: string): Answer => {
   return { _tag: "NeedsTeacher", reason: "The grader could not read this work with confidence." };
 };
 
-/** URL of the first image in the request, if any. */
-export const imageUrlOf = (request: CompletionRequest): string | undefined => {
-  for (const message of request.messages) {
-    if (message.role !== "user" || typeof message.content === "string") continue;
-    for (const part of message.content) if (part.type === "image") return part.url;
-  }
-  return undefined;
-};
+/** URLs of every image in the request's user messages, in order. */
+export const imageUrlsOf = (request: CompletionRequest): Array<string> =>
+  request.messages.flatMap((message) =>
+    message.role !== "user" || typeof message.content === "string"
+      ? []
+      : message.content.flatMap((part) => (part.type === "image" ? [part.url] : [])),
+  );
 
-export interface ImageUnavailable {
-  readonly _tag: "ImageUnavailable";
-  readonly message: string;
-}
+export type ImageError =
+  | { readonly _tag: "ImageUnavailable"; readonly message: string }
+  | { readonly _tag: "ImageTimedOut" };
 
 const DATA_URL = /^data:([^,]*?)(;base64)?,(.*)$/s;
 
-/** Image bytes from a `data:` URL, or fetched from an http(s) URL as the provider would. */
-export const imageBytes = (url: string): Effect.Effect<Uint8Array, ImageUnavailable> => {
+/**
+ * Image bytes from a `data:` URL, or fetched from an http(s) URL as the
+ * provider would. The fetch is real network time, so it is bounded by a real
+ * timer rather than Effect's clock.
+ */
+export const imageBytes = (
+  url: string,
+  timeoutMs: number,
+): Effect.Effect<Uint8Array, ImageError> => {
   const data = DATA_URL.exec(url);
   if (data !== null) {
     const payload = data[3] ?? "";
@@ -102,14 +107,19 @@ export const imageBytes = (url: string): Effect.Effect<Uint8Array, ImageUnavaila
   }
   return Effect.tryPromise({
     try: async (signal) => {
-      const response = await fetch(url, { signal });
+      const response = await fetch(url, {
+        signal: AbortSignal.any([signal, AbortSignal.timeout(timeoutMs)]),
+      });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return new Uint8Array(await response.arrayBuffer());
     },
-    catch: (cause) => ({
-      _tag: "ImageUnavailable" as const,
-      message: `could not fetch image: ${cause instanceof Error ? cause.message : String(cause)}`,
-    }),
+    catch: (cause): ImageError =>
+      cause instanceof Error && cause.name === "TimeoutError"
+        ? { _tag: "ImageTimedOut" }
+        : {
+            _tag: "ImageUnavailable",
+            message: `could not fetch image: ${cause instanceof Error ? cause.message : String(cause)}`,
+          },
   });
 };
 

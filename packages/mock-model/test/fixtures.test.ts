@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { readdirSync } from "node:fs";
+import { createServer } from "node:http";
 import { describe, expect, it } from "@effect/vitest";
 import { Effect, Either } from "effect";
 import { fixtures, type MockConfig, makeMockModelClient, renderJson } from "../src/index.ts";
@@ -113,5 +114,68 @@ describe("fixed mode answers each fixture as scripted", () => {
         status: 400,
       });
     }),
+  );
+});
+
+describe("image handling", () => {
+  const dataUrl = (bytes: Uint8Array) =>
+    `data:image/png;base64,${Buffer.from(bytes).toString("base64")}`;
+
+  it.effect("finds the fixture whiteboard among other images in the request", () =>
+    Effect.gen(function* () {
+      const client = yield* makeMockModelClient(fixed, { seed: 1 });
+      const result = yield* client.complete({
+        model: "test/model",
+        tag: { purpose: "grade" },
+        messages: [
+          {
+            role: "user",
+            content: [
+              { type: "image", url: dataUrl(new TextEncoder().encode("a diagram")) },
+              { type: "image", url: dataUrl(fixtureBytes("illegible.png")) },
+            ],
+          },
+        ],
+      });
+      expect(JSON.parse(result.text)).toMatchObject({ status: "needs_teacher" });
+    }),
+  );
+
+  it.live("times out when the image host stalls past the model timeout", () =>
+    Effect.acquireUseRelease(
+      Effect.async<ReturnType<typeof createServer> & { port: number }>((resume) => {
+        // Accepts the request and never answers.
+        const server = createServer(() => {});
+        server.listen(0, "127.0.0.1", () => {
+          const address = server.address();
+          const port = typeof address === "object" && address !== null ? address.port : 0;
+          resume(Effect.succeed(Object.assign(server, { port })));
+        });
+      }),
+      (server) =>
+        Effect.gen(function* () {
+          const client = yield* makeMockModelClient(fixed, { seed: 1, timeoutMs: 200 });
+          const result = yield* Effect.either(
+            client.complete({
+              model: "test/model",
+              tag: { purpose: "grade" },
+              messages: [
+                {
+                  role: "user",
+                  content: [{ type: "image", url: `http://127.0.0.1:${server.port}/board.png` }],
+                },
+              ],
+            }),
+          );
+          expect(Either.isLeft(result) && result.left).toMatchObject({
+            _tag: "Timeout",
+            afterMs: 200,
+          });
+        }),
+      (server) =>
+        Effect.sync(() => server.closeAllConnections()).pipe(
+          Effect.andThen(Effect.sync(() => server.close())),
+        ),
+    ),
   );
 });

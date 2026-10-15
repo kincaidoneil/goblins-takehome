@@ -38,7 +38,7 @@ mode=replay; recording=seed-window; start=1760000000000
 
 ## Fixture whiteboards
 
-The mock hashes the whiteboard image in each request (SHA-256 of the bytes, from a data URL or fetched from an http URL) and looks it up in `src/fixtures.ts`. E2E tests and the class simulator submit the files in `fixtures/`:
+The mock hashes each image in the request (SHA-256 of the bytes, from a data URL or fetched from an http URL) and looks the hashes up in `src/fixtures.ts`. The first image that matches a fixture decides, so other images such as a diagram don't get in the way; with no match, the last image's hash decides. A fetch that takes longer than the model timeout fails as `Timeout`. E2E tests and the class simulator submit the files in `fixtures/`:
 
 | File | Outcome |
 |---|---|
