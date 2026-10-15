@@ -122,6 +122,9 @@ importers:
       '@fontsource-variable/nunito':
         specifier: ^5.2.8
         version: 5.3.0
+      effect:
+        specifier: ^3.22.2
+        version: 3.22.2
     devDependencies:
       '@storybook/react-vite':
         specifier: 10.6.1

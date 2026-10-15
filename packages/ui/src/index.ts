@@ -36,3 +36,17 @@ export {
   useToast,
 } from "./components/Toast";
 export { Tooltip, type TooltipProps, TooltipProvider } from "./components/Tooltip";
+export {
+  BOARD_HEIGHT,
+  BOARD_WIDTH,
+  type DecodeDocError,
+  EMPTY_DOC,
+  INK_COLORS,
+  isDocEmpty,
+  parseDoc,
+  type Stroke,
+  serializeDoc,
+  WhiteboardDoc,
+} from "./whiteboard/doc";
+export { type RenderError, renderWhiteboardPng } from "./whiteboard/render";
+export { type Tool, Whiteboard, type WhiteboardProps } from "./whiteboard/Whiteboard";
