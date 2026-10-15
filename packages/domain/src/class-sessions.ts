@@ -70,6 +70,11 @@ export const joinSession = (input: {
           return yield* Effect.fail(new SessionNotFound({ joinCode: input.joinCode }));
         }
 
+        // Joins to one class take turns from here, so concurrent new names can't all pass the
+        // cap below on the same count. Load-test classes skip the cap and the wait.
+        if (session.loadTestRunId === null) {
+          yield* sqlClient`select pg_advisory_xact_lock(hashtext(${session.id}))`;
+        }
         const taken = yield* db
           .select({ avatarId: students.avatarId, nameKey: students.nameKey })
           .from(students)

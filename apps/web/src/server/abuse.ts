@@ -33,6 +33,12 @@ export const limits = {
     max: 1000,
     windowSeconds: 3600,
   }),
+  /** Marks a grade attempt as charged to its teacher, so resends of it aren't charged again. */
+  gradeAttempt: (submissionId: string, attempt: number): Limit => ({
+    key: `grade-attempt:${submissionId}:${attempt}`,
+    max: 1,
+    windowSeconds: 86_400,
+  }),
 } as const;
 
 /** Whether a join from this address may go ahead. Counts the attempt. */
@@ -56,7 +62,8 @@ export const submitAllowed = (studentId: string, ip: string | null) =>
   });
 
 /**
- * Wraps the grade queue so a teacher's classes send at most `limits.gradesTeacher` jobs an hour.
+ * Wraps the grade queue so a teacher's classes start at most `limits.gradesTeacher` grade
+ * attempts an hour.
  * A job over the cap isn't sent; its grade stays queued and the sweeper resends it once the
  * hour rolls over.
  */
@@ -79,14 +86,16 @@ export const cappedGradeQueue = Layer.effect(
               eq(schema.classSessions.id, schema.submissions.sessionId),
             )
             .where(eq(schema.submissions.id, job.submissionId));
-          if (owner !== undefined && owner.loadTestRunId === null) {
-            const allowed = yield* consume(limits.gradesTeacher(owner.teacherId));
-            if (!allowed) {
+          // Each grade attempt is charged once; the sweeper's resends of it are free.
+          const attempt = limits.gradeAttempt(job.submissionId, job.attempt);
+          if (owner !== undefined && owner.loadTestRunId === null && !(yield* usedUp(attempt))) {
+            if (!(yield* consume(limits.gradesTeacher(owner.teacherId)))) {
               return yield* Effect.logWarning(
                 "Grade job held: the teacher's hourly cap is used up",
                 { teacherId: owner.teacherId, submissionId: job.submissionId },
               );
             }
+            yield* consume(attempt);
           }
           yield* queue.enqueue(job, dedupeKey);
         }).pipe(
