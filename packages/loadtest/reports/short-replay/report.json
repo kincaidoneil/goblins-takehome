@@ -3,7 +3,7 @@
     "runId": "short-replay",
     "startedAt": "2026-10-15T18:50:26.750Z",
     "target": "http://localhost:3290",
-    "commit": "4216cf2",
+    "commit": "4216cf2 (head of PR #129, app as built from PR #124; on main as afbf6fc and 2523979)",
     "scenario": "replay",
     "mock": "replay of the `claude-haiku-5.5` recording",
     "mockSpecExample": "mode=replay; recording=claude-haiku-5.5; start=<step start>",

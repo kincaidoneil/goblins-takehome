@@ -4,7 +4,7 @@
 |---|---|
 | Target | http://localhost:3290 |
 | Started | 2026-10-15T18:24:51.567Z |
-| Commit | `5f7df03` |
+| Commit | `5f7df03 (head of PR #124; on main as 2523979)` |
 | Scenario | normal |
 | Mock model | `claude-haiku-5.5` profile: measured from 1,839 real grading calls (p50 3.9 s, p95 8.0 s, p99 11.4 s; no failures in the sample, measured at 8 concurrent calls) |
 | Mock spec | `mode=sampled; profile=claude-haiku-5.5; start=<step start>` |

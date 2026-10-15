@@ -62,17 +62,25 @@ const profileText: Record<Profile, string> = {
   seed: "`seed` profile: guessed, not measured (log-normal latency, median 3.5 s, p95 9 s; about 1.2% errors)",
 };
 
-export const describeMock = (scenario: ScenarioName, profile: Profile): string => {
+export const describeMock = (
+  scenario: ScenarioName,
+  profile: Profile,
+  window?: { readonly at: number; readonly for: number },
+): string => {
   const base = profileText[profile];
+  const during =
+    window === undefined
+      ? undefined
+      : `from ${window.at} s to ${window.at + window.for} s into the step`;
   switch (scenario) {
     case "normal":
       return base;
     case "rate-limit-storm":
-      return `${base}, plus a rate-limit storm (70% of calls get a 429 with Retry-After 2–10 s) in minutes 2–5`;
+      return `${base}, plus a rate-limit storm (70% of calls get a 429 with Retry-After 2–10 s) ${during ?? "in minutes 2–5"}`;
     case "provider-down":
-      return `${base}, plus the provider down for ${OUTAGE_FOR_S / 60} minutes (every call fails with no response)`;
+      return `${base}, plus the provider down (every call fails with no response) ${during ?? `for ${OUTAGE_FOR_S / 60} minutes`}`;
     case "latency-doubling":
-      return `${base}, with every latency doubled`;
+      return `${base}, with every latency doubled${during === undefined ? "" : ` ${during}`}`;
     case "replay":
       return `replay of the \`${profile === "seed" ? "seed-window" : profile}\` recording`;
   }
