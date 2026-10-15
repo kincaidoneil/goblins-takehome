@@ -1,0 +1,3042 @@
+[
+  {
+    "id": "sle-1-correct",
+    "itemId": "1",
+    "tags": ["correct"],
+    "summary": "Distributes, subtracts 3x, divides by 9 and simplifies to −4/3.",
+    "style": {
+      "font": "kalam",
+      "ink": "blue",
+      "size": 40,
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "3(x - 4) = 12x"
+      },
+      {
+        "_tag": "Text",
+        "text": "3x - 12 = 12x"
+      },
+      {
+        "_tag": "Text",
+        "text": "-3x        -3x",
+        "size": 30,
+        "indent": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "-12 = 9x"
+      },
+      {
+        "_tag": "Text",
+        "text": "x = - \\frac{12}{9}"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = - \\frac{4}{3}]]",
+        "gap": 6
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Distributes to 3x − 12 = 12x and solves to x = −4/3."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-1-distribute-first-term",
+    "itemId": "1",
+    "tags": ["incorrect", "common-mistake"],
+    "summary": "Multiplies only the x by 3, writing 3x − 4 = 12x, and gets x = −4/9.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "black",
+      "size": 38,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "3(x-4) = 12x"
+      },
+      {
+        "_tag": "Text",
+        "text": "3x - 4 = 12x"
+      },
+      {
+        "_tag": "Text",
+        "text": "-4 = 9x"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = - \\frac{4}{9}]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Distributes 3 to the x only (3x − 4 instead of 3x − 12), so x = −4/9 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-1-moved-without-sign",
+    "itemId": "1",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Distributes correctly, then moves −12 to the right side without changing its sign and gets x = 4/3.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "blue",
+      "size": 40,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "3x - 12 = 12x"
+      },
+      {
+        "_tag": "Text",
+        "text": "3x = 12x - 12"
+      },
+      {
+        "_tag": "Text",
+        "text": "-9x = -12"
+      },
+      {
+        "_tag": "Text",
+        "text": "x = \\frac{-12}{-9}"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = \\frac{4}{3}]]",
+        "gap": 6
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "3x − 12 = 12x is right; moving −12 across should give +12, so x = 4/3 has the wrong sign."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-1-unsimplified-messy",
+    "itemId": "1",
+    "tags": ["correct", "messy"],
+    "summary": "Correct work in sloppy writing, leaving the answer as −12/9.",
+    "style": {
+      "font": "shadows-into-light",
+      "ink": "black",
+      "size": 42,
+      "mess": 2
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "3(x-4)=12x"
+      },
+      {
+        "_tag": "Text",
+        "text": "3x-12=12x"
+      },
+      {
+        "_tag": "Text",
+        "text": "-3x     -3x",
+        "size": 32
+      },
+      {
+        "_tag": "Text",
+        "text": "-12 = 9x"
+      },
+      {
+        "_tag": "Text",
+        "text": "÷9   ÷9",
+        "size": 32
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = - \\frac{12}{9}]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Distributes correctly; the unsimplified −12/9 is accepted for L2."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-1-answer-only",
+    "itemId": "1",
+    "tags": ["answer-only"],
+    "summary": "Writes only the boxed answer x = −4/3.",
+    "style": {
+      "font": "caveat",
+      "ink": "purple",
+      "size": 48,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "[[x = - \\frac{4}{3}]]",
+        "at": [80, 70]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Correct answer earns L2; no distribution is shown, so L1 is not earned."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-1-divide-by-3",
+    "itemId": "1",
+    "tags": ["correct", "alternate-method", "off-rubric"],
+    "summary": "Divides both sides by 3 first (x − 4 = 4x) instead of distributing, gets x = −4/3 and checks it.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "black",
+      "size": 40,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "3(x-4) = 12x"
+      },
+      {
+        "_tag": "Text",
+        "text": "÷3          ÷3",
+        "size": 32,
+        "indent": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "x - 4 = 4x"
+      },
+      {
+        "_tag": "Text",
+        "text": "-4 = 3x"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = - \\frac{4}{3}]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "check: 3(- \\frac{16}{3}) = -16   12(- \\frac{4}{3}) = -16",
+        "size": 32,
+        "gap": 16
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Valid method: dividing by 3 replaces distributing; x = −4/3 is right and checked."
+    },
+    "review": {
+      "_tag": "Unsure",
+      "note": "L1 describes distributing (3x − 12 = 12x); the student never distributes but divides both sides by 3, an equivalent correct step. Scored 1/1 treating L1 as 'correct first step'."
+    }
+  },
+  {
+    "id": "sle-2-correct",
+    "itemId": "2",
+    "tags": ["correct"],
+    "summary": "Solves all three equations with clear steps: x = 9, y = 2, n = 4.",
+    "style": {
+      "font": "kalam",
+      "ink": "blue",
+      "size": 32,
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "2(x+5) = 3x+1"
+      },
+      {
+        "_tag": "Text",
+        "text": "2x + 10 = 3x + 1"
+      },
+      {
+        "_tag": "Text",
+        "text": "10 = x + 1"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 9]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "3y - 4 = 6 - 2y",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "5y - 4 = 6"
+      },
+      {
+        "_tag": "Text",
+        "text": "5y = 10"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y = 2]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "3(n+2) = 9(6-n)",
+        "at": [540, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "3n + 6 = 54 - 9n"
+      },
+      {
+        "_tag": "Text",
+        "text": "12n + 6 = 54"
+      },
+      {
+        "_tag": "Text",
+        "text": "12n = 48"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[n = 4]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "All three solved with correct intermediate steps."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-2-answer-only",
+    "itemId": "2",
+    "tags": ["answer-only"],
+    "summary": "Writes the three correct answers with no work.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "black",
+      "size": 44,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "x = 9",
+        "at": [60, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "y = 2",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "n = 4",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Bare correct answers; the problem asks for reasoning and the rubric gives no credit without work."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-2-distribute-first-term",
+    "itemId": "2",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Distributes the left-side factor to the first term only in the x and n equations; solves y correctly.",
+    "style": {
+      "font": "nanum-pen-script",
+      "ink": "blue",
+      "size": 40,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "2x + 5 = 3x + 1"
+      },
+      {
+        "_tag": "Text",
+        "text": "5 = x + 1"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 4]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "3y - 4 = 6 - 2y",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "+2y      +2y",
+        "size": 32,
+        "indent": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "5y - 4 = 6"
+      },
+      {
+        "_tag": "Text",
+        "text": "5y = 10"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y = 2]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "3n + 2 = 54 - 9n",
+        "at": [540, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "12n + 2 = 54"
+      },
+      {
+        "_tag": "Text",
+        "text": "12n = 52"
+      },
+      {
+        "_tag": "Text",
+        "text": "n = \\frac{52}{12}"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[n = \\frac{13}{3}]]",
+        "gap": 6
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "2(x+5) and 3(n+2) are distributed to the first term only, so x and n are wrong; y = 2 is right with work."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-2-sign-move",
+    "itemId": "2",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Moves −2y to the left without changing its sign and gets y = 10; x and n are right.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "purple",
+      "size": 32,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "2x + 10 = 3x + 1"
+      },
+      {
+        "_tag": "Text",
+        "text": "10 - 1 = 3x - 2x"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[9 = x]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "3y - 4 = 6 - 2y",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "3y - 2y = 6 + 4"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y = 10]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "3n + 6 = 54 - 9n",
+        "at": [540, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "3n + 9n = 54 - 6"
+      },
+      {
+        "_tag": "Text",
+        "text": "12n = 48"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[n = 4]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "x = 9 and n = 4 with work; −2y moved left should become +2y, so y = 10 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-2-messy-overwrite",
+    "itemId": "2",
+    "tags": ["messy", "correct"],
+    "summary": "Rushed work for all three; the final n is a 4 written over a 9, so the digit is hard to read.",
+    "style": {
+      "font": "reenie-beanie",
+      "ink": "black",
+      "size": 48,
+      "mess": 3
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "2x+10=3x+1"
+      },
+      {
+        "_tag": "Text",
+        "text": "x = 9"
+      },
+      {
+        "_tag": "Text",
+        "text": "3y-4=6-2y",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "5y=10"
+      },
+      {
+        "_tag": "Text",
+        "text": "y=2"
+      },
+      {
+        "_tag": "Text",
+        "text": "3n+6=54-9n",
+        "at": [540, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "12n=48"
+      },
+      {
+        "_tag": "Text",
+        "text": "n =",
+        "at": [540, 170]
+      },
+      {
+        "_tag": "Text",
+        "text": "9",
+        "at": [600, 170]
+      },
+      {
+        "_tag": "Text",
+        "text": "4",
+        "at": [602, 172]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "x and y are right with work; 12n = 48 is right but the final digit of n is written over and unclear."
+    },
+    "review": {
+      "_tag": "Unsure",
+      "note": "The final n is a 4 and a 9 written on top of each other. 12n = 48 points to 4, so L3 is scored 1; a teacher could score it 0 or ask the student."
+    }
+  },
+  {
+    "id": "sle-3-correct",
+    "itemId": "3",
+    "tags": ["correct"],
+    "summary": "Clears the fractions by multiplying by 9, solves all three and checks y.",
+    "style": {
+      "font": "caveat",
+      "ink": "blue",
+      "size": 34,
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "\\frac{1}{9}(2m-16) = \\frac{1}{3}(2m+4)"
+      },
+      {
+        "_tag": "Text",
+        "text": "×9:  2m - 16 = 3(2m + 4)"
+      },
+      {
+        "_tag": "Text",
+        "text": "2m - 16 = 6m + 12"
+      },
+      {
+        "_tag": "Text",
+        "text": "-28 = 4m"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[m = -7]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "-4(r+2) = 4(2-2r)",
+        "gap": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "-4r - 8 = 8 - 8r"
+      },
+      {
+        "_tag": "Text",
+        "text": "4r = 16"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[r = 4]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "12(5+2y) = 4y-(6-9y)",
+        "at": [540, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = 4y - 6 + 9y"
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = 13y - 6"
+      },
+      {
+        "_tag": "Text",
+        "text": "11y = -66"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y = -6]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "check: 12(5-12) = -84",
+        "gap": 20,
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "-24 - (6 + 54) = -84",
+        "size": 30,
+        "indent": 70
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "All three solved with correct steps; the check is a bonus."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-3-distribute-fractions",
+    "itemId": "3",
+    "tags": ["correct", "alternate-method"],
+    "summary": "Distributes the fractions instead of clearing them, uses ninths to get m = −7; r and y solved directly.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "blue",
+      "size": 34,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "\\frac{2}{9}m - \\frac{16}{9} = \\frac{2}{3}m + \\frac{4}{3}"
+      },
+      {
+        "_tag": "Text",
+        "text": "\\frac{2}{9}m - \\frac{16}{9} = \\frac{6}{9}m + \\frac{12}{9}"
+      },
+      {
+        "_tag": "Text",
+        "text": "- \\frac{16}{9} - \\frac{12}{9} = \\frac{4}{9}m"
+      },
+      {
+        "_tag": "Text",
+        "text": "- \\frac{28}{9} = \\frac{4}{9}m"
+      },
+      {
+        "_tag": "Text",
+        "text": "m = - \\frac{28}{9} · \\frac{9}{4}"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[m = -7]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "-4r - 8 = 8 - 8r",
+        "at": [560, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "4r - 8 = 8"
+      },
+      {
+        "_tag": "Text",
+        "text": "4r = 16"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[r = 4]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = 4y - 6 + 9y",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = 13y - 6"
+      },
+      {
+        "_tag": "Text",
+        "text": "11y = -66"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y = -6]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Distributing the fractions is valid and gives m = −7; r = 4 and y = −6 are right with work."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-3-sign-error",
+    "itemId": "3",
+    "tags": ["partial", "common-mistake", "messy"],
+    "summary": "Solves m and r correctly; distributes −(6 − 9y) as −6 − 9y and gets y = −66/29.",
+    "style": {
+      "mess": 2,
+      "font": "indie-flower",
+      "ink": "black",
+      "size": 28
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "\\frac{1}{9}(2m - 16) = \\frac{1}{3}(2m + 4)"
+      },
+      {
+        "_tag": "Text",
+        "text": "2m - 16 = 6m + 12"
+      },
+      {
+        "_tag": "Text",
+        "text": "-28 = 4m   [[m = -7]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "-4r - 8 = 8 - 8r",
+        "gap": 14
+      },
+      {
+        "_tag": "Text",
+        "text": "4r = 16   [[r = 4]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = 4y - 6 - 9y",
+        "at": [540, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = -5y - 6"
+      },
+      {
+        "_tag": "Text",
+        "text": "29y = -66"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y = - \\frac{66}{29}]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "m = −7 and r = 4 are right; −(6 − 9y) should be −6 + 9y, so y is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-3-partial-distribute",
+    "itemId": "3",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Multiplies by 9 but leaves the +4 unmultiplied (m = −5), distributes −4 as −4r + 8 (r = 0); y is right.",
+    "style": {
+      "font": "shadows-into-light",
+      "ink": "black",
+      "size": 34,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "\\frac{1}{9}(2m-16) = \\frac{1}{3}(2m+4)"
+      },
+      {
+        "_tag": "Text",
+        "text": "2m - 16 = 3 · 2m + 4"
+      },
+      {
+        "_tag": "Text",
+        "text": "2m - 16 = 6m + 4"
+      },
+      {
+        "_tag": "Text",
+        "text": "-20 = 4m"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[m = -5]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "-4r + 8 = 8 - 8r",
+        "gap": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "4r = 0"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[r = 0]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = 4y - 6 + 9y",
+        "at": [560, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = 13y - 6"
+      },
+      {
+        "_tag": "Text",
+        "text": "11y = -66"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y = -6]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "3(2m + 4) written as 6m + 4 gives m = −5; −4(r + 2) written as −4r + 8 gives r = 0; y = −6 is right."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-3-checks-only",
+    "itemId": "3",
+    "tags": ["answer-only", "off-rubric"],
+    "summary": "States the three correct answers and substitutes each to check, with no solving steps.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "black",
+      "size": 32,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "m = -7:   \\frac{1}{9}(-30) = \\frac{1}{3}(-10)"
+      },
+      {
+        "_tag": "Text",
+        "text": "- \\frac{10}{3} = - \\frac{10}{3}",
+        "indent": 120
+      },
+      {
+        "_tag": "Text",
+        "text": "r = 4:   -4(6) = 4(-6)",
+        "gap": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "-24 = -24",
+        "indent": 120
+      },
+      {
+        "_tag": "Text",
+        "text": "y = -6:   12(-7) = -24 - 60",
+        "gap": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "-84 = -84",
+        "indent": 120
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Correct answers verified by substitution, but no steps solving any equation."
+    },
+    "review": {
+      "_tag": "Unsure",
+      "note": "The rubric gives no credit without supporting work and says the check is not scored. The checks prove each answer is right but do not show how it was found. Scored 0/0/0; a teacher could count the checks as work and give 3/3."
+    }
+  },
+  {
+    "id": "sle-3-blank",
+    "itemId": "3",
+    "tags": ["blank"],
+    "summary": "Empty board.",
+    "style": {
+      "font": "kalam",
+      "ink": "black"
+    },
+    "board": [],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Nothing written."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-4-correct",
+    "itemId": "4",
+    "tags": ["correct"],
+    "summary": "Combines like terms on each side and solves: b = 29/11, x = 0, c = −5.",
+    "style": {
+      "font": "kalam",
+      "ink": "black",
+      "size": 30,
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "2b + 8 - 5b + 3 = -13 + 8b - 5"
+      },
+      {
+        "_tag": "Text",
+        "text": "-3b + 11 = 8b - 18"
+      },
+      {
+        "_tag": "Text",
+        "text": "29 = 11b"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[b = \\frac{29}{11}]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "2c - 3 = 2(6-c) + 7c",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "2c - 3 = 12 - 2c + 7c"
+      },
+      {
+        "_tag": "Text",
+        "text": "2c - 3 = 5c + 12"
+      },
+      {
+        "_tag": "Text",
+        "text": "-15 = 3c"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[c = -5]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "-3x + 15 = 15 + 18x - 12x",
+        "at": [560, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "-3x + 15 = 6x + 15"
+      },
+      {
+        "_tag": "Text",
+        "text": "-9x = 0"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 0]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "All three solved with correct steps."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-4-unlike-and-distribute",
+    "itemId": "4",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Combines 2b − 5b as 3b (b = 29/5) and distributes 2(6 − c) as 12 − c (c = −15/4); x is right.",
+    "style": {
+      "font": "caveat",
+      "ink": "blue",
+      "size": 34,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "3b + 11 = 8b - 18"
+      },
+      {
+        "_tag": "Text",
+        "text": "29 = 5b"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[b = \\frac{29}{5}]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "2c - 3 = 12 - c + 7c",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "2c - 3 = 6c + 12"
+      },
+      {
+        "_tag": "Text",
+        "text": "-15 = 4c"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[c = - \\frac{15}{4}]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "-3x + 15 = 18x + 15 - 12x",
+        "at": [540, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "-3x + 15 = 6x + 15"
+      },
+      {
+        "_tag": "Text",
+        "text": "-9x = 0"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 0]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "2b − 5b is −3b, not 3b, so b is wrong; 2(6 − c) is 12 − 2c, so c is wrong; x = 0 is right with work."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-4-zero-no-solution",
+    "itemId": "4",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Solves b (as 2.64) and c correctly, but reads −9x = 0 as 'no solution'.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "blue",
+      "size": 32,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "-3b + 11 = 8b - 18"
+      },
+      {
+        "_tag": "Text",
+        "text": "11 + 18 = 8b + 3b"
+      },
+      {
+        "_tag": "Text",
+        "text": "29 = 11b"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[b ≈ 2.64]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "2c - 3 = 12 - 2c + 7c",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "2c - 3 = 5c + 12"
+      },
+      {
+        "_tag": "Text",
+        "text": "-3c = 15"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[c = -5]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "-3x + 15 = 6x + 15",
+        "at": [560, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "-9x = 0"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[no solution]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "b ≈ 2.64 (accepted) and c = −5 are right with work; −9x = 0 gives x = 0, not no solution."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-4-mostly-answer-only",
+    "itemId": "4",
+    "tags": ["partial", "answer-only"],
+    "summary": "Shows work for b, then writes x = 0 and c = −5 with no work.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "purple",
+      "size": 36,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "-3b + 11 = 8b - 18"
+      },
+      {
+        "_tag": "Text",
+        "text": "29 = 11b"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[b = \\frac{29}{11}]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "x = 0",
+        "at": [600, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "c = -5",
+        "gap": 40
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "b = 29/11 is right with work; x = 0 and c = −5 are bare answers, which earn nothing."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-4-ambiguous-sign",
+    "itemId": "4",
+    "tags": ["messy", "correct"],
+    "summary": "Hurried, correct work; the final c is written with a tiny mark before the 5 that may or may not be a minus.",
+    "style": {
+      "font": "reenie-beanie",
+      "ink": "black",
+      "size": 40,
+      "mess": 3
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "-3b+11=8b-18"
+      },
+      {
+        "_tag": "Text",
+        "text": "29=11b"
+      },
+      {
+        "_tag": "Text",
+        "text": "b = \\frac{29}{11}"
+      },
+      {
+        "_tag": "Text",
+        "text": "2c-3=12-2c+7c",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "2c-3=5c+12"
+      },
+      {
+        "_tag": "Text",
+        "text": "-3c=15"
+      },
+      {
+        "_tag": "Text",
+        "text": "c =",
+        "at": [40, 450]
+      },
+      {
+        "_tag": "Path",
+        "points": [[96, 472], [100, 471]]
+      },
+      {
+        "_tag": "Text",
+        "text": "5",
+        "at": [106, 450]
+      },
+      {
+        "_tag": "Text",
+        "text": "-3x+15=6x+15",
+        "at": [560, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "-9x=0"
+      },
+      {
+        "_tag": "Text",
+        "text": "x=0"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "b and x are right with work; −3c = 15 is right but the sign of the final c is unclear."
+    },
+    "review": {
+      "_tag": "Unsure",
+      "note": "The mark before the 5 is a tiny stroke that could be a minus, a stray mark or a decimal point. −3c = 15 points to c = −5, so L3 is scored 1; a teacher could read c = 5 and score 0."
+    }
+  },
+  {
+    "id": "sle-5-correct",
+    "itemId": "5",
+    "tags": ["correct"],
+    "summary": "Solves all three, clearing the thirds by multiplying by 3, and checks z.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "blue",
+      "size": 30,
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "-3w - 4 = w + 3"
+      },
+      {
+        "_tag": "Text",
+        "text": "-4 = 4w + 3"
+      },
+      {
+        "_tag": "Text",
+        "text": "-7 = 4w"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[w = - \\frac{7}{4}]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "3(3-3x) = 2(x+3) - 30",
+        "gap": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "9 - 9x = 2x + 6 - 30"
+      },
+      {
+        "_tag": "Text",
+        "text": "9 - 9x = 2x - 24"
+      },
+      {
+        "_tag": "Text",
+        "text": "33 = 11x"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 3]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "\\frac{1}{3}(z+4) - 6 = \\frac{2}{3}(5-z)",
+        "at": [540, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "×3:  z + 4 - 18 = 10 - 2z"
+      },
+      {
+        "_tag": "Text",
+        "text": "z - 14 = 10 - 2z"
+      },
+      {
+        "_tag": "Text",
+        "text": "3z = 24"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[z = 8]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "check: \\frac{12}{3} - 6 = -2",
+        "gap": 20,
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "\\frac{2}{3}(-3) = -2",
+        "size": 28,
+        "indent": 80
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "All three solved with correct steps."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-5-forgot-6",
+    "itemId": "5",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Multiplies the z equation by 3 but leaves −6 unmultiplied (z = 4); w and x are right.",
+    "style": {
+      "font": "kalam",
+      "ink": "black",
+      "size": 30,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "-3w - 4 = w + 3"
+      },
+      {
+        "_tag": "Text",
+        "text": "-3w - w = 3 + 4"
+      },
+      {
+        "_tag": "Text",
+        "text": "-4w = 7"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[w = - \\frac{7}{4}]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "9 - 9x = 2x + 6 - 30",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "9 - 9x = 2x - 24"
+      },
+      {
+        "_tag": "Text",
+        "text": "33 = 11x"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 3]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "\\frac{1}{3}(z+4) - 6 = \\frac{2}{3}(5-z)",
+        "at": [540, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "z + 4 - 6 = 10 - 2z"
+      },
+      {
+        "_tag": "Text",
+        "text": "z - 2 = 10 - 2z"
+      },
+      {
+        "_tag": "Text",
+        "text": "3z = 12"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[z = 4]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "w = −7/4 and x = 3 are right with work; multiplying by 3 should turn −6 into −18, so z = 4 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-5-sign-and-distribute",
+    "itemId": "5",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Moves w to the left without changing its sign (w = −7/2) and distributes 3 to the 3 only (x = 33/5); z is right.",
+    "style": {
+      "font": "shadows-into-light",
+      "ink": "black",
+      "size": 34,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "-3w - 4 = w + 3"
+      },
+      {
+        "_tag": "Text",
+        "text": "-2w - 4 = 3"
+      },
+      {
+        "_tag": "Text",
+        "text": "-2w = 7"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[w = - \\frac{7}{2}]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "9 - 3x = 2x + 6 - 30",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "9 - 3x = 2x - 24"
+      },
+      {
+        "_tag": "Text",
+        "text": "33 = 5x"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = \\frac{33}{5}]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "z + 4 - 18 = 10 - 2z",
+        "at": [560, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "3z - 14 = 10"
+      },
+      {
+        "_tag": "Text",
+        "text": "3z = 24"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[z = 8]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Subtracting w from both sides gives −4w, not −2w; 3(3 − 3x) is 9 − 9x, not 9 − 3x; z = 8 is right with work."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-5-distribute-thirds",
+    "itemId": "5",
+    "tags": ["correct", "alternate-method"],
+    "summary": "Distributes the thirds instead of clearing them for z, and gives w as −1.75.",
+    "style": {
+      "font": "nanum-pen-script",
+      "ink": "blue",
+      "size": 40,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "-3w - 4 = w + 3"
+      },
+      {
+        "_tag": "Text",
+        "text": "-4w = 7"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[w = -1.75]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "9 - 9x = 2x - 24",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "-11x = -33"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 3]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "\\frac{1}{3}z + \\frac{4}{3} - 6 = \\frac{10}{3} - \\frac{2}{3}z",
+        "at": [500, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "\\frac{1}{3}z + \\frac{2}{3}z = \\frac{10}{3} - \\frac{4}{3} + 6"
+      },
+      {
+        "_tag": "Text",
+        "text": "z = 2 + 6"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[z = 8]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "w = −1.75 is accepted; x = 3 and z = 8 are right with work."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-5-near-blank",
+    "itemId": "5",
+    "tags": ["near-blank"],
+    "summary": "Copies the first equation and writes question marks.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "black",
+      "size": 40,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "-3w - 4 = w + 3",
+        "at": [60, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "? ? ?",
+        "gap": 20,
+        "indent": 40
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Only the problem is copied; nothing is solved."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-5-messy-crossed-out",
+    "itemId": "5",
+    "tags": ["correct", "messy", "crossed-out"],
+    "summary": "Sloppy but correct; crosses out a first try at x that distributed 2(x + 3) as 2x + 3.",
+    "style": {
+      "font": "caveat",
+      "ink": "purple",
+      "size": 34,
+      "mess": 2
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "-3w - 4 = w + 3"
+      },
+      {
+        "_tag": "Text",
+        "text": "-7 = 4w"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[w = - \\frac{7}{4}]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "~~9 - 9x = 2x + 3 - 30~~",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "9 - 9x = 2x + 6 - 30"
+      },
+      {
+        "_tag": "Text",
+        "text": "33 = 11x"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 3]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "z + 4 - 18 = 10 - 2z",
+        "at": [560, 28]
+      },
+      {
+        "_tag": "Text",
+        "text": "3z = 24"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[z = 8]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "All three right with work; the crossed-out line is replaced by the correct one."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-6-correct",
+    "itemId": "6",
+    "tags": ["correct"],
+    "summary": "Names the step from −6x + 10 = 4x + 20 to 10 = −2x + 20 and solves to x = −1.",
+    "style": {
+      "font": "kalam",
+      "ink": "blue",
+      "size": 34,
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "The mistake is going from"
+      },
+      {
+        "_tag": "Text",
+        "text": "-6x + 10 = 4x + 20  to  10 = -2x + 20"
+      },
+      {
+        "_tag": "Text",
+        "text": "He did 4x - 6x. It should be 4x + 6x"
+      },
+      {
+        "_tag": "Text",
+        "text": "10 = 10x + 20",
+        "gap": 16
+      },
+      {
+        "_tag": "Text",
+        "text": "-10 = 10x"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = -1]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Names the right step (6x subtracted instead of added) and gets x = −1."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-6-resolved-no-step",
+    "itemId": "6",
+    "tags": ["partial"],
+    "summary": "Re-solves the equation correctly to x = −1 but never says where Andre went wrong.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "black",
+      "size": 38,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "-2(3x - 5) = 4(x + 3) + 8"
+      },
+      {
+        "_tag": "Text",
+        "text": "-6x + 10 = 4x + 12 + 8"
+      },
+      {
+        "_tag": "Text",
+        "text": "-6x + 10 = 4x + 20"
+      },
+      {
+        "_tag": "Text",
+        "text": "10 = 10x + 20"
+      },
+      {
+        "_tag": "Text",
+        "text": "-10 = 10x"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = -1]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "the answer is -1 not 5",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "x = −1 is right, but the student never identifies which of Andre's steps is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-6-wrong-step",
+    "itemId": "6",
+    "tags": ["incorrect", "common-mistake"],
+    "summary": "Blames the correct first step, claiming −2 · −5 is −10, and solves to x = −3.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "blue",
+      "size": 38,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "His mistake is the first step."
+      },
+      {
+        "_tag": "Text",
+        "text": "-2 times -5 is -10"
+      },
+      {
+        "_tag": "Text",
+        "text": "-6x - 10 = 4x + 20",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "-10 = 10x + 20"
+      },
+      {
+        "_tag": "Text",
+        "text": "-30 = 10x"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = -3]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "The first step is correct (−2 · −5 = +10); the real mistake is the 4x − 6x step, and x = −3 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-6-right-step-slip",
+    "itemId": "6",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Names the right step, then moves 20 across without changing its sign and gets x = 3.",
+    "style": {
+      "font": "caveat",
+      "ink": "black",
+      "size": 40,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Mistake: line 3 to line 4"
+      },
+      {
+        "_tag": "Text",
+        "text": "4x + 6x = 10x, not -2x"
+      },
+      {
+        "_tag": "Text",
+        "text": "10 = 10x + 20",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "10 + 20 = 10x"
+      },
+      {
+        "_tag": "Text",
+        "text": "30 = 10x"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 3]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Identifies the right step; moving +20 across should give 10 − 20, so x = 3 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-6-near-blank",
+    "itemId": "6",
+    "tags": ["near-blank"],
+    "summary": "Writes that Andre did something wrong and a question mark.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "black",
+      "size": 44,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "he did something wrong",
+        "at": [60, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "?",
+        "gap": 10,
+        "indent": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "No step identified and no solution."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-6-messy-annotated",
+    "itemId": "6",
+    "tags": ["correct", "messy", "diagram"],
+    "summary": "Copies Andre's lines, circles 10 = −2x + 20, notes it should be 10x, and solves to x = −1.",
+    "style": {
+      "font": "kalam",
+      "ink": "purple",
+      "size": 36,
+      "mess": 2
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "-6x + 10 = 4x + 20",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "10 = -2x + 20",
+        "at": [110, 110]
+      },
+      {
+        "_tag": "Ring",
+        "at": [90, 100],
+        "size": [270, 70]
+      },
+      {
+        "_tag": "Arrow",
+        "from": [370, 135],
+        "to": [470, 135]
+      },
+      {
+        "_tag": "Text",
+        "text": "should be +6x so 10x",
+        "at": [485, 112]
+      },
+      {
+        "_tag": "Text",
+        "text": "10 = 10x + 20",
+        "at": [110, 220]
+      },
+      {
+        "_tag": "Text",
+        "text": "-10 = 10x"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = -1]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Circles the right step and says it should be 10x; x = −1 is right."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-7-correct-both",
+    "itemId": "7",
+    "tags": ["correct"],
+    "summary": "Names both errors in line 2 (72 should be 60; −(5 − 9y) is −5 + 9y) and solves to y = −65/11.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "blue",
+      "size": 34,
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Line 2 is wrong. 12 · 5 = 60 not 72"
+      },
+      {
+        "_tag": "Text",
+        "text": "and -(5 - 9y) = -5 + 9y"
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = 4y - 5 + 9y",
+        "gap": 16
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = 13y - 5"
+      },
+      {
+        "_tag": "Text",
+        "text": "11y = -65"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y = - \\frac{65}{11}]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Names both errors in the first step and gets y = −65/11."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-7-fixed-72-only",
+    "itemId": "7",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Fixes 12 · 5 = 60 but keeps Clare's −9y, so gets y = −65/29.",
+    "style": {
+      "font": "kalam",
+      "ink": "black",
+      "size": 34,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "She did 12 × 5 wrong, it's 60"
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = 4y - 5 - 9y",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = -5y - 5"
+      },
+      {
+        "_tag": "Text",
+        "text": "29y = -65"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y = - \\frac{65}{29}]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Naming 12 · 5 = 60 earns L1; the −(5 − 9y) error is kept, so y = −65/29 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-7-fixed-sign-only",
+    "itemId": "7",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Fixes the sign of 9y but keeps Clare's 72, so gets y = −7.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "blue",
+      "size": 34,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "The minus goes to both: -(5 - 9y) = -5 + 9y"
+      },
+      {
+        "_tag": "Text",
+        "text": "72 + 24y = 4y - 5 + 9y",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "72 + 24y = 13y - 5"
+      },
+      {
+        "_tag": "Text",
+        "text": "11y = -77"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y = -7]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Naming the sign error earns L1; 12 · 5 is still 72, so y = −7 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-7-decimal",
+    "itemId": "7",
+    "tags": ["correct"],
+    "summary": "Names the 12 · 5 error, solves in fewer steps and gives y ≈ −5.91 with division in the corner.",
+    "style": {
+      "font": "nanum-pen-script",
+      "ink": "black",
+      "size": 44,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "12 · 5 is 60 not 72!"
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = 13y - 5"
+      },
+      {
+        "_tag": "Text",
+        "text": "11y = -65"
+      },
+      {
+        "_tag": "Text",
+        "text": "y = -65 ÷ 11"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y ≈ -5.91]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "65 ÷ 11 = 5.909",
+        "at": [640, 60],
+        "size": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Naming 12 · 5 = 60 earns L1; y ≈ −5.91 is accepted."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-7-two-answers",
+    "itemId": "7",
+    "tags": ["partial", "messy"],
+    "summary": "Fixes 12 · 5 = 60, solves twice with and without the sign fix, and boxes both y = −65/29 and y = −65/11.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "black",
+      "size": 34,
+      "mess": 2
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "12(5) = 60"
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = 4y - 5 - 9y"
+      },
+      {
+        "_tag": "Text",
+        "text": "29y = -65"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y = - \\frac{65}{29}]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "or  4y - 5 + 9y = 13y - 5",
+        "at": [520, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = 13y - 5"
+      },
+      {
+        "_tag": "Text",
+        "text": "11y = -65"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y = - \\frac{65}{11}]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Names 12 · 5 = 60 for L1; leaves two different boxed answers, so L2 is not earned."
+    },
+    "review": {
+      "_tag": "Unsure",
+      "note": "Two boxed answers with neither crossed out, one of them correct. Scored L2 0 as most teachers would; some might accept the correct one."
+    }
+  },
+  {
+    "id": "sle-7-crossed-out-thin",
+    "itemId": "7",
+    "tags": ["correct", "crossed-out"],
+    "summary": "Crosses out a wrong first guess, says only 'the mistake is in the 2nd line', then writes the corrected line and y = −65/11.",
+    "style": {
+      "font": "caveat",
+      "ink": "purple",
+      "size": 38,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "~~the mistake is 29y = -77~~"
+      },
+      {
+        "_tag": "Text",
+        "text": "the mistake is in the 2nd line"
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = 4y - 5 + 9y",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "60 + 24y = 13y - 5"
+      },
+      {
+        "_tag": "Text",
+        "text": "11y = -65"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[y = - \\frac{65}{11}]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "Locates the error in line 2 and the rewritten line fixes both 60 and +9y; y = −65/11."
+    },
+    "review": {
+      "_tag": "Unsure",
+      "note": "The student names the line but not the error itself; the corrected line shows 60 and +9y. Scored L1 1; a strict teacher could want 12 · 5 = 60 or the sign stated in words."
+    }
+  },
+  {
+    "id": "sle-8-correct",
+    "itemId": "8",
+    "tags": ["correct"],
+    "summary": "Disagrees, solves to x = 0 and checks both sides equal 15.",
+    "style": {
+      "font": "kalam",
+      "ink": "blue",
+      "size": 36,
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "No, I disagree with Elena."
+      },
+      {
+        "_tag": "Text",
+        "text": "9x + 15 = 3x + 15"
+      },
+      {
+        "_tag": "Text",
+        "text": "6x + 15 = 15"
+      },
+      {
+        "_tag": "Text",
+        "text": "6x = 0"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 0]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "check: 9(0) + 15 = 15 and 3(0) + 15 = 15"
+      },
+      {
+        "_tag": "Text",
+        "text": "so x = 0 is a solution"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Disagrees and shows x = 0 solves the equation."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-8-agrees",
+    "itemId": "8",
+    "tags": ["incorrect", "common-mistake"],
+    "summary": "Agrees with Elena because 9x is always bigger than 3x.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "purple",
+      "size": 40,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Yes I agree. 9x is always bigger",
+        "at": [40, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "than 3x so 9x + 15 can never"
+      },
+      {
+        "_tag": "Text",
+        "text": "equal 3x + 15."
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Agrees with Elena; x = 0 makes both sides 15."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-8-no-reason",
+    "itemId": "8",
+    "tags": ["partial"],
+    "summary": "Disagrees with no explanation.",
+    "style": {
+      "font": "caveat",
+      "ink": "black",
+      "size": 48,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "No. Elena is wrong",
+        "at": [60, 70]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Disagreeing with no reason earns L1 only."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-8-negative-example",
+    "itemId": "8",
+    "tags": ["partial"],
+    "summary": "Disagrees by showing 9x < 3x when x = −1, but never finds a solution.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "blue",
+      "size": 34,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "No. 9x is not always bigger than 3x."
+      },
+      {
+        "_tag": "Text",
+        "text": "if x = -1:  9(-1) = -9  and  3(-1) = -3"
+      },
+      {
+        "_tag": "Text",
+        "text": "-3 is bigger than -9"
+      },
+      {
+        "_tag": "Text",
+        "text": "so she is wrong"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Disagrees; shows 9x is not always bigger but never shows x = 0 is a solution."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "sle-8-partly-agrees",
+    "itemId": "8",
+    "tags": ["correct", "off-rubric"],
+    "summary": "Says 'kind of', then substitutes x = 0 and concludes the equation has one solution.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "black",
+      "size": 36,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Kind of. 9x is bigger if x is positive"
+      },
+      {
+        "_tag": "Text",
+        "text": "but if x = 0:"
+      },
+      {
+        "_tag": "Text",
+        "text": "9(0) + 15 = 15",
+        "indent": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "3(0) + 15 = 15",
+        "indent": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "so it has 1 solution, x = 0"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Shows x = 0 works and concludes there is a solution, which contradicts Elena, though it opens with 'kind of'."
+    },
+    "review": {
+      "_tag": "Unsure",
+      "note": "The student hedges ('kind of') instead of stating disagreement, but concludes the equation has a solution, which contradicts Elena. Scored L1 1; a teacher could want an explicit 'no'."
+    }
+  },
+  {
+    "id": "sle-8-messy-correct",
+    "itemId": "8",
+    "tags": ["correct", "messy"],
+    "summary": "Scrawled 'no' with a substitution of x = 0 showing both sides are 15.",
+    "style": {
+      "font": "reenie-beanie",
+      "ink": "black",
+      "size": 48,
+      "mess": 3
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "no!! x = 0 works",
+        "at": [60, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "9·0 + 15 = 15",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "3·0 + 15 = 15"
+      },
+      {
+        "_tag": "Text",
+        "text": "both 15"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "Disagrees and substitutes x = 0 to show both sides equal 15; hard to read but legible."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  }
+]

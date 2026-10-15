@@ -1,0 +1,4663 @@
+[
+  {
+    "id": "rt-1a-correct",
+    "itemId": "1a",
+    "tags": ["correct", "diagram"],
+    "summary": "Redraws the triangle with the half-base 4, then x² + 16 = 64, x = √48 = 4√3.",
+    "style": {
+      "mess": 1,
+      "font": "caveat",
+      "ink": "blue"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[740, 138], [600, 380], [880, 380]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[740, 138], [740, 380]],
+        "dashed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [740, 380],
+        "a": [740, 138],
+        "b": [880, 380]
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [730, 96],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [568, 370],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [892, 370],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [730, 388],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "8",
+        "at": [640, 233],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "x",
+        "at": [750, 248],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "4",
+        "at": [655, 388],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "x^2 + 4^2 = 8^2",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "x^2 + 16 = 64"
+      },
+      {
+        "_tag": "Text",
+        "text": "x^2 = 48"
+      },
+      {
+        "_tag": "Text",
+        "text": "x = √48 = [[4√3]] ≈ 6.93"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Uses half-base 4, sets up the Pythagorean theorem and gets 4√3."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-1a-trig-sin60",
+    "itemId": "1a",
+    "tags": ["correct", "alternate-method", "diagram"],
+    "summary": "Draws the half triangle with the 60° angle at C and solves x = 8 sin 60° = 4√3.",
+    "style": {
+      "mess": 1,
+      "font": "kalam",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[760, 140], [620, 382], [760, 382]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [760, 382],
+        "a": [760, 140],
+        "b": [620, 382]
+      },
+      {
+        "_tag": "Text",
+        "text": "8",
+        "at": [655, 235],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "x",
+        "at": [772, 240],
+        "size": 30
+      },
+      {
+        "_tag": "Arc",
+        "center": [620, 382],
+        "r": 38,
+        "from": 0,
+        "to": 60
+      },
+      {
+        "_tag": "Text",
+        "text": "60°",
+        "at": [662, 340],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "sin 60° = \\frac{x}{8}",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "x = 8 sin 60°",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "x = 8 · \\frac{√3}{2}",
+        "gap": 6
+      },
+      {
+        "_tag": "Text",
+        "text": "x = [[4√3]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Trig route 8 sin 60° earns L1 and L2; 4√3 is right."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-1a-full-base-zero",
+    "itemId": "1a",
+    "tags": ["common-mistake", "partial", "diagram"],
+    "summary": "Uses the whole base 8 as the leg: x² + 8² = 8², gets x = 0 and marks it with question marks.",
+    "style": {
+      "mess": 1,
+      "font": "patrick-hand",
+      "ink": "blue"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[740, 138], [600, 380], [880, 380]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[740, 138], [740, 380]],
+        "dashed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [740, 380],
+        "a": [740, 138],
+        "b": [880, 380]
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [730, 96],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [568, 370],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [892, 370],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [730, 388],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "8",
+        "at": [640, 233],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "x",
+        "at": [750, 248],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "8",
+        "at": [785, 392],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "x^2 + 8^2 = 8^2",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "x^2 + 64 = 64"
+      },
+      {
+        "_tag": "Text",
+        "text": "x^2 = 0"
+      },
+      {
+        "_tag": "Text",
+        "text": "x = 0 ??"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "Either",
+      "reason": "Uses the whole base 8 instead of 4 (no L1); carries it through the Pythagorean theorem (L2 by the note); x = 0 is wrong."
+    },
+    "review": {
+      "_tag": "Unsure",
+      "note": "The note gives L2 for a wrong half-base carried correctly, so L2 = 1. A teacher could withhold it: the student used the full base, not a half, and accepted an impossible height of 0."
+    }
+  },
+  {
+    "id": "rt-1a-added-squares",
+    "itemId": "1a",
+    "tags": ["common-mistake", "partial", "diagram"],
+    "summary": "Uses CD = 4 but adds the squares as if x were the hypotenuse: x² = 64 + 16, x = 4√5.",
+    "style": {
+      "mess": 1,
+      "font": "gochi-hand",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[760, 140], [620, 382], [760, 382]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [760, 382],
+        "a": [760, 140],
+        "b": [620, 382]
+      },
+      {
+        "_tag": "Text",
+        "text": "8",
+        "at": [655, 235],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "4",
+        "at": [680, 390],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "x",
+        "at": [772, 240],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "x^2 = 8^2 + 4^2",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "x^2 = 64 + 16 = 80"
+      },
+      {
+        "_tag": "Text",
+        "text": "x = √80 = [[4√5]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "≈ 8.94",
+        "indent": 60
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Uses the half-base 4 (L1) but adds instead of subtracting, so the setup and 4√5 are wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-1a-guess-4",
+    "itemId": "1a",
+    "tags": ["incorrect"],
+    "summary": "Says x is half of 8 and answers x = 4.",
+    "style": {
+      "mess": 1,
+      "font": "indie-flower",
+      "ink": "purple"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "x is half of 8",
+        "at": [40, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "x = 8 ÷ 2"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 4]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Halves the side to get the height; no half-base, no Pythagorean setup, wrong answer."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-1a-squared-slip",
+    "itemId": "1a",
+    "tags": ["common-mistake", "partial", "diagram"],
+    "summary": "Sets up x² + 4² = 8² correctly but writes 4² as 8, so x² = 56 and x ≈ 7.48.",
+    "style": {
+      "mess": 1,
+      "font": "shadows-into-light",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[760, 140], [620, 382], [760, 382]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [760, 382],
+        "a": [760, 140],
+        "b": [620, 382]
+      },
+      {
+        "_tag": "Text",
+        "text": "8",
+        "at": [655, 235],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "4",
+        "at": [680, 390],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "x",
+        "at": [772, 240],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "CD = 8 ÷ 2 = 4",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "x^2 + 4^2 = 8^2"
+      },
+      {
+        "_tag": "Text",
+        "text": "x^2 + 8 = 64"
+      },
+      {
+        "_tag": "Text",
+        "text": "x^2 = 56"
+      },
+      {
+        "_tag": "Text",
+        "text": "x = √56 ≈ [[7.48]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Half-base 4 and the setup x² + 4² = 8² are right; squaring 4 as 8 gives the wrong x."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-1a-messy-ambiguous",
+    "itemId": "1a",
+    "tags": ["messy", "correct"],
+    "summary": "Hurried work: x² + 4² = 8², x² + 16 = 64, a scribbled line, then a final answer where the mark between 4 and 3 may or may not be a radical.",
+    "style": {
+      "mess": 3,
+      "font": "reenie-beanie",
+      "ink": "black",
+      "size": 48
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[740, 138], [600, 380], [880, 380]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[740, 138], [740, 380]],
+        "dashed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [740, 380],
+        "a": [740, 138],
+        "b": [880, 380]
+      },
+      {
+        "_tag": "Text",
+        "text": "8",
+        "at": [640, 233],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "x",
+        "at": [750, 248],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "4",
+        "at": [655, 388],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "x^2 + 4^2 = 8^2",
+        "at": [40, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "x^2 + 16 = 64"
+      },
+      {
+        "_tag": "Scribble",
+        "at": [40, 215],
+        "size": [170, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "x = 4",
+        "at": [40, 285]
+      },
+      {
+        "_tag": "Path",
+        "points": [[153, 314], [157, 321], [161, 304]]
+      },
+      {
+        "_tag": "Text",
+        "text": "3",
+        "at": [170, 285]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Half-base 4 and the Pythagorean setup are right; the final reads as 4√3 or 43 depending on whether the small tick is a radical."
+    },
+    "review": {
+      "_tag": "Unsure",
+      "note": "The tick before the 3 could be a radical (4√3) or a stray mark (43). The visible work leads to 4√3, so chose full credit; a teacher could withhold L3."
+    }
+  },
+  {
+    "id": "rt-1a-blank",
+    "itemId": "1a",
+    "tags": ["blank"],
+    "summary": "Leaves the board empty.",
+    "style": {
+      "font": "kalam",
+      "ink": "blue"
+    },
+    "board": [],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Blank."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-1a-crossed-out",
+    "itemId": "1a",
+    "tags": ["correct", "crossed-out", "messy", "diagram"],
+    "summary": "Crosses out x² + 8² = 8², notes that half of 8 is 4, then gets x = √48 ≈ 6.93.",
+    "style": {
+      "mess": 2,
+      "font": "nanum-pen-script",
+      "ink": "blue",
+      "size": 48
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[760, 140], [620, 382], [760, 382]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [760, 382],
+        "a": [760, 140],
+        "b": [620, 382]
+      },
+      {
+        "_tag": "Text",
+        "text": "8",
+        "at": [655, 235],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "4",
+        "at": [680, 390],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "x",
+        "at": [772, 240],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "~~x^2 + 8^2 = 8^2~~",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "~~x = 0~~"
+      },
+      {
+        "_tag": "Text",
+        "text": "oops half of 8 is 4",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "x^2 + 4^2 = 64"
+      },
+      {
+        "_tag": "Text",
+        "text": "x^2 = 48"
+      },
+      {
+        "_tag": "Text",
+        "text": "x = √48 ≈ [[6.93]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "After crossing out the full-base attempt, uses 4, sets up x² + 4² = 64 and gets √48 ≈ 6.93."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-1b-correct",
+    "itemId": "1b",
+    "tags": ["correct"],
+    "summary": "Notes all angles of an equilateral triangle are equal: 180 ÷ 3 = 60°.",
+    "style": {
+      "mess": 0,
+      "font": "kalam",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "equilateral → all angles equal",
+        "at": [40, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "180 ÷ 3 = 60"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[∠B = 60°]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "60°."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-1b-answer-only",
+    "itemId": "1b",
+    "tags": ["correct", "answer-only"],
+    "summary": "Writes 60 and circles it.",
+    "style": {
+      "mess": 1,
+      "font": "caveat",
+      "ink": "blue",
+      "size": 50
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "60",
+        "at": [90, 80]
+      },
+      {
+        "_tag": "Ring",
+        "at": [70, 70],
+        "size": [100, 80]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "60, accepted without the degree sign."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-1b-thirty",
+    "itemId": "1b",
+    "tags": ["common-mistake", "incorrect", "diagram"],
+    "summary": "Thinks the altitude cuts angle B in half and answers 30°.",
+    "style": {
+      "mess": 1,
+      "font": "patrick-hand",
+      "ink": "purple"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[740, 138], [600, 380], [880, 380]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[740, 138], [740, 380]],
+        "dashed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [740, 380],
+        "a": [740, 138],
+        "b": [880, 380]
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [730, 96],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [568, 370],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [892, 370],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [730, 388],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "8",
+        "at": [640, 233],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "altitude cuts the angle in half",
+        "at": [40, 470]
+      },
+      {
+        "_tag": "Text",
+        "text": "60 ÷ 2 = 30"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[∠B = 30°]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Answers 30°; angle B is 60°."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-1b-near-blank",
+    "itemId": "1b",
+    "tags": ["near-blank"],
+    "summary": "Writes only 'B = ?'.",
+    "style": {
+      "mess": 1,
+      "font": "gochi-hand",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "B = ?",
+        "at": [120, 120]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "No answer."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-1b-overwritten",
+    "itemId": "1b",
+    "tags": ["messy", "correct"],
+    "summary": "Writes ∠B = with 60° and 90° written over each other.",
+    "style": {
+      "mess": 3,
+      "font": "reenie-beanie",
+      "ink": "blue",
+      "size": 50
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "∠B =",
+        "at": [80, 100]
+      },
+      {
+        "_tag": "Text",
+        "text": "90°",
+        "at": [190, 100]
+      },
+      {
+        "_tag": "Text",
+        "text": "60°",
+        "at": [192, 104]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "The answer is 60 and 90 written over each other; neither is crossed out."
+    },
+    "review": {
+      "_tag": "Unsure",
+      "note": "Cannot tell which digit was written last. Chose 1 on the guess that the student corrected 90 to 60; a teacher reading 90 would give 0."
+    }
+  },
+  {
+    "id": "rt-2-correct",
+    "itemId": "2",
+    "tags": ["correct", "diagram"],
+    "summary": "Uses the 1a height: A = 1/2 · 8 · 4√3 = 16√3 ≈ 27.7.",
+    "style": {
+      "mess": 1,
+      "font": "caveat",
+      "ink": "blue"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[740, 138], [600, 380], [880, 380]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[740, 138], [740, 380]],
+        "dashed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [740, 380],
+        "a": [740, 138],
+        "b": [880, 380]
+      },
+      {
+        "_tag": "Text",
+        "text": "8",
+        "at": [640, 233],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "4√3",
+        "at": [750, 248],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "A = \\frac{1}{2} bh",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "= \\frac{1}{2} (8)(4√3)",
+        "indent": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "= 16√3",
+        "indent": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "≈ [[27.7 units^2]]",
+        "indent": 30
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "1a",
+        "caseId": "rt-1a-correct"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "1/2 · 8 · 4√3 with the 1a height, and 16√3 ≈ 27.7."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-2-follow-through-root5",
+    "itemId": "2",
+    "tags": ["follow-through"],
+    "summary": "Carries its wrong 1a height 4√5 correctly: 1/2 · 8 · 4√5 = 16√5 ≈ 35.8.",
+    "style": {
+      "mess": 1,
+      "font": "gochi-hand",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "same triangle as #1",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "h = 4√5"
+      },
+      {
+        "_tag": "Text",
+        "text": "A = \\frac{1}{2} · 8 · 4√5",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "= [[16√5]] ≈ 35.8",
+        "indent": 40
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "1a",
+        "caseId": "rt-1a-added-squares"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Uses base 8 with its own 1a height 4√5 and multiplies correctly; follow-through earns both lines."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-2-follow-through-4",
+    "itemId": "2",
+    "tags": ["follow-through"],
+    "summary": "Carries its 1a answer x = 4 correctly: 1/2 · 8 · 4 = 16.",
+    "style": {
+      "mess": 1,
+      "font": "indie-flower",
+      "ink": "purple"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "h = 4 from 1a",
+        "at": [40, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "A = \\frac{1}{2} bh",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "= \\frac{1}{2} · 8 · 4"
+      },
+      {
+        "_tag": "Text",
+        "text": "= [[16]]"
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "1a",
+        "caseId": "rt-1a-guess-4"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Base 8 with its own 1a height 4, multiplied correctly; follow-through earns both lines."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-2-carried-wrong",
+    "itemId": "2",
+    "tags": ["follow-through", "partial"],
+    "summary": "Uses its 1a height 7.48 in 1/2 · 8 · 7.48 but drops the 1/2 and gets 59.84.",
+    "style": {
+      "mess": 1,
+      "font": "shadows-into-light",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "h = 7.48 (from #1)",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "A = \\frac{1}{2} · 8 · 7.48",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "= 8 · 7.48"
+      },
+      {
+        "_tag": "Text",
+        "text": "= [[59.84]]"
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "1a",
+        "caseId": "rt-1a-squared-slip"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Right formula with base 8 and its own height 7.48 (L1); drops the 1/2, so 59.84 is not the product (should be 29.92)."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-2-sqrt3-over-4",
+    "itemId": "2",
+    "tags": ["correct", "alternate-method"],
+    "summary": "Uses the equilateral area formula: (√3/4) · 8² = 16√3.",
+    "style": {
+      "mess": 1,
+      "font": "kalam",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "A = \\frac{√3}{4} s^2",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "= \\frac{√3}{4} · 64",
+        "indent": 40,
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "= [[16√3]]",
+        "indent": 40,
+        "gap": 10
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "1a",
+        "caseId": "rt-1a-trig-sin60"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "(√3/4)s² is accepted by the notes; 16√3 is right."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-2-side-as-height",
+    "itemId": "2",
+    "tags": ["common-mistake", "incorrect", "diagram"],
+    "summary": "Rejects its 1a height of 0 and uses the side 8 as the height: 1/2 · 8 · 8 = 32.",
+    "style": {
+      "mess": 1,
+      "font": "patrick-hand",
+      "ink": "blue"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[740, 138], [600, 380], [880, 380]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[740, 138], [740, 380]],
+        "dashed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [740, 380],
+        "a": [740, 138],
+        "b": [880, 380]
+      },
+      {
+        "_tag": "Text",
+        "text": "h = 8",
+        "at": [555, 225],
+        "size": 30
+      },
+      {
+        "_tag": "Arrow",
+        "from": [612, 250],
+        "to": [655, 262]
+      },
+      {
+        "_tag": "Text",
+        "text": "height can't be 0 so use 8",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "A = \\frac{1}{2} · 8 · 8",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "= [[32]]",
+        "indent": 40
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "1a",
+        "caseId": "rt-1a-full-base-zero"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Uses the slanted side 8 as the height, which is neither the true height nor its 1a value; 32 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-2-two-answers",
+    "itemId": "2",
+    "tags": ["partial", "messy"],
+    "summary": "Computes 8 · 6.93 = 55.44 and boxes it, then also writes 1/2 · 8 · 6.93 = 27.72 without crossing either out.",
+    "style": {
+      "mess": 2,
+      "font": "nanum-pen-script",
+      "ink": "blue",
+      "size": 48
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "A = b · h",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "= 8 × 6.93",
+        "indent": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "= [[55.44]]",
+        "indent": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "or \\frac{1}{2} × 8 × 6.93 = 27.72",
+        "at": [420, 330]
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "1a",
+        "caseId": "rt-1a-crossed-out"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Uses 1/2 · 8 · 6.93 in the second line (L1), but leaves two final answers, 55.44 boxed and 27.72, neither crossed out."
+    },
+    "review": {
+      "_tag": "Unsure",
+      "note": "Two answers with neither crossed out. Chose L1 = 1 for the 1/2 · b · h line and L2 = 0 because the boxed answer is 55.44; a teacher could take 27.72 as the answer and give 2."
+    }
+  },
+  {
+    "id": "rt-2-near-blank",
+    "itemId": "2",
+    "tags": ["near-blank"],
+    "summary": "Writes only the formula A = 1/2 bh and a question mark.",
+    "style": {
+      "font": "kalam",
+      "ink": "blue"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "A = \\frac{1}{2} bh",
+        "at": [60, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "?",
+        "at": [330, 70]
+      }
+    ],
+    "earlier": [
+      {
+        "itemId": "1a",
+        "caseId": "rt-1a-blank"
+      }
+    ],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Formula only, with no base or height substituted and no area."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-3a-correct",
+    "itemId": "3a",
+    "tags": ["correct", "diagram"],
+    "summary": "Uses s² + s² = 4² to get the side 2√2, then halves it: AE = √2.",
+    "style": {
+      "mess": 1,
+      "font": "caveat",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[620, 380], [620, 100], [900, 100], [900, 380]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[620, 100], [900, 380]]
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [590, 64],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [908, 64],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [908, 375],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [590, 375],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "E",
+        "at": [752, 386],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "4",
+        "at": [775, 175],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "BD is the diagonal",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "s^2 + s^2 = 4^2"
+      },
+      {
+        "_tag": "Text",
+        "text": "2s^2 = 16"
+      },
+      {
+        "_tag": "Text",
+        "text": "s^2 = 8,  s = 2√2"
+      },
+      {
+        "_tag": "Text",
+        "text": "AE = \\frac{1}{2} s = [[√2]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Side 2√2 from the diagonal, and AE = √2 is half of it."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-3a-bd-as-side",
+    "itemId": "3a",
+    "tags": ["common-mistake", "partial", "diagram"],
+    "summary": "Treats BD = 4 as the side of the square and halves it: AE = 2.",
+    "style": {
+      "mess": 1,
+      "font": "patrick-hand",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[620, 380], [620, 100], [900, 100], [900, 380]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[620, 100], [900, 380]]
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [590, 64],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [908, 64],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [908, 375],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [590, 375],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "E",
+        "at": [752, 386],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "4",
+        "at": [585, 225],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "side = 4",
+        "at": [40, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "AE = half of the side"
+      },
+      {
+        "_tag": "Text",
+        "text": "AE = 4 ÷ 2 = [[2]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Uses the diagonal 4 as the side (no L1); states the side and halves it correctly, which earns L2 by the note."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-3a-forgot-halve",
+    "itemId": "3a",
+    "tags": ["common-mistake", "partial"],
+    "summary": "Finds the side 4/√2 = 2√2 with 45-45-90 ratios and gives that as AE.",
+    "style": {
+      "mess": 1,
+      "font": "indie-flower",
+      "ink": "blue"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "45-45-90 triangle",
+        "at": [40, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "side = \\frac{4}{√2} = 2√2",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "[[AE = 2√2]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Side 2√2 is right (L1); AE is half the side, √2, not 2√2."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-3a-messy-crossed",
+    "itemId": "3a",
+    "tags": ["correct", "crossed-out", "messy", "diagram"],
+    "summary": "Crosses out AE = 4 ÷ 4 = 1, then finds the side 4/√2 ≈ 2.83 and halves it: AE ≈ 1.41.",
+    "style": {
+      "mess": 2,
+      "font": "kalam",
+      "ink": "purple",
+      "size": 36
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[620, 380], [620, 100], [900, 100], [900, 380]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[620, 100], [900, 380]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[760, 100], [760, 380]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[620, 240], [900, 240]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[620, 380], [900, 100]]
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [590, 64],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [908, 64],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [908, 375],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [590, 375],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "E",
+        "at": [752, 386],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "4",
+        "at": [775, 175],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "~~AE = 4 ÷ 4 = 1~~",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "s = \\frac{4}{√2} ≈ 2.83",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "AE = 2.83 ÷ 2",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "AE ≈ [[1.41]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "After the crossed-out attempt, side 4/√2 ≈ 2.83 and AE ≈ 1.41 are right."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-3b-correct",
+    "itemId": "3b",
+    "tags": ["correct"],
+    "summary": "Squares the side 2√2: area = 4 · 2 = 8.",
+    "style": {
+      "mess": 1,
+      "font": "gochi-hand",
+      "ink": "blue"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "side = 2√2",
+        "at": [40, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "A = (2√2)^2",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "= 4 · 2 = [[8]]",
+        "indent": 40
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Side² with 2√2 gives 8."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-3b-diagonal",
+    "itemId": "3b",
+    "tags": ["correct", "alternate-method", "diagram"],
+    "summary": "Uses area = diagonal² ÷ 2 = 16 ÷ 2 = 8.",
+    "style": {
+      "mess": 1,
+      "font": "caveat",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[620, 380], [620, 100], [900, 100], [900, 380]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[620, 100], [900, 380]]
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [590, 64],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [908, 64],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [908, 375],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [590, 375],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "4",
+        "at": [775, 175],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "A = \\frac{d^2}{2}",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "= \\frac{4^2}{2} = \\frac{16}{2}",
+        "indent": 30,
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "= [[8]]",
+        "indent": 30,
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Diagonal² ÷ 2 with BD = 4 gives 8."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-3b-bd-as-side",
+    "itemId": "3b",
+    "tags": ["common-mistake", "incorrect"],
+    "summary": "Uses BD = 4 as the side: area = 4² = 16.",
+    "style": {
+      "mess": 1,
+      "font": "shadows-into-light",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "A = s^2",
+        "at": [40, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "= 4^2",
+        "indent": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "= [[16]]",
+        "indent": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Squares the diagonal as if it were the side; 16 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-3b-small-squares",
+    "itemId": "3b",
+    "tags": ["correct", "alternate-method", "off-rubric", "diagram"],
+    "summary": "Splits ABCD into four small squares of side √2 (= AE from 3a) and adds their areas: 4 · 2 = 8.",
+    "style": {
+      "mess": 1,
+      "font": "patrick-hand",
+      "ink": "purple",
+      "size": 36
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[620, 380], [620, 100], [900, 100], [900, 380]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[620, 100], [900, 380]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[760, 100], [760, 380]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[620, 240], [900, 240]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[620, 380], [900, 100]]
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [590, 64],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [908, 64],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [908, 375],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [590, 375],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "E",
+        "at": [752, 386],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "√2",
+        "at": [675, 382],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "4 little squares",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "each side = AE = √2"
+      },
+      {
+        "_tag": "Text",
+        "text": "each area = (√2)^2 = 2",
+        "gap": 8
+      },
+      {
+        "_tag": "Text",
+        "text": "total = 4 · 2 = [[8]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Valid method the rubric does not list: four small squares of side √2, area 8."
+    },
+    "review": {
+      "_tag": "Unsure",
+      "note": "The method is neither side² with 2√2 nor diagonal² ÷ 2, so L1 does not literally apply. It is correct, so chose full credit; a strict reading gives L2 only."
+    }
+  },
+  {
+    "id": "rt-4-correct",
+    "itemId": "4",
+    "tags": ["correct", "diagram"],
+    "summary": "Labels the string 18 and the height h, then h = 18 sin 30° = 9 ft.",
+    "style": {
+      "mess": 0,
+      "font": "kalam",
+      "ink": "blue"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[580, 400], [900, 400], [900, 215]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [900, 400],
+        "a": [900, 215],
+        "b": [580, 400]
+      },
+      {
+        "_tag": "Arc",
+        "center": [580, 400],
+        "r": 55,
+        "from": 0,
+        "to": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "18",
+        "at": [700, 250],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "30°",
+        "at": [655, 372],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "h",
+        "at": [912, 290],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "sin 30° = \\frac{h}{18}",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "h = 18 sin 30°",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "h = 18(0.5)"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[h = 9 ft]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "18 · sin 30° = 9 feet."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-4-cos",
+    "itemId": "4",
+    "tags": ["common-mistake", "incorrect", "diagram"],
+    "summary": "Uses cos instead of sin: h = 18 cos 30° ≈ 15.6 ft.",
+    "style": {
+      "mess": 1,
+      "font": "indie-flower",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[580, 400], [900, 400], [900, 215]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [900, 400],
+        "a": [900, 215],
+        "b": [580, 400]
+      },
+      {
+        "_tag": "Arc",
+        "center": [580, 400],
+        "r": 55,
+        "from": 0,
+        "to": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "18",
+        "at": [700, 250],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "30°",
+        "at": [655, 372],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "h",
+        "at": [912, 290],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "cos 30° = \\frac{h}{18}",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "h = 18 cos 30°",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "h ≈ 18(0.866)"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[h ≈ 15.6 ft]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Uses cos 30°, which the notes say loses both lines; 15.6 is the ground distance."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-4-radians",
+    "itemId": "4",
+    "tags": ["partial", "common-mistake", "messy"],
+    "summary": "Sets up h = 18 sin 30 but the calculator is in radians: 18(-0.988) ≈ -17.8.",
+    "style": {
+      "mess": 2,
+      "font": "nanum-pen-script",
+      "ink": "black",
+      "size": 48
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "sin 30 = h/18",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "h = 18 sin 30"
+      },
+      {
+        "_tag": "Text",
+        "text": "= 18(-0.988)",
+        "indent": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "= -17.8 ??",
+        "indent": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "[[h = -17.8 ft]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "Either",
+      "reason": "Right setup 18 sin 30° (L1); radian mode gives -17.8 instead of 9."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-4-answer-only",
+    "itemId": "4",
+    "tags": ["correct", "answer-only"],
+    "summary": "Writes only '9 ft' and circles it.",
+    "style": {
+      "mess": 1,
+      "font": "caveat",
+      "ink": "purple",
+      "size": 50
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "9 ft",
+        "at": [100, 90]
+      },
+      {
+        "_tag": "Ring",
+        "at": [80, 80],
+        "size": [130, 80]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Correct height 9 with no setup: a bare answer earns the answer line only."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-5-correct",
+    "itemId": "5",
+    "tags": ["correct", "diagram"],
+    "summary": "Sets up tan 30° = AB/6 and gets AB = 6 tan 30° ≈ 3.46.",
+    "style": {
+      "mess": 1,
+      "font": "patrick-hand",
+      "ink": "blue"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[620, 400], [620, 227], [920, 400]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [620, 400],
+        "a": [620, 227],
+        "b": [920, 400]
+      },
+      {
+        "_tag": "Arc",
+        "center": [920, 400],
+        "r": 55,
+        "from": 150,
+        "to": 180
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [590, 405],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [600, 190],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [930, 405],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "6",
+        "at": [760, 408],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "30°",
+        "at": [815, 368],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "tan 30° = \\frac{AB}{6}",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "AB = 6 tan 30°",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "AB ≈ 6(0.577)"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[AB ≈ 3.46]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "tan 30° = AB/6 and AB ≈ 3.46."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-5-tan-upside-down",
+    "itemId": "5",
+    "tags": ["common-mistake", "incorrect", "messy"],
+    "summary": "Writes tan 30 = 6/AB and gets AB = 6/tan 30 ≈ 10.4.",
+    "style": {
+      "mess": 2,
+      "font": "shadows-into-light",
+      "ink": "blue"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[620, 400], [620, 227], [920, 400]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [620, 400],
+        "a": [620, 227],
+        "b": [920, 400]
+      },
+      {
+        "_tag": "Arc",
+        "center": [920, 400],
+        "r": 55,
+        "from": 150,
+        "to": 180
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [590, 405],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [600, 190],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [930, 405],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "6",
+        "at": [760, 408],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "30°",
+        "at": [815, 368],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "?",
+        "at": [575, 295],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "tan 30 = \\frac{6}{AB}",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "AB = \\frac{6}{tan 30}",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "AB = \\frac{6}{0.577}",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "[[AB ≈ 10.4]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "Either",
+      "reason": "Inverts the tangent ratio (6 is adjacent, not opposite); 10.4 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-5-30-60-90",
+    "itemId": "5",
+    "tags": ["correct", "alternate-method", "diagram"],
+    "summary": "Uses 30-60-90 ratios with AC = 6 as the longer leg: AB = 6/√3 = 2√3.",
+    "style": {
+      "mess": 0,
+      "font": "gochi-hand",
+      "ink": "black",
+      "size": 36
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[620, 400], [620, 227], [920, 400]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [620, 400],
+        "a": [620, 227],
+        "b": [920, 400]
+      },
+      {
+        "_tag": "Arc",
+        "center": [920, 400],
+        "r": 55,
+        "from": 150,
+        "to": 180
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [590, 405],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [600, 190],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [930, 405],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "6",
+        "at": [760, 408],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "30°",
+        "at": [815, 368],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "x",
+        "at": [575, 295],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "30-60-90:  x : x√3 : 2x",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "long leg AC = 6 = x√3"
+      },
+      {
+        "_tag": "Text",
+        "text": "x = \\frac{6}{√3} = \\frac{6√3}{3}",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "[[AB = 2√3]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "30-60-90 ratios with AC as the longer leg give AB = 2√3."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-5-half-of-6",
+    "itemId": "5",
+    "tags": ["common-mistake", "incorrect"],
+    "summary": "Treats AC as the hypotenuse and takes half: AB = 3.",
+    "style": {
+      "mess": 1,
+      "font": "kalam",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "side across from 30° is half",
+        "at": [40, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "AB = \\frac{1}{2} · 6",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "[[AB = 3]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "AC is a leg, not the hypotenuse, so halving it is wrong; AB = 3 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-5-near-blank",
+    "itemId": "5",
+    "tags": ["near-blank"],
+    "summary": "Writes 'tan 30 =' and stops.",
+    "style": {
+      "mess": 1,
+      "font": "caveat",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "tan 30 =",
+        "at": [60, 80]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "No ratio set up and no answer."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-6-correct",
+    "itemId": "6",
+    "tags": ["correct", "diagram"],
+    "summary": "BD = 5 from the Pythagorean theorem, AD = 25/12 from similar triangles, then checks with AB² = AD · AC.",
+    "style": {
+      "mess": 1,
+      "font": "caveat",
+      "ink": "black",
+      "size": 34
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[600, 240], [652, 115], [952, 240]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[652, 115], [652, 240]]
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [652, 240],
+        "a": [652, 115],
+        "b": [952, 240],
+        "size": 12
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [652, 115],
+        "a": [600, 240],
+        "b": [952, 240],
+        "size": 12
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [578, 245],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [642, 248],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [958, 238],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [640, 78],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "13",
+        "at": [810, 140],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "12",
+        "at": [790, 248],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "BD^2 + 12^2 = 13^2",
+        "at": [40, 30]
+      },
+      {
+        "_tag": "Text",
+        "text": "BD^2 = 169 - 144 = 25"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[BD = 5]]"
+      },
+      {
+        "_tag": "Text",
+        "text": "△ADB ~ △BDC",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "\\frac{AD}{BD} = \\frac{BD}{DC}"
+      },
+      {
+        "_tag": "Text",
+        "text": "\\frac{AD}{5} = \\frac{5}{12}",
+        "gap": 6
+      },
+      {
+        "_tag": "Text",
+        "text": "[[AD = \\frac{25}{12}]] ≈ 2.08",
+        "gap": 6
+      },
+      {
+        "_tag": "Text",
+        "text": "check: AB^2 = AD · AC",
+        "at": [520, 330]
+      },
+      {
+        "_tag": "Text",
+        "text": "AC = 12 + 2.08 = 14.08"
+      },
+      {
+        "_tag": "Text",
+        "text": "AD · AC = 2.08 · 14.08 ≈ 29.3"
+      },
+      {
+        "_tag": "Text",
+        "text": "AB^2 = 5^2 + 2.08^2 ≈ 29.3  ok"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "BD = 5, AD = 25/12 from AD/BD = BD/DC, and a separate AB² = AD · AC check."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-6-trig-check",
+    "itemId": "6",
+    "tags": ["correct", "alternate-method", "diagram"],
+    "summary": "Finds BD = 5 and AD = 25/12, then checks AD with trig: angle C ≈ 22.6°, so AD = 5 tan 22.6° ≈ 2.08.",
+    "style": {
+      "mess": 1,
+      "font": "indie-flower",
+      "ink": "blue",
+      "size": 34
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[600, 240], [652, 115], [952, 240]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[652, 115], [652, 240]]
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [652, 240],
+        "a": [652, 115],
+        "b": [952, 240],
+        "size": 12
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [652, 115],
+        "a": [600, 240],
+        "b": [952, 240],
+        "size": 12
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [578, 245],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [642, 248],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [958, 238],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [640, 78],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "13",
+        "at": [810, 140],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "12",
+        "at": [790, 248],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "BD = √{169 - 144} = √25 = 5",
+        "at": [40, 30]
+      },
+      {
+        "_tag": "Text",
+        "text": "\\frac{AD}{5} = \\frac{5}{12}",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "AD = \\frac{25}{12} ≈ 2.08",
+        "gap": 6
+      },
+      {
+        "_tag": "Text",
+        "text": "check w/ trig:",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "tan C = \\frac{5}{12}, ∠C ≈ 22.6°",
+        "gap": 6
+      },
+      {
+        "_tag": "Text",
+        "text": "∠ABD = ∠C ≈ 22.6°"
+      },
+      {
+        "_tag": "Text",
+        "text": "AD = 5 tan 22.6° ≈ 2.08  yes"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "BD = 5 and AD = 25/12, then a trig check in a second triangle gives AD ≈ 2.08."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-6-restate-check",
+    "itemId": "6",
+    "tags": ["partial"],
+    "summary": "Finds BD = 5 and AD = 25/12, but the 'check' only repeats 5² + 12² = 13².",
+    "style": {
+      "mess": 1,
+      "font": "patrick-hand",
+      "ink": "black",
+      "size": 36
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[600, 240], [652, 115], [952, 240]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[652, 115], [652, 240]]
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [652, 240],
+        "a": [652, 115],
+        "b": [952, 240],
+        "size": 12
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [652, 115],
+        "a": [600, 240],
+        "b": [952, 240],
+        "size": 12
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [578, 245],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [642, 248],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [958, 238],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [640, 78],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "13",
+        "at": [810, 140],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "12",
+        "at": [790, 248],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "BD^2 = 13^2 - 12^2 = 25",
+        "at": [40, 30]
+      },
+      {
+        "_tag": "Text",
+        "text": "BD = 5"
+      },
+      {
+        "_tag": "Text",
+        "text": "\\frac{AD}{5} = \\frac{5}{12}",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "[[AD = \\frac{25}{12}]]",
+        "gap": 6
+      },
+      {
+        "_tag": "Text",
+        "text": "check: 5^2 + 12^2",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "= 25 + 144 = 169 = 13^2  ok"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "BD = 5 and AD = 25/12 are right; the check restates the BD calculation and does not test AD."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-6-wrong-ratio",
+    "itemId": "6",
+    "tags": ["partial", "common-mistake"],
+    "summary": "BD = 5, but sets up AD/12 = 5/13 (AD ≈ 4.62); its AB² = AD · AC check does not match and it leaves '??'.",
+    "style": {
+      "mess": 1,
+      "font": "gochi-hand",
+      "ink": "purple",
+      "size": 34
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[600, 240], [652, 115], [952, 240]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[652, 115], [652, 240]]
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [652, 240],
+        "a": [652, 115],
+        "b": [952, 240],
+        "size": 12
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [652, 115],
+        "a": [600, 240],
+        "b": [952, 240],
+        "size": 12
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [578, 245],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [642, 248],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [958, 238],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [640, 78],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "13",
+        "at": [810, 140],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "12",
+        "at": [790, 248],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "BD^2 + 144 = 169 → BD = 5",
+        "at": [40, 30]
+      },
+      {
+        "_tag": "Text",
+        "text": "\\frac{AD}{12} = \\frac{5}{13}",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "AD = \\frac{60}{13} ≈ 4.62",
+        "gap": 6
+      },
+      {
+        "_tag": "Text",
+        "text": "check: AB^2 = AD · AC",
+        "at": [520, 330]
+      },
+      {
+        "_tag": "Text",
+        "text": "AC = 12 + 4.62 = 16.62"
+      },
+      {
+        "_tag": "Text",
+        "text": "AD · AC ≈ 76.8"
+      },
+      {
+        "_tag": "Text",
+        "text": "AB^2 = 25 + 4.62^2 ≈ 46.3"
+      },
+      {
+        "_tag": "Text",
+        "text": "?? doesnt match"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "BD = 5 is right (L1); the proportion pairs the wrong sides, so AD is wrong; it checks with AB² = AD · AC, which exposes the error."
+    },
+    "review": {
+      "_tag": "Unsure",
+      "note": "L3 asks for a check by a different method, and the student did one, though it fails and the student does not fix AD. Chose L3 = 1; a teacher could require a check that confirms the answers."
+    }
+  },
+  {
+    "id": "rt-6-messy-crossed",
+    "itemId": "6",
+    "tags": ["correct", "crossed-out", "messy"],
+    "summary": "Crosses out AD = 13 − 12 = 1, then BD = 5, AD = 5²/12 = 25/12, and checks AB² = AD · AC with fractions.",
+    "style": {
+      "mess": 2,
+      "font": "kalam",
+      "ink": "blue",
+      "size": 32
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "~~AD = 13 - 12 = 1~~",
+        "at": [40, 30]
+      },
+      {
+        "_tag": "Text",
+        "text": "BD^2 = 169 - 144 = 25, BD = 5"
+      },
+      {
+        "_tag": "Text",
+        "text": "similar △s:  AD = \\frac{5^2}{12} = \\frac{25}{12}",
+        "gap": 8
+      },
+      {
+        "_tag": "Text",
+        "text": "check AB^2 = AD · AC",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "AD · AC = \\frac{25}{12} · \\frac{169}{12} = \\frac{4225}{144}",
+        "gap": 8
+      },
+      {
+        "_tag": "Text",
+        "text": "AB^2 = 5^2 + (\\frac{25}{12})^2 = \\frac{3600 + 625}{144} = \\frac{4225}{144}  ok",
+        "gap": 8
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "After the crossed-out line, BD = 5, AD = 25/12 by similar triangles, and an exact AB² = AD · AC check."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-6-near-blank",
+    "itemId": "6",
+    "tags": ["near-blank", "diagram"],
+    "summary": "Copies the diagram with 12 and 13 and writes 'BD = ?' and 'AD = ?'.",
+    "style": {
+      "mess": 1,
+      "font": "gochi-hand",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[600, 240], [652, 115], [952, 240]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[652, 115], [652, 240]]
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [652, 240],
+        "a": [652, 115],
+        "b": [952, 240],
+        "size": 12
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [652, 115],
+        "a": [600, 240],
+        "b": [952, 240],
+        "size": 12
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [578, 245],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [642, 248],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [958, 238],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [640, 78],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "13",
+        "at": [810, 140],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "12",
+        "at": [790, 248],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "BD = ?",
+        "at": [60, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "AD = ?",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "No work beyond the copied diagram."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-7-correct",
+    "itemId": "7",
+    "tags": ["correct", "diagram"],
+    "summary": "Identifies JH as opposite and GJ as adjacent to 35°: JH = 9 sin 35° ≈ 5.16, GJ = 9 cos 35° ≈ 7.37.",
+    "style": {
+      "mess": 0,
+      "font": "caveat",
+      "ink": "purple"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[600, 380], [920, 380], [815, 230]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [815, 230],
+        "a": [600, 380],
+        "b": [920, 380]
+      },
+      {
+        "_tag": "Arc",
+        "center": [600, 380],
+        "r": 55,
+        "from": 0,
+        "to": 35
+      },
+      {
+        "_tag": "Text",
+        "text": "G",
+        "at": [572, 385],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "H",
+        "at": [930, 385],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "J",
+        "at": [808, 192],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "9",
+        "at": [755, 390],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "35°",
+        "at": [662, 342],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "JH opp 35°, GJ adj",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "[[JH = 9 sin 35°]] ≈ 5.16",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "[[GJ = 9 cos 35°]] ≈ 7.37",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "JH = 9 sin 35° and GJ = 9 cos 35°."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-7-swapped",
+    "itemId": "7",
+    "tags": ["common-mistake", "incorrect", "messy"],
+    "summary": "Treats GJ as opposite 35°: GJ = 9 sin 35 ≈ 5.16 and JH = 9 cos 35 ≈ 7.37.",
+    "style": {
+      "mess": 2,
+      "font": "kalam",
+      "ink": "black",
+      "size": 36
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[600, 380], [920, 380], [815, 230]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [815, 230],
+        "a": [600, 380],
+        "b": [920, 380]
+      },
+      {
+        "_tag": "Arc",
+        "center": [600, 380],
+        "r": 55,
+        "from": 0,
+        "to": 35
+      },
+      {
+        "_tag": "Text",
+        "text": "G",
+        "at": [572, 385],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "H",
+        "at": [930, 385],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "J",
+        "at": [808, 192],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "9",
+        "at": [755, 390],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "35°",
+        "at": [662, 342],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "sin 35 = \\frac{GJ}{9}",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "GJ = 9 sin 35 ≈ 5.16",
+        "gap": 6
+      },
+      {
+        "_tag": "Text",
+        "text": "cos 35 = \\frac{JH}{9}",
+        "gap": 16
+      },
+      {
+        "_tag": "Text",
+        "text": "JH = 9 cos 35 ≈ 7.37",
+        "gap": 6
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "Either",
+      "reason": "Swaps sine and cosine: JH is opposite 35°, so both expressions are wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-7-angle-55",
+    "itemId": "7",
+    "tags": ["correct", "alternate-method", "diagram"],
+    "summary": "Finds angle H = 55° and writes JH = 9 cos 55°, GJ = 9 sin 55°.",
+    "style": {
+      "mess": 1,
+      "font": "indie-flower",
+      "ink": "blue",
+      "size": 36
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[600, 380], [920, 380], [815, 230]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [815, 230],
+        "a": [600, 380],
+        "b": [920, 380]
+      },
+      {
+        "_tag": "Arc",
+        "center": [600, 380],
+        "r": 55,
+        "from": 0,
+        "to": 35
+      },
+      {
+        "_tag": "Text",
+        "text": "G",
+        "at": [572, 385],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "H",
+        "at": [930, 385],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "J",
+        "at": [808, 192],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "9",
+        "at": [755, 390],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "35°",
+        "at": [662, 342],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "55°",
+        "at": [868, 345],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "∠H = 180 - 90 - 35 = 55°",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "JH = 9 cos 55°",
+        "gap": 16
+      },
+      {
+        "_tag": "Text",
+        "text": "GJ = 9 sin 55°",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Uses the 55° angle at H: 9 cos 55° and 9 sin 55° are both accepted."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-7-pythagoras",
+    "itemId": "7",
+    "tags": ["correct", "off-rubric"],
+    "summary": "Gets JH = 9 sin 35° ≈ 5.16, then GJ from the Pythagorean theorem: √(81 − 5.16²) ≈ 7.37.",
+    "style": {
+      "mess": 1,
+      "font": "nanum-pen-script",
+      "ink": "black",
+      "size": 48
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "JH = 9 sin 35° ≈ 5.16",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "GJ = √{9^2 - 5.16^2}",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "= √{81 - 26.63}",
+        "indent": 50
+      },
+      {
+        "_tag": "Text",
+        "text": "= √{54.37} ≈ [[7.37]]",
+        "indent": 50
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "JH = 9 sin 35° is right; GJ comes from the Pythagorean theorem instead of a trig ratio, and 7.37 is right."
+    },
+    "review": {
+      "_tag": "Unsure",
+      "note": "L2 names 9 cos 35° or 9 sin 55°; the Pythagorean route is valid and the problem only asks for an expression. Chose full credit; a strict reading withholds L2."
+    }
+  },
+  {
+    "id": "rt-8a-correct",
+    "itemId": "8a",
+    "tags": ["correct"],
+    "summary": "Shows 5² + 12² = 25 + 144 = 169 = 13².",
+    "style": {
+      "mess": 0,
+      "font": "patrick-hand",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "5^2 + 12^2 = 13^2",
+        "at": [40, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "25 + 144 = 169"
+      },
+      {
+        "_tag": "Text",
+        "text": "169 = 169  yes"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Shows 25 + 144 = 169."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-8a-statement-only",
+    "itemId": "8a",
+    "tags": ["answer-only", "incorrect"],
+    "summary": "States that 5, 12, 13 is a Pythagorean triple with no arithmetic.",
+    "style": {
+      "mess": 1,
+      "font": "caveat",
+      "ink": "blue"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Yes! 5, 12, 13 is a",
+        "at": [40, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "Pythagorean triple"
+      },
+      {
+        "_tag": "Text",
+        "text": "(its on the list)",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "States it is a triple without the arithmetic, which the notes say earns nothing."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-8a-doubled",
+    "itemId": "8a",
+    "tags": ["common-mistake", "incorrect", "messy"],
+    "summary": "Doubles instead of squaring: 10 + 24 = 34 and 13² = 26, so concludes it is not a triple.",
+    "style": {
+      "mess": 2,
+      "font": "shadows-into-light",
+      "ink": "purple"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "5^2 + 12^2 = 13^2",
+        "at": [40, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "10 + 24 = 34"
+      },
+      {
+        "_tag": "Text",
+        "text": "13^2 = 26"
+      },
+      {
+        "_tag": "Text",
+        "text": "34 ≠ 26  not a triple",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        }
+      ],
+      "flag": "Either",
+      "reason": "Squares by doubling, so the arithmetic and conclusion are wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-8a-blank",
+    "itemId": "8a",
+    "tags": ["blank"],
+    "summary": "Leaves the board empty.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "black"
+    },
+    "board": [],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Blank."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-8b-correct",
+    "itemId": "8b",
+    "tags": ["correct", "diagram"],
+    "summary": "Draws the 5-12-13 triangle, θ = tan⁻¹(5/12) ≈ 22.6°, other angle 90 − 22.6 = 67.4°.",
+    "style": {
+      "mess": 1,
+      "font": "gochi-hand",
+      "ink": "blue",
+      "size": 38
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[620, 400], [920, 400], [620, 275]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [620, 400],
+        "a": [620, 275],
+        "b": [920, 400]
+      },
+      {
+        "_tag": "Arc",
+        "center": [920, 400],
+        "r": 55,
+        "from": 157.4,
+        "to": 180
+      },
+      {
+        "_tag": "Text",
+        "text": "12",
+        "at": [755, 408],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "5",
+        "at": [592, 320],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "13",
+        "at": [770, 285],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "θ",
+        "at": [838, 370],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "tan θ = \\frac{5}{12}",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "θ = tan^{-1}(\\frac{5}{12})",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "θ ≈ [[22.6°]]",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "other = 90 - 22.6"
+      },
+      {
+        "_tag": "Text",
+        "text": "= [[67.4°]]",
+        "indent": 80
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "tan⁻¹(5/12) ≈ 22.6° and 90 − 22.6 = 67.4°."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-8b-radians",
+    "itemId": "8b",
+    "tags": ["common-mistake", "incorrect"],
+    "summary": "Calculator in radians: tan⁻¹(5/12) = 0.39, then 90 − 0.39 = 89.61.",
+    "style": {
+      "mess": 1,
+      "font": "kalam",
+      "ink": "black",
+      "size": 38
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "tan^{-1}(5/12) = 0.39",
+        "at": [40, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "90 - 0.39 = 89.61",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "angles: 0.39° and 89.61°",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Right ratio but radian mode gives 0.39, and 89.61 is not 67.4; neither angle is within 1°."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-8b-wrong-hypotenuse",
+    "itemId": "8b",
+    "tags": ["common-mistake", "incorrect"],
+    "summary": "Uses 12 as the hypotenuse: sin θ = 5/12, θ ≈ 24.6°, other 65.4°.",
+    "style": {
+      "mess": 1,
+      "font": "indie-flower",
+      "ink": "black",
+      "size": 38
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "sin θ = \\frac{5}{12}",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "θ = sin^{-1}(5/12) ≈ 24.6°",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "90 - 24.6 = 65.4°",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "sin θ = 5/12 uses a leg as the hypotenuse; 24.6° and 65.4° are both off by 2°."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-8b-messy-overwrite",
+    "itemId": "8b",
+    "tags": ["messy", "correct"],
+    "summary": "Uses tan⁻¹(5/12), but the angle's second digit is a 2 and a 7 written over each other, and so is the other angle's (67.4 or 62.4).",
+    "style": {
+      "mess": 3,
+      "font": "reenie-beanie",
+      "ink": "blue",
+      "size": 50
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "θ = tan^{-1}(5/12)",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "θ ≈ 2",
+        "at": [40, 140]
+      },
+      {
+        "_tag": "Text",
+        "text": "2",
+        "at": [172, 140]
+      },
+      {
+        "_tag": "Text",
+        "text": "7",
+        "at": [174, 143]
+      },
+      {
+        "_tag": "Text",
+        "text": ".6°",
+        "at": [198, 140]
+      },
+      {
+        "_tag": "Text",
+        "text": "other = 90 - θ",
+        "at": [40, 240]
+      },
+      {
+        "_tag": "Text",
+        "text": "≈ 6",
+        "at": [40, 330]
+      },
+      {
+        "_tag": "Text",
+        "text": "7",
+        "at": [122, 330]
+      },
+      {
+        "_tag": "Text",
+        "text": "2",
+        "at": [124, 334]
+      },
+      {
+        "_tag": "Text",
+        "text": ".4°",
+        "at": [148, 330]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Right method (tan⁻¹(5/12) and 90 − θ), but the deciding digits are overwritten: 22.6 or 27.6, and 67.4 or 62.4."
+    },
+    "review": {
+      "_tag": "Unsure",
+      "note": "Each angle has two digits written over each other. The method gives 22.6° and 67.4°, so chose full credit; a teacher who reads 27.6 and 62.4 would give 0."
+    }
+  },
+  {
+    "id": "rt-8b-ratio-table",
+    "itemId": "8b",
+    "tags": ["correct", "alternate-method"],
+    "summary": "Estimates from a sine table: sin θ = 5/13 ≈ 0.385 falls between sin 22° and sin 23°, so θ ≈ 23° and the other ≈ 67°.",
+    "style": {
+      "mess": 0,
+      "font": "caveat",
+      "ink": "black",
+      "size": 38
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "sin θ = \\frac{5}{13} ≈ 0.385",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "sin 22° ≈ 0.375",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "sin 23° ≈ 0.391"
+      },
+      {
+        "_tag": "Text",
+        "text": "so θ ≈ [[23°]]",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "other ≈ 90 - 23 = [[67°]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Estimates from sin θ = 5/13 with a table: 23° and 67° are within 1°."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-9-correct",
+    "itemId": "9",
+    "tags": ["correct", "diagram"],
+    "summary": "QP is opposite 30°: QP = 4 sin 30° = 2, RQ = 4 cos 30° = 2√3.",
+    "style": {
+      "mess": 0,
+      "font": "kalam",
+      "ink": "blue",
+      "size": 36
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[640, 430], [780, 430], [640, 188]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [640, 430],
+        "a": [640, 188],
+        "b": [780, 430]
+      },
+      {
+        "_tag": "Arc",
+        "center": [640, 188],
+        "r": 45,
+        "from": 270,
+        "to": 300
+      },
+      {
+        "_tag": "Arc",
+        "center": [780, 430],
+        "r": 35,
+        "from": 120,
+        "to": 180
+      },
+      {
+        "_tag": "Text",
+        "text": "R",
+        "at": [625, 148],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "Q",
+        "at": [610, 435],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "P",
+        "at": [790, 435],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "4",
+        "at": [722, 285],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "30°",
+        "at": [644, 262],
+        "size": 22
+      },
+      {
+        "_tag": "Text",
+        "text": "60°",
+        "at": [705, 392],
+        "size": 22
+      },
+      {
+        "_tag": "Text",
+        "text": "QP is opp 30°",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "QP = 4 sin 30° = 2",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "RQ = 4 cos 30°",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "= 4 · \\frac{√3}{2} = 2√3",
+        "indent": 60
+      },
+      {
+        "_tag": "Text",
+        "text": "[[QP = 2,  RQ = 2√3]]",
+        "gap": 16
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "QP = 2 and RQ = 2√3."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-9-swapped",
+    "itemId": "9",
+    "tags": ["common-mistake", "incorrect"],
+    "summary": "Swaps the legs: RQ = 4 sin 30° = 2 and QP = 4 cos 30° = 2√3.",
+    "style": {
+      "mess": 1,
+      "font": "patrick-hand",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "RQ = 4 sin 30° = 2",
+        "at": [40, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "QP = 4 cos 30° = 2√3",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Legs swapped (RQ = 2, QP = 2√3), which the notes say loses both lines."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-9-30-60-90",
+    "itemId": "9",
+    "tags": ["correct", "alternate-method", "diagram"],
+    "summary": "Uses 30-60-90 ratios: the short leg QP is half of 4, so 2; the long leg RQ is 2√3 ≈ 3.46.",
+    "style": {
+      "mess": 1,
+      "font": "caveat",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[640, 430], [780, 430], [640, 188]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [640, 430],
+        "a": [640, 188],
+        "b": [780, 430]
+      },
+      {
+        "_tag": "Arc",
+        "center": [640, 188],
+        "r": 45,
+        "from": 270,
+        "to": 300
+      },
+      {
+        "_tag": "Arc",
+        "center": [780, 430],
+        "r": 35,
+        "from": 120,
+        "to": 180
+      },
+      {
+        "_tag": "Text",
+        "text": "R",
+        "at": [625, 148],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "Q",
+        "at": [610, 435],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "P",
+        "at": [790, 435],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "4",
+        "at": [722, 285],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "30°",
+        "at": [644, 262],
+        "size": 22
+      },
+      {
+        "_tag": "Text",
+        "text": "60°",
+        "at": [705, 392],
+        "size": 22
+      },
+      {
+        "_tag": "Text",
+        "text": "short leg = \\frac{1}{2} hyp",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "QP = 2",
+        "indent": 40,
+        "gap": 8
+      },
+      {
+        "_tag": "Text",
+        "text": "long leg = 2√3 ≈ 3.46",
+        "gap": 16
+      },
+      {
+        "_tag": "Text",
+        "text": "RQ = 2√3",
+        "indent": 40
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "30-60-90 ratios: QP = 2 and RQ = 2√3."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-9-pythagoras-slip",
+    "itemId": "9",
+    "tags": ["common-mistake", "partial"],
+    "summary": "QP = 4/2 = 2, then adds squares for RQ: RQ² = 4² + 2² = 20, RQ ≈ 4.47.",
+    "style": {
+      "mess": 1,
+      "font": "gochi-hand",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "QP = \\frac{4}{2} = 2",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "RQ^2 = 4^2 + 2^2",
+        "gap": 16
+      },
+      {
+        "_tag": "Text",
+        "text": "RQ^2 = 20"
+      },
+      {
+        "_tag": "Text",
+        "text": "RQ = √20 ≈ 4.47"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "QP = 2 is right; RQ adds the squares though 4 is the hypotenuse, so √20 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "rt-9-unlabeled",
+    "itemId": "9",
+    "tags": ["correct", "off-rubric", "messy"],
+    "summary": "Uses x : x√3 : 2x with 2x = 4 and answers 'the legs are 2 and 2√3' without saying which leg is which.",
+    "style": {
+      "mess": 2,
+      "font": "shadows-into-light",
+      "ink": "blue"
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "30-60-90",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "x,  x√3,  2x"
+      },
+      {
+        "_tag": "Text",
+        "text": "2x = 4 → x = 2",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "legs are 2 and 2√3",
+        "gap": 16
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Both leg lengths are right, but the student never says which is QP and which is RQ."
+    },
+    "review": {
+      "_tag": "Unsure",
+      "note": "The rubric scores QP = 2 and RQ = 2√3 and penalizes swapping; this answer names neither leg. Chose full credit because x is the short leg by convention; a teacher could withhold both."
+    }
+  }
+]
