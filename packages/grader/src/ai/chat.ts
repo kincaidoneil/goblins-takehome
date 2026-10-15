@@ -13,6 +13,7 @@ import {
   type Usage,
 } from "../ModelClient.ts";
 import { type ExtractedProblem, fromWire, rubricGuide, toWire } from "./extract.ts";
+import { stripFence } from "./json.ts";
 import { type ModelChoice, models } from "./models.ts";
 
 /** A problem as the setup screen holds it. Same shape extraction produces. */
@@ -55,9 +56,10 @@ export const chatSystemPrompt = `You help a teacher set up an assignment for an 
 Edits (op, then the fields it uses; set every other field to null):
 - set_rubric (label, rubric): replace a problem's point lines. To change what a problem is worth, redistribute points across sensible lines; keep the lines' meaning.
 - set_grading_notes (label, gradingNotes): replace a problem's grading notes. To add guidance, keep the existing notes and append. For a request about the whole assignment ("accept unsimplified fractions"), edit every problem it could apply to.
-- set_text (label, text), set_answer_key (label, answerKey), set_diagram (label, diagramDescription; null removes it), set_depends_on (label, dependsOn: labels of earlier problems).
+- set_answer_key (label, answerKey). Then reread that problem's rubric lines and grading notes as they stand above: any that state the old answer must be rewritten with set_rubric or set_grading_notes in the same reply.
+- set_text (label, text), set_diagram (label, diagramDescription; null removes it), set_depends_on (label, dependsOn: labels of earlier problems).
 - add_problem (after, problem): a problem the worksheet has but the list is missing. Read it from the pages and fill in every field as extraction would: full text, diagram description, a solved answer key, a rubric and notes. after is the label it follows, or null to put it first.
-- remove_problem (label).
+- remove_problem (label). If other problems depend on it, also update their dependencies, text and rubric in the same reply.
 
 Keep each problem consistent: when you change an answer key, also rewrite every rubric line and grading note that states the old answer; when a problem gains a dependency, give its rubric follow-through credit. Change nothing the teacher didn't ask about. If the request is unclear or you can't do it, make no edits and ask one short question in reply. Otherwise reply in one or two sentences saying what you changed, in plain words, without labels like "set_rubric".
 
@@ -245,12 +247,6 @@ const toEdit = (wire: typeof WireEdit.Type): Either.Either<Edit, string> => {
   }
 };
 
-const stripFence = (text: string) =>
-  text
-    .trim()
-    .replace(/^```(?:json)?\s*/i, "")
-    .replace(/\s*```$/, "");
-
 export const parseChatReply = (
   text: string,
 ): Either.Either<{ readonly edits: ReadonlyArray<Edit>; readonly reply: string }, string> => {
@@ -300,13 +296,11 @@ const applyOne = (
       }));
     case "SetDependsOn":
       return update(problems, edit.label, (p) => ({ ...p, dependsOn: edit.dependsOn }));
+    // Links to the removed problem stay, so the final check rejects the batch unless it also
+    // updates every problem that used it.
     case "RemoveProblem":
       return problems.some((p) => p.label === edit.label)
-        ? ok(
-            problems
-              .filter((p) => p.label !== edit.label)
-              .map((p) => ({ ...p, dependsOn: p.dependsOn.filter((d) => d !== edit.label) })),
-          )
+        ? ok(problems.filter((p) => p.label !== edit.label))
         : Either.left({ _tag: "UnknownLabel", label: edit.label });
     case "AddProblem": {
       if (problems.some((p) => p.label === edit.problem.label)) {

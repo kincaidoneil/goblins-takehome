@@ -15,6 +15,7 @@ import {
   type ModelError,
   type Usage,
 } from "../ModelClient.ts";
+import { stripFence } from "./json.ts";
 import { type ModelChoice, models } from "./models.ts";
 
 export interface RubricLine {
@@ -278,13 +279,6 @@ export const parseGradeReply = (
         : { _tag: "NeedsTeacher", flagReason: reasons.join(" ") },
   });
 };
-
-/** Some models wrap JSON in a Markdown fence even when asked for JSON. */
-const stripFence = (text: string) =>
-  text
-    .trim()
-    .replace(/^```(?:json)?\s*/i, "")
-    .replace(/\s*```$/, "");
 
 export const gradeSubmission = (
   request: GradeRequest,

@@ -174,9 +174,15 @@ describe("applyEdits", () => {
     expect(Either.getOrThrow(after).map((p) => p.label)).toEqual(["1", "1b", "2a", "2b"]);
   });
 
-  it("drops links to a removed problem", () => {
-    const after = applyEdits(problems, [{ _tag: "RemoveProblem", label: "2a" }]);
-    expect(Either.getOrThrow(after).find((p) => p.label === "2b")?.dependsOn).toEqual([]);
+  it("rejects removing a problem others use unless the same edits update them", () => {
+    expect(Either.isLeft(applyEdits(problems, [{ _tag: "RemoveProblem", label: "2a" }]))).toBe(
+      true,
+    );
+    const fixed = applyEdits(problems, [
+      { _tag: "RemoveProblem", label: "2a" },
+      { _tag: "SetDependsOn", label: "2b", dependsOn: [] },
+    ]);
+    expect(Either.getOrThrow(fixed).map((p) => p.label)).toEqual(["1", "2b"]);
   });
 
   it("rejects unknown labels and links to later problems, changing nothing", () => {

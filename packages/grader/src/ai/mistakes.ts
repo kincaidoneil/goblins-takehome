@@ -11,6 +11,7 @@ import {
   type ModelError,
   type Usage,
 } from "../ModelClient.ts";
+import { stripFence } from "./json.ts";
 import { type ModelChoice, models } from "./models.ts";
 
 export interface MistakeInput {
@@ -47,6 +48,9 @@ export interface MistakesResult {
   readonly usage: Usage;
 }
 
+/** The report shows at most this many mistakes per problem. */
+export const maxGroups = 5;
+
 export const mistakesSystemPrompt = `A teacher is reading the report for a graded assignment. For one problem, you get the rubric and, for each student who lost points, the grader's one-line reason and the rubric lines they lost. Group the students by the mistake they made.
 
 - Each group's mistake is one plain sentence a teacher would write about the math, under 15 words: "Used 90° instead of 180° for supplementary angles." Not about grading, points or the rubric.
@@ -61,6 +65,7 @@ const replyJsonSchema = {
   properties: {
     groups: {
       type: "array",
+      maxItems: maxGroups,
       items: {
         type: "object",
         additionalProperties: false,
@@ -101,7 +106,8 @@ export const cleanGroups = (
       }),
     }))
     .filter((g) => g.mistake !== "" && g.studentIds.length > 0)
-    .sort((a, b) => b.studentIds.length - a.studentIds.length);
+    .sort((a, b) => b.studentIds.length - a.studentIds.length)
+    .slice(0, maxGroups);
 };
 
 export const groupMistakes = (
@@ -133,7 +139,7 @@ export const groupMistakes = (
       maxTokens: choice.maxTokens,
       jsonSchema: { name: "mistakes", schema: replyJsonSchema },
     });
-    const decoded = Schema.decodeUnknownEither(Reply)(completion.text);
+    const decoded = Schema.decodeUnknownEither(Reply)(stripFence(completion.text));
     if (Either.isLeft(decoded)) {
       return yield* new BadResponse({
         message: "Mistakes reply was not the expected JSON",

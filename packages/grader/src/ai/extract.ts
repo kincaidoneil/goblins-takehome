@@ -13,6 +13,7 @@ import {
   type ModelError,
   type Usage,
 } from "../ModelClient.ts";
+import { stripFence } from "./json.ts";
 import { type ModelChoice, models } from "./models.ts";
 
 /** Named as in the domain's `rubric_lines` table. */
@@ -178,12 +179,6 @@ export const toWire = (p: ExtractedProblem): WireProblem => ({
   gradingNotes: p.gradingNotes,
   dependsOn: p.dependsOn,
 });
-
-const stripFence = (text: string) =>
-  text
-    .trim()
-    .replace(/^```(?:json)?\s*/i, "")
-    .replace(/\s*```$/, "");
 
 /**
  * Decodes the reply and repairs what is safe to repair: blank diagram descriptions become null,
