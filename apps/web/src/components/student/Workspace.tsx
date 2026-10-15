@@ -10,6 +10,7 @@ import {
   type SubmitState,
   Whiteboard,
   type WhiteboardDoc,
+  WorksheetViewer,
 } from "@goblins/ui";
 import { Either } from "effect";
 import { useEffect, useState } from "react";
@@ -69,8 +70,6 @@ export function Workspace({
     [sessionId, studentId, problem.id, doc],
   );
 
-  const own = pages.filter((page) => problem.pageNumbers.includes(page.pageNumber));
-
   const submit = async () => {
     setExporting(true);
     const png = await renderWhiteboardPng(doc);
@@ -97,7 +96,7 @@ export function Workspace({
           total={total}
           {...(pages.length > 0
             ? {
-                action: <WorksheetButton problem={problem} pages={own.length > 0 ? own : pages} />,
+                action: <WorksheetButton problem={problem} pages={pages} />,
               }
             : {})}
         >
@@ -146,16 +145,13 @@ function WorksheetButton({
         </DialogClose>
       }
     >
-      {/* Scrolls on its own so focusing the close button doesn't scroll past the top of the page. */}
-      <div className="flex max-h-[60dvh] flex-col gap-4 overflow-y-auto">
-        {pages.map((page) => (
-          <img
-            key={page.pageNumber}
-            src={page.imageUrl}
-            alt={`Worksheet page ${page.pageNumber}`}
-            className="w-full rounded-md shadow-[0_0_0_1px_var(--gb-color-border)]"
-          />
-        ))}
+      {/* Every page, opening on the problem's first and marking its pages. */}
+      <div className="h-[62dvh]">
+        <WorksheetViewer
+          pages={pages}
+          highlightPages={problem.pageNumbers}
+          {...(problem.pageNumbers[0] === undefined ? {} : { page: problem.pageNumbers[0] })}
+        />
       </div>
     </Dialog>
   );
