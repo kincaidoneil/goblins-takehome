@@ -19,8 +19,12 @@ export type NotJoined = { readonly _tag: "NotJoined"; readonly joinCode: string 
 
 const notJoined = (joinCode: string | null) => err<NotJoined>({ _tag: "NotJoined", joinCode });
 
-const cookieStudent = (sessionId: string) =>
-  studentFromCookies(getRequest().headers.get("cookie"), sessionId);
+/**
+ * The request's cookie header. Read it in the handler, before the Effect runs: request context
+ * lives in AsyncLocalStorage, and an Effect fiber can resume in another request's async context
+ * after a yield, so `getRequest()` inside the Effect may see a different request.
+ */
+const requestCookies = () => getRequest().headers.get("cookie");
 
 // ---------------------------------------------------------------------------
 // Read
@@ -30,8 +34,9 @@ const WorkInput = Schema.Struct({ sessionId: Schema.UUID });
 /** The signed-in student, the session's problems in order, worksheet pages, and what they sent. */
 export const getStudentWork = createServerFn({ method: "GET" })
   .validator(Schema.standardSchemaV1(WorkInput))
-  .handler(({ data }) =>
-    run(
+  .handler(({ data }) => {
+    const cookies = requestCookies();
+    return run(
       Effect.gen(function* () {
         const db = yield* Db;
         const [session] = yield* db
@@ -47,7 +52,7 @@ export const getStudentWork = createServerFn({ method: "GET" })
         if (session === undefined) return notJoined(null);
         const openCode = session.status === "ended" ? null : session.joinCode;
 
-        const studentId = yield* cookieStudent(data.sessionId);
+        const studentId = yield* studentFromCookies(cookies, data.sessionId);
         if (Option.isNone(studentId)) return notJoined(openCode);
         const [student] = yield* db
           .select({
@@ -101,10 +106,13 @@ export const getStudentWork = createServerFn({ method: "GET" })
           submittedProblemIds: submitted.map((row) => row.problemId),
         });
       }),
-    ),
-  );
+    );
+  });
 
-export type StudentWork = Extract<Awaited<ReturnType<typeof getStudentWork>>, { _tag: "Ok" }>["value"];
+export type StudentWork = Extract<
+  Awaited<ReturnType<typeof getStudentWork>>,
+  { _tag: "Ok" }
+>["value"];
 
 // ---------------------------------------------------------------------------
 // Submit
@@ -139,11 +147,13 @@ const isPng = (bytes: Uint8Array) => PNG_SIGNATURE.every((byte, i) => bytes[i] =
  */
 export const submit = createServerFn({ method: "POST" })
   .validator(Schema.standardSchemaV1(SubmitInput))
-  .handler(({ data }) =>
-    run(
+  .handler(({ data }) => {
+    const cookies = requestCookies();
+    return run(
       Effect.gen(function* () {
-        const studentId = yield* cookieStudent(data.sessionId);
-        if (Option.isNone(studentId)) return err<SubmitError>({ _tag: "NotJoined", joinCode: null });
+        const studentId = yield* studentFromCookies(cookies, data.sessionId);
+        if (Option.isNone(studentId))
+          return err<SubmitError>({ _tag: "NotJoined", joinCode: null });
 
         const png = new Uint8Array(Buffer.from(data.png, "base64"));
         if (!isPng(png)) return err<SubmitError>({ _tag: "InvalidImage" });
@@ -179,5 +189,5 @@ export const submit = createServerFn({ method: "POST" })
           ),
         ),
       ),
-    ),
-  );
+    );
+  });
