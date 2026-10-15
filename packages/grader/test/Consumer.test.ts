@@ -6,7 +6,7 @@
  */
 
 import { describe, expect, it } from "@effect/vitest";
-import { Attempt, type GradingInput, SubmissionId } from "@goblins/domain";
+import { Attempt } from "@goblins/domain";
 import { Duration, Effect, Fiber, Layer, Option, Ref, TestClock } from "effect";
 import * as CallLog from "../src/CallLog.ts";
 import {
@@ -28,42 +28,18 @@ import {
   Timeout,
 } from "../src/ModelClient.ts";
 import {
+  ANSWER,
   always,
   fakeModel,
   LATENCY,
+  material,
+  fullMarks as reply,
   reply as replyFor,
   runUntilDone,
   type Script,
+  SETUP,
+  sub,
 } from "./fixtures.ts";
-
-/** A deterministic UUID per name, since submission and rubric-line ids are UUIDs. */
-const uuid = (name: string) => {
-  let h = 0;
-  for (const c of name) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-  return `00000000-0000-4000-8000-${h.toString(16).padStart(12, "0")}`;
-};
-const SETUP = uuid("line:setup");
-const ANSWER = uuid("line:answer");
-const sub = (name: string) => SubmissionId.make(uuid(`sub:${name}`));
-const reply = (unsure: string | null = null) => replyFor([SETUP, ANSWER], unsure);
-
-const material = (loadTestRunId?: string): Omit<GradingInput, "lease"> => ({
-  whiteboardUrl: "data:image/png;base64,AA",
-  problem: {
-    label: "1",
-    text: "Solve 2x + 3 = 11",
-    answerKey: "x = 4",
-    diagramDescription: null,
-    gradingNotes: "",
-    pageImageUrls: [],
-  },
-  rubricLines: [
-    { id: SETUP, points: 1, description: "correct setup" },
-    { id: ANSWER, points: 1, description: "x = 4" },
-  ],
-  dependencies: [],
-  loadTestRunId: Option.fromNullable(loadTestRunId),
-});
 
 const setup = (options: { readonly script: Script; readonly concurrency?: number }) =>
   Effect.gen(function* () {

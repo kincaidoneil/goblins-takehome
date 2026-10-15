@@ -9,3 +9,17 @@ Compared on 2026-10-15 by the grading pipeline stream; the decision is in [decis
 | Upstash Workflow | Same as QStash | Step-level retries | At least 2–3 messages per grade: about $3 | Same as QStash | Run-level view |
 | Postgres jobs table plus cron | Yes, `FOR UPDATE SKIP LOCKED` with a running count | Ours to build; Vercel cron fires at most once a minute, so workers need a loop | $0 extra, but it adds load on the same database | None | Full SQL |
 | Inngest, Temporal | Yes | Yes | Not priced | New account, and a heavier programming model | Good |
+
+## Measured dispatch under a backlog
+
+Each job holds its delivery for 5 s, like a model call. Wall time runs from the first enqueue to the last completion; ideal is jobs × 5 s ÷ cap. Vercel Queues numbers are Infra's probe; QStash numbers come from QStash's own delivery logs (`scripts`-free probe, run from the grader stream's scratchpad).
+
+| Queue | Jobs | Cap | Peak in flight | Wall time | Ideal |
+|---|---|---|---|---|---|
+| Vercel Queues, `maxConcurrency` | 60 | 10 | 10 | 129 s | 30 s |
+| QStash flow control, pay-as-you-go (fra1) | 60 | 10 | 10 | 32.4 s, 32.5 s | 30 s |
+| QStash flow control, pay-as-you-go (fra1) | 500 | 100 | 100 | 27.3 s | 25 s |
+| QStash flow control, free plan (iad1) | 500 | 100 requested | 10 | 270 s | 25 s |
+
+QStash dispatches within about 10% of ideal at both scales. Vercel Queues takes over four times the ideal. The free plan silently clamps parallelism to 10, so the resource must be on pay-as-you-go before any load test.
+

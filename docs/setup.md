@@ -1,6 +1,6 @@
 # Setup: what only Kincaid can do
 
-Agents don't create accounts, sign in, accept terms or type keys into web forms. This page lists every step that needs a person. Everything else the Infra and CI stream does with the `vercel`, `gh`, `electric` and `neonctl` CLIs.
+Agents don't create accounts, sign in, accept terms or type keys into web forms. This page lists every step that needs a person. Everything else the Infra and CI stream does with the `vercel`, `gh` and `fly` CLIs.
 
 Put keys in `.env.local` at the root of the main checkout (`~/goblins-takehome/.env.local`). It is gitignored. [`.env.example`](../.env.example) lists every variable. Never paste a key into chat, a PR or a commit. Tell the orchestrator when a step is done; agents never wait on these, they work around whatever is missing.
 
@@ -24,17 +24,18 @@ Only needed if the Infra and CI stream asks for it, for example to manage databa
    NEON_API_KEY=
    ```
 
-## Electric Cloud
+## Fly.io (for Electric)
 
-1. Create an account at <https://dashboard.electric-sql.cloud> (signing in with GitHub is fine).
-2. Create an API token in the dashboard's settings. Agents use it with the `electric` CLI to create one sync source per environment, including per-PR previews.
-3. Add it to `.env.local`:
+Electric Cloud has shut down, so production Electric runs on Fly.io. About $7/month.
 
+1. Create an account at <https://fly.io> and add a card.
+2. Sign in the CLI (already installed):
+
+   ```bash
+   fly auth login
    ```
-   ELECTRIC_API_TOKEN=
-   ```
 
-Agents create the sources and set `ELECTRIC_SOURCE_ID` and `ELECTRIC_SECRET` on Vercel themselves.
+3. Tell the orchestrator. The Infra and CI stream then runs `infra/electric/deploy.sh`.
 
 ## Clerk (done)
 
@@ -64,7 +65,8 @@ Agents create the sources and set `ELECTRIC_SOURCE_ID` and `ELECTRIC_SECRET` on 
 | OpenRouter | $20 limit on the key (OpenRouter section) | The only service with metered spend |
 | Upstash QStash | $25 total for load tests, pay-as-you-go (Kincaid approved 2026-10-15) | Added by the grading pipeline stream through the Vercel integration |
 | Vercel | None needed | Hobby plan has no billing; usage over the free limits pauses, it doesn't charge |
-| Neon, Electric, Clerk | None needed | Free tiers with no card on file |
+| Fly.io | About $7/month: one shared-CPU machine with 1 GB RAM, plus a 1 GB volume | Runs production Electric |
+| Neon, Clerk | None needed | Free tiers with no card on file. Electric's idle timeout lets Neon scale to zero, which keeps it within the free 100 CU-hours |
 
 If any free tier turns out too small (for example for the load test), the stream that hits it asks the orchestrator, and you decide whether to ask Goblins to pay.
 
