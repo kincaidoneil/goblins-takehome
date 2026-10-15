@@ -10,7 +10,8 @@
     "typecheck": "pnpm -r --if-present typecheck",
     "lint": "biome check --error-on-warnings . && node scripts/check-workspace.ts",
     "format": "biome check --write .",
-    "test": "pnpm -r --if-present test"
+    "test": "pnpm -r --if-present test",
+    "e2e": "pnpm --filter @goblins/e2e e2e"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
