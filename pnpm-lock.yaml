@@ -29,6 +29,12 @@ importers:
       '@goblins/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@goblins/grader':
+        specifier: workspace:*
+        version: link:../../packages/grader
+      '@goblins/mock-model':
+        specifier: workspace:*
+        version: link:../../packages/mock-model
       '@goblins/ui':
         specifier: workspace:*
         version: link:../../packages/ui

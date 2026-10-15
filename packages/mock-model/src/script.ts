@@ -136,6 +136,7 @@ export const imageBytes = (
 };
 
 export const sha256Hex = (bytes: Uint8Array): Effect.Effect<string> =>
-  Effect.promise(() => crypto.subtle.digest("SHA-256", bytes)).pipe(
+  // Copying gives an ArrayBuffer-backed array, which the DOM's BufferSource type requires.
+  Effect.promise(() => crypto.subtle.digest("SHA-256", new Uint8Array(bytes))).pipe(
     Effect.map((digest) => Buffer.from(digest).toString("hex")),
   );
