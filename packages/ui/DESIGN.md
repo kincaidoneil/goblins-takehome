@@ -31,13 +31,15 @@ All tokens are CSS custom properties in [src/tokens.css](src/tokens.css), prefix
 - Primitives: `--gb-green-700`, `--gb-lime-400`, `--gb-paper-100`, ... Use these only to define semantic tokens.
 - Semantic: `--gb-color-*`, `--gb-score-*`, `--gb-text-*`, `--gb-space-*`, `--gb-radius-*`, `--gb-shadow-*`, `--gb-ease-*`, `--gb-duration-*`. Components and apps use these.
 
-Text pairs meet WCAG AA (4.5:1) except `--gb-ink-400`, which is for placeholders and large text only.
+Every text token meets WCAG AA (4.5:1) on the page background and on white.
 
 | Pair | Contrast |
 |---|---|
 | Body text on page | 13.4 |
 | Brand green on page | 5.6 |
 | Muted text on white | 5.8 |
+| Subtle text (placeholders) on page | 4.6 |
+| Success text on its soft background | 5.2 |
 | Text on lime CTA | 6.1 |
 | Score chips (full, partial, low, needs you, couldn't grade) | 6.1, 4.7, 4.9, 5.9, 4.8 |
 

@@ -36,7 +36,7 @@
   --gb-ink-900: #1e2b24; /* body text */
   --gb-ink-700: #393c41;
   --gb-ink-500: #5c6860; /* secondary text, 5.6:1 on paper-100 */
-  --gb-ink-400: #7d877f; /* placeholders and large text only, 3.7:1 */
+  --gb-ink-400: #687269; /* placeholders, 4.6:1 on the page */
 
   --gb-sun-600: #8a5a00;
   --gb-sun-400: #ffc94d;
@@ -81,7 +81,7 @@
   --gb-color-brand-soft: var(--gb-green-100);
 
   /* Feedback. Danger is for destructive teacher actions, never for student work. */
-  --gb-color-success: var(--gb-green-600);
+  --gb-color-success: var(--gb-green-700);
   --gb-color-success-soft: var(--gb-green-100);
   --gb-color-warning: var(--gb-sun-600);
   --gb-color-warning-soft: var(--gb-sun-100);
