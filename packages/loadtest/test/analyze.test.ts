@@ -121,6 +121,15 @@ describe("analyzeStep and the criteria", () => {
     expect(evaluate(metrics, "provider-outage").find((c) => c.id === "failures")?.pass).toBe(false);
   });
 
+  it("counts planned submissions that were never attempted as lost", () => {
+    // 100 planned, only 60 sent: a class failed setup.
+    const metrics = analyzeStep(
+      input(scenario({ submissions: 60, ackMs: 100, gradeMs: 1000 }), { plannedSubmissions: 100 }),
+    );
+    expect(metrics.lost.count).toBe(40);
+    expect(evaluate(metrics, "normal").find((c) => c.id === "lost")?.pass).toBe(false);
+  });
+
   it("marks a step invalid when the load generator was the bottleneck", () => {
     const busy = (at: number): SimEvent => ({
       type: "generator",

@@ -17,6 +17,8 @@ export interface Whiteboard {
   readonly name: string;
   readonly png: Uint8Array;
   readonly expected: ExpectedState;
+  /** For a graded fixture, the share of the problem's points it should get (2/2 → 1, 1/2 → 0.5). */
+  readonly expectedFraction: number | null;
   /** How often a simulated student draws this one. */
   readonly weight: number;
 }
@@ -41,8 +43,11 @@ export const loadWhiteboards = (): readonly [Whiteboard, ...Array<Whiteboard>] =
     if (fixture === undefined) throw new Error(`mock-model has no fixture ${file}`);
     const outcome = fixture.outcome;
     const expected: ExpectedState = outcome._tag === "NeedsTeacher" ? "needs_teacher" : "graded";
+    const expectedFraction =
+      outcome._tag === "Graded" && outcome.maxScore > 0 ? outcome.score / outcome.maxScore : null;
     return {
       name: file,
+      expectedFraction,
       png: new Uint8Array(readFileSync(fileURLToPath(new URL(file, fixturesDir)))),
       expected,
       weight,
