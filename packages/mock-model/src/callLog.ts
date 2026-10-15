@@ -4,9 +4,8 @@
  * `CallLogRow` validates the columns this package reads, as Drizzle returns
  * them (camelCase; `createdAt` a Date, or an ISO string from a JSON export).
  * `test/callLog.test.ts` checks at compile time that a `model_calls` row still
- * fits it. The table has no HTTP status column yet: `statusCode` is read when
- * present, and a `provider_error` without one replays as a 502. A 429 carries
- * no retry hint.
+ * fits it. `statusCode` is kept when present, and a `provider_error` without
+ * one replays as a 502. A 429 carries no retry hint.
  */
 import { Either, Schema } from "effect";
 import type { FailureKind } from "./fate.ts";
@@ -15,19 +14,29 @@ import type { Recording } from "./replay.ts";
 
 const Count = Schema.NullOr(Schema.NonNegative);
 
+/** Statuses that describe what the provider did. `interrupted` means our caller gave up, so it is skipped. */
+type ProviderStatus = Exclude<CallLogRow["status"], "interrupted">;
+
 const statusToOutcome = {
   ok: "Ok",
   rate_limited: "RateLimited",
   timeout: "Timeout",
   provider_error: "ProviderError",
   bad_response: "BadResponse",
-} as const satisfies Record<string, "Ok" | FailureKind>;
+} as const satisfies Record<ProviderStatus, "Ok" | FailureKind>;
 
 export const CallLogRow = Schema.Struct({
   purpose: Schema.String,
   provider: Schema.String,
   model: Schema.String,
-  status: Schema.Literal("ok", "rate_limited", "timeout", "provider_error", "bad_response"),
+  status: Schema.Literal(
+    "ok",
+    "rate_limited",
+    "timeout",
+    "provider_error",
+    "bad_response",
+    "interrupted",
+  ),
   latencyMs: Schema.NonNegative,
   inputTokens: Count,
   outputTokens: Count,
@@ -46,11 +55,12 @@ const toEpochMs = (value: string | Date): number =>
   typeof value === "string" ? new Date(value).getTime() : value.getTime();
 
 /**
- * Only real grading calls describe the provider: app grades and eval runs
+ * Only completed real grading calls describe the provider: app grades and eval runs
  * (the same grading prompt, run offline), not the mock's own rows, other
  * purposes or load-test traffic.
  */
-const isRealGradeCall = (row: CallLogRow): boolean =>
+const isRealGradeCall = (row: CallLogRow): row is CallLogRow & { status: ProviderStatus } =>
+  row.status !== "interrupted" &&
   row.provider === "openrouter" &&
   (row.purpose === "grade" || row.purpose === "eval") &&
   row.loadTestRunId === null;

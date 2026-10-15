@@ -47,6 +47,7 @@ describe("call log import", () => {
     const rows = [
       modelCallRow(),
       modelCallRow({ purpose: "eval" }),
+      modelCallRow({ status: "interrupted" }),
       modelCallRow({ provider: "mock" }),
       modelCallRow({ purpose: "extract" }),
       modelCallRow({ loadTestRunId: "lt-42" }),
