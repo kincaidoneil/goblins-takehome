@@ -20,6 +20,8 @@ export interface RunHeader {
   readonly template: string;
   readonly submissionsPerStudent: number;
   readonly timeScale: number;
+  readonly lobbySeconds: number;
+  readonly bellSeconds: number;
   readonly generator: string;
 }
 
@@ -101,7 +103,7 @@ export const toMarkdown = (
     `| Mock spec | \`${header.mockSpecExample}\` |`,
     `| Queue | ${header.queue} |`,
     `| Assignment | ${header.template}, ${header.submissionsPerStudent} submissions per student |`,
-    `| Time scale | ${header.timeScale}${header.timeScale === 1 ? " (real testing-day pace)" : ` (each student's 20–40 min working window × ${header.timeScale}; the 1-minute lobby and 2-minute bell spread run at real time; submission rate ≈ ${(1 / header.timeScale).toFixed(1)}× a real testing day with the same head count)`} |`,
+    `| Time scale | ${header.timeScale}${header.timeScale === 1 ? " (real testing-day pace)" : ` (each student's 20–40 min working window × ${header.timeScale}; submission rate ≈ ${(1 / header.timeScale).toFixed(1)}× a real testing day with the same head count)`}; lobby ${header.lobbySeconds} s, bell spread ${header.bellSeconds} s, both at real time |`,
     `| Load generator | ${header.generator} |`,
     "",
   );

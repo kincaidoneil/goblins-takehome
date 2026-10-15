@@ -44,6 +44,7 @@ export interface RunOptions {
   readonly runId: string;
   readonly scenario: ScenarioName;
   readonly profile: Profile;
+  readonly window: { readonly at: number; readonly for: number } | undefined;
   readonly classesPerStep: ReadonlyArray<number>;
   readonly studentsPerClass: number;
   readonly templateId: string;
@@ -82,6 +83,7 @@ export const runLoadTest = (options: RunOptions) =>
       mock: describeMock(options.scenario, options.profile),
       mockSpecExample: mockSpecFor(options.scenario, {
         profile: options.profile,
+        ...(options.window === undefined ? {} : { window: options.window }),
         startMs: 0,
         timeScale: options.pace.timeScale,
       }).replace("start=0", "start=<step start>"),
@@ -89,6 +91,8 @@ export const runLoadTest = (options: RunOptions) =>
       template: options.templateId,
       submissionsPerStudent: options.submissionsPerStudent,
       timeScale: options.pace.timeScale,
+      lobbySeconds: options.pace.lobbyMs / 1000,
+      bellSeconds: options.pace.bellSpreadMs / 1000,
       generator: `one Node ${process.version} process on ${hostname()} (${cpus().length} CPUs, ${Math.round(totalmem() / 2 ** 30)} GB)`,
     };
     const steps: Array<StepReport> = [];
@@ -122,6 +126,7 @@ export const runLoadTest = (options: RunOptions) =>
           startMs,
           timeScale: options.pace.timeScale,
           profile: options.profile,
+          ...(options.window === undefined ? {} : { window: options.window }),
         }),
       };
       const simulation = {
