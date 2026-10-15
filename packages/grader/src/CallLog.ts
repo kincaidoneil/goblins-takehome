@@ -62,51 +62,52 @@ const failureFields = (error: ModelError) => {
 }
 
 /**
- * Wraps whichever ModelClient is provided so every call is timed and logged.
- * Latency is measured here, not reported by the client, so the mock and the real
- * client are measured the same way.
+ * Wraps a ModelClient so every call is timed and logged. Latency is measured
+ * here, not reported by the client, so the mock and the real client are
+ * measured the same way.
  */
+export const wrap = (inner: ModelClient["Type"], log: CallLog["Type"]): ModelClient["Type"] => ({
+  complete: (request) =>
+    Effect.gen(function* () {
+      const startedMs = yield* Clock.currentTimeMillis
+      const result = yield* Effect.either(inner.complete(request))
+      const latencyMs = (yield* Clock.currentTimeMillis) - startedMs
+      const base = {
+        startedAt: new Date(startedMs),
+        purpose: request.tag.purpose,
+        modelRequested: request.model,
+        latencyMs,
+        ...(request.tag.subjectId === undefined ? {} : { subjectId: request.tag.subjectId }),
+        ...(request.tag.loadTestRunId === undefined ? {} : { loadTestRunId: request.tag.loadTestRunId }),
+      }
+      yield* log.record(
+        result._tag === "Right"
+          ? {
+              ...base,
+              status: "ok",
+              statusCode: 200,
+              model: result.right.model,
+              providerId: result.right.id,
+              ...result.right.usage,
+            }
+          : {
+              ...base,
+              status: statusOf[result.left._tag],
+              promptTokens: 0,
+              completionTokens: 0,
+              costUsd: 0,
+              ...failureFields(result.left),
+            },
+      )
+      return yield* result
+    }),
+})
+
+/** Replaces the provided ModelClient with one that logs every call. */
 export const withCallLog = Layer.effect(
   ModelClient,
   Effect.gen(function* () {
-    const inner = yield* ModelClient
-    const log = yield* CallLog
-    return {
-      complete: (request) =>
-        Effect.gen(function* () {
-          const startedMs = yield* Clock.currentTimeMillis
-          const result = yield* Effect.either(inner.complete(request))
-          const latencyMs = (yield* Clock.currentTimeMillis) - startedMs
-          const base = {
-            startedAt: new Date(startedMs),
-            purpose: request.tag.purpose,
-            modelRequested: request.model,
-            latencyMs,
-            ...(request.tag.subjectId === undefined ? {} : { subjectId: request.tag.subjectId }),
-            ...(request.tag.loadTestRunId === undefined ? {} : { loadTestRunId: request.tag.loadTestRunId }),
-          }
-          yield* log.record(
-            result._tag === "Right"
-              ? {
-                  ...base,
-                  status: "ok",
-                  statusCode: 200,
-                  model: result.right.model,
-                  providerId: result.right.id,
-                  ...result.right.usage,
-                }
-              : {
-                  ...base,
-                  status: statusOf[result.left._tag],
-                  promptTokens: 0,
-                  completionTokens: 0,
-                  costUsd: 0,
-                  ...failureFields(result.left),
-                },
-          )
-          return yield* result
-        }),
-    }
+    return wrap(yield* ModelClient, yield* CallLog)
   }),
 )
 
