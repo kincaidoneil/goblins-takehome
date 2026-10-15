@@ -5,7 +5,7 @@
  */
 import { Db, schema } from "@goblins/domain";
 import { and, eq } from "drizzle-orm";
-import { Data, Effect, Option } from "effect";
+import { Data, Effect, Option, Schema } from "effect";
 import { studentFromCookies } from "./student-identity";
 import { currentTeacher } from "./teacher";
 
@@ -18,7 +18,10 @@ export interface ShapeDefinition {
 }
 
 export class Forbidden extends Data.TaggedError("Forbidden") {}
+/** The view name or session id is not one this proxy serves. */
 export class UnknownView extends Data.TaggedError("UnknownView") {}
+
+const isUuid = Schema.is(Schema.UUID);
 
 const sessionColumns = [
   "id",
@@ -90,6 +93,7 @@ const teacherOwnsSession = (sessionId: string) =>
  */
 export const resolveShape = (request: Request, view: string, sessionId: string) =>
   Effect.gen(function* () {
+    if (!isUuid(sessionId)) return yield* Effect.fail(new UnknownView());
     switch (view) {
       case "session":
         yield* teacherOwnsSession(sessionId);

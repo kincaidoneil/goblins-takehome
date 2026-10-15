@@ -3,6 +3,7 @@
  * signed cookie per session naming their student id. It proves which student a request speaks
  * for; the teacher in the room is the check on who that student really is.
  */
+import { timingSafeEqual } from "node:crypto";
 import { Config, Effect, Option, Redacted } from "effect";
 
 const cookieName = (sessionId: string) => `gb_student_${sessionId}`;
@@ -56,5 +57,8 @@ export const studentFromCookies = (cookieHeader: string | null, sessionId: strin
     const [studentId, signature] = raw.split(".");
     if (studentId === undefined || signature === undefined) return Option.none<string>();
     const expected = yield* hmac(yield* secret, `${sessionId}.${studentId}`);
-    return expected === signature ? Option.some(studentId) : Option.none<string>();
+    const matches =
+      expected.length === signature.length &&
+      timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
+    return matches ? Option.some(studentId) : Option.none<string>();
   });
