@@ -1,0 +1,6078 @@
+{
+ "spec": "openai/gpt-6-luna",
+ "limit": null,
+ "summary": {
+  "cases": 230,
+  "scored": 219,
+  "exact": 205,
+  "lineAgreement": 0.967479674796748,
+  "meanAbsError": 0.0730593607305936,
+  "flagged": 8,
+  "autoCorrect": 205,
+  "autoUnder": 5,
+  "autoOver": 5,
+  "flagRecall": {
+   "should": 25,
+   "did": 8
+  },
+  "falseFlags": {
+   "shouldNot": 170,
+   "did": 0
+  },
+  "failed": 0,
+  "meanCostUsd": 0.000481321195652174,
+  "p50LatencyMs": 7089,
+  "p95LatencyMs": 13405,
+  "meanCompletionTokens": 431.7782608695652
+ },
+ "outcomes": [
+  {
+   "_tag": "Graded",
+   "caseId": "ar-1-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "∠A + ∠C = 180°\n74 + C = 180\nC = 180 − 74\n(circled) C = 106°",
+   "reason": "Correctly uses supplementary angles and finds angle C = 106°.",
+   "costUsd": 0.000362675,
+   "latencyMs": 5755,
+   "attempts": 1,
+   "promptTokens": 1930,
+   "completionTokens": 243
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-1-answer-only",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "C = 106° (circled)",
+   "reason": "The student gives the correct measure of angle C; the grading note awards full credit without work.",
+   "costUsd": 0.000374175,
+   "latencyMs": 9046,
+   "attempts": 1,
+   "promptTokens": 1930,
+   "completionTokens": 266
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-1-used-90",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Supplementary\nA + C = 90\n74 + C = 90\nC = 90 − 74\nC = 16° (circled)",
+   "reason": "Identifies the angles as supplementary but uses 90 instead of 180, giving an incorrect answer of 16°.",
+   "costUsd": 0.000388175,
+   "latencyMs": 10124,
+   "attempts": 1,
+   "promptTokens": 1930,
+   "completionTokens": 294
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-1-borrow-slip",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "A + C = 180\nC = 180 - 74\n180\n- 74\n———\n116\n[Boxed] ∠C = 116°\nDrawing: Two angles labeled A, B, E and C, D, F; the first angle is labeled 74°, and the second has an arc and a question mark.",
+   "reason": "The student correctly uses the supplementary-angle relationship but calculates and gives 116° instead of 106°.",
+   "costUsd": 0.000438175,
+   "latencyMs": 8014,
+   "attempts": 1,
+   "promptTokens": 1930,
+   "completionTokens": 394
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-1-overwritten-digit",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "A + C = 180\n180 - 74\n[C = 106 circled]",
+   "reason": "Correctly uses the supplementary-angle relationship and gives C = 106.",
+   "costUsd": 0.000352675,
+   "latencyMs": 8421,
+   "attempts": 1,
+   "promptTokens": 1930,
+   "completionTokens": 223
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2a-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "pair 1: ∠DCM and ∠DMC\n27 + 63 = 90\npair 2: ∠MGF and ∠GMF\n26 + 64 = 90\nDrawing: square CDFG, with M on DF and segments CM and GM. Labels show 27 at C, 63 and 64 at M, and 26 at G.",
+   "reason": "Both named pairs are different and each sums to 90°.",
+   "costUsd": 0.00044855,
+   "latencyMs": 7256,
+   "attempts": 1,
+   "promptTokens": 2141,
+   "completionTokens": 362
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2a-corner-pairs",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "corners of a square = 90\n∠MCG = 90 - 27 = 63\n∠CGM = 90 - 26 = 64\n1) ∠DCM + ∠MCG\n2) ∠MGF + ∠CGM\nSketch: quadrilateral labeled C, D, F, G, with M on side DF; segments CM and GM; right-angle marks at C and G; angle labels 27, 63, 64, 26.",
+   "reason": "Both listed pairs are valid complementary pairs; the student correctly derives the needed angles from the square's right angles.",
+   "costUsd": 0.00060355,
+   "latencyMs": 11336,
+   "attempts": 1,
+   "promptTokens": 2141,
+   "completionTokens": 672
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2a-measures-only",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "27° and 63°\n26° and 64°\nthey both add up to 90",
+   "reason": "The student gives two distinct pairs of angle measures and correctly states that both pairs sum to 90°.",
+   "costUsd": 0.00047205,
+   "latencyMs": 10025,
+   "attempts": 1,
+   "promptTokens": 2141,
+   "completionTokens": 409
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2a-wrong-vertex",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "∠CDM (27) + ∠CMD (63) = 90\n∠GMF (64) + ∠MGF (26) = 90",
+   "reason": "The GMF and MGF pair is correct; the first pair uses CDM, which is not an angle in the figure.",
+   "costUsd": 0.00045455,
+   "latencyMs": 6834,
+   "attempts": 1,
+   "promptTokens": 2141,
+   "completionTokens": 374
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2a-used-180",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "complementary = 180\n∠D and ∠F (90 + 90)\n∠C and ∠G (90 + 90)",
+   "reason": "The student identifies the square’s right angles but treats two 90° angles, totaling 180°, as complementary.",
+   "costUsd": 0.00046755,
+   "latencyMs": 9390,
+   "attempts": 1,
+   "promptTokens": 2141,
+   "completionTokens": 400
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2b-straight-angle",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "D, M, F are on a straight line\n∠DMC + ∠CMG + ∠GMF\n63 + 53 + 64 = 180\n∠CMG = 180 - 127 = 53\nDrawing: Square CDFG with M on side DF; segments CM and GM are drawn. The angles at M are labeled 63, 53, and 64.",
+   "reason": "The student correctly names three angles on a straight line and shows their measures sum to 180°.",
+   "costUsd": 0.00048405,
+   "latencyMs": 6026,
+   "attempts": 1,
+   "promptTokens": 2069,
+   "completionTokens": 451
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2b-triangle",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "triangle CDM\n∠DCM, ∠CDM, ∠DMC\n27 + 90 + 63 = 180\nDrawing: Triangle CDM, with a right angle marked at D and 27° at C and 63° at M.",
+   "reason": "The student correctly names all three angles of triangle CDM and shows their measures sum to 180°.",
+   "costUsd": 0.00040405,
+   "latencyMs": 5803,
+   "attempts": 1,
+   "promptTokens": 2069,
+   "completionTokens": 291
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2b-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no work)",
+   "reason": "No work is shown, so no valid set of three angles is named.",
+   "costUsd": 0.00031605,
+   "latencyMs": 3409,
+   "attempts": 1,
+   "promptTokens": 2069,
+   "completionTokens": 115
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2b-measures-only",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "63 + 64 = 127\n180 - 127 = 53\n(circled) 63, 53, 64",
+   "reason": "The calculations give three measures summing to 180°, but the answer does not name the angles.",
+   "costUsd": 0.00038905,
+   "latencyMs": 5198,
+   "attempts": 1,
+   "promptTokens": 2069,
+   "completionTokens": 261
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2b-wrong-vertex",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "∠DMC + ∠CMG + ∠MGF = 180\n63 + 53 + 64 = 180",
+   "reason": "The student correctly names three angles that sum to 180° and verifies their measures.",
+   "costUsd": 0.00036755,
+   "latencyMs": 4837,
+   "attempts": 1,
+   "promptTokens": 2069,
+   "completionTokens": 218
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-3-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "b = 42 (vertical angles)\nc + 42 = 180\nc = 180 - 42\nc = 138\n[circled] b = 42  c = 138\nDrawing: two intersecting lines labeled b° on the left, 42° on the right, and c° at the bottom, with angle arcs marked.",
+   "reason": "Correctly finds b using vertical angles and c using supplementary angles.",
+   "costUsd": 0.0004028,
+   "latencyMs": 9818,
+   "attempts": 1,
+   "promptTokens": 1911,
+   "completionTokens": 328
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-3-c-complementary",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "b = 42° vertical\nc = 90 - 42\n[c = 48° boxed]",
+   "reason": "Correctly finds b using vertical angles, but uses 90 instead of 180 to find c.",
+   "costUsd": 0.0003723,
+   "latencyMs": 8972,
+   "attempts": 1,
+   "promptTokens": 1911,
+   "completionTokens": 267
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-3-adjacent-as-vertical",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "c is across from 42\nso c = 42\nb and 42 make a line\nb = 180 - 42 = 138\n[oval] b = 138 c = 42\nDrawing: two intersecting lines; the right angle is labeled 42°, the left angle b°, and the bottom angle c°.",
+   "reason": "The student correctly identifies angle relationships but assigns them to the wrong angles, giving b = 138 and c = 42.",
+   "costUsd": 0.0004518,
+   "latencyMs": 10647,
+   "attempts": 1,
+   "promptTokens": 1911,
+   "completionTokens": 426
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-3-crossed-out-messy",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "b = 42\nc = 90 - 42 = 48 [crossed out]\nc = 180 - 42 = 138\nb = 42   c = 138",
+   "reason": "Correctly finds b = 42 and c = 138; the crossed-out attempt does not affect the answers.",
+   "costUsd": 0.0003998,
+   "latencyMs": 7454,
+   "attempts": 1,
+   "promptTokens": 1911,
+   "completionTokens": 322
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-3-two-answers",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": true,
+   "flagReason": "More than one answer: For c: 138 and 48.",
+   "read": "b = 42\nc = 180 - 42 = 138\nor c = 90 - 42 = 48\n[Diagram: two intersecting lines, labeled b°, 42°, and c°; an arc marks the bottom angle.]\nc = 48",
+   "reason": "The student correctly gives b = 42 and c = 138, but also leaves an incorrect answer of c = 48.",
+   "costUsd": 0.0004568,
+   "latencyMs": 10316,
+   "attempts": 1,
+   "promptTokens": 1911,
+   "completionTokens": 436
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-4-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "R + S = 90\n62 + S = 90\nS = 90 − 62\n[S = 28° boxed]\nDrawing: triangle QRS, right-angle marker at Q, angle R labeled 62°, and a question mark at angle S.",
+   "reason": "Uses the complementary-angle sum correctly and gives the correct measure for angle S.",
+   "costUsd": 0.00036355,
+   "latencyMs": 8533,
+   "attempts": 1,
+   "promptTokens": 1873,
+   "completionTokens": 259
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-4-answer-only",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "∠S = 28° (circled)",
+   "reason": "The student gives the correct measure, 28°; the grading note awards full credit without work.",
+   "costUsd": 0.00032955,
+   "latencyMs": 6783,
+   "attempts": 1,
+   "promptTokens": 1873,
+   "completionTokens": 191
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-4-used-180",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "R + S = 180\nS = 180 - 62\n[boxed] S = 118°",
+   "reason": "They treated complementary angles as summing to 180°, yielding 118° instead of 28°.",
+   "costUsd": 0.00039355,
+   "latencyMs": 7416,
+   "attempts": 1,
+   "promptTokens": 1873,
+   "completionTokens": 319
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-4-triangle-sum",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "triangle = 180\n90 + 62 = 152\n180 - 152 = 28\nS = 28\nDrawing: Triangle QRS, right angle marked at Q, 62° marked at R, S unlabeled.",
+   "reason": "The student correctly uses the triangle angle sum to find the remaining angle and states S = 28.",
+   "costUsd": 0.00047555,
+   "latencyMs": 9355,
+   "attempts": 1,
+   "promptTokens": 1873,
+   "completionTokens": 483
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-4-subtraction-slip",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "complementary = 90\n90 - 62 = 38\n∠S = 38 (circled)\nDrawing: Triangle QRS with a right-angle mark at Q, 62° marked at R, and 38° marked at S.",
+   "reason": "Uses the complementary-angle relationship and subtraction setup correctly, but gives 38° instead of 28°.",
+   "costUsd": 0.00041505,
+   "latencyMs": 7730,
+   "attempts": 1,
+   "promptTokens": 1873,
+   "completionTokens": 362
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-4-overwritten-digit",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Hard to read: In “S = 38,” the first digit is overwritten and could be 3 or 2: 38 or 28.",
+   "read": "90 - 62 = 38\nS = 38",
+   "reason": "Uses the complementary-angle subtraction setup, but the clearest reading of the final answer is 38, not 28.",
+   "costUsd": 0.00090905,
+   "latencyMs": 17991,
+   "attempts": 1,
+   "promptTokens": 1873,
+   "completionTokens": 1350
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-5-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "vertical angles are equal, so x and x\nsupplementary: x + x = 180\n2x = 180, x = 90\nyes, both are 90°\ncomplementary: x + x = 90\n2x = 90, x = 45\nyes it's possible, both are 45°",
+   "reason": "Correctly uses equal vertical angles and finds both angles are 90° when supplementary and 45° when complementary.",
+   "costUsd": 0.000423175,
+   "latencyMs": 7395,
+   "attempts": 1,
+   "promptTokens": 1954,
+   "completionTokens": 358
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-5-no-explanation",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "1) yes, 90°\n2) yes, 45°",
+   "reason": "The angle measures and possibility answers are correct, but the work does not show that vertical angles are equal.",
+   "costUsd": 0.000383175,
+   "latencyMs": 6125,
+   "attempts": 1,
+   "promptTokens": 1954,
+   "completionTokens": 278
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-5-complementary-impossible",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Vertical angles are the same size.\nIf they are supplementary they are both 90\nbecause 90 + 90 = 180\n\nNo, they can't be complementary.\nComplementary angles have to be next\nto each other to make a right angle\nand vertical angles are across.",
+   "reason": "The student correctly identifies equal vertical angles and the 90° supplementary pair, but incorrectly says they cannot be complementary.",
+   "costUsd": 0.000385675,
+   "latencyMs": 6533,
+   "attempts": 1,
+   "promptTokens": 1954,
+   "completionTokens": 283
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-5-idk",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "idk",
+   "reason": "The student wrote “idk” and did not answer any part of the problem.",
+   "costUsd": 0.000327675,
+   "latencyMs": 5219,
+   "attempts": 1,
+   "promptTokens": 1954,
+   "completionTokens": 167
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-5-forgot-halve",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "vertical = same angle\nsupplementary → yes they are 180\ncomplementary → yes they are 90",
+   "reason": "Recognizes vertical angles are equal, but gives incorrect measures for the supplementary and complementary cases.",
+   "costUsd": 0.000451675,
+   "latencyMs": 7918,
+   "attempts": 1,
+   "promptTokens": 1954,
+   "completionTokens": 415
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-5-drawings-only",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "1) Intersecting vertical and horizontal lines, with a right-angle mark; “90” in the upper-right angle and “90” in the lower-left angle; “yes” to the right.\n2) Two intersecting diagonal lines, with opposite left and right angles marked and labeled “45”; “yes” to the right.\n“45 + 45 = 90”",
+   "reason": "The student shows equal opposite angles, correctly gives 90° for the supplementary case, and 45° for the complementary case.",
+   "costUsd": 0.000516175,
+   "latencyMs": 7397,
+   "attempts": 1,
+   "promptTokens": 1954,
+   "completionTokens": 544
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-6-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "∠ACD = 90 so ∠DCB = 90 too\n53 + g = 90\ng = 90 - 53\n[circled] g = 37\nDrawing: intersecting segments labeled A, B, C, D, E, F; right angle marked at C, with angles labeled 53° and g°.",
+   "reason": "Correctly identifies the right angle, sets up the equation, and finds g = 37.",
+   "costUsd": 0.0004328,
+   "latencyMs": 6751,
+   "attempts": 1,
+   "promptTokens": 1963,
+   "completionTokens": 375
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-6-answer-only",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "g = 37°",
+   "reason": "The student gives the correct value, and the grading note awards full credit for a correct answer with no work.",
+   "costUsd": 0.0003328,
+   "latencyMs": 4220,
+   "attempts": 1,
+   "promptTokens": 1963,
+   "completionTokens": 175
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-6-used-180",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "53 + g = 180\n g = 180 - 53\n[circled] g = 127\nDrawing: Lines AB and FE cross at C; CD extends upward from C. Points A, B, C, D, E, and F are labeled. Angle ACD is marked as a right angle; DCE is labeled 53°; ECB is labeled g°.",
+   "reason": "The student identifies the 53° angle but uses 180° instead of the right angle’s 90°, giving an incorrect answer.",
+   "costUsd": 0.0004903,
+   "latencyMs": 8017,
+   "attempts": 1,
+   "promptTokens": 1963,
+   "completionTokens": 490
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-6-straight-line",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "[crossed out: illegible writing]\nA to B is a line = 180\n90 + 53 + g = 180\n143 + g = 180\ng = 37\nDrawing: lines labeled A–B, F–E, and C–D meet at C; a right angle is marked, with angles labeled 53° and g°.",
+   "reason": "The student correctly sets up the angle relationship and gives the correct value of g.",
+   "costUsd": 0.0004588,
+   "latencyMs": 7451,
+   "attempts": 1,
+   "promptTokens": 1963,
+   "completionTokens": 427
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-6-copied-problem",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "AB, EF, CD intersect at C\nACD is a right angle\ng = ?",
+   "reason": "The student restates the diagram facts but does not set up an equation or find g.",
+   "costUsd": 0.0003628,
+   "latencyMs": 6959,
+   "attempts": 1,
+   "promptTokens": 1963,
+   "completionTokens": 235
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-7-messy-diagram",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "1. x = 180 − 148 = 32 [crossed out]\n2. x + x + 148 = 180\n3. 2x = 32\n4. x = 32/2\n5. Boxed: x = 16\n6. Drawing: a straight line with two downward rays; the two outer angles are labeled x° and the middle angle is labeled 148°.",
+   "reason": "Correctly sets up the straight-angle equation and finds x = 16.",
+   "costUsd": 0.000498675,
+   "latencyMs": 9478,
+   "attempts": 1,
+   "promptTokens": 1934,
+   "completionTokens": 514
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-7-halve-difference",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "A to B is a straight line\n180 - 148 = 32\n2 x's share the 32\n32 ÷ 2 = 16\n[x = 16 boxed]\nDiagram: A, C, B on a horizontal line; rays from C to D and E; x° marked on both outer angles and 148° on the angle between the rays.",
+   "reason": "The student correctly finds the remaining 32° and divides it equally between the two x angles, giving x = 16.",
+   "costUsd": 0.000428675,
+   "latencyMs": 4907,
+   "attempts": 1,
+   "promptTokens": 1934,
+   "completionTokens": 374
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-7-forgot-second-x",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "x + 148 = 180\nx = 180 - 148\n[circled] x = 32\nDrawing: a horizontal line with two downward-slanting rays; the left and right angles are labeled x, and the middle angle is labeled 148°.",
+   "reason": "The student uses 180 − 148 but omits the second x and gives 32 instead of 16.",
+   "costUsd": 0.000410675,
+   "latencyMs": 5226,
+   "attempts": 1,
+   "promptTokens": 1934,
+   "completionTokens": 338
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-7-answer-only",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "x = 16°",
+   "reason": "The answer x = 16° is correct; the grading note awards full credit despite no shown work.",
+   "costUsd": 0.000336675,
+   "latencyMs": 4794,
+   "attempts": 1,
+   "promptTokens": 1934,
+   "completionTokens": 190
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-7-borrow-slip",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "x + 148 + x = 180\n2x + 148 = 180\n2x = 42\nx = 21\n180\n−148\n——\n42",
+   "reason": "The student correctly sets up the straight-angle equation but makes an arithmetic error and gives x = 21.",
+   "costUsd": 0.000371675,
+   "latencyMs": 6225,
+   "attempts": 1,
+   "promptTokens": 1934,
+   "completionTokens": 260
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-8-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "w = 43° [crossed out]\nw + 138 = 180\nw = 42\n19 + x + 42 = 90\n61 + x = 90\nx = 29 (circled)\nw = 42 (boxed)\nDrawing: ℓ vertical and m horizontal, with two interior rays labeled 19°, x°, and w°; a slanted line continues through the intersection, and the angle below m is labeled 138°.",
+   "reason": "Correctly finds w = 42 and uses the right-angle sum to find x = 29.",
+   "costUsd": 0.000599675,
+   "latencyMs": 7600,
+   "attempts": 1,
+   "promptTokens": 2066,
+   "completionTokens": 683
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-8-w-from-right-angle",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "138 = 90 + w\nw = 48\n19 + x + 48 = 90\n67 + x = 90\nx = 23\n[circled] x = 23, w = 48\nDiagram: vertical line labeled ℓ and horizontal line labeled m intersect. Three rays in the upper-right angle are labeled 19°, x°, and w°; the angle below the horizontal ray is labeled 138°.",
+   "reason": "The student correctly follows through from w = 48 to x = 23, but the value of w is incorrect.",
+   "costUsd": 0.000604675,
+   "latencyMs": 8700,
+   "attempts": 1,
+   "promptTokens": 2066,
+   "completionTokens": 693
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-8-x-used-180",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "w = 180 - 138 = 42\n19 + x + 42 = 180\nx = 180 - 61\n[circled] x = 119\nDrawing: Vertical line labeled ℓ meets horizontal line labeled m. Two rays in the upper-right region are labeled 19°, x°, and w°; a lower-left diagonal ray and an angle marked 138° are also shown.",
+   "reason": "The value of w is correct, but the student uses 180 instead of 90 for the three angles and gets an incorrect x.",
+   "costUsd": 0.000584675,
+   "latencyMs": 8397,
+   "attempts": 1,
+   "promptTokens": 2066,
+   "completionTokens": 653
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-8-borrow-slip",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "w = 180 - 138 = 42\nx + 19 + 42 = 90\nx + 61 = 90\nx = 39\n[circled] x = 39  w = 42",
+   "reason": "Correctly finds w and sets up the right-angle equation, but makes an arithmetic error and gives x = 39.",
+   "costUsd": 0.000423175,
+   "latencyMs": 3765,
+   "attempts": 1,
+   "promptTokens": 2066,
+   "completionTokens": 330
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-8-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no work)",
+   "reason": "No work or answers are shown.",
+   "costUsd": 0.000329175,
+   "latencyMs": 4804,
+   "attempts": 1,
+   "promptTokens": 2066,
+   "completionTokens": 142
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-8-overwritten-digit",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Hard to read: Final answer: 29 or 39 (the first digit is overwritten).",
+   "read": "w = 180 - 138 = 42\nx = 90 - 19 - 42\nx = 29",
+   "reason": "The student correctly finds w and uses the right-angle relationship to find x; the final digit is overwritten.",
+   "costUsd": 0.000608175,
+   "latencyMs": 8649,
+   "attempts": 1,
+   "promptTokens": 2066,
+   "completionTokens": 700
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-1-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "3(x − 4) = 12x\n3x − 12 = 12x\n−3x     −3x\n−12 = 9x\nx = −12/9\n[circled] x = −4/3",
+   "reason": "The distribution and final solution are both correct.",
+   "costUsd": 0.000358675,
+   "latencyMs": 4553,
+   "attempts": 1,
+   "promptTokens": 1874,
+   "completionTokens": 249
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-1-distribute-first-term",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "3(x-4) = 12x\n3x - 4 = 12x\n-4 = 9x\n[circled] x = -4/9",
+   "reason": "The distribution is incorrect, and the final answer is -4/9 rather than -4/3.",
+   "costUsd": 0.000438175,
+   "latencyMs": 5762,
+   "attempts": 1,
+   "promptTokens": 1874,
+   "completionTokens": 408
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-1-moved-without-sign",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "3x − 12 = 12x\n3x = 12x − 12\n−9x = −12\nx = −12/−9\n[boxed] x = 4/3",
+   "reason": "Correctly distributes, but gives the final answer as positive 4/3 instead of −4/3.",
+   "costUsd": 0.000352175,
+   "latencyMs": 4530,
+   "attempts": 1,
+   "promptTokens": 1874,
+   "completionTokens": 236
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-1-unsimplified-messy",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "3(x−4)=12x\n3x+12=12x\n−3x   −3x\n−12=9x\n÷9   ÷9\n[Boxed] x=−12/9",
+   "reason": "The boxed answer is correct, but the distribution uses +12 instead of −12.",
+   "costUsd": 0.000563175,
+   "latencyMs": 9265,
+   "attempts": 1,
+   "promptTokens": 1874,
+   "completionTokens": 658
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-1-answer-only",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "x = -4/3 (circled)",
+   "reason": "The final answer is correct, but the student did not show the distribution.",
+   "costUsd": 0.000403175,
+   "latencyMs": 20059,
+   "attempts": 1,
+   "promptTokens": 1874,
+   "completionTokens": 338
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-1-divide-by-3",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "3(x−4) = 12x\n÷3             ÷3\nx − 4 = 4x\n−4 = 3x\n[circled] x = −4/3\ncheck: 3(−16/3) = −16     12(−4/3) = −16",
+   "reason": "The final answer is correct, but the student does not write out the required distribution.",
+   "costUsd": 0.000516175,
+   "latencyMs": 12171,
+   "attempts": 1,
+   "promptTokens": 1874,
+   "completionTokens": 564
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-2-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "2(x+5) = 3x+1\n2x + 10 = 3x + 1\n10 = x + 1\nx = 9 (circled)\n\n3y - 4 = 6 - 2y\n5y - 4 = 6\n5y = 10\ny = 2 (boxed)\n\n3(n+2) = 9(6-n)\n3n + 6 = 54 - 9n\n12n + 6 = 54\n12n = 48\nn = 4 (boxed)",
+   "reason": "All three answers are correct and supported by correct intermediate steps.",
+   "costUsd": 0.00051805,
+   "latencyMs": 7678,
+   "attempts": 1,
+   "promptTokens": 1925,
+   "completionTokens": 555
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-2-answer-only",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "x = 9\ny = 2\nn = 4",
+   "reason": "All three answers are correct, but none has a supporting intermediate step, so they earn no credit under the grading notes.",
+   "costUsd": 0.00034505,
+   "latencyMs": 3764,
+   "attempts": 1,
+   "promptTokens": 1925,
+   "completionTokens": 209
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-2-distribute-first-term",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "2x + 5 = 3x + 1\n5 = x + 1\n(circled) x = 4\n\n3y - 4 = 6 - 2y\n+2y       +2y\n5y - 4 = 6\n5y = 10\n(boxed) y = 2\n\n3n + 2 = 54 - 9n\n12n + 2 = 54\n12n = 52\nn = 52/12\n(boxed) n = 13/3",
+   "reason": "The y solution is correct with supporting work; incorrect expansions lead to wrong answers for x and n.",
+   "costUsd": 0.00061455,
+   "latencyMs": 9885,
+   "attempts": 1,
+   "promptTokens": 1925,
+   "completionTokens": 748
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-2-sign-move",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "2x + 10 = 3x + 1\n10 - 1 = 3x - 2x\n[boxed] 9 = x\n\n3y - 4 = 6 - 2y\n3y - 2y = 6 + 4\n[boxed] y = 10\n\n3n + 6 = 54 - 9n\n3n + 9n = 54 - 6\n12n = 48\n[boxed] n = 4",
+   "reason": "The x and n solutions have correct supporting work; the y rearrangement is incorrect, giving the wrong answer.",
+   "costUsd": 0.00057455,
+   "latencyMs": 8549,
+   "attempts": 1,
+   "promptTokens": 1925,
+   "completionTokens": 668
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-2-messy-overwrite",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Hard to read: The final digit in “n =” is overwritten; it could be 4 or 9.",
+   "read": "2x + 10 = 3x + 1\nx = 9\n3y - 4 = 6 - 2y\n5y = 10\ny = 2\n3n + 6 = 54 - 9n\n12n = 48\nn = 4(?) (4 or 9)",
+   "reason": "All three solutions have correct supporting work; the final value for n is overwritten but reads as 4 on the best reading.",
+   "costUsd": 0.00084005,
+   "latencyMs": 13405,
+   "attempts": 1,
+   "promptTokens": 1925,
+   "completionTokens": 1199
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-3-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "1/9(2m-16) = 1/3(2m+4)\n× 9: 2m - 16 = 3(2m + 4)\n2m - 16 = 6m + 12\n-28 = 4m\nm = -7 (circled)\n\n-4(r+2) = 4(2-2r)\n-4r - 8 = 8 - 8r\n4r = 16\nr = 4 (circled)\n\n12(5+2y) = 4y-(6-9y)\n60 + 24y = 4y - 6 + 9y\n60 + 24y = 13y - 6\n11y = -66\ny = -6 (circled)\ncheck: 12(5-12) = -84\n-24 - (6 + 54) = -84",
+   "reason": "All three solutions are correct and each has supporting algebra; the y check is also correct.",
+   "costUsd": 0.000684675,
+   "latencyMs": 8543,
+   "attempts": 1,
+   "promptTokens": 1998,
+   "completionTokens": 870
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-3-distribute-fractions",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "2/9 m − 16/9 = 2/3 m + 4/3\n2/9 m − 16/9 = 6/9 m + 12/9\n−16/9 − 12/9 = 4/9 m\n−28/9 = 4/9 m\nm = −28/9 · 9/4\n[circled] m = −7\n\n−4r − 8 = 8 − 8r\n4r − 8 = 8\n4r = 16\n[circled] r = 4\n\n60 + 24y = 4y − 6 + 9y\n60 + 24y = 13y − 6\n11y = −66\n[boxed] y = −6",
+   "reason": "All three solutions are correct, and each has supporting algebraic work.",
+   "costUsd": 0.000598175,
+   "latencyMs": 7889,
+   "attempts": 1,
+   "promptTokens": 1998,
+   "completionTokens": 697
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-3-sign-error",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "1/9(2m − 16) = 1/3(2m + 4)\n2m − 16 = 6m + 12\n−28 = 4m\nm = −7 (circled)\n−4r − 8 = 8 − 8r\n4r = 16\nr = 4 (boxed)\n60 + 24y = 4y − 6 − 9y\n60 + 24y = −5y − 6\n29y = −66\ny = −66/29 (circled)",
+   "reason": "The m and r solutions have supporting work and are correct; the y solution is incorrect because the expansion and simplification are wrong.",
+   "costUsd": 0.000656675,
+   "latencyMs": 9359,
+   "attempts": 1,
+   "promptTokens": 1998,
+   "completionTokens": 814
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-3-partial-distribute",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "1/9(2m−16) = 1/3(2m+4)\n2m−16 = 3·2m+4\n2m−16 = 6m+4\n−20 = 4m\nm = −7 (circled)\n−4r+8 = 8−8r\n4r = 0\nr = 0 (circled)\n60+24y = 4y−6+9y\n60+24y = 13y−6\n11y = −66\ny = −6 (boxed)",
+   "reason": "The y solution is correctly worked; the m and r lines contain distribution errors and do not support their answers.",
+   "costUsd": 0.000842675,
+   "latencyMs": 14826,
+   "attempts": 1,
+   "promptTokens": 1998,
+   "completionTokens": 1186
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-3-checks-only",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "m = -7: 1/9(-30) = 1/3(-10)\n-10/3 = -10/3\nr = 4: -4(6) = 4(-6)\n-24 = -24\ny = -6: 12(-7) = -24 - 60\n-84 = -84",
+   "reason": "All three answers are correct, and each is supported by a correct substitution check.",
+   "costUsd": 0.000871675,
+   "latencyMs": 14261,
+   "attempts": 1,
+   "promptTokens": 1998,
+   "completionTokens": 1244
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-3-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no work)",
+   "reason": "No work or solutions are shown, so no points are earned.",
+   "costUsd": 0.000321675,
+   "latencyMs": 2493,
+   "attempts": 1,
+   "promptTokens": 1998,
+   "completionTokens": 144
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-4-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "2b + 8 - 5b + 3 = -13 + 8b - 5\n-3b + 11 = 8b - 18\n29 = 11b\nb = 29/11 (boxed)\n\n-3x + 15 = 15 + 18x - 12x\n-3x + 15 = 6x + 15\n-9x = 0\nx = 0 (boxed)\n\n2c - 3 = 2(6-c) + 7c\n2c - 3 = 12 - 2c + 7c\n2c - 3 = 5c + 12\n-15 = 3c\nc = -5 (circled)",
+   "reason": "All three equations are solved correctly, with supporting algebra shown for each.",
+   "costUsd": 0.000511175,
+   "latencyMs": 13189,
+   "attempts": 1,
+   "promptTokens": 2002,
+   "completionTokens": 522
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-4-unlike-and-distribute",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "-3b + 11 = 8b - 18\n29 = 5b\nb = 29/5 (circled)\n\n-3x + 15 = 18x + 15 - 12x\n-3x + 15 = 6x + 15\n-9x = 0\nx = 0 (circled)\n\n2c - 3 = 12 - c + 7c\n2c - 3 = 6c + 12\n-15 = 4c\nc = -15/4 (circled)",
+   "reason": "The x solution is correct with supporting work; the b and c answers are incorrect.",
+   "costUsd": 0.000555675,
+   "latencyMs": 8789,
+   "attempts": 1,
+   "promptTokens": 2002,
+   "completionTokens": 611
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-4-zero-no-solution",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Top left:\n-3b + 11 = 8b - 18\n11 + 18 = 8b + 3b\n29 = 11b\n[circled] b ≈ 2.64\n\nTop right:\n-3x + 15 = 6x + 15\n-9x = 0\n[boxed] no solution\n\nBottom left:\n2c - 3 = 12 - 2c + 7c\n2c - 3 = 5c + 12\n-3c = 15\n[boxed] c = -5",
+   "reason": "The b and c solutions are correct with work; the x work reaches -9x = 0, but the conclusion is incorrect.",
+   "costUsd": 0.000543675,
+   "latencyMs": 7269,
+   "attempts": 1,
+   "promptTokens": 2002,
+   "completionTokens": 587
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-4-mostly-answer-only",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "-3b + 11 = 8b - 18\n29 = 11b\n[boxed] b = 29/11\nx = 0\nc = -5",
+   "reason": "The b solution has correct supporting work; x and c are correct answers without work, so they earn no credit.",
+   "costUsd": 0.000436175,
+   "latencyMs": 5453,
+   "attempts": 1,
+   "promptTokens": 2002,
+   "completionTokens": 372
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-4-ambiguous-sign",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "-3b+11=8b-18\n29=11b\nb=29/11\n-3x+15=6x+15\n-9x=0\nx=0\n2c-3=12-2c+7c\n2c-3=5c+12\n-3c=15\nc=-5",
+   "reason": "All three equations are correctly simplified and solved, with supporting work.",
+   "costUsd": 0.000514675,
+   "latencyMs": 6257,
+   "attempts": 1,
+   "promptTokens": 2002,
+   "completionTokens": 529
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-5-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "-3w - 4 = w + 3\n-4 = 4w + 3\n-7 = 4w\n[circled] w = -7/4\n\n3(3-3x) = 2(x+3) - 30\n9 - 9x = 2x + 6 - 30\n9 - 9x = 2x - 24\n33 = 11x\n[circled] x = 3\n\n1/3(z+4) - 6 = 2/3(5-z)\n×3: z + 4 - 18 = 10 - 2z\nz - 14 = 10 - 2z\n3z = 24\n[boxed] z = 8\ncheck: 12/3 - 6 = -2\n2/3(-3) = -2",
+   "reason": "All three equations are solved correctly with supporting work.",
+   "costUsd": 0.000577925,
+   "latencyMs": 5752,
+   "attempts": 1,
+   "promptTokens": 2020,
+   "completionTokens": 651
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-5-forgot-6",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "-3w - 4 = w + 3\n-3w - w = 3 + 4\n-4w = 7\nw = -7/4 (boxed)\n\n9 - 9x = 2x + 6 - 30\n9 - 9x = 2x - 24\n33 = 11x\nx = 3 (boxed)\n\n1/3(z + 4) - 6 = 2/3(5 - z)\nz + 4 - 6 = 10 - 2z\nz - 2 = 10 - 2z\n3z = 12\nz = 4 (circled)",
+   "reason": "The w and x solutions are correct with work; the z solution incorrectly handles the -6 term and gives 4.",
+   "costUsd": 0.001113925,
+   "latencyMs": 17986,
+   "attempts": 1,
+   "promptTokens": 2020,
+   "completionTokens": 1723
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-5-sign-and-distribute",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "-3w - 4 = w + 3\n-2w - 4 = 3\n-2w = 7\nw = -7/2 (circled)\n\n9 - 3x = 2x + 6 - 30\n9 - 3x = 2x - 24\n33 = 5x\nx = 33/5 (circled)\n\nz + 4 - 18 = 10 - 2z\n3z - 14 = 10\n3z = 24\nz = 8 (boxed)",
+   "reason": "The z solution is correct with work; the w steps contain an algebra error, and the x expression is expanded incorrectly.",
+   "costUsd": 0.000711425,
+   "latencyMs": 10407,
+   "attempts": 1,
+   "promptTokens": 2020,
+   "completionTokens": 918
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-5-distribute-thirds",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "−3w − 4 = w + 3\n−4w = 7\nw = −1.75 (circled)\n\n9 − 9x = 2x − 24\n−11x = −33\nx = 3 (circled)\n\n⅓z + ⁴⁄₃ − 6 = ¹⁰⁄₃ − ²⁄₃z\n⅓z + ⅔z = ¹⁰⁄₃ − ⁴⁄₃ + 6\nz = 2 + 6\nz = 8 (boxed)",
+   "reason": "All three equations are solved correctly with supporting work; the checks are not scored separately.",
+   "costUsd": 0.000627425,
+   "latencyMs": 8301,
+   "attempts": 1,
+   "promptTokens": 2020,
+   "completionTokens": 750
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-5-near-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "-3w - 4 = w + 3\n???",
+   "reason": "The student copied the first equation but did not show any solving work or answers.",
+   "costUsd": 0.000422925,
+   "latencyMs": 6420,
+   "attempts": 1,
+   "promptTokens": 2020,
+   "completionTokens": 341
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-5-messy-crossed-out",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "-3w - 4 = w + 3\n-7 = 4w\n[w = -7/4, boxed]\n\n[9 - 9x = 2x + 3 - 30, crossed out]\n9 - 9x = 2x + 6 - 30\n33 = 11x\n[x = 3, boxed]\n\nz + 4 - 18 = 10 - 2z\n3z = 24\n[z = 8, boxed]",
+   "reason": "All three solutions are correct and supported by work; the crossed-out x line does not affect the correct solution that follows.",
+   "costUsd": 0.000635925,
+   "latencyMs": 8486,
+   "attempts": 1,
+   "promptTokens": 2020,
+   "completionTokens": 767
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-6-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "The mistake is going from\n-6x + 10 = 4x + 20 to 10 = -2x + 20\nHe did 4x - 6x. It should be 4x + 6x\n10 = 10x + 20\n-10 = 10x\n(circled) x = -1",
+   "reason": "Correctly identifies the sign error and gives the correct solution, x = -1.",
+   "costUsd": 0.00043105,
+   "latencyMs": 4428,
+   "attempts": 1,
+   "promptTokens": 2109,
+   "completionTokens": 335
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-6-resolved-no-step",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "-2(3x - 5) = 4(x + 3) + 8\n-6x + 10 = 4x + 12 + 8\n-6x + 10 = 4x + 20\n10 = 10x + 20\n-10 = 10x\nx = -1 (circled)\nthe answer is -1 not 5",
+   "reason": "The student shows the incorrect step should produce 10 = 10x + 20 and gives the correct solution x = -1.",
+   "costUsd": 0.00058655,
+   "latencyMs": 8375,
+   "attempts": 1,
+   "promptTokens": 2109,
+   "completionTokens": 646
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-6-wrong-step",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "this mistake is the first step.\n-2 times -5 is -10\n-6x - 10 = 4x + 20\n-10 = 10x + 20\n-30 = 10x\n[x boxed] x = -3",
+   "reason": "The student identifies a distribution-sign error, but not the specified equation step, and gives x = −3 instead of x = −1.",
+   "costUsd": 0.00047205,
+   "latencyMs": 5297,
+   "attempts": 1,
+   "promptTokens": 2109,
+   "completionTokens": 417
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-6-right-step-slip",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Mistake: line 3 to line 4\n4x + 6x = 10x not -2x\n10 = 10x + 20\n10 + 20 = 10x\n30 = 10x\n[circled] x = 3",
+   "reason": "Correctly identifies the mistake, but gives x = 3 instead of x = −1.",
+   "costUsd": 0.00044505,
+   "latencyMs": 5558,
+   "attempts": 1,
+   "promptTokens": 2109,
+   "completionTokens": 363
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-6-near-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "he did something wrong\n2\n?",
+   "reason": "The student notes that something went wrong but does not identify the mistake or give the solution.",
+   "costUsd": 0.00049855,
+   "latencyMs": 8585,
+   "attempts": 1,
+   "promptTokens": 2109,
+   "completionTokens": 470
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-6-messy-annotated",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "−6x + 10 = 4x + 20\n[circled] 10 = −2x + 20 → should be +6x so 10x\n10 = 10x + 20\n−10 = 10x\n[circled] x = −1",
+   "reason": "Correctly identifies the mistaken step and gives the correct solution, x = −1.",
+   "costUsd": 0.00041905,
+   "latencyMs": 5013,
+   "attempts": 1,
+   "promptTokens": 2109,
+   "completionTokens": 311
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-7-correct-both",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Line 2 is wrong. 12 · 5 = 60 not 72\nand -(5 - 9y) = -5 + 9y\n60 + 24y = 4y - 5 + 9y\n60 + 24y = 13y - 5\n11y = -65\n[y = -65/11 boxed]",
+   "reason": "Correctly identifies the distribution errors and gives the correct solution, y = -65/11.",
+   "costUsd": 0.00045755,
+   "latencyMs": 4757,
+   "attempts": 1,
+   "promptTokens": 2109,
+   "completionTokens": 388
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-7-fixed-72-only",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "She did 12 × 5 wrong, it's 60\n60 + 24y = 4y − 5 − 9y\n60 + 24y = −5y − 5\n29y = −65\n[boxed] y = −65/29",
+   "reason": "Correctly identifies the multiplication error, but gives an incorrect solution because the sign of 9y was also mishandled.",
+   "costUsd": 0.00042155,
+   "latencyMs": 6121,
+   "attempts": 1,
+   "promptTokens": 2109,
+   "completionTokens": 316
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-7-fixed-sign-only",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "The minus goes to both: −(5 − 9y) = −5 + 9y\n72 + 24y = 4y − 5 + 9y\n72 + 24y = 13y − 5\n11y = −77\n[boxed] y = −7",
+   "reason": "Correctly identifies the sign error when distributing the minus, but gives y = −7 instead of the correct solution.",
+   "costUsd": 0.00044405,
+   "latencyMs": 5428,
+   "attempts": 1,
+   "promptTokens": 2109,
+   "completionTokens": 361
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-7-decimal",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "12 · 5 is 60 not 72!\n60 + 24y = 13y − 5\n11y = −65\ny = −65 ÷ 11\n[circled] y ≈ −5.91\n65 ÷ 11 = 5.909",
+   "reason": "Correctly identifies the multiplication error and gives the correct solution as a quotient and approximation.",
+   "costUsd": 0.00071505,
+   "latencyMs": 12736,
+   "attempts": 1,
+   "promptTokens": 2109,
+   "completionTokens": 903
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-7-two-answers",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": true,
+   "flagReason": "More than one answer: The student gives y = -65/29 and y = -65/11 as answers to the same equation; neither is crossed out.",
+   "read": "12(5) = 60\n60 + 24y = 4y - 5 - 9y\n29y = -65\n[y = -65/29 boxed]\nor 4y - 5 + 9y = 13y - 5\n60 + 24y = 13y - 5\n11y = -65\n[y = -65/11 boxed]",
+   "reason": "The student identifies both distribution errors and gives the correct solution, but also leaves a different boxed answer.",
+   "costUsd": 0.00060105,
+   "latencyMs": 9486,
+   "attempts": 1,
+   "promptTokens": 2109,
+   "completionTokens": 675
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-7-crossed-out-thin",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "[crossed out] the mistake is 29y = -77\nthe mistake is in the 2nd line\n60 + 24y = 4y - 5 + 9y\n60 + 24y = 13y - 5\n11y = -65\n[boxed] y = -65/11",
+   "reason": "Identifies the second-line mistake, shows the corrected equation, and gives the correct solution.",
+   "costUsd": 0.00053505,
+   "latencyMs": 7703,
+   "attempts": 1,
+   "promptTokens": 2109,
+   "completionTokens": 543
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-8-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "No, I disagree with Elena.\n9x + 15 = 3x + 15\n6x + 15 = 15\n6x = 0\n[x = 0 boxed]\ncheck: 9(0) + 15 = 15 and 3(0) + 15 = 15\nso x = 0 is a solution",
+   "reason": "The student disagrees with Elena and correctly solves and checks that x = 0 is a solution.",
+   "costUsd": 0.000377425,
+   "latencyMs": 5089,
+   "attempts": 1,
+   "promptTokens": 1932,
+   "completionTokens": 272
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-8-agrees",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Yes I agree. 9x is always bigger\nthan 3x so 9x + 15 can never\nequal 3x + 15.",
+   "reason": "The student agrees with Elena and does not show that x = 0 is a solution.",
+   "costUsd": 0.000369925,
+   "latencyMs": 4560,
+   "attempts": 1,
+   "promptTokens": 1932,
+   "completionTokens": 257
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-8-no-reason",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "No. Elena is wrong",
+   "reason": "The student correctly disagrees with Elena but does not show that x = 0 is a solution.",
+   "costUsd": 0.000320925,
+   "latencyMs": 4686,
+   "attempts": 1,
+   "promptTokens": 1932,
+   "completionTokens": 159
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-8-negative-example",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "No. 9x is not always bigger than 3x.\nif x = -1 9(-1) = -9 and 3(-1) = -3\n-3 is bigger than -9\nso she is wrong",
+   "reason": "The student disagrees with Elena and correctly compares the expressions at x = -1, but does not show that x = 0 is a solution.",
+   "costUsd": 0.000434425,
+   "latencyMs": 7144,
+   "attempts": 1,
+   "promptTokens": 1932,
+   "completionTokens": 386
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-8-partly-agrees",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "kind of. 9x is bigger if x is positive\nbut if x = 0:\n9(0) + 15 = 15\n3(0) + 15 = 15\nso it has 1 solution, x = 0",
+   "reason": "The student rejects Elena’s claim and verifies that x = 0 makes both sides equal.",
+   "costUsd": 0.000413925,
+   "latencyMs": 4353,
+   "attempts": 1,
+   "promptTokens": 1932,
+   "completionTokens": 345
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-8-messy-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "no!! x = 0 works\n9·0 + 15 = 15\n3·0 + 15 = 15\nboth 15",
+   "reason": "Disagrees with Elena and correctly shows that x = 0 makes both sides equal 15.",
+   "costUsd": 0.000365925,
+   "latencyMs": 5162,
+   "attempts": 1,
+   "promptTokens": 1932,
+   "completionTokens": 249
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-1-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "58 - 25 = 33\n3 more pizzas cost $33\n33 ÷ 3 = $11 per pizza\nfee: 25 - 2(11) = 25 - 22 = $3\n11n + 3 = 80\n11n = 77\nn = 7\n[boxed] 7 pizzas",
+   "reason": "Correctly finds the $11 pizza price, $3 delivery fee, and 7-pizza answer.",
+   "costUsd": 0.000489425,
+   "latencyMs": 5745,
+   "attempts": 1,
+   "promptTokens": 1940,
+   "completionTokens": 494
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-1-table",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "pizzas | cost\n2 | 25\n3 | 36\n4 | 47\n5 | 58\n6 | 69\n7 | 80\n\nGoes up $11 each pizza\n1 pizza = 11\n\nfee: 25 − 2·11 = 3\nso fee is $3\n\n(circled) 7 pizzas",
+   "reason": "The student identifies the $11 price per pizza and $3 delivery fee, then correctly gives 7 pizzas for $80.",
+   "costUsd": 0.000898925,
+   "latencyMs": 18706,
+   "attempts": 1,
+   "promptTokens": 1940,
+   "completionTokens": 1313
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-1-per-pizza",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "25 ÷ 2 = 12.50 for each pizza\n80 ÷ 12.50 = 6.4\n[boxed] about 6 pizzas",
+   "reason": "The student divides total cost by pizza count, so neither the unit price nor delivery fee is isolated, and the final estimate is incorrect.",
+   "costUsd": 0.000418425,
+   "latencyMs": 7333,
+   "attempts": 1,
+   "promptTokens": 1940,
+   "completionTokens": 352
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-1-fee-one-pizza",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "58 - 25 = 33\n33 ÷ 3 = $11 each\nfee: 25 - 11 = $14\n11p + 14 = 80\n11p = 66\np = 6\n[boxed] 6 pizzas",
+   "reason": "Correctly finds $11 per pizza and follows through to 6 using their fee, but the fee should be $3.",
+   "costUsd": 0.000470925,
+   "latencyMs": 7578,
+   "attempts": 1,
+   "promptTokens": 1940,
+   "completionTokens": 457
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-1-answer-only",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "[boxed] 7 Pizzas",
+   "reason": "The student gave the correct answer of 7 pizzas but showed no work for the price or delivery fee.",
+   "costUsd": 0.000367425,
+   "latencyMs": 5794,
+   "attempts": 1,
+   "promptTokens": 1940,
+   "completionTokens": 250
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-1-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no work)",
+   "reason": "The board is blank, so no price, delivery fee, or pizza count is provided.",
+   "costUsd": 0.000314425,
+   "latencyMs": 4473,
+   "attempts": 1,
+   "promptTokens": 1940,
+   "completionTokens": 144
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-2a-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "12 ÷ 2 = 6 cups sugar each\nLin: 2 sugar → 1 flour\n6 × 1/2 = 3 cups flour (circled)\nNoah: 3 sugar → 2 flour\n6 × 2/3 = 4 cups flour (circled)",
+   "reason": "Correctly divides the sugar evenly and calculates the flour needed for both recipes.",
+   "costUsd": 0.000404675,
+   "latencyMs": 6495,
+   "attempts": 1,
+   "promptTokens": 2046,
+   "completionTokens": 298
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-2a-table",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "each gets 6 cups sugar\n\nNoah\nsugar | flour\n1 1/2 | 1\n3 | 2\n4 1/2 | 3\n6 | 4\n\nLin\nsugar | flour\n2 | 1\n4 | 2\n6 | 3\n\nLin 3 cups flour, Noah 4 cups flour",
+   "reason": "The student correctly finds 3 cups of flour for Lin and 4 cups for Noah.",
+   "costUsd": 0.000457675,
+   "latencyMs": 5317,
+   "attempts": 1,
+   "promptTokens": 2046,
+   "completionTokens": 404
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-2a-flipped-lin",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "6 cups of sugar each\nLin: 2 flour for every 1 sugar\n6 × 2 = 12 cups flour\nNoah: 3 sugar uses 2 flour\n6 ÷ 3 = 2, 2 × 2 = 4 cups flour\nLin 12, Noah 4",
+   "reason": "Noah’s amount is correct; Lin’s flour ratio and resulting amount are incorrect.",
+   "costUsd": 0.000435175,
+   "latencyMs": 4648,
+   "attempts": 1,
+   "promptTokens": 2046,
+   "completionTokens": 359
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-2a-whole-bag",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Lin: 12 × 1/2 = 6 cups flour\nNoah: 12 × 2/3 = 8 cups flour",
+   "reason": "The student uses 12 cups of sugar instead of 6, so both flour amounts are incorrect.",
+   "costUsd": 0.000392175,
+   "latencyMs": 4335,
+   "attempts": 1,
+   "promptTokens": 2046,
+   "completionTokens": 273
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-2a-near-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "12 ÷ 2 = 6\nLin ?",
+   "reason": "Correctly divides the sugar evenly, but does not give either flour amount.",
+   "costUsd": 0.000367175,
+   "latencyMs": 4941,
+   "attempts": 1,
+   "promptTokens": 2046,
+   "completionTokens": 223
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-2b-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "10 ÷ 2 = 5 cups flour each\nLin: 1 flour → 2 sugar\n5 × 2 = 10\nNoah: 1 flour → 1.5 sugar\n5 × 1.5 = 7.5\n[boxed] Lin 10 cups, Noah 7.5 cups",
+   "reason": "Correctly divides the flour evenly and calculates both recipes’ sugar amounts.",
+   "costUsd": 0.000430175,
+   "latencyMs": 4718,
+   "attempts": 1,
+   "promptTokens": 2074,
+   "completionTokens": 342
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-2b-flipped",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "5 cups flour each\nLin: 5 × 1/2 = 2.5 cups sugar\nNoah: 5 × 2/3 = 3 1/3 cups sugar",
+   "reason": "Correctly states that each gets 5 cups of flour, but gives incorrect sugar amounts for both recipes.",
+   "costUsd": 0.000391175,
+   "latencyMs": 4835,
+   "attempts": 1,
+   "promptTokens": 2074,
+   "completionTokens": 264
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-2b-fraction",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "5 flour each\nLin 5 · 2 = 10\nNoah 5 · 3/2 = 15/2\nLin 10 sugar, Noah 15/2 sugar",
+   "reason": "Correctly gives Lin 10 cups of sugar and Noah 15/2 cups of sugar.",
+   "costUsd": 0.000396675,
+   "latencyMs": 4165,
+   "attempts": 1,
+   "promptTokens": 2074,
+   "completionTokens": 275
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-2b-overwrite",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "each 5 flour\nLin 5 × 2 = 10\nNoah 5 × 1.5 =\nNoah: 7.5",
+   "reason": "Correctly gives 10 cups of sugar for Lin and 7.5 for Noah.",
+   "costUsd": 0.000571175,
+   "latencyMs": 10668,
+   "attempts": 1,
+   "promptTokens": 2074,
+   "completionTokens": 624
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3a-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "20 hrs: 500 + 50·20 = 500 + 1000 = $1500\n50 hrs: 500 + 50·50 = 500 + 2500 = $3000",
+   "reason": "Both calculations and charges are correct.",
+   "costUsd": 0.00033205,
+   "latencyMs": 3838,
+   "attempts": 1,
+   "promptTokens": 1917,
+   "completionTokens": 185
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3a-forgot-flat-rate",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "20 hours: 50 × 20 = $1000\n50 hours: 50 × 50 = $2500",
+   "reason": "The hourly charges are calculated correctly, but the $500 flat supply fee is missing from both answers.",
+   "costUsd": 0.00034105,
+   "latencyMs": 5478,
+   "attempts": 1,
+   "promptTokens": 1917,
+   "completionTokens": 203
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3a-fee-every-hour",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "500 + 50 = 550 an hour\n20 hr: 550 × 20 = 11,000\n50 hr: 550 × 50 = 27,500",
+   "reason": "The student combines the flat rate and hourly charge as 550 per hour, so both totals are incorrect.",
+   "costUsd": 0.00039655,
+   "latencyMs": 5612,
+   "attempts": 1,
+   "promptTokens": 1917,
+   "completionTokens": 314
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3a-answer-only",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Circled $1500 and boxed $3000, with “and” between them.",
+   "reason": "Both costs are correct: $1,500 for 20 hours and $3,000 for 50 hours.",
+   "costUsd": 0.00037805,
+   "latencyMs": 5111,
+   "attempts": 1,
+   "promptTokens": 1917,
+   "completionTokens": 277
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3a-one-wrong",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "500 + 50(20) = 500 + 1000 = 1500\n500 + 50(50) = 500 + 250 = 750",
+   "reason": "The 20-hour charge is correct; the 50-hour calculation and charge are incorrect.",
+   "costUsd": 0.00035005,
+   "latencyMs": 3708,
+   "attempts": 1,
+   "promptTokens": 1917,
+   "completionTokens": 221
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3b-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Graph with vertical axis labeled “cost ($)” and horizontal axis labeled “hours”; ticks shown from 0 to 4000 and 0 to 60. A straight rising line crosses the vertical axis at about 500 and passes through plotted, labeled points (20, 1500) and (50, 3000).",
+   "reason": "The two points are plotted and labeled correctly, and a straight line through them reaches the vertical axis at 500.",
+   "costUsd": 0.000548425,
+   "latencyMs": 6121,
+   "attempts": 1,
+   "promptTokens": 3112,
+   "completionTokens": 319
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3b-ft-forgot-fee",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Graph: vertical axis labeled “cost,” marked 0, 500, 1000, 1500, 2000, 2500, 3000; horizontal axis labeled “hours,” marked 0, 10, 20, 30, 40, 50, 60. A straight rising line runs from (0, 0) to about (60, 3000). Marked and labeled points: (20, 1000) and (50, 2500).",
+   "reason": "The graph correctly plots, connects, and labels both points from the student's earlier answers.",
+   "costUsd": 0.000728425,
+   "latencyMs": 9339,
+   "attempts": 1,
+   "promptTokens": 3112,
+   "completionTokens": 679
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3b-misses-points",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Vertical axis labeled “cost,” with 0, 1000, 2000, 3000, 4000; horizontal axis labeled “hours,” with 0, 10, 20, 30, 40, 50, 60. Two plotted and labeled points: (20, 1000) and (50, 2500). A straight rising line crosses the vertical axis at 500 and does not pass through the plotted points. Written beside the graph: “starts at 500”.",
+   "reason": "The student plots and labels their earlier values and draws a line starting at 500, but the line does not pass through those points.",
+   "costUsd": 0.000839425,
+   "latencyMs": 11137,
+   "attempts": 1,
+   "promptTokens": 3112,
+   "completionTokens": 901
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3b-ft-fee-every-hour",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "y-axis labeled “$”, with marks 5000, 10000, 15000, 20000, 25000, 30000.\nx-axis labeled “hours”, with marks 0, 10, 20, 30, 40, 50, 60.\nA straight rising line from the origin, through two plotted points and continuing above them.\nPoint labeled “(20,11000)”.\nPoint labeled “(50,27500)”",
+   "reason": "They plotted and labeled both their part-a values and drew a straight line through them, though it starts at zero.",
+   "costUsd": 0.000816925,
+   "latencyMs": 15426,
+   "attempts": 1,
+   "promptTokens": 3112,
+   "completionTokens": 856
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3b-unlabeled",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Graph: vertical axis labeled “dolars,” marked 0, 1000, 2000, 3000, 4000; horizontal axis labeled “hours,” marked 0, 10, 20, 30, 40, 50, 60. Two plotted points, approximately (20, 1500) and (50, 3000). A straight rising line passes through both points and meets the vertical axis at approximately 500.",
+   "reason": "The graph has the correct points and line, but the two points are not labeled.",
+   "costUsd": 0.000735425,
+   "latencyMs": 15385,
+   "attempts": 1,
+   "promptTokens": 3112,
+   "completionTokens": 693
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3b-axes-only",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Graph with vertical axis labeled “cost” and tick labels 0, 1000, 2000, 3000, 4000; horizontal axis labeled “hours” and tick labels 0, 10, 20, 30, 40, 50, 60. A “?” is drawn near (30, 2200). No points or line.",
+   "reason": "The axes are labeled, but the student did not plot or label the points or draw the relationship line.",
+   "costUsd": 0.000684925,
+   "latencyMs": 8188,
+   "attempts": 1,
+   "promptTokens": 3112,
+   "completionTokens": 592
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3c-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "slope = (3000 - 1500)/(50 - 20) = 1500/30 = 50\nThe cost goes up $50 for\nevery hour of labor.",
+   "reason": "Correctly calculates a slope of 50 and explains it as a $50 increase per hour of labor.",
+   "costUsd": 0.000504425,
+   "latencyMs": 4167,
+   "attempts": 1,
+   "promptTokens": 3000,
+   "completionTokens": 259
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3c-total-over-hours",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "3000 ÷ 50 = 60\nslope is 60\nit costs $60 for each hour",
+   "reason": "The student gives a per-hour meaning, but both the stated slope and rate disagree with the slope of 50 on their graph.",
+   "costUsd": 0.000675925,
+   "latencyMs": 8257,
+   "attempts": 1,
+   "promptTokens": 3000,
+   "completionTokens": 602
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3c-cost-only",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "rise = 1500 run = 30\n1500 / 30 = 50\nslope = 50, it's the cost",
+   "reason": "The student correctly finds the slope as 50 but does not explain that it represents $50 per hour of labor.",
+   "costUsd": 0.000498925,
+   "latencyMs": 4109,
+   "attempts": 1,
+   "promptTokens": 3000,
+   "completionTokens": 248
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3c-ft-fee-every-hour",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(27500 - 11000) / (50 - 20) = 16500 / 30 = 550\nslope = 550\n$550 more for each hour",
+   "reason": "The student correctly finds the slope of their own line and explains it as a per-hour cost increase.",
+   "costUsd": 0.000601425,
+   "latencyMs": 7336,
+   "attempts": 1,
+   "promptTokens": 3000,
+   "completionTokens": 453
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3c-ft-slip",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "1. (27500 - 11000) / (50 - 20) = 16500 / 30 = 55\n2. slope = 55\n3. it is the cost of painting",
+   "reason": "The student calculates 55, not the slope 550 of their graph, and only says it is the cost of painting, not a per-hour rate.",
+   "costUsd": 0.000828425,
+   "latencyMs": 11313,
+   "attempts": 1,
+   "promptTokens": 3000,
+   "completionTokens": 907
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3c-overwrite",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(2500 - 1000) / (50 - 20) = 1500 / 30\nslope = 30\neach hour costs that many\nmore dollars",
+   "reason": "The student describes a per-hour cost increase but gives a slope of 30 instead of 50.",
+   "costUsd": 0.000641925,
+   "latencyMs": 9706,
+   "attempts": 1,
+   "promptTokens": 3000,
+   "completionTokens": 534
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-4-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "m = (7 - 5)/(6 - 2) = 2/4 = 1/2\n y = mx + b\n 5 = 1/2(2) + b\n 5 = 1 + b\n b = 4\n[boxed] y = 1/2 x + 4",
+   "reason": "The student correctly finds the slope and intercept and writes the correct line equation.",
+   "costUsd": 0.000422425,
+   "latencyMs": 6965,
+   "attempts": 1,
+   "promptTokens": 1980,
+   "completionTokens": 350
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-4-point-slope",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "slope = (7 - 5)/(6 - 2) = 2/4 = 1/2\nuse point (6, 7)\ny - 7 = 1/2(x - 6) [circled]",
+   "reason": "The slope is correct, and the student gives an equivalent point-slope equation through (6, 7).",
+   "costUsd": 0.000487925,
+   "latencyMs": 6564,
+   "attempts": 1,
+   "promptTokens": 1980,
+   "completionTokens": 481
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-4-run-over-rise",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "slope = (6 − 2)/(7 − 5) = 4/2 = 2\n5 = 2(2) + b\n5 = 4 + b\nb = 1\n[circled] y = 2x + 1",
+   "reason": "The intercept is correct for the student's slope, but the slope and final equation are incorrect for the given points.",
+   "costUsd": 0.000536925,
+   "latencyMs": 6987,
+   "attempts": 1,
+   "promptTokens": 1980,
+   "completionTokens": 579
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-4-b-is-5",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "slope = 2/4 = 1/2\nstarts at 5\n[circled] y = 1/2x + 5",
+   "reason": "The slope is correct, but the student uses 5 instead of 4 as the intercept, so the equation is incorrect.",
+   "costUsd": 0.000409925,
+   "latencyMs": 4055,
+   "attempts": 1,
+   "promptTokens": 1980,
+   "completionTokens": 325
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-4-crossed",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "m = 1/2 = 2 [crossed out]\nm = (7 − 5)/(6 − 2) = 1/2\n7 = 1/2(6) + b\n7 = 3 + b\nb = 4\n[circled] y = .5x + 4",
+   "reason": "The student correctly finds the slope and intercept, then writes an equivalent equation of the line.",
+   "costUsd": 0.000607925,
+   "latencyMs": 10632,
+   "attempts": 1,
+   "promptTokens": 1980,
+   "completionTokens": 721
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5a-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Tyler: graph at 10 min is 1.2 mi\nElena: 10 = 8.5x\nx = 10 ÷ 8.5 ≈ 1.18 mi\nTyler ran farther\n1.2 − 1.18 = 0.02 mi farther",
+   "reason": "Correctly finds both distances, identifies Tyler as farther, and gives a difference of 0.02 mile.",
+   "costUsd": 0.0004533,
+   "latencyMs": 5439,
+   "attempts": 1,
+   "promptTokens": 2207,
+   "completionTokens": 355
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5a-elena-85",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Elena: y = 8.5(10) = 85\nTyler: 1.2\nElena ran way farther\n85 - 1.2 = 83.8",
+   "reason": "Tyler’s distance is read correctly, but the student chooses the wrong runner and does not find Elena’s distance or the distance difference.",
+   "costUsd": 0.0004443,
+   "latencyMs": 5086,
+   "attempts": 1,
+   "promptTokens": 2207,
+   "completionTokens": 337
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5a-no-difference",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Tyler: 1.2 miles (graph)\nElena: 10 ÷ 8.5 = 1.18 miles\n[Tyler boxed] because 1.2 > 1.18",
+   "reason": "Correctly identifies Tyler and gives both distances, but does not state how much farther he ran.",
+   "costUsd": 0.0004373,
+   "latencyMs": 6679,
+   "attempts": 1,
+   "promptTokens": 2207,
+   "completionTokens": 323
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5a-compares-time",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Tyler goes 1.2 mi in 10 min\nElena: 8.5 x 1.2 = 10.2 min for 1.2 mi\nso Elena is slower, Tyler ran farther\nTyler is ahead by 0.2 minutes",
+   "reason": "Correctly identifies Tyler as farther and gives his distance, but does not find Elena’s distance or the difference in miles.",
+   "costUsd": 0.0004758,
+   "latencyMs": 7210,
+   "attempts": 1,
+   "promptTokens": 2207,
+   "completionTokens": 400
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5a-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no work)",
+   "reason": "No work is shown, so no runner, distances, or difference are provided.",
+   "costUsd": 0.0003498,
+   "latencyMs": 7192,
+   "attempts": 1,
+   "promptTokens": 2207,
+   "completionTokens": 148
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5b-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Tyler: 10 min ÷ 1.2 mi = 8.33\nmin per mile\nElena: y = 8.5x so 8.5 min per mile",
+   "reason": "Both runners’ paces are correct: Tyler’s is about 8.33 minutes per mile and Elena’s is 8.5 minutes per mile.",
+   "costUsd": 0.000391925,
+   "latencyMs": 5647,
+   "attempts": 1,
+   "promptTokens": 2032,
+   "completionTokens": 276
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5b-mi-per-min",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Tyler 1.2 ÷ 10 = 0.12\nElena 1 ÷ 8.5 = 0.118\nTyler: 0.12 mi per min\nElena: 0.118 mi per min",
+   "reason": "They calculate rates in miles per minute, but the question asks for pace in minutes per mile.",
+   "costUsd": 0.000465925,
+   "latencyMs": 6161,
+   "attempts": 1,
+   "promptTokens": 2032,
+   "completionTokens": 424
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5b-misread-graph",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Tyler: at 1.4 miles about 12 min\n12 ÷ 1.4 = 8.57 min/mile\nElena: 8.5 min/mile",
+   "reason": "Elena’s pace is correct; Tyler’s is not, because the graph-based calculation uses incorrect values.",
+   "costUsd": 0.000436925,
+   "latencyMs": 6219,
+   "attempts": 1,
+   "promptTokens": 2032,
+   "completionTokens": 366
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5b-tyler-times",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Tyler 10 × 1.2 = 12 min/mi\nElena 8.5 min/mi",
+   "reason": "Elena’s pace is correct; Tyler’s calculation multiplies instead of finding minutes per mile.",
+   "costUsd": 0.000385425,
+   "latencyMs": 7310,
+   "attempts": 1,
+   "promptTokens": 2032,
+   "completionTokens": 263
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5c-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Tyler ran faster\n8.33 < 8.5 so he takes less time\nto run each mile",
+   "reason": "Correctly chooses Tyler because his pace is lower and he takes less time per mile.",
+   "costUsd": 0.000521175,
+   "latencyMs": 9166,
+   "attempts": 1,
+   "promptTokens": 3106,
+   "completionTokens": 266
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5c-bigger-faster",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Elena, because 8.5 is bigger\nthan 8.33 so her pace is faster",
+   "reason": "The student compares the paces but chooses Elena and incorrectly says a larger number of minutes per mile is faster.",
+   "costUsd": 0.000535175,
+   "latencyMs": 8974,
+   "attempts": 1,
+   "promptTokens": 3106,
+   "completionTokens": 294
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5c-ft-misread",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Elena is faster\nher pace 8.5 is less than Tyler's 8.57\nless minutes each mile = faster",
+   "reason": "The student correctly identifies Elena as faster based on her lower pace and explains that fewer minutes per mile means faster.",
+   "costUsd": 0.000534675,
+   "latencyMs": 6491,
+   "attempts": 1,
+   "promptTokens": 3106,
+   "completionTokens": 293
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5c-misread-bigger",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Tyler, 8.57 > 8.5\nso he's faster",
+   "reason": "The student chooses Tyler, but their own paces favor Elena, and the comparison does not support the claim that Tyler is faster.",
+   "costUsd": 0.000575675,
+   "latencyMs": 6662,
+   "attempts": 1,
+   "promptTokens": 3106,
+   "completionTokens": 375
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5c-mph",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Tyler: 60 ÷ 8.33 ≈ 7.2 mph\nElena: 60 ÷ 8.5 ≈ 7.06 mph\n(Tyler circled) is faster, he goes more\nmiles every hour",
+   "reason": "The student correctly chooses Tyler and compares their speeds, concluding Tyler covers more miles per hour.",
+   "costUsd": 0.000681175,
+   "latencyMs": 12340,
+   "attempts": 1,
+   "promptTokens": 3106,
+   "completionTokens": 586
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6a-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(0, 60) and (1, 80)\nslope = (80 - 60)/(1 - 0) = 20\neach class costs $20",
+   "reason": "Correctly calculates the slope as 20 and interprets it as the cost per class.",
+   "costUsd": 0.000331675,
+   "latencyMs": 6898,
+   "attempts": 1,
+   "promptTokens": 1958,
+   "completionTokens": 174
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6a-answer-only",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Each class costs $20",
+   "reason": "The student correctly states that each class costs $20, giving both the slope and its meaning.",
+   "costUsd": 0.000326675,
+   "latencyMs": 7487,
+   "attempts": 1,
+   "promptTokens": 1958,
+   "completionTokens": 164
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6a-total-cost",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "slope = 20\n20 is the total cost",
+   "reason": "The slope is correctly given as 20, but its meaning is incorrectly described as the total cost rather than the cost per class.",
+   "costUsd": 0.000346675,
+   "latencyMs": 5224,
+   "attempts": 1,
+   "promptTokens": 1958,
+   "completionTokens": 204
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6a-divide-total",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "200 ÷ 7 ≈ 28.57\nEach class costs about $28.57",
+   "reason": "The student identifies a per-class cost, but calculates it as about $28.57 instead of $20.",
+   "costUsd": 0.000355175,
+   "latencyMs": 6642,
+   "attempts": 1,
+   "promptTokens": 1958,
+   "completionTokens": 221
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6a-idk",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "idk",
+   "reason": "The student wrote “idk” and did not give a slope or explain its meaning.",
+   "costUsd": 0.000310175,
+   "latencyMs": 7840,
+   "attempts": 1,
+   "promptTokens": 1958,
+   "completionTokens": 131
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6b-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "at 0 classes the cost is $60\nthe 60 is the fee to join the gym",
+   "reason": "Correctly identifies the cost at zero classes as $60 and explains it is the fee to join.",
+   "costUsd": 0.00035405,
+   "latencyMs": 6713,
+   "attempts": 1,
+   "promptTokens": 1961,
+   "completionTokens": 218
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6b-zero",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "the intercept is 0\nbecause you start with 0 classes",
+   "reason": "The student correctly notes that classes start at zero but gives the wrong intercept and does not identify the membership fee.",
+   "costUsd": 0.00034555,
+   "latencyMs": 7316,
+   "attempts": 1,
+   "promptTokens": 1961,
+   "completionTokens": 201
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6b-first-class",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "60, its how much the first class costs",
+   "reason": "The student gives the vertical intercept as 60 but misidentifies it as the cost of the first class.",
+   "costUsd": 0.00037155,
+   "latencyMs": 7089,
+   "attempts": 1,
+   "promptTokens": 1961,
+   "completionTokens": 253
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6b-crossed",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "intercept = 20 [crossed out]\nintercept = 60\nyou pay $60 just to join,\neven with no classes",
+   "reason": "Correctly identifies the vertical intercept as 60 and explains it is the fee to join with no classes.",
+   "costUsd": 0.00036605,
+   "latencyMs": 7105,
+   "attempts": 1,
+   "promptTokens": 1961,
+   "completionTokens": 242
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6b-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no work)",
+   "reason": "No answer or interpretation is shown.",
+   "costUsd": 0.00030505,
+   "latencyMs": 4401,
+   "attempts": 1,
+   "promptTokens": 1961,
+   "completionTokens": 120
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7a-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "starts at 12\n(0, 12) to (6, 30): (30 - 12)/6 = 3\n[circled] h = 3t + 12",
+   "reason": "Correctly identifies the rate as 3 and gives the equation with starting height 12.",
+   "costUsd": 0.00037705,
+   "latencyMs": 4746,
+   "attempts": 1,
+   "promptTokens": 1961,
+   "completionTokens": 264
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7a-swapped",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(0, 12)   (1, 15)\n[h = 12t + 3]",
+   "reason": "The plotted points show a rate of 3, but the equation puts the rate and starting height in the wrong places.",
+   "costUsd": 0.00046505,
+   "latencyMs": 9129,
+   "attempts": 1,
+   "promptTokens": 1961,
+   "completionTokens": 440
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7a-t-h-swapped",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "slope = 3, start = 12\n[t = 3h + 12, boxed]",
+   "reason": "The rate and starting height are identified correctly, but the equation swaps t and h.",
+   "costUsd": 0.00036405,
+   "latencyMs": 5164,
+   "attempts": 1,
+   "promptTokens": 1961,
+   "completionTokens": 238
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7a-forgot-start",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "goes up 3 each month\n[boxed] h = 3t",
+   "reason": "Correctly identifies the monthly increase as 3, but omits the starting height of 12 in the equation.",
+   "costUsd": 0.00034755,
+   "latencyMs": 5800,
+   "attempts": 1,
+   "promptTokens": 1961,
+   "completionTokens": 205
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7a-recursive",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Check whether the recursive equation with the stated starting value is acceptable for the requested relationship.",
+   "read": "t | h\n0 | 12\n1 | 15\n2 | 18\n3 | 21\nstart at 12 and add 3\nevery month\nnew h = old h + 3",
+   "reason": "The work shows a starting height of 12 and an increase of 3 inches per month, but gives a recursive equation instead of the requested equation in t.",
+   "costUsd": 0.00112205,
+   "latencyMs": 25366,
+   "attempts": 1,
+   "promptTokens": 1961,
+   "completionTokens": 1754
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7a-messy",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "+3 every month, starts 12\n[crossed out] h = 3t\nh = 3t + 12",
+   "reason": "The student correctly identifies the rate as 3 and gives the equation with starting height 12.",
+   "costUsd": 0.00038755,
+   "latencyMs": 3706,
+   "attempts": 1,
+   "promptTokens": 1961,
+   "completionTokens": 285
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7b-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "66 = 3t + 12\n3t = 54\nt = 18\n[boxed] 18 months",
+   "reason": "Correctly sets up the equation and solves to 18 months.",
+   "costUsd": 0.000468675,
+   "latencyMs": 5692,
+   "attempts": 1,
+   "promptTokens": 2942,
+   "completionTokens": 202
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7b-plugs-t",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "h = 3(66) + 12\nh = 198 + 12 = 210\n(circled) 210",
+   "reason": "The student uses the equation from 7a but substitutes 66 for t, so neither the setup nor the answer is correct.",
+   "costUsd": 0.000590175,
+   "latencyMs": 5706,
+   "attempts": 1,
+   "promptTokens": 2942,
+   "completionTokens": 445
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7b-subtract-first",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "needs 66 - 12 = 54 more inches\ngrows 3 inches a month\n54 ÷ 3 = 18\n[circled] 18 months",
+   "reason": "Correctly uses the starting height and growth rate to find 18 months.",
+   "costUsd": 0.000595675,
+   "latencyMs": 7313,
+   "attempts": 1,
+   "promptTokens": 2942,
+   "completionTokens": 456
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7b-ft-swapped",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "66 = 12t + 3\n63 = 12t\nt = 5.25\n[boxed] 5.25 months",
+   "reason": "The setup and solution are correct for the student's equation from 7a, though that equation does not match the graph.",
+   "costUsd": 0.000507675,
+   "latencyMs": 6834,
+   "attempts": 1,
+   "promptTokens": 2942,
+   "completionTokens": 280
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7b-swapped-slip",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "66 = 12t + 3\n69 = 12t\nt = 5.75\n[boxed] 5.75 months",
+   "reason": "The student correctly substituted 66 into their equation from 7a, but made an algebra error and gave 5.75 months.",
+   "costUsd": 0.000525175,
+   "latencyMs": 8465,
+   "attempts": 1,
+   "promptTokens": 2942,
+   "completionTokens": 315
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7b-overwrite",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "66 = 3t + 12\n66 - 12 = 54\n54 ÷ 3 =\nt = 18 months",
+   "reason": "The student sets up the correct equation and gives the correct answer of 18 months.",
+   "costUsd": 0.000633675,
+   "latencyMs": 10149,
+   "attempts": 1,
+   "promptTokens": 2942,
+   "completionTokens": 532
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1a-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "x² + 4² = 8²\nx² + 16 = 64\nx² = 48\nx = √48 = (circled) 4√3 ≈ 6.93\nDrawing: Triangle ABC with altitude AD labeled x and marked perpendicular to CB; AC labeled 8; CD labeled 4.",
+   "reason": "The student correctly uses the half-base and Pythagorean theorem to find the accepted height.",
+   "costUsd": 0.000440175,
+   "latencyMs": 5090,
+   "attempts": 1,
+   "promptTokens": 2022,
+   "completionTokens": 375
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1a-trig-sin60",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "sin 60° = x/8\nx = 8 sin 60°\nx = 8 · √3/2\nx = 4√3 (circled)\nDrawing: right triangle with hypotenuse labeled 8, vertical side labeled x, a 60° angle at the lower left, and a right-angle mark at the lower right.",
+   "reason": "The student correctly uses the 60° sine ratio and obtains the exact answer 4√3.",
+   "costUsd": 0.000429175,
+   "latencyMs": 5207,
+   "attempts": 1,
+   "promptTokens": 2022,
+   "completionTokens": 353
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1a-full-base-zero",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "x² + 8² = 8²\nx² + 64 = 64\nx² = 0\nx = 0 ??\nDrawing: Triangle ABC with altitude AD marked perpendicular to CB; AC labeled 8, AD labeled x, and DB labeled 8.",
+   "reason": "The student applies the Pythagorean theorem incorrectly and gives x = 0 instead of the altitude's correct value.",
+   "costUsd": 0.000480175,
+   "latencyMs": 7296,
+   "attempts": 1,
+   "promptTokens": 2022,
+   "completionTokens": 455
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1a-added-squares",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "x² = 8² + 4²\nx² = 64 + 16 = 80\nx = √80 = 4√5 [circled]\n≈ 8.94\nDrawing: right triangle with slanted side labeled 8, vertical side labeled x, base labeled 4, and a right-angle mark.",
+   "reason": "The half-base is identified as 4, but the Pythagorean equation is set up incorrectly, giving the wrong height.",
+   "costUsd": 0.000502175,
+   "latencyMs": 7693,
+   "attempts": 1,
+   "promptTokens": 2022,
+   "completionTokens": 499
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1a-guess-4",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "x is half of 8\nx = 8 ÷ 2\n[x = 4, boxed]",
+   "reason": "The student halves 8 but assigns that value to the altitude, without finding the altitude using a right-triangle relation.",
+   "costUsd": 0.000420175,
+   "latencyMs": 5864,
+   "attempts": 1,
+   "promptTokens": 2022,
+   "completionTokens": 335
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1a-squared-slip",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "CD = 8 ÷ 2 = 4\nx² + 4² = 8²\nx² + 8 = 64\nx² = 56\nx = √56 ≈ [boxed] 7.48\nDrawing: right triangle with hypotenuse labeled 8, vertical side labeled x, base labeled 4, and a right-angle mark.",
+   "reason": "Correctly halves the base and sets up the Pythagorean equation, but makes an arithmetic error and gives an incorrect value for x.",
+   "costUsd": 0.000442175,
+   "latencyMs": 6387,
+   "attempts": 1,
+   "promptTokens": 2022,
+   "completionTokens": 379
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1a-messy-ambiguous",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Hard to read: Final answer: 4√3 or 4.3 (mark after 4 is unclear).",
+   "read": "1. x² + 4² = 8²\n2. x² + 16 = 64\n3. [crossed out scribble]\n4. x = 4√3 (the mark after 4 is unclear)\nDrawing: triangle with one side labeled 8, altitude labeled x, a right-angle mark at its foot, and the left base segment labeled 4.",
+   "reason": "The half-base and Pythagorean setup are correct; the final answer earns credit when read as 4√3.",
+   "costUsd": 0.000894175,
+   "latencyMs": 17100,
+   "attempts": 1,
+   "promptTokens": 2022,
+   "completionTokens": 1283
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1a-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no work)",
+   "reason": "No work or answer is shown, so no rubric points are earned.",
+   "costUsd": 0.000321675,
+   "latencyMs": 4271,
+   "attempts": 1,
+   "promptTokens": 2022,
+   "completionTokens": 138
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1a-crossed-out",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "[crossed out] x² + 8² = 8²\n[crossed out] x = 0\nOops half of 8 is 4\nx² + 4² = 64\nx² = 48\nx = √48 ≈ 6.93 (6.93 boxed)\nDrawing: right triangle with hypotenuse labeled 8, vertical side labeled x, base labeled 4, and a right-angle mark.",
+   "reason": "The student correctly halves the side, sets up the Pythagorean theorem, and gives the correct exact and approximate answers.",
+   "costUsd": 0.000529175,
+   "latencyMs": 7657,
+   "attempts": 1,
+   "promptTokens": 2022,
+   "completionTokens": 553
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1b-correct",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "equilateral → all angles equal\n130 ÷ 3 = 60\n∠B = 60° (boxed)",
+   "reason": "The student correctly gives angle B as 60°; the intermediate division is incorrect but does not change the correct answer.",
+   "costUsd": 0.0003953,
+   "latencyMs": 5691,
+   "attempts": 1,
+   "promptTokens": 1847,
+   "completionTokens": 329
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1b-answer-only",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "60 (circled)",
+   "reason": "The student gave the correct angle measure, 60.",
+   "costUsd": 0.0002888,
+   "latencyMs": 2548,
+   "attempts": 1,
+   "promptTokens": 1847,
+   "completionTokens": 116
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1b-thirty",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Drawing: Triangle labeled A (top), C (bottom left), B (bottom right), with D on CB; dashed altitude AD and a right-angle mark at D; AC labeled 8.\naltitude cuts the angle in half\n60 ÷ 2 = 30\nBoxed: ∠B = 30°",
+   "reason": "The student correctly identifies that an altitude can bisect an angle, but gives 30° instead of angle B's 60°.",
+   "costUsd": 0.0004693,
+   "latencyMs": 5662,
+   "attempts": 1,
+   "promptTokens": 1847,
+   "completionTokens": 477
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1b-near-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "B = ?",
+   "reason": "The student asks for angle B but does not give its measure.",
+   "costUsd": 0.0002963,
+   "latencyMs": 3555,
+   "attempts": 1,
+   "promptTokens": 1847,
+   "completionTokens": 131
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1b-overwritten",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "∠B = 60°",
+   "reason": "The student gives the correct measure of angle B, 60°.",
+   "costUsd": 0.0005123,
+   "latencyMs": 9617,
+   "attempts": 1,
+   "promptTokens": 1847,
+   "completionTokens": 563
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-2-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "A = 1/2 bh\n= 1/2 (8)(4√3)\n= 16√3\n≈ 27.7 units² (circled)\nDrawing: triangle with a dashed altitude labeled 4√3, a side labeled 8, and a right-angle mark at the base.",
+   "reason": "Uses the correct area formula with the correct base and height, and gives the exact and approximate area.",
+   "costUsd": 0.00058355,
+   "latencyMs": 6358,
+   "attempts": 1,
+   "promptTokens": 2913,
+   "completionTokens": 439
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-2-follow-through-root5",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "same triangle as #1\nh = 4√5\nA = 1/2 · 8 · 4√5\n= [boxed 16√5] ≈ 35.8",
+   "reason": "The area method and follow-through calculation are correct for the student's 1a height, though that height differs from the key.",
+   "costUsd": 0.00063405,
+   "latencyMs": 7937,
+   "attempts": 1,
+   "promptTokens": 2913,
+   "completionTokens": 540
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-2-follow-through-4",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "h = 4 from 1a\nA = 1/2 bh\n= 1/2 · 8 · 4\n= 16 (circled)",
+   "reason": "Uses the area formula correctly with the student's earlier height and calculates 16.",
+   "costUsd": 0.00054105,
+   "latencyMs": 5879,
+   "attempts": 1,
+   "promptTokens": 2913,
+   "completionTokens": 354
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-2-carried-wrong",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "h = 7.48 (from #1)\nA = 1/2 · 8 · 7.48\n= 8 · 7.48\n= [boxed] 59.84",
+   "reason": "The student used the area formula with their 1a height and correctly calculated the resulting area.",
+   "costUsd": 0.00054405,
+   "latencyMs": 7337,
+   "attempts": 1,
+   "promptTokens": 2913,
+   "completionTokens": 360
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-2-sqrt3-over-4",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "A = (√3/4)s²\n= (√3/4) · 64\n= [boxed] 16√3",
+   "reason": "Uses a correct area formula and obtains the correct exact area, 16√3.",
+   "costUsd": 0.00051105,
+   "latencyMs": 6431,
+   "attempts": 1,
+   "promptTokens": 2913,
+   "completionTokens": 294
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-2-side-as-height",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "height can't be 0 so use 8\nA = 1/2 · 8 · 8\n= (circled) 32\nDrawing: triangle with a dashed altitude and a right-angle mark; “h = 8” with an arrow pointing to a sloping side.",
+   "reason": "The student uses the area formula but substitutes 8 for their earlier height value, so the resulting area is incorrect.",
+   "costUsd": 0.00076755,
+   "latencyMs": 14276,
+   "attempts": 1,
+   "promptTokens": 2913,
+   "completionTokens": 807
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-2-two-answers",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": true,
+   "flagReason": "More than one answer: 55.44 and 27.72",
+   "read": "A = b · h\n= 8 × 6.93\n= 55.44 (circled)\n\nor 1/2 × 8 × 6.93 = 27.72",
+   "reason": "The half-base-times-height calculation and follow-through answer are correct, but the student also leaves 55.44 as another answer.",
+   "costUsd": 0.00057405,
+   "latencyMs": 7966,
+   "attempts": 1,
+   "promptTokens": 2913,
+   "completionTokens": 420
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-2-near-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "A = 1/2 bh\n?",
+   "reason": "The student writes the area formula but does not substitute values or give an area.",
+   "costUsd": 0.00050155,
+   "latencyMs": 8472,
+   "attempts": 1,
+   "promptTokens": 2913,
+   "completionTokens": 275
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-3a-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "BD is the diagonal\ns² + s² = 4²\n2s² = 16\ns² = 8, s = 2√2\nAE = 1/2 s = √2 (boxed)\nDrawing: Square ABCD with diagonal BD labeled 4; E marked on AD.",
+   "reason": "Correctly finds the square’s side and halves it to obtain AE = √2.",
+   "costUsd": 0.00040855,
+   "latencyMs": 6433,
+   "attempts": 1,
+   "promptTokens": 2025,
+   "completionTokens": 311
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-3a-bd-as-side",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "side = 4\nAE = half of the side\nAE = 4 ÷ 2 = [boxed] 2\nDrawing: square ABCD with diagonal BD; the left side is labeled 4 and E is marked on the bottom side.",
+   "reason": "They treated the diagonal as the side, but correctly halved their stated side of 4 to get AE = 2.",
+   "costUsd": 0.00049555,
+   "latencyMs": 7809,
+   "attempts": 1,
+   "promptTokens": 2025,
+   "completionTokens": 485
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-3a-forgot-halve",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "45-45-90 triangle\nside = 4/√2 = 2√2\n[circled] AE = 2√2",
+   "reason": "Correctly finds the square’s side, but gives that full length for AE instead of halving it.",
+   "costUsd": 0.00039155,
+   "latencyMs": 5784,
+   "attempts": 1,
+   "promptTokens": 2025,
+   "completionTokens": 277
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-3a-messy-crossed",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "[crossed out] AE = 4 ÷ 4 = 1\ns = 4/√2 ≈ 2.83\nAE = 2.83 ÷ 2\nAE ≈ [1.41 boxed]\nDrawing: square labeled A, B, C, D, with E on the bottom side; diagonals and horizontal and vertical lines meet at the center, where 4 is marked.",
+   "reason": "Correctly finds the square’s side and halves it to get AE ≈ 1.41.",
+   "costUsd": 0.00050455,
+   "latencyMs": 6159,
+   "attempts": 1,
+   "promptTokens": 2025,
+   "completionTokens": 503
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-3b-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "side = 2√2\nA = (2√2)²\n= 4 · 2 = ⑧",
+   "reason": "The student correctly squares the side length and gets an area of 8.",
+   "costUsd": 0.000357425,
+   "latencyMs": 5186,
+   "attempts": 1,
+   "promptTokens": 1968,
+   "completionTokens": 223
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-3b-diagonal",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "A = d²/2\n= 4²/2 = 16/2\n= [boxed] 8\nDrawing: square ABCD with diagonal BD drawn and labeled 4.",
+   "reason": "The student correctly uses diagonal² ÷ 2 and obtains an area of 8.",
+   "costUsd": 0.000371925,
+   "latencyMs": 4707,
+   "attempts": 1,
+   "promptTokens": 1968,
+   "completionTokens": 252
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-3b-bd-as-side",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "A = s²\n= 4²\n= 16 (circled)",
+   "reason": "The student squares 4 as though it were the side length, so the method and area are incorrect.",
+   "costUsd": 0.000405925,
+   "latencyMs": 8225,
+   "attempts": 1,
+   "promptTokens": 1968,
+   "completionTokens": 320
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-3b-small-squares",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "4 little squares\n\nEach side = AE = √2\n\nEach area = (√2)² = 2\n\nTotal = 4 · 2 = [boxed] 8\n\nDrawing: square labeled A, B, C, D, divided into four small squares with diagonals drawn; E is labeled at the bottom midpoint, and √2 is marked along AE.",
+   "reason": "Correctly adds the areas of four small squares to get 8.",
+   "costUsd": 0.000611425,
+   "latencyMs": 11924,
+   "attempts": 1,
+   "promptTokens": 1968,
+   "completionTokens": 731
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-4-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "sin 30° = h/18\nh = 18 sin 30°\nh = 18(0.5)\n[h = 9 ft] (boxed)\nDrawing: right triangle with hypotenuse labeled 18, vertical side labeled h, a 30° angle at the left end of the ground, and a right angle at the base of the vertical side.",
+   "reason": "Correctly uses sine to find the height and gives 9 feet.",
+   "costUsd": 0.0003913,
+   "latencyMs": 6610,
+   "attempts": 1,
+   "promptTokens": 1959,
+   "completionTokens": 293
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-4-cos",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "cos 30° = h/18\nh = 18 cos 30°\nh ≈ 18(0.866)\n[h ≈ 15.6 ft] (boxed)\nDrawing: right triangle with 18 on the slanted side, 30° at the left angle, h on the vertical side, and a right-angle mark at the bottom right.",
+   "reason": "The student correctly identifies the hypotenuse but uses cosine instead of sine, giving an incorrect height.",
+   "costUsd": 0.0004023,
+   "latencyMs": 5714,
+   "attempts": 1,
+   "promptTokens": 1959,
+   "completionTokens": 315
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-4-radians",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "sin 30 = h/18\nh = 18 sin 30\n= 18(-0.988)\n= -17.8??\n[circled] h = -17.8 ft",
+   "reason": "The setup using 18 sin 30 is correct, but the final height is given as -17.8 instead of 9.",
+   "costUsd": 0.0005113,
+   "latencyMs": 10727,
+   "attempts": 1,
+   "promptTokens": 1959,
+   "completionTokens": 533
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-4-answer-only",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "9 ft (circled)",
+   "reason": "The answer is correct, but no method is shown.",
+   "costUsd": 0.0003168,
+   "latencyMs": 4442,
+   "attempts": 1,
+   "promptTokens": 1959,
+   "completionTokens": 144
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-5-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "tan 30° = AB/6\nAB = 6 tan 30°\nAB ≈ 6(0.577)\n[boxed] AB ≈ 3.46\nDrawing: right triangle ABC, right angle at A, angle C marked 30°, and AC labeled 6.",
+   "reason": "The tangent setup is correct, and the boxed answer is approximately 3.46.",
+   "costUsd": 0.000382925,
+   "latencyMs": 5892,
+   "attempts": 1,
+   "promptTokens": 1928,
+   "completionTokens": 284
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-5-tan-upside-down",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "tan 30 = 6/AB\nAB = 6/tan 30\nAB = 6/0.577\n[boxed] AB ≈ 10.4\nDiagram: right triangle ABC, right angle at A, AC labeled 6, angle C labeled 30°, and ? beside AB.",
+   "reason": "The student identifies the relevant tangent but reverses the ratio, resulting in an incorrect value for AB.",
+   "costUsd": 0.000428925,
+   "latencyMs": 7335,
+   "attempts": 1,
+   "promptTokens": 1928,
+   "completionTokens": 376
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-5-30-60-90",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "30-60-90: x : x√3 : 2x\nlong leg AC = 6 = x√3\nx = 6/√3 = 6√3/3\n[boxed] AB = 2√3\nDrawing: right triangle ABC, right angle at A; AB is labeled x, AC is labeled 6, and angle C is labeled 30°.",
+   "reason": "Correctly identifies AC as the long leg and finds AB = 2√3.",
+   "costUsd": 0.000440925,
+   "latencyMs": 6884,
+   "attempts": 1,
+   "promptTokens": 1928,
+   "completionTokens": 400
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-5-half-of-6",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "side across from 30° is half\nAB = 1/2 · 6\n[boxed] AB = 3",
+   "reason": "The student identifies the side opposite 30° but incorrectly treats AC as the hypotenuse, giving an incorrect length.",
+   "costUsd": 0.000428425,
+   "latencyMs": 5832,
+   "attempts": 1,
+   "promptTokens": 1928,
+   "completionTokens": 375
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-5-near-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "tan 30 =",
+   "reason": "The student begins a tangent setup but does not complete it or give a value for AB.",
+   "costUsd": 0.000364425,
+   "latencyMs": 7456,
+   "attempts": 1,
+   "promptTokens": 1928,
+   "completionTokens": 247
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "BD² + 12² = 13²\nBD² = 169 − 144 = 25\n[boxed] BD = 5\n△ADB ~ △BDC\nAD/BD = BD/DC\nAD/5 = 5/12\n[circled] AD = 25/12 ≈ 2.08\ncheck: AB² = AD · AC\nAC = 12 + 2.08 = 14.08\nAD · AC = 2.08 · 14.08 ≈ 29.3\nAB² = 5² + 2.08² ≈ 29.3 ok\nDiagram: Triangle ABC with D on AC and BD drawn; labels BC = 13 and DC = 12; right-angle marks at B and D.",
+   "reason": "Found BD = 5 and AD = 25/12, then checked the results with a different calculation.",
+   "costUsd": 0.000645925,
+   "latencyMs": 9660,
+   "attempts": 1,
+   "promptTokens": 2076,
+   "completionTokens": 773
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-trig-check",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "BD = √169 − 144 = √25 = 5\nAD/5 = 5/12\nAD = 25/12 ≈ 2.08\ncheck w/ trig:\ntan C = 5/12, ∠C ≈ 22.6°\n∠ABD = ∠C ≈ 22.6°\nAD = 5 tan 22.6° ≈ 2.08 yes\nDrawing: Triangle labeled A, B, C, with D on AC and BD drawn; right-angle marks at B and D; BC labeled 13 and DC labeled 12.",
+   "reason": "Finds BD and AD correctly, then checks AD with a separate trigonometric calculation.",
+   "costUsd": 0.000658425,
+   "latencyMs": 12335,
+   "attempts": 1,
+   "promptTokens": 2076,
+   "completionTokens": 798
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-restate-check",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "BD² = 13² - 12² = 25\nBD = 5\nAD/5 = 5/12\n[boxed] AD = 25/12\ncheck: 5² + 12²\n= 25 + 144 = 169 = 13² ok\nDrawing: triangle ABC with right-angle marks at B and D; altitude BD meets AC at D. BC is labeled 13 and DC is labeled 12.",
+   "reason": "Correctly finds BD and AD, but the check repeats the Pythagorean calculation instead of using a different method.",
+   "costUsd": 0.000582425,
+   "latencyMs": 7407,
+   "attempts": 1,
+   "promptTokens": 2076,
+   "completionTokens": 646
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-wrong-ratio",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "BD² + 144 = 169 → BD = 5\nAD/12 = 5/13\nAD = 60/13 ≈ 4.62\nDrawing: Triangle ABC with D on AC; right-angle marks at B and D; BC labeled 13 and DC labeled 12.\ncheck: AB² = AD · AC\nAC = 12 + 4.62 = 16.62\nAD · AC ≈ 76.8\nAB² = 25 + 4.62² ≈ 46.3\n?? doesnt match",
+   "reason": "BD is correct, but AD is not; the student uses a different calculation to check the answers and identifies a mismatch.",
+   "costUsd": 0.000736925,
+   "latencyMs": 11112,
+   "attempts": 1,
+   "promptTokens": 2076,
+   "completionTokens": 955
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-messy-crossed",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "[crossed out] AD = 13 − 12 = 1\nBD² = 169 − 144 = 25, BD = 5\nsimilar △s: AD = 5²/12 = 25/12\ncheck AB² = AD · AC\nAD · AC = 25/12 · 169/12 = 4225/144\nAB² = 5² + (25/12)² = (3600 + 625)/144 = 4225/144 ok",
+   "reason": "Correctly finds BD and AD, then verifies the answers with a second calculation.",
+   "costUsd": 0.000502925,
+   "latencyMs": 7790,
+   "attempts": 1,
+   "promptTokens": 2076,
+   "completionTokens": 487
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-near-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "BD = ?\nAD = ?\nDrawing: triangle ABC with altitude BD to AC, right-angle marks at B and D, BC labeled 13, and DC labeled 12.",
+   "reason": "The diagram includes the given lengths, but the student does not calculate either segment or show a check.",
+   "costUsd": 0.000428925,
+   "latencyMs": 4831,
+   "attempts": 1,
+   "promptTokens": 2076,
+   "completionTokens": 339
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-7-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "JH opp 35°, GJ adj\n[Boxed] JH = 9 sin 35° ≈ 5.16\n[Circled] GJ = 9 cos 35° ≈ 7.37\nDrawing: triangle GJH, right angle at J, 35° marked at G, and 9 marked on GH.",
+   "reason": "Both expressions correctly use the 35° angle and hypotenuse 9 to find the requested lengths.",
+   "costUsd": 0.000511925,
+   "latencyMs": 9223,
+   "attempts": 1,
+   "promptTokens": 2004,
+   "completionTokens": 523
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-7-swapped",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "sin 35 = GJ/9\nGJ = 9 sin 35 ≈ 5.16\ncos 35 = JH/9\nJH = 9 cos 35 ≈ 7.37\nDrawing: right triangle labeled G, H, J; right angle at J, angle 35° at G, and 9 on GH.",
+   "reason": "The student uses sine and cosine with the opposite side labels, so both requested lengths are incorrect.",
+   "costUsd": 0.000481925,
+   "latencyMs": 8443,
+   "attempts": 1,
+   "promptTokens": 2004,
+   "completionTokens": 463
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-7-angle-55",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "∠H = 180 - 90 - 35 = 55°\nJH = 9 cos 55°\nGJ = 9 sin 55°\nDrawing: right triangle labeled G, J, H, with a right angle at J, 35° at G, 55° at H, and 9 along GH.",
+   "reason": "Both expressions are correct using the complementary angle of 55°.",
+   "costUsd": 0.000416925,
+   "latencyMs": 7355,
+   "attempts": 1,
+   "promptTokens": 2004,
+   "completionTokens": 333
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-7-pythagoras",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "JH = 9 sin 35° ≈ 5.16\nGJ = √(9² − 5.16²)\n= √(81 − 26.63)\n= √54.37 ≈ [boxed] 7.37",
+   "reason": "The student finds JH correctly and uses a valid Pythagorean calculation to find GJ correctly.",
+   "costUsd": 0.000480425,
+   "latencyMs": 7362,
+   "attempts": 1,
+   "promptTokens": 2004,
+   "completionTokens": 460
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8a-correct",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "5² + 12² = 13²\n25 + 144 = 169\n169 = 169 yes",
+   "reason": "The student correctly shows that 5² + 12² equals 13² and verifies the arithmetic.",
+   "costUsd": 0.000318175,
+   "latencyMs": 3283,
+   "attempts": 1,
+   "promptTokens": 1838,
+   "completionTokens": 177
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8a-statement-only",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Yes! 5, 12, 13 is a\nPythagorean triple\n(its on the list)",
+   "reason": "The student identifies the numbers as a Pythagorean triple but does not verify it with arithmetic.",
+   "costUsd": 0.000347675,
+   "latencyMs": 6258,
+   "attempts": 1,
+   "promptTokens": 1838,
+   "completionTokens": 236
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8a-doubled",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "5² + 12² = 13²\n10 + 24 = 34\n13² = 26\n34 ≠ 26 Not a triple",
+   "reason": "The student writes the correct equation setup but uses incorrect arithmetic, so the work does not verify the triple.",
+   "costUsd": 0.000472675,
+   "latencyMs": 6528,
+   "attempts": 1,
+   "promptTokens": 1838,
+   "completionTokens": 486
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8a-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no work)",
+   "reason": "No arithmetic is shown to verify the Pythagorean triple.",
+   "costUsd": 0.000283675,
+   "latencyMs": 2329,
+   "attempts": 1,
+   "promptTokens": 1838,
+   "completionTokens": 108
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8b-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "tan θ = 5/12\nθ = tan⁻¹(5/12)\nθ ≈ 22.6° [circled]\nother = 90 − 22.6\n= 67.4° [circled]\nDrawing: right triangle labeled 5, 12, and 13; right angle marked at the lower-left corner and θ marked at the lower-right corner.",
+   "reason": "Both acute angles are correctly calculated using a trig ratio and the complementary-angle relationship.",
+   "costUsd": 0.000419425,
+   "latencyMs": 8188,
+   "attempts": 1,
+   "promptTokens": 1932,
+   "completionTokens": 356
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8b-radians",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "tan⁻¹(5/12) = 0.39\n90 − 0.39 = 89.61\nangles: 0.39° and 89.61°",
+   "reason": "The inverse tangent setup is appropriate, but both reported angles are incorrect.",
+   "costUsd": 0.000484925,
+   "latencyMs": 9157,
+   "attempts": 1,
+   "promptTokens": 1932,
+   "completionTokens": 487
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8b-wrong-hypotenuse",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "sin θ = 5/12\nθ = sin⁻¹(5/12) ≈ 24.6°\n90 − 24.6 = 65.4°",
+   "reason": "The student uses the wrong sine ratio and obtains neither acute angle within the accepted range.",
+   "costUsd": 0.000440925,
+   "latencyMs": 8323,
+   "attempts": 1,
+   "promptTokens": 1932,
+   "completionTokens": 399
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8b-messy-overwrite",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "θ = tan⁻¹(5/12)\nθ ≈ 27.6°\nOther = 90 - θ\n≈ 67.4°",
+   "reason": "The complementary angle is correct, but the calculated angle is 27.6° rather than about 22.6°.",
+   "costUsd": 0.000615925,
+   "latencyMs": 12471,
+   "attempts": 1,
+   "promptTokens": 1932,
+   "completionTokens": 749
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8b-ratio-table",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "sin θ = 5/13 ≈ 0.385\nsin 22° ≈ 0.375\nsin 23° ≈ 0.391\nso θ ≈ 23° (circled)\nother ≈ 90 − 23 = 67° (boxed)",
+   "reason": "Correctly estimates the acute angles as 23° and 67° using a sine comparison and the complementary-angle relationship.",
+   "costUsd": 0.000378925,
+   "latencyMs": 5740,
+   "attempts": 1,
+   "promptTokens": 1932,
+   "completionTokens": 275
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-9-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "QP is opp 30°\nQP = 4 sin 30° = 2\nRQ = 4 cos 30°\n= 4 · √3/2 = 2√3\n[boxed] QP = 2, RQ = 2√3\nDrawing: right triangle PQR, right angle at Q, angle R marked 30°, angle P marked 60°, hypotenuse RP labeled 4.",
+   "reason": "Correctly finds both legs and labels them with the correct sides.",
+   "costUsd": 0.000421175,
+   "latencyMs": 8646,
+   "attempts": 1,
+   "promptTokens": 1970,
+   "completionTokens": 350
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-9-swapped",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "RQ = 4 sin 30° = 2\nQP = 4 cos 30° = 2√3",
+   "reason": "The student used the correct values but assigned each to the wrong leg, so neither line earns credit.",
+   "costUsd": 0.000355675,
+   "latencyMs": 5121,
+   "attempts": 1,
+   "promptTokens": 1970,
+   "completionTokens": 219
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-9-30-60-90",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "short leg = 1/2 hyp\nQP = 2\nlong leg = 2√3 ≈ 3.46\nRQ = 2√3\nDrawing: right triangle labeled Q, R, P; right angle at Q, 30° at R, 60° at P, and 4 on hypotenuse RP.",
+   "reason": "Both legs are correctly identified and calculated: QP = 2 and RQ = 2√3.",
+   "costUsd": 0.000438675,
+   "latencyMs": 7447,
+   "attempts": 1,
+   "promptTokens": 1970,
+   "completionTokens": 385
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-9-pythagoras-slip",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "QP = 4/2 = 2\nRQ² = 4² + 2²\nRQ² = 20\nRQ = √20 ≈ 4.47",
+   "reason": "The student correctly found QP = 2, but used an incorrect calculation for RQ and got about 4.47.",
+   "costUsd": 0.000378175,
+   "latencyMs": 6106,
+   "attempts": 1,
+   "promptTokens": 1970,
+   "completionTokens": 264
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-9-unlabeled",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "30-60-90\nx, x√3, 2x\n2x = 4 → x = 2\nlegs are 2 and 2√3",
+   "reason": "Correctly uses the 30-60-90 ratio to find both leg lengths, 2 and 2√3.",
+   "costUsd": 0.000437175,
+   "latencyMs": 7167,
+   "attempts": 1,
+   "promptTokens": 1970,
+   "completionTokens": 382
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2a-correct-phone",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "pair 1: ∠DCM and ∠DMC\n27 + 63 = 90\npair 2: ∠MGF and ∠GMF\n26 + 64 = 90\nDiagram: Square labeled C, D, F, G, with M on side DF; segments CM and GM are drawn. Angle measures 27, 63, 64, and 26 are labeled.",
+   "reason": "Both named pairs are different and each sums to 90°.",
+   "costUsd": 0.00050455,
+   "latencyMs": 9147,
+   "attempts": 1,
+   "promptTokens": 2141,
+   "completionTokens": 474
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-1-borrow-slip-phone",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "A + C = 180\nC = 180 − 74\n180\n− 74\n[line]\n116\n[boxed] ∠C = 116°\nDrawing: two angles labeled EAB and FCD; angle A is labeled 74°, and angle C is marked with an arc and a question mark.",
+   "reason": "Correctly uses the supplementary-angle relationship, but subtracts incorrectly and gives 116° instead of 106°.",
+   "costUsd": 0.000490675,
+   "latencyMs": 8802,
+   "attempts": 1,
+   "promptTokens": 1930,
+   "completionTokens": 499
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-3-adjacent-as-vertical-phone",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "c is across from 42\nso c = 42\nb and 42 make a line\nb = 180 - 42 = 138\n[boxed] b = 138   c = 42\nDiagram: Two intersecting lines labeled b°, 42°, and c°; an arc marks the bottom angle.",
+   "reason": "Both angle values are reversed: b should be 42 and c should be 138.",
+   "costUsd": 0.0004223,
+   "latencyMs": 7549,
+   "attempts": 1,
+   "promptTokens": 1911,
+   "completionTokens": 367
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-1-correct-phone",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "3(x - 4) = 12x\n3x - 12 = 12x\n-3x      -3x\n-12 = 9x\nx = -12/9\n[boxed] x = -4/3",
+   "reason": "Correct distribution and correct solution, including the boxed answer.",
+   "costUsd": 0.000408675,
+   "latencyMs": 7544,
+   "attempts": 1,
+   "promptTokens": 1874,
+   "completionTokens": 349
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-2-distribute-first-term-phone",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "2x + 5 = 3x + 1\n5 = x + 1\n[circled] x = 4\n\n3y − 4 = 6 − 2y\n+2y          +2y\n5y − 4 = 6\n5y = 10\n[circled] y = 2\n\n3n + 2 = 54 − 9n\n12n + 2 = 54\n12n = 52\nn = 52/12\n[circled] n = 13/3",
+   "reason": "The y solution is correct with supporting work; the x and n solutions are incorrect.",
+   "costUsd": 0.00060905,
+   "latencyMs": 8982,
+   "attempts": 1,
+   "promptTokens": 1925,
+   "completionTokens": 737
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-6-wrong-step-phone",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "his mistake is the first step.\n-2 times -5 is -10\n-6x - 10 = 4x + 20\n-10 = 10x + 20\n-30 = 10x\n[x = -3, boxed]",
+   "reason": "The student identifies the first step as the mistake, but the required mistake is a later step; the solution given is incorrect.",
+   "costUsd": 0.00052455,
+   "latencyMs": 8329,
+   "attempts": 1,
+   "promptTokens": 2109,
+   "completionTokens": 522
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3b-correct-phone",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Vertical axis label: cost ($). Vertical-axis tick labels: 0, 1000, 2000, 3000, 4000. Horizontal axis label: hours. Horizontal-axis tick labels: 0, 10, 20, 30, 40, 50, 60. A straight rising line crosses the vertical axis near 500 and passes through plotted points labeled (20, 1500) and (50, 3000).",
+   "reason": "Both points are correctly plotted and labeled, and the straight line has the correct intercept and rise.",
+   "costUsd": 0.000621425,
+   "latencyMs": 9150,
+   "attempts": 1,
+   "promptTokens": 3112,
+   "completionTokens": 465
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-1-fee-one-pizza-phone",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "58 − 25 = 33\n33 ÷ 3 = $11 each\nfee: 25 − 11 = $14\n11p + 14 = 80\n11p = 66\np = 6\n[boxed] 6 pizzas",
+   "reason": "The student correctly finds the pizza price and follows through with their incorrect fee to solve for 6 pizzas.",
+   "costUsd": 0.000739925,
+   "latencyMs": 12575,
+   "attempts": 1,
+   "promptTokens": 1940,
+   "completionTokens": 995
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-2a-whole-bag-phone",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Lin: 12 × 1/2 = 6 cups flour\nNoah: 12 × 2/3 = 8 cups flour",
+   "reason": "The recipe ratios are correct, but the student uses all 12 cups instead of each person’s 6 cups of sugar.",
+   "costUsd": 0.000387175,
+   "latencyMs": 7974,
+   "attempts": 1,
+   "promptTokens": 2046,
+   "completionTokens": 263
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1a-correct-phone",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Hard to read: The boxed radical appears to read 4√3; the small 4 is written close to the radical sign.",
+   "read": "x² + 4² = 8²\nx² + 16 = 64\nx² = 48\nx = √48 = ⁴√3(?) [boxed] ≈ 6.93\nDrawing: Triangle labeled A, B, C, with AC labeled 8; dashed altitude AD labeled x, right-angle mark at D, and CD labeled 4.",
+   "reason": "The diagram gives the half-base as 4, and the Pythagorean setup and final value are correct.",
+   "costUsd": 0.000461175,
+   "latencyMs": 6207,
+   "attempts": 1,
+   "promptTokens": 2022,
+   "completionTokens": 417
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-2-carried-wrong-phone",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "h = 7.48 (from #1)\nA = 1/2 · 8 · 7.48\n= 8 · 7.48\n= 59.84 (boxed)",
+   "reason": "The student used the area formula with their 1a height, but omitted the factor of 1/2 when calculating the area.",
+   "costUsd": 0.00057305,
+   "latencyMs": 7528,
+   "attempts": 1,
+   "promptTokens": 2913,
+   "completionTokens": 418
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1b-thirty-phone",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Triangle drawing: vertices A, C, and B; side AC labeled 8; dashed altitude AD with a right-angle mark at D; D labeled.\naltitude cuts the angle in half\n60 ÷ 2 = 30\nCircled: ∠B = 30°",
+   "reason": "The student identifies the altitude as bisecting an angle but incorrectly gives angle B as 30° instead of 60°.",
+   "costUsd": 0.0004448,
+   "latencyMs": 5813,
+   "attempts": 1,
+   "promptTokens": 1847,
+   "completionTokens": 428
+  }
+ ]
+}
