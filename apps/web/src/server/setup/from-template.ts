@@ -5,8 +5,9 @@
  * point per criterion.
  */
 import type { Answer, Template } from "@goblins/templates";
-import { Array as Arr } from "effect";
+import { Array as Arr, Option } from "effect";
 import type { Extracted, ExtractedProblem, RubricLineInput } from "./extracted";
+import { referenceRubric } from "./reference-rubrics";
 
 /**
  * Template answers are LaTeX without delimiters ("x = 4\sqrt{3}", "16\sqrt{3} square units").
@@ -54,11 +55,7 @@ const notesFor = (answer: Answer, dependsOn: ReadonlyArray<string>): string => {
   if (answer._tag === "Exact" && answer.accept.length > 0) {
     notes.push(`Accept equivalent forms, such as ${listJoin(answer.accept.map(answerToMarkup))}.`);
   }
-  if (dependsOn.length > 0) {
-    notes.push(
-      `Follow-through: this uses the student's answer to ${listJoin(dependsOn)}. If that answer was wrong, give the method point for correct work built on it.`,
-    );
-  }
+  if (dependsOn.length > 0) notes.push(followThrough(dependsOn));
   return notes.join(" ");
 };
 
@@ -66,6 +63,34 @@ const answerKeyFor = (answer: Answer, solution: string): string =>
   answer._tag === "Exact"
     ? `${answerToMarkup(answer.value)}\n\n${solution}`
     : `${answer.sample}\n\n${solution}`;
+
+const followThrough = (dependsOn: ReadonlyArray<string>) =>
+  `Follow-through: this uses the student's answer to ${listJoin(dependsOn)}. If that answer was wrong, give the method point for correct work built on it.`;
+
+/**
+ * The hand-written reference rubric when the eval dataset has one, so answer-only prompts keep
+ * full credit for a bare answer; otherwise one drafted from the answer key.
+ */
+const rubricAndNotes = (
+  templateId: string,
+  label: string,
+  answer: Answer,
+  dependsOn: ReadonlyArray<string>,
+): Pick<ExtractedProblem, "rubric" | "gradingNotes"> =>
+  Option.match(referenceRubric(templateId, label), {
+    onNone: () => ({ rubric: rubricFor(answer), gradingNotes: notesFor(answer, dependsOn) }),
+    onSome: (reference) => {
+      const notes = reference.notes ?? "";
+      const needsFollowThrough = dependsOn.length > 0 && !/follow-through/i.test(notes);
+      return {
+        rubric: Arr.map(reference.lines, (line) => ({
+          points: line.points,
+          description: line.description,
+        })),
+        gradingNotes: needsFollowThrough ? `${notes} ${followThrough(dependsOn)}`.trim() : notes,
+      };
+    },
+  });
 
 export const extractedFromTemplate = (template: Template): Extracted => {
   const problems = Arr.flatMap(
@@ -85,8 +110,12 @@ export const extractedFromTemplate = (template: Template): Extracted => {
               answerKey: answerKeyFor(problem.answer, problem.solution),
               diagramDescription,
               pageNumbers,
-              gradingNotes: notesFor(problem.answer, problem.dependsOn),
-              rubric: rubricFor(problem.answer),
+              ...rubricAndNotes(
+                template.id,
+                String(problem.number),
+                problem.answer,
+                problem.dependsOn,
+              ),
               dependsOn: [...problem.dependsOn],
             },
           ];
@@ -99,8 +128,12 @@ export const extractedFromTemplate = (template: Template): Extracted => {
             answerKey: answerKeyFor(part.answer, part.solution),
             diagramDescription,
             pageNumbers,
-            gradingNotes: notesFor(part.answer, part.dependsOn),
-            rubric: rubricFor(part.answer),
+            ...rubricAndNotes(
+              template.id,
+              `${problem.number}${part.label}`,
+              part.answer,
+              part.dependsOn,
+            ),
             dependsOn: [...part.dependsOn],
           }));
       }

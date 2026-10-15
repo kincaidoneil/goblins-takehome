@@ -31,7 +31,7 @@ test("teacher sets up a template by chat and inline edits, and it persists", asy
   );
   await expect(problem(page, "2a")).toContainText("The grader reads this instead of the picture");
   await expect(problem(page, "3b")).toContainText("Uses the answer to 3a");
-  await expect(problem(page, "4")).toContainText("2 pts");
+  await expect(problem(page, "4")).toContainText("3 pts");
 
   // Chat: the three requests the PRD names.
   await expect(await ask(page, "Make problem 4 worth 5 points")).toContainText(

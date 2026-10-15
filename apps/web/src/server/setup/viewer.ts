@@ -20,10 +20,39 @@ export interface Viewer {
   readonly teacherId: Option.Option<string>;
 }
 
-/** The draft-owner id from this request's cookie, if any. */
-const draftOwnerFromCookie = () => {
+// Cookies are read and set outside Effect fibers, in the server function's own async context:
+// TanStack's request context lives in AsyncLocalStorage, which a fiber may not carry.
+
+/** The draft-owner id from this request's cookie, if any. Call outside an Effect. */
+export const readDraftOwner = (): Option.Option<string> => {
   const raw = getCookie(COOKIE);
   return raw !== undefined && isUuid(raw) ? Option.some(raw) : Option.none<string>();
+};
+
+export interface DraftOwner {
+  readonly id: string;
+  /** No cookie yet: `saveDraftOwner` sets it after the draft is created. */
+  readonly isNew: boolean;
+}
+
+/** This browser's draft-owner id, or a fresh one. Call outside an Effect. */
+export const draftOwnerForRequest = (): DraftOwner =>
+  Option.match(readDraftOwner(), {
+    onSome: (id) => ({ id, isNew: false }),
+    onNone: () => ({ id: crypto.randomUUID(), isNew: true }),
+  });
+
+/** Sets the cookie for a fresh draft-owner id. Call outside an Effect, after the write. */
+export const saveDraftOwner = (owner: DraftOwner) => {
+  if (!owner.isNew) return;
+  setCookie(COOKIE, owner.id, {
+    path: "/",
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    // A teacher may start a draft at home and launch it at school days later.
+    maxAge: 60 * 60 * 24 * 30,
+  });
 };
 
 /** The signed-in teacher's row id, without creating one: a teacher with no row owns nothing yet. */
@@ -38,28 +67,16 @@ const signedInTeacherId = Effect.gen(function* () {
   return Option.fromNullable(row?.id);
 });
 
-export const currentViewer = Effect.gen(function* () {
-  return {
-    draftOwnerId: draftOwnerFromCookie(),
-    teacherId: yield* signedInTeacherId,
-  } satisfies Viewer;
-});
+/** The viewer for a draft-owner id read with `readDraftOwner`. */
+export const viewerFor = (draftOwnerId: Option.Option<string>) =>
+  Effect.map(signedInTeacherId, (teacherId): Viewer => ({ draftOwnerId, teacherId }));
 
-/** The draft-owner id for this browser, setting the cookie on first use. */
-export const ensureDraftOwner = Effect.sync(() => {
-  const existing = draftOwnerFromCookie();
-  if (Option.isSome(existing)) return existing.value;
-  const id = crypto.randomUUID();
-  setCookie(COOKIE, id, {
-    path: "/",
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    // A teacher may start a draft at home and launch it at school days later.
-    maxAge: 60 * 60 * 24 * 30,
+/** Who a new draft belongs to: the signed-in teacher, else this browser's draft owner. */
+export const newDraftOwner = (viewer: Viewer, draftOwnerId: string) =>
+  Option.match(viewer.teacherId, {
+    onSome: (teacherId) => ({ teacherId, draftOwnerId: null }),
+    onNone: () => ({ teacherId: null, draftOwnerId }),
   });
-  return id;
-});
 
 /** Whether the viewer owns an assignment row. */
 export const owns = (

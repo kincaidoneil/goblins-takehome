@@ -195,8 +195,8 @@ export function SetupScreen({
     setHighlighted(new Set([problem.id]));
     scrollToProblem(problem.id);
     toast({
-      title: `Problem ${label} has no text yet`,
-      description: "Type it in, then launch.",
+      title: `Problem ${label} isn't finished`,
+      description: "It needs its text and an answer key before students can be graded on it.",
       tone: "attention",
     });
   };
@@ -259,6 +259,7 @@ export function SetupScreen({
                   stem={group.stem === "" ? null : group.stem}
                   highlighted={highlighted.has(problem.id)}
                   isNew={newProblemIds.has(problem.id) && problem.text.trim() === ""}
+                  needsAnswerKey={newProblemIds.has(problem.id) && problem.answerKey.trim() === ""}
                   onEdit={(build) =>
                     void applyEdits((current) => {
                       if (typeof build !== "function") return build;

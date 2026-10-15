@@ -4,7 +4,6 @@
  */
 import { Db, schema } from "@goblins/domain";
 import { createServerFn } from "@tanstack/react-start";
-import { waitUntil } from "@vercel/functions";
 import { Effect, Option, Schema } from "effect";
 import { err, ok } from "../result";
 import { run } from "../runtime";
@@ -13,15 +12,14 @@ import { type Draft, ensureEditable, loadDraft, ownedAssignment, whileEditable }
 import { applyEdits, Edit } from "./edits";
 import { claimDrafts, launchDraft } from "./launch";
 import { editByChat } from "./setup-ai";
-import { extractInBackground, owner, startTemplateDraft } from "./start";
-import { storeFile } from "./storage";
-import { currentViewer, type Viewer } from "./viewer";
-
-/** The browser converts every upload to page images before sending (see `setup/upload.ts`). */
-const MAX_PAGES = 10;
-/** Under Vercel's 4.5 MB request body limit, with room for the form encoding. */
-const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
-const PAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+import { startTemplateDraft, startUploadDraft } from "./start";
+import {
+  draftOwnerForRequest,
+  readDraftOwner,
+  saveDraftOwner,
+  type Viewer,
+  viewerFor,
+} from "./viewer";
 
 /** Starts a draft from page images. Extraction runs after the response; the setup screen polls. */
 export const startDraftFromUpload = createServerFn({ method: "POST" })
@@ -29,55 +27,22 @@ export const startDraftFromUpload = createServerFn({ method: "POST" })
     if (!(data instanceof FormData)) throw new Error("expected form data");
     return data;
   })
-  .handler(({ data }) =>
-    run(
-      Effect.gen(function* () {
-        const files = data.getAll("page").filter((entry): entry is File => entry instanceof File);
-        if (files.length === 0 || !files.every((file) => PAGE_TYPES.includes(file.type))) {
-          return err({ _tag: "Rejected", reason: "unsupported" } as const);
-        }
-        if (files.length > MAX_PAGES) return err({ _tag: "Rejected", reason: "too-many" } as const);
-        if (files.reduce((sum, file) => sum + file.size, 0) > MAX_UPLOAD_BYTES) {
-          return err({ _tag: "Rejected", reason: "too-large" } as const);
-        }
-
-        const viewer = yield* currentViewer;
-        const db = yield* Db;
-        const [assignment] = yield* db
-          .insert(schema.assignments)
-          .values({ ...(yield* owner(viewer)), extractionStatus: "extracting" })
-          .returning({ id: schema.assignments.id });
-        if (assignment === undefined) return yield* Effect.die("assignment insert returned no row");
-
-        const pages = yield* Effect.forEach(
-          files,
-          (file, index) =>
-            storeFile(
-              `worksheets/${assignment.id}/page-${index + 1}.${file.type.split("/")[1]}`,
-              file,
-              file.type,
-            ).pipe(Effect.map((imageUrl) => ({ pageNumber: index + 1, imageUrl }))),
-          { concurrency: 4 },
-        );
-        yield* db
-          .insert(schema.worksheetPages)
-          .values(pages.map((page) => ({ ...page, assignmentId: assignment.id })));
-
-        waitUntil(run(extractInBackground(assignment.id, pages)));
-        return ok({ _tag: "Started", draftId: assignment.id } as const);
-      }).pipe(
-        Effect.catchTag("StorageFailed", (e) =>
-          Effect.logError("page upload failed", e.cause).pipe(
-            Effect.as(err({ _tag: "Rejected", reason: "upload-failed" } as const)),
-          ),
-        ),
-      ),
-    ),
-  );
+  .handler(async ({ data }) => {
+    const files = data.getAll("page").filter((entry): entry is File => entry instanceof File);
+    const owner = draftOwnerForRequest();
+    const result = await run(startUploadDraft(files, owner.id));
+    if (result._tag === "Ok") saveDraftOwner(owner);
+    return result;
+  });
 
 export const startDraftFromTemplate = createServerFn({ method: "POST" })
   .validator(Schema.standardSchemaV1(Schema.Struct({ templateId: Schema.String })))
-  .handler(({ data }) => run(startTemplateDraft(data.templateId)));
+  .handler(async ({ data }) => {
+    const owner = draftOwnerForRequest();
+    const result = await run(startTemplateDraft(data.templateId, owner.id));
+    if (result._tag === "Ok") saveDraftOwner(owner);
+    return result;
+  });
 
 const DraftInput = Schema.Struct({ draftId: Schema.UUID });
 
@@ -87,17 +52,18 @@ const locked = (e: { readonly sessionId: string }) =>
 
 export const getDraft = createServerFn({ method: "GET" })
   .validator(Schema.standardSchemaV1(DraftInput))
-  .handler(({ data }) =>
-    run(
+  .handler(({ data }) => {
+    const draftOwnerId = readDraftOwner();
+    return run(
       Effect.gen(function* () {
-        const viewer = yield* currentViewer;
+        const viewer = yield* viewerFor(draftOwnerId);
         const draft = yield* loadDraft(viewer, data.draftId);
         // From the server, so local sign-in mode (`AUTH_MODE=local`) counts as signed in.
         const signedIn = (yield* signedInUserId) !== null;
         return ok({ draft, signedIn });
       }).pipe(Effect.catchTag("DraftNotFound", notFound)),
-    ),
-  );
+    );
+  });
 
 export const editDraft = createServerFn({ method: "POST" })
   .validator(
@@ -108,10 +74,11 @@ export const editDraft = createServerFn({ method: "POST" })
       }),
     ),
   )
-  .handler(({ data }) =>
-    run(
+  .handler(({ data }) => {
+    const draftOwnerId = readDraftOwner();
+    return run(
       Effect.gen(function* () {
-        const viewer = yield* currentViewer;
+        const viewer = yield* viewerFor(draftOwnerId);
         yield* ownedAssignment(viewer, data.draftId);
         yield* whileEditable(data.draftId, applyEdits(data.draftId, data.edits));
         return ok(yield* loadDraft(viewer, data.draftId));
@@ -123,8 +90,8 @@ export const editDraft = createServerFn({ method: "POST" })
             Effect.succeed(err({ _tag: "EditRejected", reason: e.reason } as const)),
         }),
       ),
-    ),
-  );
+    );
+  });
 
 /** Which problems an edit batch touched, so the screen can point them out. */
 const touched = (before: Draft, after: Draft): ReadonlyArray<string> =>
@@ -144,10 +111,11 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       }),
     ),
   )
-  .handler(({ data }) =>
-    run(
+  .handler(({ data }) => {
+    const draftOwnerId = readDraftOwner();
+    return run(
       Effect.gen(function* () {
-        const viewer = yield* currentViewer;
+        const viewer = yield* viewerFor(draftOwnerId);
         const before = yield* loadDraft(viewer, data.draftId);
         yield* ensureEditable(data.draftId);
         const db = yield* Db;
@@ -170,8 +138,8 @@ export const sendChatMessage = createServerFn({ method: "POST" })
         const after = yield* loadDraft(viewer, data.draftId);
         return ok({ draft: after, changed: touched(before, after) });
       }).pipe(Effect.catchTags({ DraftNotFound: notFound, DraftLocked: locked })),
-    ),
-  );
+    );
+  });
 
 export const launch = createServerFn({ method: "POST" })
   .validator(
@@ -182,11 +150,12 @@ export const launch = createServerFn({ method: "POST" })
       }),
     ),
   )
-  .handler(({ data }) =>
-    run(
+  .handler(({ data }) => {
+    const draftOwnerId = readDraftOwner();
+    return run(
       Effect.gen(function* () {
         const teacher = yield* currentTeacher;
-        const viewer = yield* currentViewer;
+        const viewer = yield* viewerFor(draftOwnerId);
         if (Option.isSome(viewer.draftOwnerId)) {
           yield* claimDrafts(viewer.draftOwnerId.value, teacher.id);
         }
@@ -213,5 +182,5 @@ export const launch = createServerFn({ method: "POST" })
             ),
         }),
       ),
-    ),
-  );
+    );
+  });

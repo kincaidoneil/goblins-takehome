@@ -24,6 +24,8 @@ export interface ProblemCardProps {
   readonly highlighted: boolean;
   /** Open in edit mode, for a problem the chat just added with no text. */
   readonly isNew: boolean;
+  /** Point at a blank answer key, e.g. after launch refused a problem without one. */
+  readonly needsAnswerKey: boolean;
   /**
    * Edits run one at a time. Pass a function to build them from the problem as it is when the
    * edit runs, so a rubric or link change doesn't undo one still being saved.
@@ -45,6 +47,7 @@ export function ProblemCard({
   stem,
   highlighted,
   isNew,
+  needsAnswerKey,
   onEdit,
   onShowPage,
 }: ProblemCardProps) {
@@ -195,7 +198,11 @@ export function ProblemCard({
           value={problem.answerKey}
           onSave={setField("answerKey")}
           label={`Problem ${problem.label} answer key`}
-          placeholder="The answer, and how to get there."
+          placeholder={
+            needsAnswerKey
+              ? "Needed before launch: the answer, and how to get there."
+              : "The answer, and how to get there."
+          }
           className="setup-answer"
         />
       </section>

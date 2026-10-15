@@ -10,7 +10,7 @@ import type { Viewer } from "./viewer";
 /** The draft is not ready to launch. */
 export class NotLaunchable extends Data.TaggedError("NotLaunchable")<{
   readonly reason: "still_extracting" | "extraction_failed" | "no_title" | "empty_problem";
-  /** For `empty_problem`, its label. */
+  /** For `empty_problem`, the label of a problem with no text or no answer key. */
   readonly label?: string;
 }> {}
 
@@ -82,7 +82,8 @@ export const launchDraft = (input: {
           .where(
             and(
               eq(schema.problems.assignmentId, input.draftId),
-              sql`btrim(${schema.problems.text}) = ''`,
+              // The grader needs both: a blank answer key would grade against nothing.
+              sql`(btrim(${schema.problems.text}) = '' or btrim(${schema.problems.answerKey}) = '')`,
             ),
           )
           .limit(1);
