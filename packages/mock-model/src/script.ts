@@ -28,13 +28,13 @@ export type Scripted =
   | { readonly _tag: "FailsAlways"; readonly failure: Failure }
   | {
       /**
-       * Fails the first `times` calls for each grade (`tag.subjectId`), then
-       * answers `afterwards`. The count lives in memory on one instance, which holds
-       * for a test that fails once and retries seconds later.
+       * Fails grading attempts 1 to `attempts` (`tag.attempt`, read as 1 when
+       * missing), then answers `afterwards`. The attempt number comes from the
+       * caller, so the mock keeps no state and any instance gives the same answer.
        */
       readonly _tag: "FailsFirst";
       readonly failure: Failure;
-      readonly times: number;
+      readonly attempts: number;
       readonly afterwards: Answer;
     };
 

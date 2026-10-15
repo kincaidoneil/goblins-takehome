@@ -8,40 +8,15 @@ Put keys in `.env.local` at the root of the main checkout (`~/goblins-takehome/.
 
 - GitHub: signed in to `gh`, repo created, Codex reviews on.
 - Vercel CLI: signed in as `kincaidoneil`, team "Kincaid's Team" on the Hobby plan.
+- Vercel: project linked to GitHub; Neon (`goblins-db`, logical replication on) and Blob provisioned.
+- Clerk and OpenRouter keys in `.env.local`, copied to Vercel and GitHub secrets.
+- Repo stays private until submission; agents check CI by convention.
 
-## 1. GitHub: let CI block merges (decision needed)
+## Neon API key (optional)
 
-GitHub only enforces branch protection on private repos with GitHub Pro. Without it, a red CI run can't block a merge; agents would only follow the rule by convention.
+Only needed if the Infra and CI stream asks for it, for example to manage database branches the Vercel integration can't.
 
-Pick one:
-
-- **Make the repo public (recommended).** Free, and the repo is a deliverable anyway. The risk is anyone reading it before you submit. No secrets are committed.
-
-  ```bash
-  gh repo edit kincaidoneil/goblins-takehome --visibility public --accept-visibility-change-consequences
-  ```
-
-- **Upgrade to GitHub Pro** ($4/month). Keeps it private. This is your money, so it's your call.
-
-- **Do nothing.** Agents check CI themselves before merging. Weaker, and a reviewer may notice.
-
-## 2. Vercel: connect GitHub and accept Neon's terms
-
-Run these in a terminal in `~/goblins-takehome`. Each needs a person to confirm.
-
-1. Accept the Neon marketplace terms. This installs Neon on the team; agents then create the database.
-
-   ```bash
-   vercel integration accept-terms neon
-   ```
-
-2. Make sure the Vercel GitHub app can see the repo, so merges to `main` deploy and PRs get previews. Open <https://github.com/settings/installations>, choose Vercel, and add `goblins-takehome` if it uses "Only select repositories".
-
-## 3. Neon API key
-
-Agents need it to turn on logical replication (Electric requires it), and to manage the per-preview database branches.
-
-1. In the Vercel dashboard, open Storage, then the Neon integration, then "Open in Neon". If there is no database yet, wait for the agent to say it created one.
+1. In the Vercel dashboard, open Storage, then `goblins-db`, then "Open in Neon".
 2. In the Neon console, go to Organization settings, then API keys, and create a key named `goblins-agents`.
 3. Add it to `.env.local`:
 
@@ -49,7 +24,7 @@ Agents need it to turn on logical replication (Electric requires it), and to man
    NEON_API_KEY=
    ```
 
-## 4. Electric Cloud
+## Electric Cloud
 
 1. Create an account at <https://dashboard.electric-sql.cloud> (signing in with GitHub is fine).
 2. Create an API token in the dashboard's settings. Agents use it with the `electric` CLI to create one sync source per environment, including per-PR previews.
@@ -61,7 +36,7 @@ Agents need it to turn on logical replication (Electric requires it), and to man
 
 Agents create the sources and set `ELECTRIC_SOURCE_ID` and `ELECTRIC_SECRET` on Vercel themselves.
 
-## 5. Clerk
+## Clerk (done)
 
 1. At <https://dashboard.clerk.com>, create an application named `goblins-autograder`.
 2. Under sign-in options, turn on Google and turn everything else off (email, password, other social providers). The development instance uses Clerk's shared Google credentials, so no Google Cloud setup.
@@ -72,7 +47,7 @@ Agents create the sources and set `ELECTRIC_SOURCE_ID` and `ELECTRIC_SECRET` on 
    CLERK_SECRET_KEY=
    ```
 
-## 6. OpenRouter
+## OpenRouter (done)
 
 1. Copy the key from the Goblins email into `.env.local`:
 
@@ -86,7 +61,8 @@ Agents create the sources and set `ELECTRIC_SOURCE_ID` and `ELECTRIC_SECRET` on 
 
 | Service | Cap | Why it's enough |
 |---|---|---|
-| OpenRouter | $20 limit on the key (step 6) | The only service with metered spend |
+| OpenRouter | $20 limit on the key (OpenRouter section) | The only service with metered spend |
+| Upstash QStash | $25 total for load tests, pay-as-you-go (Kincaid approved 2026-10-15) | Added by the grading pipeline stream through the Vercel integration |
 | Vercel | None needed | Hobby plan has no billing; usage over the free limits pauses, it doesn't charge |
 | Neon, Electric, Clerk | None needed | Free tiers with no card on file |
 

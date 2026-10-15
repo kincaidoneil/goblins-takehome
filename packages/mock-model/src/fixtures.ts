@@ -61,7 +61,7 @@ export const fixtures: ReadonlyArray<Fixture> = [
     outcome: {
       _tag: "FailsFirst",
       failure: { _tag: "ProviderError", status: 400 },
-      times: 1,
+      attempts: 1,
       afterwards: { _tag: "Graded", score: 2, maxScore: 2, feedback: "Correct: x = 4." },
     },
   },
