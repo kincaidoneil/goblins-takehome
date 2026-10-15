@@ -4,6 +4,7 @@
  */
 import { Db, schema } from "@goblins/domain";
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestUrl } from "@tanstack/react-start/server";
 import { Effect, Option, Schema } from "effect";
 import { err, ok } from "../result";
 import { run } from "../runtime";
@@ -39,7 +40,7 @@ export const startDraftFromTemplate = createServerFn({ method: "POST" })
   .validator(Schema.standardSchemaV1(Schema.Struct({ templateId: Schema.String })))
   .handler(async ({ data }) => {
     const owner = draftOwnerForRequest();
-    const result = await run(startTemplateDraft(data.templateId, owner.id));
+    const result = await run(startTemplateDraft(data.templateId, owner.id, getRequestUrl().origin));
     if (result._tag === "Ok") saveDraftOwner(owner);
     return result;
   });
