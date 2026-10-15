@@ -11,8 +11,10 @@ export type CallPurpose = "grade" | "extract" | "rubric-chat" | "eval" | "calibr
 /** Metadata recorded in the call log next to each call. Not sent to the provider. */
 export interface CallTag {
   readonly purpose: CallPurpose;
-  /** The thing this call works on, such as a grade id, for joining log rows to app data. */
+  /** The thing this call works on, such as a submission id, for joining log rows to app data. */
   readonly subjectId?: string;
+  /** For grading calls, the grade attempt the call belongs to. */
+  readonly attempt?: number;
   /** Set when the call was made for a load-test run; its rows are deleted after the run. */
   readonly loadTestRunId?: string;
 }
@@ -66,14 +68,36 @@ export class Timeout extends Schema.TaggedError<Timeout>()("Timeout", {
 
 /** The provider returned an error status (5xx, or a 4xx other than 429), or no response at all. */
 export class ProviderError extends Schema.TaggedError<ProviderError>()("ProviderError", {
-  /** HTTP status, or 0 when the request never got a response (DNS, connection reset). */
+  /**
+   * HTTP status, the error code from a 200 response's error body, or 0 when the
+   * request never got a response (DNS, connection reset).
+   */
   status: Schema.Number,
   message: Schema.String,
+  /** The provider's `Retry-After`, when it sent one. Its presence makes the error retryable. */
+  retryAfterMs: Schema.optional(Schema.Number),
+  /**
+   * The failure came after the model started work (OpenRouter's errors inside a 200
+   * body), so the call may have been billed. With `usage`, the bill is known.
+   */
+  mayBeBilled: Schema.optional(Schema.Boolean),
+  usage: Schema.optional(
+    Schema.Struct({
+      promptTokens: Schema.Number,
+      completionTokens: Schema.Number,
+      costUsd: Schema.Number,
+    }),
+  ),
 }) {}
 
 /** The provider answered 200 but the body is unusable: malformed, empty, or cut off. */
 export class BadResponse extends Schema.TaggedError<BadResponse>()("BadResponse", {
   message: Schema.String,
+  /**
+   * The answer hit the max-token limit. Asking again with the same limit would
+   * pay for the same cut-off answer, so this is not retried.
+   */
+  truncated: Schema.optional(Schema.Boolean),
   /** Present when the provider reported usage, so the call log can still record the cost. */
   usage: Schema.optional(
     Schema.Struct({
@@ -87,17 +111,24 @@ export class BadResponse extends Schema.TaggedError<BadResponse>()("BadResponse"
 export type ModelError = RateLimited | Timeout | ProviderError | BadResponse;
 
 /**
- * Whether trying the same request again can succeed. A 4xx other than 429 means the
- * request itself is wrong (bad model id, too many tokens), so repeating it only spends money.
+ * Whether trying the same request again can succeed. A 4xx other than 408 or 429 means
+ * the request itself is wrong (bad model id, too many tokens), so repeating it only
+ * spends money, unless the provider said when to come back.
  */
 export const isRetryable = (error: ModelError): boolean => {
   switch (error._tag) {
     case "RateLimited":
     case "Timeout":
-    case "BadResponse":
       return true;
+    case "BadResponse":
+      return error.truncated !== true;
     case "ProviderError":
-      return error.status === 0 || error.status === 408 || error.status >= 500;
+      return (
+        error.retryAfterMs !== undefined ||
+        error.status === 0 ||
+        error.status === 408 ||
+        error.status >= 500
+      );
   }
 };
 
