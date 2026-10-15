@@ -15,10 +15,12 @@ import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as ApiShapeRouteImport } from './routes/api/shape'
 import { Route as PlaySessionIdRouteImport } from './routes/play/$sessionId'
 import { Route as ReportDemoRouteImport } from './routes/report/demo'
+import { Route as ShareTokenRouteImport } from './routes/share/$token'
 import { Route as ShareDemoRouteImport } from './routes/share/demo'
 import { Route as ApiGradingSweepRouteImport } from './routes/api/grading/sweep'
 import { Route as SessionsSessionIdIndexRouteImport } from './routes/sessions/$sessionId/index'
 import { Route as SessionsSessionIdProjectorRouteImport } from './routes/sessions/$sessionId/projector'
+import { Route as SessionsSessionIdReportRouteImport } from './routes/sessions/$sessionId/report'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -50,6 +52,11 @@ const ReportDemoRoute = ReportDemoRouteImport.update({
   path: '/report/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShareTokenRoute = ShareTokenRouteImport.update({
+  id: '/share/$token',
+  path: '/share/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShareDemoRoute = ShareDemoRouteImport.update({
   id: '/share/demo',
   path: '/share/demo',
@@ -71,6 +78,11 @@ const SessionsSessionIdProjectorRoute =
     path: '/sessions/$sessionId/projector',
     getParentRoute: () => rootRouteImport,
   } as any)
+const SessionsSessionIdReportRoute = SessionsSessionIdReportRouteImport.update({
+  id: '/sessions/$sessionId/report',
+  path: '/sessions/$sessionId/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -79,9 +91,11 @@ export interface FileRoutesByFullPath {
   '/api/shape': typeof ApiShapeRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
+  '/share/$token': typeof ShareTokenRoute
   '/share/demo': typeof ShareDemoRoute
   '/api/grading/sweep': typeof ApiGradingSweepRoute
   '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
+  '/sessions/$sessionId/report': typeof SessionsSessionIdReportRoute
   '/sessions/$sessionId/': typeof SessionsSessionIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -91,9 +105,11 @@ export interface FileRoutesByTo {
   '/api/shape': typeof ApiShapeRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
+  '/share/$token': typeof ShareTokenRoute
   '/share/demo': typeof ShareDemoRoute
   '/api/grading/sweep': typeof ApiGradingSweepRoute
   '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
+  '/sessions/$sessionId/report': typeof SessionsSessionIdReportRoute
   '/sessions/$sessionId': typeof SessionsSessionIdIndexRoute
 }
 export interface FileRoutesById {
@@ -104,9 +120,11 @@ export interface FileRoutesById {
   '/api/shape': typeof ApiShapeRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
+  '/share/$token': typeof ShareTokenRoute
   '/share/demo': typeof ShareDemoRoute
   '/api/grading/sweep': typeof ApiGradingSweepRoute
   '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
+  '/sessions/$sessionId/report': typeof SessionsSessionIdReportRoute
   '/sessions/$sessionId/': typeof SessionsSessionIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -118,9 +136,11 @@ export interface FileRouteTypes {
     | '/api/shape'
     | '/play/$sessionId'
     | '/report/demo'
+    | '/share/$token'
     | '/share/demo'
     | '/api/grading/sweep'
     | '/sessions/$sessionId/projector'
+    | '/sessions/$sessionId/report'
     | '/sessions/$sessionId/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -130,9 +150,11 @@ export interface FileRouteTypes {
     | '/api/shape'
     | '/play/$sessionId'
     | '/report/demo'
+    | '/share/$token'
     | '/share/demo'
     | '/api/grading/sweep'
     | '/sessions/$sessionId/projector'
+    | '/sessions/$sessionId/report'
     | '/sessions/$sessionId'
   id:
     | '__root__'
@@ -142,9 +164,11 @@ export interface FileRouteTypes {
     | '/api/shape'
     | '/play/$sessionId'
     | '/report/demo'
+    | '/share/$token'
     | '/share/demo'
     | '/api/grading/sweep'
     | '/sessions/$sessionId/projector'
+    | '/sessions/$sessionId/report'
     | '/sessions/$sessionId/'
   fileRoutesById: FileRoutesById
 }
@@ -155,9 +179,11 @@ export interface RootRouteChildren {
   ApiShapeRoute: typeof ApiShapeRoute
   PlaySessionIdRoute: typeof PlaySessionIdRoute
   ReportDemoRoute: typeof ReportDemoRoute
+  ShareTokenRoute: typeof ShareTokenRoute
   ShareDemoRoute: typeof ShareDemoRoute
   ApiGradingSweepRoute: typeof ApiGradingSweepRoute
   SessionsSessionIdProjectorRoute: typeof SessionsSessionIdProjectorRoute
+  SessionsSessionIdReportRoute: typeof SessionsSessionIdReportRoute
   SessionsSessionIdIndexRoute: typeof SessionsSessionIdIndexRoute
 }
 
@@ -205,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportDemoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/share/$token': {
+      id: '/share/$token'
+      path: '/share/$token'
+      fullPath: '/share/$token'
+      preLoaderRoute: typeof ShareTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/share/demo': {
       id: '/share/demo'
       path: '/share/demo'
@@ -233,6 +266,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SessionsSessionIdProjectorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sessions/$sessionId/report': {
+      id: '/sessions/$sessionId/report'
+      path: '/sessions/$sessionId/report'
+      fullPath: '/sessions/$sessionId/report'
+      preLoaderRoute: typeof SessionsSessionIdReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -243,9 +283,11 @@ const rootRouteChildren: RootRouteChildren = {
   ApiShapeRoute: ApiShapeRoute,
   PlaySessionIdRoute: PlaySessionIdRoute,
   ReportDemoRoute: ReportDemoRoute,
+  ShareTokenRoute: ShareTokenRoute,
   ShareDemoRoute: ShareDemoRoute,
   ApiGradingSweepRoute: ApiGradingSweepRoute,
   SessionsSessionIdProjectorRoute: SessionsSessionIdProjectorRoute,
+  SessionsSessionIdReportRoute: SessionsSessionIdReportRoute,
   SessionsSessionIdIndexRoute: SessionsSessionIdIndexRoute,
 }
 export const routeTree = rootRouteImport

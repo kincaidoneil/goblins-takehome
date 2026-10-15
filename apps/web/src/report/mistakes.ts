@@ -58,7 +58,7 @@ export function groupByRubricLine(stats: ProblemStats): ProblemMistakes {
         description:
           lines.length === 0
             ? "Lost points (see each grade for the reason)"
-            : `Didn't get ${lines.map(quote).join(" or ")}`,
+            : `Lost points on ${lines.map(quote).join(" and ")}`,
         studentIds: students,
       })),
   };
