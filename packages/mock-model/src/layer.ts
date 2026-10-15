@@ -135,12 +135,15 @@ export const makeMockModelClient = (config: MockConfig, options: MockOptions = {
      * does. Reading is bounded by the model timeout, as the provider's fetch
      * would be. An unreadable image fails as the provider's 400.
      */
-    const scriptFor = (request: CompletionRequest): Effect.Effect<Resolved, ModelError> => {
+    const scriptFor = (
+      request: CompletionRequest,
+      deadline: AbortSignal,
+    ): Effect.Effect<Resolved, ModelError> => {
       const urls = imageUrlsOf(request);
       if (urls.length === 0) return Effect.succeed({ scripted: defaultAnswer, key: "" });
-      return Effect.forEach(urls, (url) =>
-        Effect.flatMap(imageBytes(url, timeoutMs), sha256Hex),
-      ).pipe(
+      return Effect.forEach(urls, (url) => Effect.flatMap(imageBytes(url, deadline), sha256Hex), {
+        concurrency: "unbounded",
+      }).pipe(
         Effect.mapError(
           (error): ModelError =>
             error._tag === "ImageTimedOut"
@@ -162,11 +165,15 @@ export const makeMockModelClient = (config: MockConfig, options: MockOptions = {
       Effect.gen(function* () {
         const now = yield* Clock.currentTimeMillis;
         const id = `mock-${anchorMs}-${++calls}`;
-        const { scripted, key } = yield* scriptFor(request);
-        const fate = capAtTimeout(timing(now - anchorMs, rng), timeoutMs);
+        // One timeout covers the whole call: the real time spent reading
+        // images, then the modelled latency within what is left.
+        const readStarted = performance.now();
+        const { scripted, key } = yield* scriptFor(request, AbortSignal.timeout(timeoutMs));
+        const readMs = Math.round(performance.now() - readStarted);
+        const fate = capAtTimeout(timing(now - anchorMs, rng), Math.max(0, timeoutMs - readMs));
         yield* Effect.sleep(fate.latencyMs);
         if (fate._tag === "Fail") {
-          return yield* Effect.fail(toModelError(fate.failure, fate.latencyMs));
+          return yield* Effect.fail(toModelError(fate.failure, readMs + fate.latencyMs));
         }
         const answer = yield* answerOf(scripted, key, attempts, fate.latencyMs);
         return { id, model: request.model, text: render(answer), usage: usageFor(config, rng) };

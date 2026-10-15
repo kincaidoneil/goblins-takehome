@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { readdirSync } from "node:fs";
-import { createServer } from "node:http";
+import { createServer, type Server } from "node:http";
 import { describe, expect, it } from "@effect/vitest";
 import { Effect, Either } from "effect";
 import { fixtures, type MockConfig, makeMockModelClient, renderJson } from "../src/index.ts";
@@ -141,41 +141,74 @@ describe("image handling", () => {
     }),
   );
 
+  it.effect("a malformed data URL fails as the provider's 400", () =>
+    Effect.gen(function* () {
+      const client = yield* makeMockModelClient(fixed, { seed: 1 });
+      const result = yield* Effect.either(client.complete(withImageUrl("data:image/png,%")));
+      expect(Either.isLeft(result) && result.left).toMatchObject({
+        _tag: "ProviderError",
+        status: 400,
+      });
+    }),
+  );
+
   it.live("times out when the image host stalls past the model timeout", () =>
-    Effect.acquireUseRelease(
-      Effect.async<ReturnType<typeof createServer> & { port: number }>((resume) => {
-        // Accepts the request and never answers.
-        const server = createServer(() => {});
-        server.listen(0, "127.0.0.1", () => {
-          const address = server.address();
-          const port = typeof address === "object" && address !== null ? address.port : 0;
-          resume(Effect.succeed(Object.assign(server, { port })));
-        });
+    withServer(undefined, (port) =>
+      Effect.gen(function* () {
+        const client = yield* makeMockModelClient(fixed, { seed: 1, timeoutMs: 200 });
+        const result = yield* Effect.either(
+          client.complete(withImageUrl(`http://127.0.0.1:${port}/board.png`)),
+        );
+        expect(Either.isLeft(result) && result.left).toMatchObject({ _tag: "Timeout" });
       }),
-      (server) =>
-        Effect.gen(function* () {
-          const client = yield* makeMockModelClient(fixed, { seed: 1, timeoutMs: 200 });
-          const result = yield* Effect.either(
-            client.complete({
-              model: "test/model",
-              tag: { purpose: "grade" },
-              messages: [
-                {
-                  role: "user",
-                  content: [{ type: "image", url: `http://127.0.0.1:${server.port}/board.png` }],
-                },
-              ],
-            }),
-          );
-          expect(Either.isLeft(result) && result.left).toMatchObject({
-            _tag: "Timeout",
-            afterMs: 200,
-          });
-        }),
-      (server) =>
-        Effect.sync(() => server.closeAllConnections()).pipe(
-          Effect.andThen(Effect.sync(() => server.close())),
-        ),
+    ),
+  );
+
+  it.live("one timeout covers the image read and the modelled latency together", () =>
+    withServer(150, (port) =>
+      Effect.gen(function* () {
+        // 150 ms reading plus 100 ms of latency is past the 200 ms budget,
+        // though each part alone is within it.
+        const client = yield* makeMockModelClient(
+          { _tag: "Fixed", latencyMs: 100 },
+          { seed: 1, timeoutMs: 200 },
+        );
+        const result = yield* Effect.either(
+          client.complete(withImageUrl(`http://127.0.0.1:${port}/board.png`)),
+        );
+        expect(Either.isLeft(result) && result.left).toMatchObject({ _tag: "Timeout" });
+      }),
     ),
   );
 });
+
+const withImageUrl = (url: string) => ({
+  model: "test/model",
+  tag: { purpose: "grade" as const },
+  messages: [{ role: "user" as const, content: [{ type: "image" as const, url }] }],
+});
+
+/** Runs `use` against a local image server that answers after `delayMs`, or never when undefined. */
+const withServer = <A, E>(
+  delayMs: number | undefined,
+  use: (port: number) => Effect.Effect<A, E>,
+) =>
+  Effect.acquireUseRelease(
+    Effect.async<{ server: Server; port: number }>((resume) => {
+      const server = createServer((_, response) => {
+        if (delayMs === undefined) return;
+        setTimeout(() => response.end(fixtureBytes("correct.png")), delayMs);
+      });
+      server.listen(0, "127.0.0.1", () => {
+        const address = server.address();
+        const port = typeof address === "object" && address !== null ? address.port : 0;
+        resume(Effect.succeed({ server, port }));
+      });
+    }),
+    ({ port }) => use(port),
+    ({ server }) =>
+      Effect.sync(() => {
+        server.closeAllConnections();
+        server.close();
+      }),
+  );

@@ -89,26 +89,28 @@ const DATA_URL = /^data:([^,]*?)(;base64)?,(.*)$/s;
 
 /**
  * Image bytes from a `data:` URL, or fetched from an http(s) URL as the
- * provider would. The fetch is real network time, so it is bounded by a real
- * timer rather than Effect's clock.
+ * provider would. The fetch is real network time, so it stops at `deadline`,
+ * a real timer shared by the whole call, rather than at Effect's clock.
  */
 export const imageBytes = (
   url: string,
-  timeoutMs: number,
+  deadline: AbortSignal,
 ): Effect.Effect<Uint8Array, ImageError> => {
   const data = DATA_URL.exec(url);
   if (data !== null) {
     const payload = data[3] ?? "";
-    return Effect.succeed(
-      data[2] === undefined
-        ? new TextEncoder().encode(decodeURIComponent(payload))
-        : new Uint8Array(Buffer.from(payload, "base64")),
-    );
+    return Effect.try({
+      try: () =>
+        data[2] === undefined
+          ? new TextEncoder().encode(decodeURIComponent(payload))
+          : new Uint8Array(Buffer.from(payload, "base64")),
+      catch: (): ImageError => ({ _tag: "ImageUnavailable", message: "malformed data URL" }),
+    });
   }
   return Effect.tryPromise({
     try: async (signal) => {
       const response = await fetch(url, {
-        signal: AbortSignal.any([signal, AbortSignal.timeout(timeoutMs)]),
+        signal: AbortSignal.any([signal, deadline]),
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return new Uint8Array(await response.arrayBuffer());
