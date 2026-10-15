@@ -113,9 +113,18 @@ export function creature(id: number): Creature {
   };
 }
 
-/** A uniformly random creature id, for assigning to a student who just joined. */
-export function randomCreatureId(random: () => number = Math.random): number {
-  return Math.floor(random() * CREATURE_COUNT);
+/**
+ * A random creature id for a student who just joined, chosen from the ones no
+ * one in the session has yet. Repeats only once all 48 are taken.
+ */
+export function randomCreatureId(
+  taken: Iterable<number> = [],
+  random: () => number = Math.random,
+): number {
+  const used = new Set(taken);
+  const free = Array.from({ length: CREATURE_COUNT }, (_, id) => id).filter((id) => !used.has(id));
+  const pool = free.length > 0 ? free : Array.from({ length: CREATURE_COUNT }, (_, id) => id);
+  return at(pool, Math.floor(random() * pool.length));
 }
 
 /** Mirrors a left-side shape to the right side of the 64-unit canvas. */
