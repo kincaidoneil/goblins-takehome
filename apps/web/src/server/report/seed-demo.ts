@@ -14,7 +14,6 @@ import { DEMO_ASSIGNMENT, demoClass } from "../../report/fixture";
 
 export const DEMO_SESSION_ID = "5eed0000-0000-4000-8000-000000000001";
 export const DEMO_SHARE_TOKEN = "sample-class-report-share-link";
-const TEACHER_ID = "5eed0000-0000-4000-8000-000000000002";
 const ASSIGNMENT_ID = "5eed0000-0000-4000-8000-000000000003";
 
 /** Fixture ids ("s1", "p7", "p7-l1") as stable UUIDs. */
@@ -31,13 +30,16 @@ export const seedDemoReport = (clerkUserId: string) =>
     const started = new Date(ended.getTime() - 40 * 60_000);
 
     yield* db.delete(schema.assignments).where(eq(schema.assignments.id, ASSIGNMENT_ID));
-    yield* db
+    // The Clerk user may already have a teacher row from signing in; seed under that one.
+    const [teacher] = yield* db
       .insert(schema.teachers)
-      .values({ id: TEACHER_ID, clerkUserId, name: DEMO_ASSIGNMENT.teacherName })
-      .onConflictDoUpdate({ target: schema.teachers.id, set: { clerkUserId } });
+      .values({ clerkUserId, name: DEMO_ASSIGNMENT.teacherName })
+      .onConflictDoUpdate({ target: schema.teachers.clerkUserId, set: { updatedAt: new Date() } })
+      .returning({ id: schema.teachers.id });
+    if (teacher === undefined) return yield* Effect.die("teacher upsert returned no row");
     yield* db.insert(schema.assignments).values({
       id: ASSIGNMENT_ID,
-      teacherId: TEACHER_ID,
+      teacherId: teacher.id,
       title: DEMO_ASSIGNMENT.title,
       templateId: "solving-linear-equations",
       extractionStatus: "ready",
@@ -66,7 +68,7 @@ export const seedDemoReport = (clerkUserId: string) =>
     yield* db.insert(schema.classSessions).values({
       id: DEMO_SESSION_ID,
       assignmentId: ASSIGNMENT_ID,
-      teacherId: TEACHER_ID,
+      teacherId: teacher.id,
       joinCode: "000000",
       status: "ended",
       startedAt: started,

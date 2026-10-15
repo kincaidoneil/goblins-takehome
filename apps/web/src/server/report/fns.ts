@@ -96,7 +96,9 @@ export const shareReport = createServerFn({ method: "POST" })
     ),
   );
 
-const ShareToken = Schema.Struct({ token: Schema.String.pipe(Schema.pattern(/^[\w-]{16,64}$/)) });
+const ShareToken = Schema.Struct({ token: Schema.String });
+/** Tokens are base64url. A truncated or mangled link is just "not found", like a wrong one. */
+const isTokenShaped = (token: string) => /^[\w-]{16,64}$/.test(token);
 
 /** The shared report: class results with every student name removed here, on the server. */
 export const getSharedReport = createServerFn({ method: "GET" })
@@ -104,6 +106,7 @@ export const getSharedReport = createServerFn({ method: "GET" })
   .handler(({ data }) =>
     run(
       Effect.gen(function* () {
+        if (!isTokenShaped(data.token)) return err(notFound);
         const session = yield* sharedSession(data.token);
         const header = yield* reportHeader(session);
         const problems = yield* reportProblems(session.assignmentId);
