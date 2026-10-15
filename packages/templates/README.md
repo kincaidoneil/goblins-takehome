@@ -33,18 +33,20 @@ Each problem is either `Whole` (one answer) or `WithParts` (lettered parts a, b,
 - `answer`: `Exact` (a canonical value plus equivalent forms to accept) or `Open` (a sample full-credit response and the criteria a grader checks).
 - `solution`: a worked solution.
 - `dependsOn`: earlier items whose answers this one uses, such as `["3a"]`. A correct method that uses the student's own wrong earlier answer earns follow-through credit.
-- `review`: `Checked`, or `Unsure` with a note for Kincaid.
+- `review`: `Checked` (with an optional note on how a doubt was settled), or `Unsure` with a note for Kincaid.
 
 Each problem also records the pages it appears on (two pages when it runs across a page break), its source lesson and problem number, and a text description of each diagram detailed enough to solve the problem without the image. Problem text keeps the worksheet's wording, with math in LaTeX between `\(` and `\)`.
 
 "Solve each" problems with several unlettered equations are one `Whole` problem whose answer lists every solution, because that is how the page prints them.
 
-### Items marked Unsure
+### Items Kincaid reviewed
 
-- `angle-relationships` 8: the diagram shows 138°, but IM's alt text for the image says 128°. The key follows the diagram.
-- `solving-linear-equations` 7: Clare's work has two errors in one step. The key accepts either one; Kincaid may want both required.
-- `linear-relationships` 5a: Tyler ran only about 0.02 miles farther, a difference read from a graph. A teacher may accept any reasoned estimate.
-- `right-triangle-trigonometry` 2: we linked it to 1a (same triangle), so a wrong height from 1a earns method credit.
+These four were marked `Unsure` until Kincaid reviewed them on 2026-10-15. They are now `Checked`, and each keeps a note recording the decision:
+
+- `angle-relationships` 8: the key follows the diagram (138°), not IM's alt text (128°).
+- `solving-linear-equations` 7: naming either of Clare's two errors earns credit.
+- `linear-relationships` 5a: any reasoned estimate of the graph-read difference earns credit.
+- `right-triangle-trigonometry` 2: stays linked to 1a, so a wrong height from 1a still earns method credit.
 
 ## Rebuilding the worksheets
 

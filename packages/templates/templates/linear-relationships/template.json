@@ -195,15 +195,15 @@
             "sample": "Tyler. In 10 minutes Tyler ran 1.2 miles (from the graph) and Elena ran 10 ÷ 8.5 ≈ 1.18 miles, so Tyler ran about 0.02 miles farther.",
             "criteria": [
               "Tyler ran farther",
-              "Tyler about 1.2 miles and Elena about 1.18 miles in 10 minutes",
-              "Difference of about 0.02 miles (exactly 2/85 mile)"
+              "Compares how far each ran in 10 minutes (Tyler about 1.2 miles from the graph, Elena 10 ÷ 8.5 ≈ 1.18 miles)",
+              "Gives a difference supported by that comparison; any reasoned estimate earns credit (exact: 2/85 ≈ 0.02 mile)"
             ]
           },
           "solution": "Tyler: the line reaches 10 minutes at 1.2 miles. Elena: 10 = 8.5x, x = 20/17 ≈ 1.176 miles. 1.2 − 1.176 ≈ 0.024 miles.",
           "dependsOn": [],
           "review": {
-            "_tag": "Unsure",
-            "note": "Tyler's line was read from the graph's pixels (8 1/3 minutes at 1 mile, on a grid line). The difference is small, so graph-reading error could flip a student's answer; a teacher may accept any reasoned estimate."
+            "_tag": "Checked",
+            "note": "Reviewed by Kincaid on 2026-10-15: the difference is read from a graph, so any reasoned estimate earns credit."
           }
         },
         {
