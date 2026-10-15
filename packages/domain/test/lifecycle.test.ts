@@ -210,6 +210,7 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
       if (claimed._tag !== "Claimed") return yield* Effect.die("expected a claim")
       const input = claimed.input
       expect(input.problem.label).toBe("1b")
+      expect(input.loadTestRunId).toEqual(Option.none())
       expect(input.rubricLines).toHaveLength(1)
       expect(input.dependencies).toHaveLength(1)
       expect(input.dependencies[0]?.label).toBe("1a")

@@ -25,6 +25,7 @@ import {
   totalPoints
 } from "./grade"
 import {
+  classSessions,
   grades,
   problemDependencies,
   problems,
@@ -156,6 +157,8 @@ export interface Lease {
 /** Everything the grader needs for one attempt. */
 export interface GradingInput {
   readonly lease: Lease
+  /** Set when a load test created this grade. Route it to the mock model and tag its call log rows. */
+  readonly loadTestRunId: Option.Option<string>
   readonly whiteboardUrl: string
   readonly problem: {
     readonly label: string
@@ -238,8 +241,9 @@ export const startGrading = (job: GradeJob) =>
     }
 
     const [submission] = yield* db
-      .select({ whiteboardUrl: submissions.whiteboardUrl })
+      .select({ whiteboardUrl: submissions.whiteboardUrl, loadTestRunId: classSessions.loadTestRunId })
       .from(submissions)
+      .innerJoin(classSessions, eq(classSessions.id, submissions.sessionId))
       .where(eq(submissions.id, job.submissionId))
     const [problem] = yield* db.select().from(problems).where(eq(problems.id, claimed.problemId))
     if (submission === undefined || problem === undefined) return stale
@@ -283,6 +287,7 @@ export const startGrading = (job: GradeJob) =>
 
     const input: GradingInput = {
       lease: { submissionId: job.submissionId, attempt: job.attempt, claimId },
+      loadTestRunId: Option.fromNullable(submission.loadTestRunId),
       whiteboardUrl: submission.whiteboardUrl,
       problem: {
         label: problem.label,
