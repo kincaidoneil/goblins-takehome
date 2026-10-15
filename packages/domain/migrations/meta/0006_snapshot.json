@@ -70,12 +70,8 @@
           "name": "assignment_chat_messages_assignment_id_assignments_id_fk",
           "tableFrom": "assignment_chat_messages",
           "tableTo": "assignments",
-          "columnsFrom": [
-            "assignment_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["assignment_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -209,12 +205,8 @@
           "name": "assignments_teacher_id_teachers_id_fk",
           "tableFrom": "assignments",
           "tableTo": "teachers",
-          "columnsFrom": [
-            "teacher_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["teacher_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -390,12 +382,8 @@
           "name": "class_sessions_assignment_id_assignments_id_fk",
           "tableFrom": "class_sessions",
           "tableTo": "assignments",
-          "columnsFrom": [
-            "assignment_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["assignment_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -403,12 +391,8 @@
           "name": "class_sessions_teacher_id_teachers_id_fk",
           "tableFrom": "class_sessions",
           "tableTo": "teachers",
-          "columnsFrom": [
-            "teacher_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["teacher_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -418,9 +402,7 @@
         "class_sessions_reportShareToken_unique": {
           "name": "class_sessions_reportShareToken_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "report_share_token"
-          ]
+          "columns": ["report_share_token"]
         }
       },
       "policies": {},
@@ -645,18 +627,8 @@
           "name": "grades_submission_fk",
           "tableFrom": "grades",
           "tableTo": "submissions",
-          "columnsFrom": [
-            "submission_id",
-            "session_id",
-            "student_id",
-            "problem_id"
-          ],
-          "columnsTo": [
-            "id",
-            "session_id",
-            "student_id",
-            "problem_id"
-          ],
+          "columnsFrom": ["submission_id", "session_id", "student_id", "problem_id"],
+          "columnsTo": ["id", "session_id", "student_id", "problem_id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -915,12 +887,8 @@
           "name": "problem_dependencies_problem_id_problems_id_fk",
           "tableFrom": "problem_dependencies",
           "tableTo": "problems",
-          "columnsFrom": [
-            "problem_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["problem_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -928,12 +896,8 @@
           "name": "problem_dependencies_depends_on_problem_id_problems_id_fk",
           "tableFrom": "problem_dependencies",
           "tableTo": "problems",
-          "columnsFrom": [
-            "depends_on_problem_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["depends_on_problem_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -941,10 +905,7 @@
       "compositePrimaryKeys": {
         "problem_dependencies_problem_id_depends_on_problem_id_pk": {
           "name": "problem_dependencies_problem_id_depends_on_problem_id_pk",
-          "columns": [
-            "problem_id",
-            "depends_on_problem_id"
-          ]
+          "columns": ["problem_id", "depends_on_problem_id"]
         }
       },
       "uniqueConstraints": {},
@@ -1075,12 +1036,8 @@
           "name": "problems_assignment_id_assignments_id_fk",
           "tableFrom": "problems",
           "tableTo": "assignments",
-          "columnsFrom": [
-            "assignment_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["assignment_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1207,10 +1164,7 @@
       "compositePrimaryKeys": {
         "rate_limits_key_window_start_pk": {
           "name": "rate_limits_key_window_start_pk",
-          "columns": [
-            "key",
-            "window_start"
-          ]
+          "columns": ["key", "window_start"]
         }
       },
       "uniqueConstraints": {},
@@ -1272,12 +1226,8 @@
           "name": "report_mistake_groups_session_id_class_sessions_id_fk",
           "tableFrom": "report_mistake_groups",
           "tableTo": "class_sessions",
-          "columnsFrom": [
-            "session_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["session_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1285,12 +1235,8 @@
           "name": "report_mistake_groups_problem_id_problems_id_fk",
           "tableFrom": "report_mistake_groups",
           "tableTo": "problems",
-          "columnsFrom": [
-            "problem_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["problem_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1298,11 +1244,7 @@
       "compositePrimaryKeys": {
         "report_mistake_groups_session_id_problem_id_input_hash_pk": {
           "name": "report_mistake_groups_session_id_problem_id_input_hash_pk",
-          "columns": [
-            "session_id",
-            "problem_id",
-            "input_hash"
-          ]
+          "columns": ["session_id", "problem_id", "input_hash"]
         }
       },
       "uniqueConstraints": {},
@@ -1388,12 +1330,8 @@
           "name": "rubric_lines_problem_id_problems_id_fk",
           "tableFrom": "rubric_lines",
           "tableTo": "problems",
-          "columnsFrom": [
-            "problem_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["problem_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1491,12 +1429,8 @@
           "name": "students_session_id_class_sessions_id_fk",
           "tableFrom": "students",
           "tableTo": "class_sessions",
-          "columnsFrom": [
-            "session_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["session_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1623,12 +1557,8 @@
           "name": "submissions_session_id_class_sessions_id_fk",
           "tableFrom": "submissions",
           "tableTo": "class_sessions",
-          "columnsFrom": [
-            "session_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["session_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1636,12 +1566,8 @@
           "name": "submissions_student_id_students_id_fk",
           "tableFrom": "submissions",
           "tableTo": "students",
-          "columnsFrom": [
-            "student_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["student_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1649,12 +1575,8 @@
           "name": "submissions_problem_id_problems_id_fk",
           "tableFrom": "submissions",
           "tableTo": "problems",
-          "columnsFrom": [
-            "problem_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["problem_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1664,12 +1586,7 @@
         "submissions_grade_link": {
           "name": "submissions_grade_link",
           "nullsNotDistinct": false,
-          "columns": [
-            "id",
-            "session_id",
-            "student_id",
-            "problem_id"
-          ]
+          "columns": ["id", "session_id", "student_id", "problem_id"]
         }
       },
       "policies": {},
@@ -1756,9 +1673,7 @@
         "teachers_clerkUserId_unique": {
           "name": "teachers_clerkUserId_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "clerk_user_id"
-          ]
+          "columns": ["clerk_user_id"]
         }
       },
       "policies": {},
@@ -1801,12 +1716,8 @@
           "name": "worksheet_pages_assignment_id_assignments_id_fk",
           "tableFrom": "worksheet_pages",
           "tableTo": "assignments",
-          "columnsFrom": [
-            "assignment_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["assignment_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1814,10 +1725,7 @@
       "compositePrimaryKeys": {
         "worksheet_pages_assignment_id_page_number_pk": {
           "name": "worksheet_pages_assignment_id_page_number_pk",
-          "columns": [
-            "assignment_id",
-            "page_number"
-          ]
+          "columns": ["assignment_id", "page_number"]
         }
       },
       "uniqueConstraints": {},
@@ -1835,61 +1743,32 @@
     "public.chat_role": {
       "name": "chat_role",
       "schema": "public",
-      "values": [
-        "teacher",
-        "assistant"
-      ]
+      "values": ["teacher", "assistant"]
     },
     "public.class_session_status": {
       "name": "class_session_status",
       "schema": "public",
-      "values": [
-        "lobby",
-        "live",
-        "ended"
-      ]
+      "values": ["lobby", "live", "ended"]
     },
     "public.extraction_status": {
       "name": "extraction_status",
       "schema": "public",
-      "values": [
-        "extracting",
-        "ready",
-        "failed"
-      ]
+      "values": ["extracting", "ready", "failed"]
     },
     "public.grade_source": {
       "name": "grade_source",
       "schema": "public",
-      "values": [
-        "model",
-        "teacher_accepted",
-        "teacher_scored",
-        "teacher_override"
-      ]
+      "values": ["model", "teacher_accepted", "teacher_scored", "teacher_override"]
     },
     "public.grade_state": {
       "name": "grade_state",
       "schema": "public",
-      "values": [
-        "submitted",
-        "grading",
-        "graded",
-        "needs_teacher",
-        "couldnt_grade"
-      ]
+      "values": ["submitted", "grading", "graded", "needs_teacher", "couldnt_grade"]
     },
     "public.model_call_status": {
       "name": "model_call_status",
       "schema": "public",
-      "values": [
-        "ok",
-        "rate_limited",
-        "timeout",
-        "provider_error",
-        "bad_response",
-        "interrupted"
-      ]
+      "values": ["ok", "rate_limited", "timeout", "provider_error", "bad_response", "interrupted"]
     }
   },
   "schemas": {},
