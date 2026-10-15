@@ -1,0 +1,5 @@
+# Parallel streams append rows to the decision log. Keep both sides on conflict.
+docs/decisions.md merge=union
+
+# Generated. On conflict, take main's copy and run `pnpm install`.
+pnpm-lock.yaml -diff linguist-generated=true

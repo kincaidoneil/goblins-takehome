@@ -1,0 +1,47 @@
+name: E2E
+
+# Vercel reports each deploy to GitHub as a deployment. When a preview finishes
+# deploying, run the Playwright suite against it. The check attaches to the
+# deployed commit, so it shows on the PR.
+on:
+  deployment_status:
+
+# The job runs code from the deployed commit, so its token can only read.
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-${{ github.event.deployment.sha }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: E2E against preview
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      startsWith(github.event.deployment.environment, 'Preview')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha }}
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @goblins/e2e exec playwright install --with-deps chromium
+      - run: pnpm e2e
+        env:
+          E2E_BASE_URL: ${{ github.event.deployment_status.environment_url || github.event.deployment_status.target_url }}
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            e2e/playwright-report
+            e2e/test-results
+          retention-days: 7
