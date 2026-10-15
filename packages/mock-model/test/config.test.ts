@@ -8,7 +8,7 @@ describe("authorizeLoadTest", () => {
   it("accepts <token>:<runId> and defaults to sampled mode", () => {
     expect(
       authorizeLoadTest({ env, loadTestHeader: "s3cret:lt-42", mockSpecHeader: undefined }),
-    ).toEqual(Either.right({ runId: "lt-42", spec: "mode=sampled; profile=seed" }));
+    ).toEqual(Either.right({ runId: "lt-42", spec: "mode=sampled; profile=claude-haiku-5.5" }));
   });
 
   it.each([
@@ -74,7 +74,7 @@ describe("selectModel", () => {
         runId: "lt-42",
         config: {
           _tag: "Sampled",
-          profile: "seed",
+          profile: "claude-haiku-5.5",
           anchorMs: 1_760_000_000_000,
           scenario: { name: "provider-down", startMs: 60_000, durationMs: 300_000 },
         },
@@ -84,7 +84,7 @@ describe("selectModel", () => {
 
   it("reads MOCK_MODEL from env", () => {
     expect(selectModel({ env: { MOCK_MODEL: "mode=replay" }, loadTest: undefined })).toMatchObject({
-      right: { _tag: "Mock", config: { _tag: "Replay", recording: "seed-window" } },
+      right: { _tag: "Mock", config: { _tag: "Replay", recording: "claude-haiku-5.5" } },
     });
   });
 

@@ -121,3 +121,53 @@ export const recordingFromCallLog = (
   options: { readonly source: string; readonly model?: string },
 ): Either.Either<Recording, CallLogError> =>
   Either.map(toLoggedCalls(rows, options.model), (calls) => ({ source: options.source, calls }));
+
+const Tokens = Schema.optional(Schema.NullOr(Schema.Number));
+
+/**
+ * A grader `CallLogEntry` serialized to JSONL. The grader's own entries carry
+ * `provider` and nest usage in `cost`; flat exports (AI quality's eval run) put
+ * `promptTokens` and `completionTokens` at the top level and omit `provider`.
+ */
+const CallLogEntryExport = Schema.Struct({
+  startedAt: Schema.String,
+  provider: Schema.optional(Schema.String),
+  purpose: Schema.String,
+  modelRequested: Schema.String,
+  status: Schema.String,
+  statusCode: Schema.optional(Schema.NullOr(Schema.Number)),
+  latencyMs: Schema.Number,
+  cost: Schema.optional(
+    Schema.NullOr(Schema.Struct({ promptTokens: Schema.Number, completionTokens: Schema.Number })),
+  ),
+  promptTokens: Tokens,
+  completionTokens: Tokens,
+  /** The completion id: OpenRouter's start with `gen-`, the mock's with `mock-`. */
+  providerId: Schema.optional(Schema.NullOr(Schema.String)),
+  loadTestRunId: Schema.optional(Schema.NullOr(Schema.String)),
+});
+const decodeEntry = Schema.decodeUnknownEither(CallLogEntryExport);
+
+/**
+ * Maps a grader `CallLogEntry` export to a `model_calls` row, and passes
+ * anything else through to be validated as a row. The entry's `provider` is
+ * kept; a flat export without one counts as OpenRouter only with an OpenRouter
+ * generation id. The load-test run id is kept, so load-test entries stay out.
+ */
+export const rowFromExport = (raw: unknown): unknown => {
+  const entry = decodeEntry(raw);
+  if (Either.isLeft(entry)) return raw;
+  const e = entry.right;
+  return {
+    purpose: e.purpose,
+    provider: e.provider ?? (e.providerId?.startsWith("gen-") === true ? "openrouter" : "unknown"),
+    model: e.modelRequested,
+    status: e.status,
+    statusCode: e.statusCode ?? null,
+    latencyMs: e.latencyMs,
+    inputTokens: e.cost?.promptTokens ?? e.promptTokens ?? null,
+    outputTokens: e.cost?.completionTokens ?? e.completionTokens ?? null,
+    loadTestRunId: e.loadTestRunId ?? null,
+    createdAt: new Date(Date.parse(e.startedAt) + e.latencyMs).toISOString(),
+  };
+};

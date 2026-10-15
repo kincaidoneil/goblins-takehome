@@ -4,6 +4,7 @@
 import { randomBytes } from "node:crypto";
 import { Db, schema } from "@goblins/domain";
 import { createServerFn } from "@tanstack/react-start";
+import { waitUntil } from "@vercel/functions";
 import { and, eq, isNull } from "drizzle-orm";
 import { Effect, Schema } from "effect";
 import { anonymize, buildReport } from "../../report/model";
@@ -52,7 +53,7 @@ export const getMistakes = createServerFn({ method: "POST" })
         const { session } = yield* ownedSession(data.sessionId);
         const problems = yield* reportProblems(session.assignmentId);
         const report = buildReport(yield* reportInput(session.id, problems));
-        return ok(yield* mistakesFor(session.id, report).pipe(withModel));
+        return ok(yield* mistakesFor(session.id, report, "call").pipe(withModel));
       }).pipe(
         Effect.catchTags({
           SessionNotFound: () => Effect.succeed(err(notFound)),
@@ -111,7 +112,13 @@ export const getSharedReport = createServerFn({ method: "GET" })
         const header = yield* reportHeader(session);
         const problems = yield* reportProblems(session.assignmentId);
         const input = yield* reportInput(session.id, problems);
-        const mistakes = yield* mistakesFor(session.id, buildReport(input)).pipe(withModel);
+        const report = buildReport(input);
+        // A viewer never waits on the model: cached groupings now, the rubric fallback for the
+        // rest, and the missing ones are made in the background for the next view.
+        const mistakes = yield* mistakesFor(session.id, report, "cache-only").pipe(withModel);
+        if (mistakes.length < report.weak.length) {
+          waitUntil(run(mistakesFor(session.id, report, "call").pipe(withModel)));
+        }
         return ok({ header, input: anonymize(input), mistakes });
       }).pipe(Effect.catchTags({ ReportNotFound: () => Effect.succeed(err(notFound)) })),
     ),

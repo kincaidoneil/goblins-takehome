@@ -1,0 +1,1 @@
+ALTER TABLE "class_sessions" ADD COLUMN "load_test_mock_spec" text;

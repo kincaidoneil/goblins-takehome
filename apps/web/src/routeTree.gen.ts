@@ -12,19 +12,27 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as JoinRouteImport } from './routes/join'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
+import { Route as ApiJoinRouteImport } from './routes/api/join'
 import { Route as ApiLiveRouteImport } from './routes/api/live'
 import { Route as ApiShapeRouteImport } from './routes/api/shape'
+import { Route as ApiSubmitRouteImport } from './routes/api/submit'
 import { Route as PlaySessionIdRouteImport } from './routes/play/$sessionId'
 import { Route as ReportDemoRouteImport } from './routes/report/demo'
 import { Route as SetupDraftIdRouteImport } from './routes/setup/$draftId'
 import { Route as ShareTokenRouteImport } from './routes/share/$token'
 import { Route as ShareDemoRouteImport } from './routes/share/demo'
 import { Route as ApiGradingSweepRouteImport } from './routes/api/grading/sweep'
+import { Route as ApiLoadTestDbRouteImport } from './routes/api/load-test/db'
 import { Route as ApiQueueGradeRouteImport } from './routes/api/queue/grade'
+import { Route as ApiTeacherAssignmentsRouteImport } from './routes/api/teacher/assignments'
+import { Route as ApiTeacherSessionsRouteImport } from './routes/api/teacher/sessions'
 import { Route as SessionsSessionIdIndexRouteImport } from './routes/sessions/$sessionId/index'
 import { Route as SessionsSessionIdProjectorRouteImport } from './routes/sessions/$sessionId/projector'
 import { Route as SessionsSessionIdReportRouteImport } from './routes/sessions/$sessionId/report'
 import { Route as SetupTemplateTemplateIdRouteImport } from './routes/setup/template/$templateId'
+import { Route as ApiLoadTestRunsRunIdCleanupRouteImport } from './routes/api/load-test/runs/$runId/cleanup'
+import { Route as ApiLoadTestRunsRunIdTimingsRouteImport } from './routes/api/load-test/runs/$runId/timings'
+import { Route as ApiTeacherSessionsSessionIdActionRouteImport } from './routes/api/teacher/sessions/$sessionId/$action'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -41,6 +49,11 @@ const ApiHealthRoute = ApiHealthRouteImport.update({
   path: '/api/health',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiJoinRoute = ApiJoinRouteImport.update({
+  id: '/api/join',
+  path: '/api/join',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiLiveRoute = ApiLiveRouteImport.update({
   id: '/api/live',
   path: '/api/live',
@@ -49,6 +62,11 @@ const ApiLiveRoute = ApiLiveRouteImport.update({
 const ApiShapeRoute = ApiShapeRouteImport.update({
   id: '/api/shape',
   path: '/api/shape',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSubmitRoute = ApiSubmitRouteImport.update({
+  id: '/api/submit',
+  path: '/api/submit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlaySessionIdRoute = PlaySessionIdRouteImport.update({
@@ -81,9 +99,24 @@ const ApiGradingSweepRoute = ApiGradingSweepRouteImport.update({
   path: '/api/grading/sweep',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiLoadTestDbRoute = ApiLoadTestDbRouteImport.update({
+  id: '/api/load-test/db',
+  path: '/api/load-test/db',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiQueueGradeRoute = ApiQueueGradeRouteImport.update({
   id: '/api/queue/grade',
   path: '/api/queue/grade',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTeacherAssignmentsRoute = ApiTeacherAssignmentsRouteImport.update({
+  id: '/api/teacher/assignments',
+  path: '/api/teacher/assignments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTeacherSessionsRoute = ApiTeacherSessionsRouteImport.update({
+  id: '/api/teacher/sessions',
+  path: '/api/teacher/sessions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SessionsSessionIdIndexRoute = SessionsSessionIdIndexRouteImport.update({
@@ -107,61 +140,103 @@ const SetupTemplateTemplateIdRoute = SetupTemplateTemplateIdRouteImport.update({
   path: '/setup/template/$templateId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiLoadTestRunsRunIdCleanupRoute =
+  ApiLoadTestRunsRunIdCleanupRouteImport.update({
+    id: '/api/load-test/runs/$runId/cleanup',
+    path: '/api/load-test/runs/$runId/cleanup',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiLoadTestRunsRunIdTimingsRoute =
+  ApiLoadTestRunsRunIdTimingsRouteImport.update({
+    id: '/api/load-test/runs/$runId/timings',
+    path: '/api/load-test/runs/$runId/timings',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiTeacherSessionsSessionIdActionRoute =
+  ApiTeacherSessionsSessionIdActionRouteImport.update({
+    id: '/$sessionId/$action',
+    path: '/$sessionId/$action',
+    getParentRoute: () => ApiTeacherSessionsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/join': typeof JoinRoute
   '/api/health': typeof ApiHealthRoute
+  '/api/join': typeof ApiJoinRoute
   '/api/live': typeof ApiLiveRoute
   '/api/shape': typeof ApiShapeRoute
+  '/api/submit': typeof ApiSubmitRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/setup/$draftId': typeof SetupDraftIdRoute
   '/share/$token': typeof ShareTokenRoute
   '/share/demo': typeof ShareDemoRoute
   '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/api/load-test/db': typeof ApiLoadTestDbRoute
   '/api/queue/grade': typeof ApiQueueGradeRoute
+  '/api/teacher/assignments': typeof ApiTeacherAssignmentsRoute
+  '/api/teacher/sessions': typeof ApiTeacherSessionsRouteWithChildren
   '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
   '/sessions/$sessionId/report': typeof SessionsSessionIdReportRoute
   '/setup/template/$templateId': typeof SetupTemplateTemplateIdRoute
   '/sessions/$sessionId/': typeof SessionsSessionIdIndexRoute
+  '/api/load-test/runs/$runId/cleanup': typeof ApiLoadTestRunsRunIdCleanupRoute
+  '/api/load-test/runs/$runId/timings': typeof ApiLoadTestRunsRunIdTimingsRoute
+  '/api/teacher/sessions/$sessionId/$action': typeof ApiTeacherSessionsSessionIdActionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/join': typeof JoinRoute
   '/api/health': typeof ApiHealthRoute
+  '/api/join': typeof ApiJoinRoute
   '/api/live': typeof ApiLiveRoute
   '/api/shape': typeof ApiShapeRoute
+  '/api/submit': typeof ApiSubmitRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/setup/$draftId': typeof SetupDraftIdRoute
   '/share/$token': typeof ShareTokenRoute
   '/share/demo': typeof ShareDemoRoute
   '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/api/load-test/db': typeof ApiLoadTestDbRoute
   '/api/queue/grade': typeof ApiQueueGradeRoute
+  '/api/teacher/assignments': typeof ApiTeacherAssignmentsRoute
+  '/api/teacher/sessions': typeof ApiTeacherSessionsRouteWithChildren
   '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
   '/sessions/$sessionId/report': typeof SessionsSessionIdReportRoute
   '/setup/template/$templateId': typeof SetupTemplateTemplateIdRoute
   '/sessions/$sessionId': typeof SessionsSessionIdIndexRoute
+  '/api/load-test/runs/$runId/cleanup': typeof ApiLoadTestRunsRunIdCleanupRoute
+  '/api/load-test/runs/$runId/timings': typeof ApiLoadTestRunsRunIdTimingsRoute
+  '/api/teacher/sessions/$sessionId/$action': typeof ApiTeacherSessionsSessionIdActionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/join': typeof JoinRoute
   '/api/health': typeof ApiHealthRoute
+  '/api/join': typeof ApiJoinRoute
   '/api/live': typeof ApiLiveRoute
   '/api/shape': typeof ApiShapeRoute
+  '/api/submit': typeof ApiSubmitRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/setup/$draftId': typeof SetupDraftIdRoute
   '/share/$token': typeof ShareTokenRoute
   '/share/demo': typeof ShareDemoRoute
   '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/api/load-test/db': typeof ApiLoadTestDbRoute
   '/api/queue/grade': typeof ApiQueueGradeRoute
+  '/api/teacher/assignments': typeof ApiTeacherAssignmentsRoute
+  '/api/teacher/sessions': typeof ApiTeacherSessionsRouteWithChildren
   '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
   '/sessions/$sessionId/report': typeof SessionsSessionIdReportRoute
   '/setup/template/$templateId': typeof SetupTemplateTemplateIdRoute
   '/sessions/$sessionId/': typeof SessionsSessionIdIndexRoute
+  '/api/load-test/runs/$runId/cleanup': typeof ApiLoadTestRunsRunIdCleanupRoute
+  '/api/load-test/runs/$runId/timings': typeof ApiLoadTestRunsRunIdTimingsRoute
+  '/api/teacher/sessions/$sessionId/$action': typeof ApiTeacherSessionsSessionIdActionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -169,74 +244,105 @@ export interface FileRouteTypes {
     | '/'
     | '/join'
     | '/api/health'
+    | '/api/join'
     | '/api/live'
     | '/api/shape'
+    | '/api/submit'
     | '/play/$sessionId'
     | '/report/demo'
     | '/setup/$draftId'
     | '/share/$token'
     | '/share/demo'
     | '/api/grading/sweep'
+    | '/api/load-test/db'
     | '/api/queue/grade'
+    | '/api/teacher/assignments'
+    | '/api/teacher/sessions'
     | '/sessions/$sessionId/projector'
     | '/sessions/$sessionId/report'
     | '/setup/template/$templateId'
     | '/sessions/$sessionId/'
+    | '/api/load-test/runs/$runId/cleanup'
+    | '/api/load-test/runs/$runId/timings'
+    | '/api/teacher/sessions/$sessionId/$action'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/join'
     | '/api/health'
+    | '/api/join'
     | '/api/live'
     | '/api/shape'
+    | '/api/submit'
     | '/play/$sessionId'
     | '/report/demo'
     | '/setup/$draftId'
     | '/share/$token'
     | '/share/demo'
     | '/api/grading/sweep'
+    | '/api/load-test/db'
     | '/api/queue/grade'
+    | '/api/teacher/assignments'
+    | '/api/teacher/sessions'
     | '/sessions/$sessionId/projector'
     | '/sessions/$sessionId/report'
     | '/setup/template/$templateId'
     | '/sessions/$sessionId'
+    | '/api/load-test/runs/$runId/cleanup'
+    | '/api/load-test/runs/$runId/timings'
+    | '/api/teacher/sessions/$sessionId/$action'
   id:
     | '__root__'
     | '/'
     | '/join'
     | '/api/health'
+    | '/api/join'
     | '/api/live'
     | '/api/shape'
+    | '/api/submit'
     | '/play/$sessionId'
     | '/report/demo'
     | '/setup/$draftId'
     | '/share/$token'
     | '/share/demo'
     | '/api/grading/sweep'
+    | '/api/load-test/db'
     | '/api/queue/grade'
+    | '/api/teacher/assignments'
+    | '/api/teacher/sessions'
     | '/sessions/$sessionId/projector'
     | '/sessions/$sessionId/report'
     | '/setup/template/$templateId'
     | '/sessions/$sessionId/'
+    | '/api/load-test/runs/$runId/cleanup'
+    | '/api/load-test/runs/$runId/timings'
+    | '/api/teacher/sessions/$sessionId/$action'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   JoinRoute: typeof JoinRoute
   ApiHealthRoute: typeof ApiHealthRoute
+  ApiJoinRoute: typeof ApiJoinRoute
   ApiLiveRoute: typeof ApiLiveRoute
   ApiShapeRoute: typeof ApiShapeRoute
+  ApiSubmitRoute: typeof ApiSubmitRoute
   PlaySessionIdRoute: typeof PlaySessionIdRoute
   ReportDemoRoute: typeof ReportDemoRoute
   SetupDraftIdRoute: typeof SetupDraftIdRoute
   ShareTokenRoute: typeof ShareTokenRoute
   ShareDemoRoute: typeof ShareDemoRoute
   ApiGradingSweepRoute: typeof ApiGradingSweepRoute
+  ApiLoadTestDbRoute: typeof ApiLoadTestDbRoute
   ApiQueueGradeRoute: typeof ApiQueueGradeRoute
+  ApiTeacherAssignmentsRoute: typeof ApiTeacherAssignmentsRoute
+  ApiTeacherSessionsRoute: typeof ApiTeacherSessionsRouteWithChildren
   SessionsSessionIdProjectorRoute: typeof SessionsSessionIdProjectorRoute
   SessionsSessionIdReportRoute: typeof SessionsSessionIdReportRoute
   SetupTemplateTemplateIdRoute: typeof SetupTemplateTemplateIdRoute
   SessionsSessionIdIndexRoute: typeof SessionsSessionIdIndexRoute
+  ApiLoadTestRunsRunIdCleanupRoute: typeof ApiLoadTestRunsRunIdCleanupRoute
+  ApiLoadTestRunsRunIdTimingsRoute: typeof ApiLoadTestRunsRunIdTimingsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -262,6 +368,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/join': {
+      id: '/api/join'
+      path: '/api/join'
+      fullPath: '/api/join'
+      preLoaderRoute: typeof ApiJoinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/live': {
       id: '/api/live'
       path: '/api/live'
@@ -274,6 +387,13 @@ declare module '@tanstack/react-router' {
       path: '/api/shape'
       fullPath: '/api/shape'
       preLoaderRoute: typeof ApiShapeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/submit': {
+      id: '/api/submit'
+      path: '/api/submit'
+      fullPath: '/api/submit'
+      preLoaderRoute: typeof ApiSubmitRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/play/$sessionId': {
@@ -318,11 +438,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiGradingSweepRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/load-test/db': {
+      id: '/api/load-test/db'
+      path: '/api/load-test/db'
+      fullPath: '/api/load-test/db'
+      preLoaderRoute: typeof ApiLoadTestDbRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/queue/grade': {
       id: '/api/queue/grade'
       path: '/api/queue/grade'
       fullPath: '/api/queue/grade'
       preLoaderRoute: typeof ApiQueueGradeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/teacher/assignments': {
+      id: '/api/teacher/assignments'
+      path: '/api/teacher/assignments'
+      fullPath: '/api/teacher/assignments'
+      preLoaderRoute: typeof ApiTeacherAssignmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/teacher/sessions': {
+      id: '/api/teacher/sessions'
+      path: '/api/teacher/sessions'
+      fullPath: '/api/teacher/sessions'
+      preLoaderRoute: typeof ApiTeacherSessionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sessions/$sessionId/': {
@@ -353,26 +494,66 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SetupTemplateTemplateIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/load-test/runs/$runId/cleanup': {
+      id: '/api/load-test/runs/$runId/cleanup'
+      path: '/api/load-test/runs/$runId/cleanup'
+      fullPath: '/api/load-test/runs/$runId/cleanup'
+      preLoaderRoute: typeof ApiLoadTestRunsRunIdCleanupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/load-test/runs/$runId/timings': {
+      id: '/api/load-test/runs/$runId/timings'
+      path: '/api/load-test/runs/$runId/timings'
+      fullPath: '/api/load-test/runs/$runId/timings'
+      preLoaderRoute: typeof ApiLoadTestRunsRunIdTimingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/teacher/sessions/$sessionId/$action': {
+      id: '/api/teacher/sessions/$sessionId/$action'
+      path: '/$sessionId/$action'
+      fullPath: '/api/teacher/sessions/$sessionId/$action'
+      preLoaderRoute: typeof ApiTeacherSessionsSessionIdActionRouteImport
+      parentRoute: typeof ApiTeacherSessionsRoute
+    }
   }
 }
+
+interface ApiTeacherSessionsRouteChildren {
+  ApiTeacherSessionsSessionIdActionRoute: typeof ApiTeacherSessionsSessionIdActionRoute
+}
+
+const ApiTeacherSessionsRouteChildren: ApiTeacherSessionsRouteChildren = {
+  ApiTeacherSessionsSessionIdActionRoute:
+    ApiTeacherSessionsSessionIdActionRoute,
+}
+
+const ApiTeacherSessionsRouteWithChildren =
+  ApiTeacherSessionsRoute._addFileChildren(ApiTeacherSessionsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   JoinRoute: JoinRoute,
   ApiHealthRoute: ApiHealthRoute,
+  ApiJoinRoute: ApiJoinRoute,
   ApiLiveRoute: ApiLiveRoute,
   ApiShapeRoute: ApiShapeRoute,
+  ApiSubmitRoute: ApiSubmitRoute,
   PlaySessionIdRoute: PlaySessionIdRoute,
   ReportDemoRoute: ReportDemoRoute,
   SetupDraftIdRoute: SetupDraftIdRoute,
   ShareTokenRoute: ShareTokenRoute,
   ShareDemoRoute: ShareDemoRoute,
   ApiGradingSweepRoute: ApiGradingSweepRoute,
+  ApiLoadTestDbRoute: ApiLoadTestDbRoute,
   ApiQueueGradeRoute: ApiQueueGradeRoute,
+  ApiTeacherAssignmentsRoute: ApiTeacherAssignmentsRoute,
+  ApiTeacherSessionsRoute: ApiTeacherSessionsRouteWithChildren,
   SessionsSessionIdProjectorRoute: SessionsSessionIdProjectorRoute,
   SessionsSessionIdReportRoute: SessionsSessionIdReportRoute,
   SetupTemplateTemplateIdRoute: SetupTemplateTemplateIdRoute,
   SessionsSessionIdIndexRoute: SessionsSessionIdIndexRoute,
+  ApiLoadTestRunsRunIdCleanupRoute: ApiLoadTestRunsRunIdCleanupRoute,
+  ApiLoadTestRunsRunIdTimingsRoute: ApiLoadTestRunsRunIdTimingsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

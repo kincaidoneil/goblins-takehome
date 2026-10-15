@@ -34,3 +34,23 @@ export const studentLabel = (student: StudentRow, index: number, hideNames: bool
   hideNames ? `Student ${index + 1}` : student.displayName;
 
 export const gradeKey = (studentId: string, problemId: string) => `${studentId}:${problemId}`;
+
+/**
+ * Grades waiting on the teacher, in a stable order (problem, then join order), so the list
+ * doesn't move while the teacher works through it.
+ */
+export const needsYouQueue = <G extends TeacherGradeRow>(
+  grades: ReadonlyArray<G>,
+  students: ReadonlyArray<StudentRow>,
+  problems: ReadonlyArray<DashboardProblem>,
+): ReadonlyArray<G> => {
+  const problemIndex = new Map(problems.map((p, i) => [p.id, i]));
+  const studentIndex = new Map(students.map((s, i) => [s.id, i]));
+  return grades
+    .filter((g) => g.state === "needs_teacher" || g.state === "couldnt_grade")
+    .toSorted(
+      (a, b) =>
+        (problemIndex.get(a.problemId) ?? 0) - (problemIndex.get(b.problemId) ?? 0) ||
+        (studentIndex.get(a.studentId) ?? 0) - (studentIndex.get(b.studentId) ?? 0),
+    );
+};

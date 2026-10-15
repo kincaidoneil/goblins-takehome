@@ -13,9 +13,37 @@ DATABASE_URL=postgres://postgres:postgres@localhost:55433/goblins pnpm --filter 
 LOAD_TEST_TOKEN=local pnpm --filter @goblins/loadtest standin      # leave running
 LOAD_TEST_TOKEN=local pnpm --filter @goblins/loadtest loadtest ramp --start-classes 2 --max-steps 1 --time-scale 0.05
 
-# Against a deploy
-LOAD_TEST_TOKEN=<token> pnpm --filter @goblins/loadtest loadtest ramp --url https://<app> --queue "Vercel Queues, cap 50"
+# Against the real app's production build on this machine (what our reports use)
+pnpm --filter @goblins/web build
+LOAD_TEST_TOKEN=local NODE_ENV=production PORT=3290 AUTH_MODE=local \
+  DATABASE_URL=postgres://postgres:postgres@localhost:55433/goblins ELECTRIC_URL=http://localhost:30002 \
+  STUDENT_COOKIE_SECRET=local node --env-file=.env.local apps/web/.output/server/index.mjs
+LOAD_TEST_TOKEN=local pnpm --filter @goblins/loadtest loadtest ramp --url http://localhost:3290 --pricing none
+
+# Smoke test against a deploy: one class of 30, same command and report
+LOAD_TEST_TOKEN=<token> pnpm --filter @goblins/loadtest loadtest scenario normal --url https://<app> --start-classes 1 --time-scale 0.1
 ```
+
+The target is only a URL: a local build and a Vercel deploy run the same scenario, metrics and report. More than one class against a non-local URL requires `--i-have-vercel-approval`.
+
+## Running the full ramp on Vercel
+
+We do not run it ourselves: Vercel [permits load tests only on Enterprise plans](https://vercel.com/kb/guide/what-s-vercel-s-policy-regarding-load-testing-deployments), with notice given through a Vercel representative (test window, peak requests per second, hostnames, source IPs), and blocks the source IPs of unannounced tests. Someone with that approval runs:
+
+```bash
+LOAD_TEST_TOKEN=<the deploy's token> pnpm --filter @goblins/loadtest loadtest ramp \
+  --url https://<app> --i-have-vercel-approval --queue "QStash, parallelism 100"
+```
+
+Prerequisites:
+
+- The deploy has `LOAD_TEST_TOKEN` set; requests carrying it are routed to the mock model and their data is tagged and deleted after each step.
+- The QStash resource is on pay as you go (the free tier allows 1,000 messages a day and parallelism 10).
+- Expected cost: QStash about $1 per 100,000 deliveries, so about $0.13 for the 990-student step and about $1.70 for six steps; the runner stops before its ledger passes $25. On Vercel Pro, usage past the included amounts (function invocations and CPU, Blob operations) is billed; load-test whiteboards are stored once per content hash per instance, so Blob writes stay in the tens per step.
+
+Known deployed limits on our plan (Pro): the policy above, Vercel's limit on how fast new function instances start (1,000 per 10 s), and Blob's per-second upload rate. Enterprise lifts the policy and the concurrency defaults.
+
+`--pricing` defaults to `qstash` (charged against the ledger) for every target except the stand-in.
 
 Reports land in `packages/loadtest/reports/<run-id>/`: `report.md`, `report.json`, and one `<run-id>-s<step>.ndjson` of raw events per step (git-ignored).
 
