@@ -4,13 +4,21 @@ import { type Audience, type GradeStatus, scoreBand } from "./grade";
 export interface ScoreChipProps {
   status: GradeStatus;
   audience?: Audience;
+  /**
+   * For "hide names and scores" on a projected screen: any submitted work shows the same neutral
+   * check, so the room sees progress but no score and no "needs you".
+   */
+  concealed?: boolean;
   size?: "sm" | "md";
   className?: string;
 }
 
 type Look = { tone: string; label: string; title: string };
 
-function look(status: GradeStatus, audience: Audience): Look {
+function look(status: GradeStatus, audience: Audience, concealed: boolean): Look {
+  if (concealed && status.state !== "not-started" && status.state !== "grading") {
+    return { tone: "done", label: "", title: "Work is in" };
+  }
   switch (status.state) {
     case "not-started":
       return { tone: "empty", label: "–", title: "Not started" };
@@ -35,10 +43,11 @@ function look(status: GradeStatus, audience: Audience): Look {
 export function ScoreChip({
   status,
   audience = "teacher",
+  concealed = false,
   size = "md",
   className,
 }: ScoreChipProps) {
-  const { tone, label, title } = look(status, audience);
+  const { tone, label, title } = look(status, audience, concealed);
   return (
     <span
       className={cx("gb-score-chip", className)}
@@ -50,6 +59,7 @@ export function ScoreChip({
     >
       {tone === "needs" && <HandIcon />}
       {tone === "check" && <EyeIcon />}
+      {tone === "done" && <CheckIcon />}
       {tone === "pending" ? <span className="gb-score-chip-dots" aria-hidden="true" /> : label}
     </span>
   );
@@ -63,6 +73,21 @@ function HandIcon() {
         fill="none"
         stroke="currentColor"
         strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path
+        d="M3.5 8.5l3 3 6-6.5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

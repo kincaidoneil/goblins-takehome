@@ -17,6 +17,3 @@
 @import "./student/StudentWorkLayout.css";
 @import "./student/SubmitButton.css";
 @import "./student/SubmitTransition.css";
-@import "./dashboard/ClassGrid.css";
-@import "./dashboard/NeedsYouList.css";
-@import "./dashboard/GradeReview.css";
