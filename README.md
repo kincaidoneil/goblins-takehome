@@ -2,8 +2,6 @@
 
 Live: [goblins-takehome-three.vercel.app](https://goblins-takehome-three.vercel.app) · [sample report](https://goblins-takehome-three.vercel.app/report/demo) · [shared view](https://goblins-takehome-three.vercel.app/share/demo)
 
-A free auto-grader for math teachers. A teacher drops in the worksheet they were going to hand out anyway, students show their work on a whiteboard, and the teacher gets a graded class and a report that sends the students who struggled to Goblins.
-
 ## How I approached it
 
 - **The PRD and the agent setup came first.** I wrote a [PRD](docs/prd.md) with the user flows, the ship / no-ship criteria, and how the agents would be organized. Then I oversaw the build. One orchestrator Claude session ran about a dozen Claude Code workstreams in parallel, each owning one package. Every change was a small PR merged on green CI and E2E. I made the calls: scope, vendors, spend, eval ground truth, and the changes of course logged in [decisions.md](docs/decisions.md).
@@ -28,7 +26,7 @@ A free auto-grader for math teachers. A teacher drops in the worksheet they were
 | [Local, one app process](packages/loadtest/reports/ramp-local-qstash/report.md) | 990 | 0 | 49.5 s | 254 s | Fail: one process saturates |
 | [Local, six app processes](packages/loadtest/reports/ramp-local-6workers/report.md) | 990 | 0 | 5.8 s | 49 s | Fail: sync accounts for 44 s of the dashboard time |
 
-No grade failed in any run. With six processes, grades waited at most 1.3 s in the queue (p95). The bottleneck is the live subscriptions: each student holds their own, and Electric falls behind serving them all.
+No grade failed in any run. With six processes, grades waited 1.3 s in the queue at p95 and 7.8 s at most. The bottleneck is the live subscriptions: each student holds their own, and Electric falls behind serving them all.
 
 **The first limits in production.** QStash is on its free plan: 1,000 messages a day, about three classes, and 10 grades in flight. Moving to pay-as-you-go (100 in flight) is the first step for real use. After that comes sync: share one subscription per class instead of one per student, and add Electric machines.
 
