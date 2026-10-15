@@ -3,10 +3,11 @@
  * is reproducible from a seed and testable.
  *
  * The PRD's testing day: classes of about 30 start within 2 minutes of the bell; each student
- * makes about 10 submissions over 20–40 minutes. `timeScale` compresses every interval for tests
- * and the demo (0.1 turns 30 minutes into 3). Compressing raises the submission rate, so a
- * compressed run with N students is a heavier load than a real testing day with N students;
- * reports state the rate as well as the head count.
+ * makes about 10 submissions over 20–40 minutes. `timeScale` compresses each student's working
+ * window (and how late a latecomer arrives); the lobby and the 2-minute bell spread stay at real
+ * time, so the spike at the bell is the real one (Kincaid's call). Compressing the working window
+ * raises the submission rate, so a compressed run with N students is heavier than a real testing
+ * day with N students; reports state the rate as well as the head count.
  */
 import { chance, type Rng, uniform } from "./rng.ts";
 
@@ -65,14 +66,14 @@ export const planClass = (
   options: { readonly students: number; readonly problems: number },
 ): ClassPlan => {
   const s = pace.timeScale;
-  // Everyone needs time to join before the earliest bell.
-  const startAtMs = Math.round((pace.lobbyMs + uniform(rng, 0, pace.bellSpreadMs)) * s);
+  // Everyone needs time to join before the earliest bell. Lobby and bell are never scaled.
+  const startAtMs = Math.round(pace.lobbyMs + uniform(rng, 0, pace.bellSpreadMs));
   const students = Array.from({ length: options.students }, (): StudentPlan => {
     const late = chance(rng, pace.lateShare);
     const joinAtMs = Math.round(
       late
         ? startAtMs + uniform(rng, 0, pace.lateMaxMs) * s
-        : startAtMs - uniform(rng, 0, pace.lobbyMs) * s,
+        : startAtMs - uniform(rng, 0, pace.lobbyMs),
     );
     const workMs = uniform(rng, pace.workMinMs, pace.workMaxMs) * s;
     // Uneven gaps: some problems take longer than others.

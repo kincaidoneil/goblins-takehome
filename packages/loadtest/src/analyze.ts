@@ -25,6 +25,8 @@ export interface StepInput {
 
 type Lost =
   | { readonly kind: "never-acknowledged"; readonly reason: string }
+  /** Planned but never sent: the class failed setup or the student could not join. */
+  | { readonly kind: "never-attempted" }
   | {
       readonly kind: "no-final-grade";
       /** Where the server says the grade is, when timings are available. */
@@ -166,6 +168,10 @@ export const analyzeStep = (input: StepInput): StepMetrics => {
     kind: "never-acknowledged",
     reason: e.reason,
   }));
+  // Planned work never attempted: a class whose setup failed, a student who could not join.
+  // Without this a step could pass on the classes that worked.
+  const shortfall = Math.max(0, input.plannedSubmissions - submitted.length - abandoned.length);
+  for (let i = 0; i < shortfall; i++) lost.push({ kind: "never-attempted" });
   const toDashboard: Array<number> = [];
   for (const s of submitted) {
     const shown = dashboard.get(s.submissionId);
@@ -325,11 +331,16 @@ export const analyzeStep = (input: StepInput): StepMetrics => {
     },
     lost: {
       count: lost.length,
-      byKind: groupCount(lost, (l) =>
-        l.kind === "never-acknowledged"
-          ? `never acknowledged: ${l.reason}`
-          : `acknowledged, no final grade (server: ${l.serverState})`,
-      ),
+      byKind: groupCount(lost, (l) => {
+        switch (l.kind) {
+          case "never-acknowledged":
+            return `never acknowledged: ${l.reason}`;
+          case "never-attempted":
+            return "never attempted (class setup or join failed)";
+          case "no-final-grade":
+            return `acknowledged, no final grade (server: ${l.serverState})`;
+        }
+      }),
     },
     pipeline: { peakQueued, peakInFlight, series },
     transitionShare: submitted.length === 0 ? null : inTransition / submitted.length,

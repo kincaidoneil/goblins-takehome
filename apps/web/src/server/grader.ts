@@ -9,19 +9,20 @@
  * The model is the mock unless `MODEL_CLIENT=openrouter`; load-test grades always
  * use the mock.
  */
-import { DatabaseLive } from "@goblins/domain";
+import { DatabaseLive, Db, schema } from "@goblins/domain";
 import {
   AiGrader,
   CallLog,
   Consumer,
   Grader,
   GradeStore,
-  ModelClient,
+  type ModelClient,
   OpenRouter,
   QStashQueue,
 } from "@goblins/grader";
 import * as MockModel from "@goblins/mock-model";
-import { Config, Effect, Layer, ManagedRuntime, Option, Redacted } from "effect";
+import { eq } from "drizzle-orm";
+import { Config, Effect, Either, Layer, ManagedRuntime, Option, Redacted } from "effect";
 import { GradeQueue } from "./grading";
 
 /**
@@ -91,9 +92,69 @@ const configuredModel = Layer.unwrapEffect(
   ),
 );
 
-/** Load-test grades always get the mock, as their own service so they can't reach OpenRouter. */
-const loadTestModel = Layer.effect(Consumer.LoadTestModelClient, ModelClient).pipe(
-  Layer.provide(mockModel),
+/** The mock config for a load-test run without a stored spec: the seed profile, no scenario. */
+const defaultLoadTestConfig: MockModel.MockConfig = {
+  _tag: "Sampled",
+  profile: "seed",
+  scenario: undefined,
+  anchorMs: undefined,
+};
+
+/**
+ * Load-test grades always get the mock, as their own service so they can't reach
+ * OpenRouter. Each run's mock spec (scenario, start time) is stored on its class
+ * session (`load_test_mock_spec`, from the load test's `x-goblins-mock-model`
+ * header) and read by run id, so every function instance replays the same scenario
+ * on the same clock. One mock client per spec, cached.
+ */
+const loadTestModel = Layer.effect(
+  Consumer.LoadTestModelClient,
+  Effect.gen(function* () {
+    const db = yield* Db;
+    const specs = new Map<string, Option.Option<string>>();
+    const clients = new Map<string, ModelClient["Type"]>();
+
+    const specFor = (runId: string) =>
+      Effect.gen(function* () {
+        const cached = specs.get(runId);
+        if (cached !== undefined) return cached;
+        const rows = yield* db
+          .select({ spec: schema.classSessions.loadTestMockSpec })
+          .from(schema.classSessions)
+          .where(eq(schema.classSessions.loadTestRunId, runId))
+          .limit(1);
+        const spec = Option.fromNullable(rows[0]?.spec);
+        specs.set(runId, spec);
+        return spec;
+      }).pipe(Effect.orElseSucceed(() => Option.none<string>()));
+
+    const clientFor = (spec: Option.Option<string>) =>
+      Effect.gen(function* () {
+        const key = Option.getOrElse(spec, () => "");
+        const cached = clients.get(key);
+        if (cached !== undefined) return cached;
+        const config = Option.match(spec, {
+          onNone: () => defaultLoadTestConfig,
+          onSome: (raw) =>
+            Either.getOrElse(MockModel.parseMockSpec(raw, "header"), () => defaultLoadTestConfig),
+        });
+        const client = yield* MockModel.makeMockModelClient(config, {
+          render: Grader.placeholderRender,
+        });
+        clients.set(key, client);
+        return client;
+      });
+
+    return {
+      complete: (request) =>
+        Effect.gen(function* () {
+          const runId = request.tag.loadTestRunId;
+          const spec = runId === undefined ? Option.none<string>() : yield* specFor(runId);
+          const client = yield* clientFor(spec);
+          return yield* client.complete(request);
+        }),
+    } satisfies ModelClient["Type"];
+  }),
 );
 
 /**

@@ -38,7 +38,7 @@ for _ in $(seq 1 60); do
   [ "${body: -3}" = 200 ] && echo "$body" | grep -q active && break
   sleep 5
 done
-[ "${body: -3}" = 200 ] || { echo "Electric is not healthy: $body" >&2; exit 1; }
+{ [ "${body: -3}" = 200 ] && echo "$body" | grep -q active; } || { echo "Electric is not healthy: $body" >&2; exit 1; }
 
 if [ -n "$new_secret" ]; then
   vercel env rm ELECTRIC_SECRET production --yes >/dev/null 2>&1 || true

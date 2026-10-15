@@ -9,6 +9,7 @@ import { clerkClient } from "@clerk/tanstack-react-start/server";
 import { Db, schema } from "@goblins/domain";
 import { eq } from "drizzle-orm";
 import { Data, Effect } from "effect";
+import { type LoadTestAuth, loadTestTeacher } from "./loadtest/identity";
 import { RequestContext } from "./request-context";
 import { localTeacherMode } from "./teacher-mode";
 
@@ -54,3 +55,12 @@ export const currentTeacher = Effect.gen(function* () {
   if (created === undefined) return yield* Effect.die("teacher upsert returned no row");
   return created;
 });
+
+/**
+ * The teacher a request acts for: a load-test teacher when the request carries a valid load-test
+ * token and teacher number (see `loadtest/identity.ts`), otherwise the signed-in teacher.
+ */
+export const teacherFor = (auth: LoadTestAuth) =>
+  auth._tag === "LoadTest" && auth.teacher !== null
+    ? loadTestTeacher(auth.run, auth.teacher)
+    : currentTeacher;

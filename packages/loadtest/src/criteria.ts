@@ -88,6 +88,13 @@ export const attribute = (metrics: StepMetrics, failed: Criterion["id"]): string
   switch (failed) {
     case "lost": {
       const kinds = Object.keys(metrics.lost.byKind);
+      if (kinds.some((k) => k.startsWith("never attempted"))) {
+        const setup =
+          Object.keys(metrics.errors.classFailures)[0] ??
+          Object.keys(metrics.errors.studentFailures)[0] ??
+          "classes or joins failed";
+        return `Setup: ${setup}`;
+      }
       if (kinds.some((k) => k.startsWith("never acknowledged"))) {
         return dbSaturated
           ? "Database: connections saturated, submits failed"

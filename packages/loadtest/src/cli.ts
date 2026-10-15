@@ -15,7 +15,7 @@ import {
 } from "@goblins/simulator";
 import { Cause, Effect, Exit, Fiber, Logger, LogLevel } from "effect";
 import type { Pricing } from "./budget.ts";
-import { type RampPlan, type ScenarioName, scenarios, stepClasses } from "./plan.ts";
+import { profiles, type RampPlan, type ScenarioName, scenarios, stepClasses } from "./plan.ts";
 import { runLoadTest } from "./run.ts";
 import { cleanup } from "./server.ts";
 
@@ -32,6 +32,7 @@ Options:
   --start-classes <n>       classes in the first step (default 33, i.e. 990 students)
   --step-classes <n>        classes added per step (default 17, about 500 students)
   --max-steps <n>           default 6
+  --profile <name>          mock latency profile: claude-haiku-5.5 (measured, default) or seed (guessed)
   --template <id>           default ${DEFAULT_TEMPLATE}
   --drain-minutes <n>       wait for grades after the last submit (default 10)
   --queue <text>            queue and concurrency cap under test, for the report
@@ -41,6 +42,8 @@ Options:
   --keep-data               do not delete the run's data afterward
   --pricing <qstash|none>   queue billing; default qstash, or none for the local stand-in
   --max-usd <n>             stop before the ledger passes this (default and ceiling: 25)
+  --i-have-vercel-approval  required to send more than one class to a non-local target
+                            (Vercel allows load tests only on Enterprise, with its approval)
 Environment: LOAD_TEST_TOKEN (required), GOBLINS_URL`;
 
 const { values, positionals } = parseArgs({
@@ -53,6 +56,7 @@ const { values, positionals } = parseArgs({
     "step-classes": { type: "string", default: "17" },
     "max-steps": { type: "string", default: "6" },
     template: { type: "string", default: DEFAULT_TEMPLATE },
+    profile: { type: "string", default: "claude-haiku-5.5" },
     "drain-minutes": { type: "string", default: "10" },
     queue: { type: "string", default: "not stated (pass --queue)" },
     seed: { type: "string", default: "1" },
@@ -61,6 +65,7 @@ const { values, positionals } = parseArgs({
     "keep-data": { type: "boolean", default: false },
     pricing: { type: "string" },
     "max-usd": { type: "string", default: "25" },
+    "i-have-vercel-approval": { type: "boolean", default: false },
     help: { type: "boolean", default: false },
   },
 });
@@ -137,6 +142,18 @@ if (command === "cleanup") {
         ? values.pricing
         : fail("--pricing must be qstash or none");
 
+  // A smoke test (one class, one step) may go anywhere. Anything bigger against a deploy is a load
+  // test, which Vercel permits only with an Enterprise approval.
+  const isLocal = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(baseUrl);
+  const isSmoke =
+    Number(values["start-classes"]) <= 1 &&
+    (command !== "ramp" || Number(values["max-steps"]) <= 1);
+  if (!isLocal && !isSmoke && !values["i-have-vercel-approval"]) {
+    fail(
+      `${baseUrl} is not local. Sending more than one class to a deploy is a load test; Vercel permits it only on Enterprise with prior approval. Pass --i-have-vercel-approval if you have it, or use --start-classes 1 --max-steps 1 for a smoke test.`,
+    );
+  }
+
   const ramp: RampPlan = {
     studentsPerClass: positive("students-per-class", values["students-per-class"]),
     startClasses: positive("start-classes", values["start-classes"]),
@@ -149,6 +166,8 @@ if (command === "cleanup") {
     token,
     runId,
     scenario,
+    profile:
+      profiles.find((p) => p === values.profile) ?? fail(`unknown profile "${values.profile}"`),
     classesPerStep: stepClasses(ramp),
     studentsPerClass: ramp.studentsPerClass,
     templateId,

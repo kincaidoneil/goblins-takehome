@@ -7,7 +7,7 @@ import { waitUntil } from "@vercel/functions";
 import { Array as Arr, Effect, Option } from "effect";
 import { templatePageUrls } from "../../setup/template-pages";
 import { err, ok } from "../result";
-import { run } from "../runtime";
+import { runtime } from "../runtime";
 import { markExtractionFailed, saveExtracted } from "./draft";
 import { extractTemplate, extractWorksheet } from "./setup-ai";
 import { deleteStored, storeFile } from "./storage";
@@ -17,7 +17,7 @@ export const extractInBackground = (
   draftId: string,
   pages: ReadonlyArray<{ pageNumber: number; imageUrl: string }>,
 ) =>
-  extractWorksheet(pages).pipe(
+  extractWorksheet(draftId, pages).pipe(
     Effect.flatMap((extracted) => saveExtracted(draftId, extracted)),
     Effect.catchTags({
       NotMath: (e) => markExtractionFailed(draftId, e.message),
@@ -37,8 +37,12 @@ export const extractInBackground = (
   );
 
 /** Starts a draft from a template. No model call: the template's key becomes the rubric. */
-/** Starts a template draft owned by the teacher, or else by `draftOwnerId` (see `viewer.ts`). */
-export const startTemplateDraft = (templateId: string, draftOwnerId: string) =>
+/**
+ * Starts a template draft owned by the teacher, or else by `draftOwnerId` (see `viewer.ts`).
+ * `origin` makes the page URLs absolute, so a model provider can fetch them when a problem is
+ * graded with its page image.
+ */
+export const startTemplateDraft = (templateId: string, draftOwnerId: string, origin: string) =>
   Effect.gen(function* () {
     const extracted = extractTemplate(templateId);
     if (Option.isNone(extracted)) return err({ _tag: "UnknownTemplate" } as const);
@@ -54,10 +58,10 @@ export const startTemplateDraft = (templateId: string, draftOwnerId: string) =>
       .returning({ id: schema.assignments.id });
     if (assignment === undefined) return yield* Effect.die("assignment insert returned no row");
     yield* db.insert(schema.worksheetPages).values(
-      templatePageUrls(templateId).map((imageUrl, index) => ({
+      templatePageUrls(templateId).map((path, index) => ({
         assignmentId: assignment.id,
         pageNumber: index + 1,
-        imageUrl,
+        imageUrl: new URL(path, origin).href,
       })),
     );
     yield* saveExtracted(assignment.id, extracted.value);
@@ -124,6 +128,7 @@ export const startUploadDraft = (files: ReadonlyArray<File>, draftOwnerId: strin
       )
       .pipe(Effect.tapError(() => deleteStored(urls)));
 
-    yield* Effect.sync(() => waitUntil(run(extractInBackground(draftId, pages))));
+    // The runtime directly, not `run`: this outlives the request, so it reads no request context.
+    yield* Effect.sync(() => waitUntil(runtime.runPromise(extractInBackground(draftId, pages))));
     return ok({ _tag: "Started", draftId } as const);
   });

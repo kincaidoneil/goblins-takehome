@@ -1,9 +1,10 @@
-import { Avatar, Button, Dialog, ScoreChip, useToast } from "@goblins/ui";
+import { Avatar, Button, ScoreChip, useToast } from "@goblins/ui";
 import { useEffect, useState } from "react";
 import type { StudentRow, TeacherGradeRow } from "../../../lib/sync";
 import { accept, getWhiteboard, retry, score } from "../../../server/fns/grading";
 import { MathText } from "../MathText";
 import { type DashboardProblem, gradeStatus } from "./model";
+import { SidePanel } from "./SidePanel";
 
 type Whiteboard =
   | { readonly _tag: "Loading" }
@@ -15,8 +16,11 @@ type Whiteboard =
  * line and the reason, with the controls to accept, rescore or retry (PRD, "Live dashboard").
  */
 export function CellDetail(props: {
-  readonly open: boolean;
-  readonly onOpenChange: (open: boolean) => void;
+  readonly onClose: () => void;
+  /** After an action resolves the grade: move to the next grade that needs the teacher. */
+  readonly onResolved: () => void;
+  /** The next grade waiting on the teacher, if any. */
+  readonly onNext: (() => void) | undefined;
   readonly student: StudentRow;
   readonly studentLabel: string;
   readonly problem: DashboardProblem;
@@ -71,7 +75,7 @@ export function CellDetail(props: {
     setBusy(false);
     if (result._tag === "Ok") {
       toast({ title: done, tone: "success" });
-      props.onOpenChange(false);
+      props.onResolved();
     } else {
       toast({
         title:
@@ -168,20 +172,26 @@ export function CellDetail(props: {
   })();
 
   return (
-    <Dialog
-      open={props.open}
-      onOpenChange={props.onOpenChange}
-      size="lg"
-      title={
+    <SidePanel
+      label={`${props.studentLabel}, problem ${problem.label}`}
+      onClose={props.onClose}
+      header={
         <span className="flex items-center gap-3">
           <Avatar kind="creature" creatureId={props.student.avatarId} size="sm" />
-          {props.studentLabel} · Problem {problem.label}
+          <span className="truncate font-extrabold text-brand">
+            {props.studentLabel} · Problem {problem.label}
+          </span>
           <ScoreChip status={gradeStatus(grade)} size="sm" />
+          {props.onNext !== undefined && (
+            <Button variant="ghost" size="sm" className="ml-auto" onClick={props.onNext}>
+              Next →
+            </Button>
+          )}
         </span>
       }
-      actions={actions}
+      footer={actions}
     >
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-3">
           <MathText text={problem.text} className="text-sm text-text-muted" />
           <div className="grid aspect-[4/3] place-items-center overflow-hidden rounded-lg border border-border bg-white">
@@ -277,7 +287,7 @@ export function CellDetail(props: {
           </section>
         </div>
       </div>
-    </Dialog>
+    </SidePanel>
   );
 }
 

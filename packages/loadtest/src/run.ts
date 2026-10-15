@@ -28,7 +28,13 @@ import {
   usd,
 } from "./budget.ts";
 import { attribute, evaluate, verdictOf } from "./criteria.ts";
-import { conditionsFor, describeMock, mockSpecFor, type ScenarioName } from "./plan.ts";
+import {
+  conditionsFor,
+  describeMock,
+  mockSpecFor,
+  type Profile,
+  type ScenarioName,
+} from "./plan.ts";
 import { type RunHeader, type StepReport, summarize, writeReport } from "./report.ts";
 import { cleanup, type DbSample, fetchDbStats, fetchTimings } from "./server.ts";
 
@@ -37,6 +43,7 @@ export interface RunOptions {
   readonly token: string;
   readonly runId: string;
   readonly scenario: ScenarioName;
+  readonly profile: Profile;
   readonly classesPerStep: ReadonlyArray<number>;
   readonly studentsPerClass: number;
   readonly templateId: string;
@@ -72,8 +79,9 @@ export const runLoadTest = (options: RunOptions) =>
       target: options.baseUrl,
       commit: commit(),
       scenario: options.scenario,
-      mock: describeMock(options.scenario),
+      mock: describeMock(options.scenario, options.profile),
       mockSpecExample: mockSpecFor(options.scenario, {
+        profile: options.profile,
         startMs: 0,
         timeScale: options.pace.timeScale,
       }).replace("start=0", "start=<step start>"),
@@ -110,7 +118,11 @@ export const runLoadTest = (options: RunOptions) =>
         baseUrl: options.baseUrl,
         token: options.token,
         runId,
-        mockSpec: mockSpecFor(options.scenario, { startMs, timeScale: options.pace.timeScale }),
+        mockSpec: mockSpecFor(options.scenario, {
+          startMs,
+          timeScale: options.pace.timeScale,
+          profile: options.profile,
+        }),
       };
       const simulation = {
         target,

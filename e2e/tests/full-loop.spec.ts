@@ -1,14 +1,18 @@
 import type { Page } from "@playwright/test";
+import { signInTeacher } from "../auth";
 import { expect, test } from "../fixtures";
 
 // The whole loop through the app's own screens, with no seeded data: a teacher launches a
 // template, three students join on phones, draw and submit, grades reach the dashboard live,
 // the teacher resolves what needs them, and the session ends in the report.
 //
-// Runs where AUTH_MODE=local signs in a local teacher (CI's Docker stack). On a deploy the
-// teacher signs in with Google, which a test can't do; the launch step then skips the test.
-// Grades come from the app's scripted mock, which reads the student's name: "Flag" needs the
-// teacher, "Fail" fails its first attempt, anyone else gets full marks.
+// Three ways to run it (e2e/README.md): against the local stack with AUTH_MODE=local, against the
+// local stack with a real Clerk sign-in, or against a deploy with a real Clerk sign-in.
+//
+// Against a local server, grades come from the app's scripted mock, which reads the student's
+// name: "Flag" needs the teacher, "Fail" fails its first attempt, anyone else gets full marks.
+// Against a deploy the grader decides, so the test checks that every grade lands and that the
+// teacher can resolve whatever needs them, without expecting particular scores.
 
 // A new Electric shape takes a few seconds on first subscribe.
 expect.configure({ timeout: 20_000 });
@@ -16,6 +20,14 @@ expect.configure({ timeout: 20_000 });
 const TEMPLATE = "linear-relationships";
 const TITLE = "Linear Relationships in Context";
 const STUDENTS = ["Maya R.", "Flag F.", "Fail F."] as const;
+const scripted =
+  process.env.E2E_SCRIPTED_GRADES === undefined
+    ? /\/\/(localhost|127\.0\.0\.1)[:/]/.test(
+        process.env.BASE_URL ?? process.env.E2E_BASE_URL ?? "http://localhost:3000",
+      )
+    : process.env.E2E_SCRIPTED_GRADES === "1";
+/** Accessible names of a cell whose grade has landed: a score, needs you, or couldn't grade. */
+const LANDED = /^\d+\/\d+$|check this|Grading failed/;
 
 /** A grid cell's score chip, whose accessible name is the grade. */
 const cell = (teacher: Page, student: string, problem: string) =>
@@ -52,6 +64,7 @@ test("a teacher runs a class from template to report", async ({ classroom }) => 
   let code = "";
 
   await test.step("1. teacher picks a template, reviews it and launches", async () => {
+    await signInTeacher(teacher);
     await teacher.goto(`/setup/template/${TEMPLATE}`);
     await expect(teacher.locator(".setup-screen[data-hydrated]")).toBeVisible();
     await expect(teacher.getByRole("textbox", { name: "Assignment name" })).toHaveValue(TITLE);
@@ -60,7 +73,7 @@ test("a teacher runs a class from template to report", async ({ classroom }) => 
     const open = teacher.getByRole("button", { name: "Open the projector" });
     const signIn = teacher.getByRole("button", { name: "Sign in with Google to launch" });
     await expect(open.or(signIn)).toBeVisible();
-    test.skip(await signIn.isVisible(), "launch needs Google sign-in on a deploy");
+    test.skip(await signIn.isVisible(), "not signed in: run with E2E_AUTH=clerk on a deploy");
     const [popup] = await Promise.all([teacher.waitForEvent("popup"), open.click()]);
     projector = popup;
     await expect(teacher).toHaveURL(/\/sessions\/[0-9a-f-]{36}$/);
@@ -101,6 +114,11 @@ test("a teacher runs a class from template to report", async ({ classroom }) => 
   });
 
   await test.step("4. grades appear live on the dashboard", async () => {
+    if (!scripted) {
+      for (const name of STUDENTS)
+        await expect(cell(teacher, name, "1")).toHaveAccessibleName(LANDED);
+      return;
+    }
     await expect(cell(teacher, "Maya R.", "1")).toHaveAccessibleName("3/3");
     await expect(cell(teacher, "Flag F.", "1")).toHaveAccessibleName(/check this/);
     await expect(cell(teacher, "Fail F.", "1")).toHaveAccessibleName(/Grading failed/);
@@ -117,27 +135,41 @@ test("a teacher runs a class from template to report", async ({ classroom }) => 
   });
 
   await test.step("5. teacher accepts, retries and overrides; students see the result", async () => {
-    // Accept the flagged best guess.
-    await teacher.getByRole("button", { name: "Look at the work" }).first().click();
     const detail = teacher.getByRole("dialog");
-    await expect(detail.getByText("What the grader read")).toBeVisible();
-    await detail.getByRole("button", { name: /^Accept / }).click();
-    await expect(cell(teacher, "Flag F.", "1")).toHaveAccessibleName("3/3");
-    await expect(
-      phoneOf("Flag F.").getByRole("button", { name: "Problem 1, 3 out of 3" }),
-    ).toBeVisible();
+    const lookAtWork = teacher.getByRole("button", { name: "Look at the work" });
+    const tryAgain = teacher.getByRole("button", { name: "Try again" });
 
-    // Send the failed grade back to the grader; the retry succeeds.
-    await teacher.getByRole("button", { name: "Try again" }).click();
-    await expect(cell(teacher, "Fail F.", "1")).toHaveAccessibleName("3/3");
+    // Accept the flagged best guess.
+    if (scripted || (await lookAtWork.count()) > 0) {
+      await lookAtWork.first().click();
+      await expect(detail.getByText("What the grader read")).toBeVisible();
+      await detail.getByRole("button", { name: /^Accept / }).click();
+      if (scripted) {
+        await expect(cell(teacher, "Flag F.", "1")).toHaveAccessibleName("3/3");
+        await expect(
+          phoneOf("Flag F.").getByRole("button", { name: "Problem 1, 3 out of 3" }),
+        ).toBeVisible();
+      }
+    }
+
+    // Send a failed grade back to the grader; the retry succeeds.
+    if (scripted || (await tryAgain.count()) > 0) {
+      await tryAgain.first().click();
+      if (scripted) await expect(cell(teacher, "Fail F.", "1")).toHaveAccessibleName("3/3");
+    }
 
     // Override a final score; the student's progress strip follows.
+    await expect(cell(teacher, "Maya R.", "1")).toHaveAccessibleName(/^\d+\/\d+$/);
+    const before = (await cell(teacher, "Maya R.", "1").getAttribute("aria-label")) ?? "";
+    const [points = 0, max = 0] = before.split("/").map(Number);
     await teacher.getByRole("button", { name: "Maya R., problem 1" }).click();
-    await detail.getByRole("button", { name: "One point fewer" }).last().click();
-    await detail.getByRole("button", { name: "Change score to 2/3" }).click();
-    await expect(cell(teacher, "Maya R.", "1")).toHaveAccessibleName("2/3");
+    const target = points > 0 ? points - 1 : points + 1;
+    const step = points > 0 ? "One point fewer" : "One point more";
+    await detail.getByRole("button", { name: step }).last().click();
+    await detail.getByRole("button", { name: `Change score to ${target}/${max}` }).click();
+    await expect(cell(teacher, "Maya R.", "1")).toHaveAccessibleName(`${target}/${max}`);
     await expect(
-      phoneOf("Maya R.").getByRole("button", { name: "Problem 1, 2 out of 3" }),
+      phoneOf("Maya R.").getByRole("button", { name: `Problem 1, ${target} out of ${max}` }),
     ).toBeVisible();
   });
 
