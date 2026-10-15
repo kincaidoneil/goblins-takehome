@@ -33,7 +33,7 @@ test("two teachers at once only ever see their own session", async ({ playwright
   const [a, b] = sessions ?? [];
   const teacher = (id: string) =>
     playwright.request.newContext({
-      baseURL,
+      ...(baseURL === undefined ? {} : { baseURL }),
       extraHTTPHeaders: { cookie: `gb_local_teacher=${id}` },
     });
   const [ta, tb] = await Promise.all([teacher("teacher_a"), teacher("teacher_b")]);
