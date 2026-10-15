@@ -16,10 +16,11 @@ import {
   RateLimited,
   Timeout,
 } from "./ModelClient.ts";
+import * as SpendGuard from "./SpendGuard.ts";
 
 export interface OpenRouterConfig {
   readonly apiKey: Redacted.Redacted;
-  /** Deadline for one call, including reading the body. */
+  /** Default deadline for one call, including reading the body. A request can override it. */
   readonly timeoutMs: number;
   readonly baseUrl: string;
   /** Shown on OpenRouter's dashboard next to each call. */
@@ -30,6 +31,9 @@ const UsageBody = Schema.Struct({
   prompt_tokens: Schema.Number,
   completion_tokens: Schema.Number,
   cost: Schema.optional(Schema.Number),
+  completion_tokens_details: Schema.optional(
+    Schema.Struct({ reasoning_tokens: Schema.optional(Schema.NullOr(Schema.Number)) }),
+  ),
 });
 
 const SuccessBody = Schema.Struct({
@@ -76,6 +80,7 @@ const toRequestBody = (request: CompletionRequest) => ({
   messages: request.messages.map(toWireMessage),
   ...(request.maxTokens === undefined ? {} : { max_tokens: request.maxTokens }),
   ...(request.temperature === undefined ? {} : { temperature: request.temperature }),
+  ...(request.reasoning === undefined ? {} : { reasoning: { effort: request.reasoning.effort } }),
   ...(request.jsonSchema === undefined
     ? {}
     : {
@@ -95,14 +100,16 @@ const toRequestBody = (request: CompletionRequest) => ({
  * We ask for cost with `usage: { include: true }`. A response without it can't be
  * costed, and logging it as free would undercount spend, so it has no usage.
  */
-const toUsage = (usage: typeof UsageBody.Type) =>
-  usage.cost === undefined
-    ? undefined
-    : {
-        promptTokens: usage.prompt_tokens,
-        completionTokens: usage.completion_tokens,
-        costUsd: usage.cost,
-      };
+const toUsage = (usage: typeof UsageBody.Type) => {
+  if (usage.cost === undefined) return undefined;
+  const reasoningTokens = usage.completion_tokens_details?.reasoning_tokens;
+  return {
+    promptTokens: usage.prompt_tokens,
+    completionTokens: usage.completion_tokens,
+    costUsd: usage.cost,
+    ...(typeof reasoningTokens === "number" ? { reasoningTokens } : {}),
+  };
+};
 
 /** Retry-After is either seconds or an HTTP date. */
 const parseRetryAfterMs = (header: string | null, now: number): number | undefined => {
@@ -144,7 +151,7 @@ const parseCompletion = (
           new BadResponse({ message: `Unrecognized response body: ${text.slice(0, 200)}` }),
         onSome: (body): RateLimited | ProviderError =>
           body.error.code === 429
-            ? new RateLimited({})
+            ? new RateLimited({ mayBeBilled: true })
             : new ProviderError({
                 status: typeof body.error.code === "number" ? body.error.code : 502,
                 message: body.error.message,
@@ -169,7 +176,7 @@ const parseCompletion = (
     const code = choice.error?.code;
     return Either.left(
       code === 429
-        ? new RateLimited({})
+        ? new RateLimited({ mayBeBilled: true, ...(usage === undefined ? {} : { usage }) })
         : new ProviderError({
             status: typeof code === "number" ? code : 502,
             message: choice.error?.message ?? "The provider failed partway through the answer",
@@ -187,9 +194,13 @@ const parseCompletion = (
   return Either.right({ id: body.id, model: body.model, text: choice.message.content, usage });
 };
 
-export const make = (config: OpenRouterConfig): ModelClient["Type"] => ({
+export const make = (
+  config: OpenRouterConfig,
+  guard: SpendGuard.SpendGuard,
+): ModelClient["Type"] => ({
   complete: (request) =>
     Effect.gen(function* () {
+      yield* guard.check;
       const response = yield* Effect.tryPromise({
         try: (signal) =>
           fetch(`${config.baseUrl}/chat/completions`, {
@@ -209,14 +220,24 @@ export const make = (config: OpenRouterConfig): ModelClient["Type"] => ({
         catch: (cause) => new ProviderError({ status: 0, message: String(cause) }),
       }).pipe(
         Effect.timeoutFail({
-          duration: config.timeoutMs,
-          onTimeout: () => new Timeout({ afterMs: config.timeoutMs }),
+          duration: request.timeoutMs ?? config.timeoutMs,
+          onTimeout: () => new Timeout({ afterMs: request.timeoutMs ?? config.timeoutMs }),
         }),
       );
       if (response.status !== 200) {
         return yield* errorForStatus(response.status, response.retryAfter, response.text);
       }
-      return yield* parseCompletion(response.text);
+      const parsed = parseCompletion(response.text);
+      // Count every reported cost toward the cap, including unusable answers.
+      const usage = Either.match(parsed, {
+        onLeft: (e) =>
+          e._tag === "BadResponse" || e._tag === "ProviderError" || e._tag === "RateLimited"
+            ? e.usage
+            : undefined,
+        onRight: (c) => c.usage,
+      });
+      if (usage !== undefined) yield* guard.add(usage.costUsd);
+      return yield* parsed;
     }),
 });
 
@@ -226,7 +247,10 @@ const ModelClientChoice = Config.literal(
   "openrouter",
 )("MODEL_CLIENT").pipe(Config.withDefault("mock"));
 
-/** Fails to build unless real calls are explicitly allowed, so a missing flag can never spend money. */
+/**
+ * Fails to build unless real calls are explicitly allowed, so a missing flag can never
+ * spend money, and refuses calls once spend reaches `MODEL_SPEND_CAP_USD` (default $20).
+ */
 export const layer = Layer.effect(
   ModelClient,
   Effect.gen(function* () {
@@ -235,13 +259,18 @@ export const layer = Layer.effect(
         "OpenRouter ModelClient requested without MODEL_CLIENT=openrouter. Use the mock model, or set the flag deliberately.",
       );
     }
-    return make({
+    const config = {
       apiKey: yield* Config.redacted("OPENROUTER_API_KEY"),
       timeoutMs: yield* Config.integer("OPENROUTER_TIMEOUT_MS").pipe(Config.withDefault(45_000)),
       baseUrl: yield* Config.string("OPENROUTER_BASE_URL").pipe(
         Config.withDefault("https://openrouter.ai/api/v1"),
       ),
       appName: "Goblins auto-grader",
+    };
+    const guard = yield* SpendGuard.make({
+      capUsd: yield* Config.number("MODEL_SPEND_CAP_USD").pipe(Config.withDefault(20)),
+      fetchUsage: SpendGuard.fetchOpenRouterUsage(config),
     });
+    return make(config, guard);
   }),
 );
