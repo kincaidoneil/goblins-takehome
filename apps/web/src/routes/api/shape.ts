@@ -15,6 +15,24 @@ const electric = Config.all({
   secret: Config.option(Config.redacted("ELECTRIC_SECRET")),
 });
 
+/**
+ * Keeps control messages and the student's own rows from an Electric response. Offsets and
+ * handles live in headers, so dropping rows doesn't disturb the client's position in the log.
+ */
+const onlyStudentRows = (body: unknown, studentId: string): ReadonlyArray<unknown> =>
+  Array.isArray(body)
+    ? body.filter((message: unknown) => {
+        if (typeof message !== "object" || message === null || !("value" in message)) return true;
+        const value: unknown = message.value;
+        return (
+          typeof value === "object" &&
+          value !== null &&
+          "student_id" in value &&
+          value.student_id === studentId
+        );
+      })
+    : [];
+
 const proxy = (request: Request) =>
   Effect.gen(function* () {
     const url = new URL(request.url);
@@ -36,6 +54,8 @@ const proxy = (request: Request) =>
       upstream.searchParams.set(`params[${i + 1}]`, value);
     }
     upstream.searchParams.set("columns", shape.columns.join(","));
+    // Full rows on every change, so each message carries student_id for the filter below.
+    if (shape.rows._tag === "OfStudent") upstream.searchParams.set("replica", "full");
     if (Option.isSome(config.secret)) {
       upstream.searchParams.set("secret", Redacted.value(config.secret.value));
     }
@@ -51,6 +71,13 @@ const proxy = (request: Request) =>
     // (whose shape Electric may have since replaced, sending the client into a refetch loop),
     // or one teacher's rows to another browser. Never cache.
     headers.set("cache-control", "private, no-store");
+    if (shape.rows._tag === "OfStudent" && response.status === 200) {
+      const body: unknown = yield* Effect.promise(() => response.json());
+      return Response.json(onlyStudentRows(body, shape.rows.studentId), {
+        status: 200,
+        headers,
+      });
+    }
     return new Response(response.body, {
       status: response.status,
       statusText: response.statusText,
