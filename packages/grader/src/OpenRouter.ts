@@ -83,11 +83,14 @@ const toRequestBody = (request: CompletionRequest) => ({
   usage: { include: true },
 })
 
-const toUsage = (usage: typeof UsageBody.Type) => ({
-  promptTokens: usage.prompt_tokens,
-  completionTokens: usage.completion_tokens,
-  costUsd: usage.cost ?? 0,
-})
+/**
+ * We ask for cost with `usage: { include: true }`. A response without it can't be
+ * costed, and logging it as free would undercount spend, so it has no usage.
+ */
+const toUsage = (usage: typeof UsageBody.Type) =>
+  usage.cost === undefined
+    ? undefined
+    : { promptTokens: usage.prompt_tokens, completionTokens: usage.completion_tokens, costUsd: usage.cost }
 
 /** Retry-After is either seconds or an HTTP date. */
 const parseRetryAfterMs = (header: string | null, now: number): number | undefined => {
@@ -147,7 +150,7 @@ const parseCompletion = (
   if (choice.message.content === null || choice.message.content.trim() === "") {
     return badResponse("Empty response")
   }
-  if (usage === undefined) return badResponse("Response has no usage, so its cost is unknown")
+  if (usage === undefined) return badResponse("Response has no usage or no cost, so its cost is unknown")
   return Either.right({ id: body.id, model: body.model, text: choice.message.content, usage })
 }
 

@@ -29,6 +29,7 @@ const replies: Record<string, Reply> = {
   "rate-limited-in-200": (_req, res) => json(res, 200, { error: { code: 429, message: "upstream rate limit" } }),
   "cut-off": (_req, res) => json(res, 200, ok("partial", "length")),
   empty: (_req, res) => json(res, 200, ok(null)),
+  "no-cost": (_req, res) => json(res, 200, { ...ok("3/4"), usage: { prompt_tokens: 10, completion_tokens: 2 } }),
   garbage: (_req, res) => {
     res.writeHead(200)
     res.end("<html>oops</html>")
@@ -107,6 +108,7 @@ describe("OpenRouter client", () => {
         _tag: "BadResponse",
         usage: { promptTokens: 1200, completionTokens: 80, costUsd: 0.00042 },
       })
+      expect(tagOf(yield* run("no-cost"))).toMatchObject({ _tag: "BadResponse", message: expect.stringContaining("cost is unknown") })
       expect(tagOf(yield* run("empty"))).toMatchObject({ _tag: "BadResponse" })
       expect(tagOf(yield* run("garbage"))).toMatchObject({ _tag: "BadResponse" })
       expect(tagOf(yield* run("slow"))).toMatchObject({ _tag: "Timeout", afterMs: 500 })
