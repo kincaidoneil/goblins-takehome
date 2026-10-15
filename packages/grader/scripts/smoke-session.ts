@@ -2,13 +2,14 @@
  * Seeds one live class session for a production smoke test of real grading: a
  * teacher, a one-problem assignment with a two-line rubric, and a join code. Not
  * tagged as a load test, so its grades go to the configured (real) model.
- * Prints the join code. With `--report <joinCode>`, prints that session's grades
- * and their model calls instead.
+ * Prints the join code and session id. With `--report <sessionId>`, prints that
+ * session's grades and their model calls instead (by id: join codes of ended
+ * sessions can be reused).
  *
  *   DATABASE_URL=... pnpm --filter @goblins/grader exec tsx scripts/smoke-session.ts
  */
 import { DatabaseLive, Db, randomJoinCode, schema } from "@goblins/domain";
-import { eq, inArray } from "drizzle-orm";
+import { inArray } from "drizzle-orm";
 import { Effect } from "effect";
 
 const seed = Effect.gen(function* () {
@@ -44,32 +45,26 @@ const seed = Effect.gen(function* () {
     { problemId: problem.id, position: 1, points: 1, description: "Correct answer: x = 4" },
   ]);
   const joinCode = randomJoinCode();
-  yield* db.insert(schema.classSessions).values({
-    assignmentId: assignment.id,
-    teacherId: teacher.id,
-    joinCode,
-    status: "live",
-    startedAt: new Date(),
-  });
-  console.log(JSON.stringify({ joinCode, assignmentId: assignment.id }));
+  const [session] = yield* db
+    .insert(schema.classSessions)
+    .values({
+      assignmentId: assignment.id,
+      teacherId: teacher.id,
+      joinCode,
+      status: "live",
+      startedAt: new Date(),
+    })
+    .returning({ id: schema.classSessions.id });
+  console.log(JSON.stringify({ joinCode, sessionId: session?.id, assignmentId: assignment.id }));
 });
 
-const report = (joinCode: string) =>
+const report = (sessionId: string) =>
   Effect.gen(function* () {
     const db = yield* Db;
-    const sessions = yield* db
-      .select({ id: schema.classSessions.id })
-      .from(schema.classSessions)
-      .where(eq(schema.classSessions.joinCode, joinCode));
     const grades = yield* db
       .select()
       .from(schema.grades)
-      .where(
-        inArray(
-          schema.grades.sessionId,
-          sessions.map((s) => s.id),
-        ),
-      );
+      .where(inArray(schema.grades.sessionId, [sessionId]));
     const calls =
       grades.length === 0
         ? []
