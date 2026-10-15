@@ -5,7 +5,10 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./schema": "./src/schema.ts"
+    "./schema": "./src/schema.ts",
+    "./grade": "./src/grade.ts",
+    "./names": "./src/names.ts",
+    "./join-code": "./src/join-code.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

@@ -16,6 +16,9 @@ import { Route as ApiShapeRouteImport } from './routes/api/shape'
 import { Route as PlaySessionIdRouteImport } from './routes/play/$sessionId'
 import { Route as ReportDemoRouteImport } from './routes/report/demo'
 import { Route as ShareDemoRouteImport } from './routes/share/demo'
+import { Route as ApiGradingSweepRouteImport } from './routes/api/grading/sweep'
+import { Route as SessionsSessionIdIndexRouteImport } from './routes/sessions/$sessionId/index'
+import { Route as SessionsSessionIdProjectorRouteImport } from './routes/sessions/$sessionId/projector'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +55,22 @@ const ShareDemoRoute = ShareDemoRouteImport.update({
   path: '/share/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiGradingSweepRoute = ApiGradingSweepRouteImport.update({
+  id: '/api/grading/sweep',
+  path: '/api/grading/sweep',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SessionsSessionIdIndexRoute = SessionsSessionIdIndexRouteImport.update({
+  id: '/sessions/$sessionId/',
+  path: '/sessions/$sessionId/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SessionsSessionIdProjectorRoute =
+  SessionsSessionIdProjectorRouteImport.update({
+    id: '/sessions/$sessionId/projector',
+    path: '/sessions/$sessionId/projector',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +80,9 @@ export interface FileRoutesByFullPath {
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/share/demo': typeof ShareDemoRoute
+  '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
+  '/sessions/$sessionId/': typeof SessionsSessionIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +92,9 @@ export interface FileRoutesByTo {
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/share/demo': typeof ShareDemoRoute
+  '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
+  '/sessions/$sessionId': typeof SessionsSessionIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +105,9 @@ export interface FileRoutesById {
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/share/demo': typeof ShareDemoRoute
+  '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
+  '/sessions/$sessionId/': typeof SessionsSessionIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +119,9 @@ export interface FileRouteTypes {
     | '/play/$sessionId'
     | '/report/demo'
     | '/share/demo'
+    | '/api/grading/sweep'
+    | '/sessions/$sessionId/projector'
+    | '/sessions/$sessionId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +131,9 @@ export interface FileRouteTypes {
     | '/play/$sessionId'
     | '/report/demo'
     | '/share/demo'
+    | '/api/grading/sweep'
+    | '/sessions/$sessionId/projector'
+    | '/sessions/$sessionId'
   id:
     | '__root__'
     | '/'
@@ -109,6 +143,9 @@ export interface FileRouteTypes {
     | '/play/$sessionId'
     | '/report/demo'
     | '/share/demo'
+    | '/api/grading/sweep'
+    | '/sessions/$sessionId/projector'
+    | '/sessions/$sessionId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +156,9 @@ export interface RootRouteChildren {
   PlaySessionIdRoute: typeof PlaySessionIdRoute
   ReportDemoRoute: typeof ReportDemoRoute
   ShareDemoRoute: typeof ShareDemoRoute
+  ApiGradingSweepRoute: typeof ApiGradingSweepRoute
+  SessionsSessionIdProjectorRoute: typeof SessionsSessionIdProjectorRoute
+  SessionsSessionIdIndexRoute: typeof SessionsSessionIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -172,6 +212,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShareDemoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/grading/sweep': {
+      id: '/api/grading/sweep'
+      path: '/api/grading/sweep'
+      fullPath: '/api/grading/sweep'
+      preLoaderRoute: typeof ApiGradingSweepRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sessions/$sessionId/': {
+      id: '/sessions/$sessionId/'
+      path: '/sessions/$sessionId'
+      fullPath: '/sessions/$sessionId/'
+      preLoaderRoute: typeof SessionsSessionIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sessions/$sessionId/projector': {
+      id: '/sessions/$sessionId/projector'
+      path: '/sessions/$sessionId/projector'
+      fullPath: '/sessions/$sessionId/projector'
+      preLoaderRoute: typeof SessionsSessionIdProjectorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -183,6 +244,9 @@ const rootRouteChildren: RootRouteChildren = {
   PlaySessionIdRoute: PlaySessionIdRoute,
   ReportDemoRoute: ReportDemoRoute,
   ShareDemoRoute: ShareDemoRoute,
+  ApiGradingSweepRoute: ApiGradingSweepRoute,
+  SessionsSessionIdProjectorRoute: SessionsSessionIdProjectorRoute,
+  SessionsSessionIdIndexRoute: SessionsSessionIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
