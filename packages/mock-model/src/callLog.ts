@@ -4,8 +4,9 @@
  * `CallLogRow` validates the columns this package reads, as Drizzle returns
  * them (camelCase; `createdAt` a Date, or an ISO string from a JSON export).
  * `test/callLog.test.ts` checks at compile time that a `model_calls` row still
- * fits it. The table has no HTTP status or Retry-After column, so a
- * `provider_error` replays as a 502 and a 429 carries no retry hint.
+ * fits it. The table has no HTTP status column yet: `statusCode` is read when
+ * present, and a `provider_error` without one replays as a 502. A 429 carries
+ * no retry hint.
  */
 import { Either, Schema } from "effect";
 import type { FailureKind } from "./fate.ts";
@@ -30,6 +31,8 @@ export const CallLogRow = Schema.Struct({
   latencyMs: Schema.NonNegative,
   inputTokens: Count,
   outputTokens: Count,
+  /** HTTP status the provider returned. Not in `model_calls` yet; read when an export or a later column has it. */
+  statusCode: Schema.optional(Schema.NullOr(Schema.Number)),
   loadTestRunId: Schema.NullOr(Schema.String),
   createdAt: Schema.Union(Schema.DateFromSelf, Schema.String),
 });
@@ -80,7 +83,7 @@ const toLoggedCalls = (
       startedAt,
       latencyMs: row.latencyMs,
       outcome: statusToOutcome[row.status],
-      status: undefined,
+      status: row.statusCode ?? undefined,
       retryAfterMs: undefined,
       promptTokens: row.inputTokens ?? 0,
       completionTokens: row.outputTokens ?? 0,

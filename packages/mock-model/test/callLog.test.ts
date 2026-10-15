@@ -1,7 +1,13 @@
 import type { modelCalls } from "@goblins/domain/schema";
 import { Either, type Schema } from "effect";
 import { describe, expect, expectTypeOf, it } from "vitest";
-import { type CallLogRow, profileFromCallLog, recordingFromCallLog } from "../src/index.ts";
+import {
+  type CallLogRow,
+  profileFromCallLog,
+  recordingFromCallLog,
+  sampleUsage,
+  seededRng,
+} from "../src/index.ts";
 import { modelCallRow } from "./helpers.ts";
 
 describe("call log import", () => {
@@ -51,6 +57,36 @@ describe("call log import", () => {
       model: "google/gemini-2.5-flash",
     });
     expect(Either.isRight(recording) && recording.right.calls.length).toBe(2);
+  });
+
+  it("keeps the provider's status code when a row has one, so a 400 replays as a 400", () => {
+    const profile = profileFromCallLog(
+      [
+        { ...modelCallRow({ status: "provider_error" }), statusCode: 400 },
+        modelCallRow({ status: "provider_error" }),
+      ],
+      { source: "test" },
+    );
+    if (Either.isLeft(profile)) throw new Error("expected a profile");
+    expect(profile.right.calls.map((c) => c.status).sort()).toEqual([400, undefined]);
+  });
+
+  it("samples token usage from successful calls only", () => {
+    const profile = profileFromCallLog(
+      [
+        modelCallRow({ inputTokens: 1800, outputTokens: 200 }),
+        modelCallRow({ status: "timeout", inputTokens: null, outputTokens: null }),
+      ],
+      { source: "test" },
+    );
+    if (Either.isLeft(profile)) throw new Error("expected a profile");
+    const rng = seededRng(3);
+    for (let i = 0; i < 50; i++) {
+      expect(sampleUsage(profile.right, rng)).toEqual({
+        promptTokens: 1800,
+        completionTokens: 200,
+      });
+    }
   });
 
   it("accepts createdAt as an ISO string from a JSON export", () => {
