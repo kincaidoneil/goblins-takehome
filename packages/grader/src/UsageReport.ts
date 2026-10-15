@@ -16,7 +16,7 @@ export interface BudgetLine {
 export const budget: ReadonlyArray<BudgetLine> = [
   { name: "Evals", budgetUsd: 8, purposes: ["eval"] },
   { name: "Extraction and prompt development", budgetUsd: 4, purposes: ["extract", "rubric-chat"] },
-  { name: "Production and demo", budgetUsd: 4, purposes: ["grade"] },
+  { name: "Production and demo", budgetUsd: 4, purposes: ["grade", "report"] },
   { name: "Latency calibration", budgetUsd: 2, purposes: ["calibration"] },
   { name: "Reserve", budgetUsd: 2, purposes: [] },
 ];
