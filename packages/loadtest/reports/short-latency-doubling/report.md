@@ -4,7 +4,7 @@
 |---|---|
 | Target | http://localhost:3290 |
 | Started | 2026-10-15T18:44:24.720Z |
-| Commit | `4216cf2` |
+| Commit | `4216cf2 (head of PR #129, app as built from PR #124; on main as afbf6fc and 2523979)` |
 | Scenario | latency-doubling |
 | Mock model | `claude-haiku-5.5` profile: measured from 1,839 real grading calls (p50 3.9 s, p95 8.0 s, p99 11.4 s; no failures in the sample, measured at 8 concurrent calls), with every latency doubled |
 | Mock spec | `mode=sampled; profile=claude-haiku-5.5; scenario=latency-doubling; start=<step start>` |

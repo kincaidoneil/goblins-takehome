@@ -80,7 +80,7 @@ export const runLoadTest = (options: RunOptions) =>
       target: options.baseUrl,
       commit: commit(),
       scenario: options.scenario,
-      mock: describeMock(options.scenario, options.profile),
+      mock: describeMock(options.scenario, options.profile, options.window),
       mockSpecExample: mockSpecFor(options.scenario, {
         profile: options.profile,
         ...(options.window === undefined ? {} : { window: options.window }),

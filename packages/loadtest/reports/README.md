@@ -18,11 +18,13 @@ One folder per run: `report.md` (read this), `report.json` (everything), and raw
 
 ### Failure scenarios (short shape)
 
-All at 300 students on the #124 build, all classes starting at once with no lobby, working window ×0.1 (about 2–4 minutes). That is about 10 submits/s on average, roughly what a real testing day with 2,000 students produces, so these are heavier than their head count suggests. Each scenario is judged on lost = 0 and failed < 0.1% (delayed, not failed). Dashboard p95 is reported but not part of a scenario's verdict, since every scenario delays grades by design.
+All at 300 students on the #124 build, all classes starting at once with no lobby, working window ×0.1 (about 2–4 minutes). That is about 10 submits/s on average, roughly what a real testing day with 2,000 students produces, so these are heavier than their head count suggests. Two verdicts per scenario. **Report verdict**: the PRD's criteria as the report applies them; every scenario except provider-down uses the normal bars, so any latency over the bar is a FAIL. **Resilience**: the narrower question these scenarios ask, whether a provider problem loses or fails grades (lost = 0, failed < 0.1%), with delays allowed. A run can pass resilience and still fail the ship criteria.
 
-| Run | Scenario | Lost | Failed | Submit p99 | Dashboard p95 | Verdict |
-|---|---|---|---|---|---|---|
-| [short-rate-limit-storm](short-rate-limit-storm/report.md) | 70% of calls get a 429 for 2 minutes | 0 | 0 | 2.30 s | 81.7 s (queue peaked at 423 while calls backed off) | PASS (delayed, not failed) |
-| [short-latency-doubling](short-latency-doubling/report.md) | Every model call takes twice as long | 0 | 0 | 0.14 s | 56.9 s: at 100 parallel calls and about 8.6 s each, the queue clears about 12 grades/s, below this run's 16/s peak | PASS on lost and failed; the dashboard bar needs more parallelism at this rate |
-| [short-replay](short-replay/report.md) | Replay of 1,839 recorded Haiku calls | 0 | 0 | 1.50 s (laptop, bell) | 8.7 s | PASS (submit p99 over 1 s at the bell, from laptop contention) |
-| [provider-down-local](provider-down-local/report.md) | Provider down for 5 minutes (earlier, full shape) | 0 | 0 | 0.62 s | 192 s | PASS (delayed, not failed) |
+| Run | Scenario | Lost | Failed | Submit p99 | Dashboard p95 | Report verdict | Resilience |
+|---|---|---|---|---|---|---|---|
+| [short-rate-limit-storm](short-rate-limit-storm/report.md) | 70% of calls get a 429 for 2 minutes | 0 | 0 | 2.30 s | 81.7 s (queue peaked at 423 while calls backed off) | FAIL (submit p99, dashboard p95) | PASS |
+| [short-latency-doubling](short-latency-doubling/report.md) | Every model call takes twice as long | 0 | 0 | 0.14 s | 56.9 s: at 100 parallel calls and about 8.6 s each, the queue clears about 12 grades/s, below this run's 16/s peak | FAIL (dashboard p95) | PASS |
+| [short-replay](short-replay/report.md) | Replay of 1,839 recorded Haiku calls | 0 | 0 | 1.50 s (laptop, bell) | 8.7 s | FAIL (submit p99) | PASS |
+| [provider-down-local](provider-down-local/report.md) | Provider down for 5 minutes (earlier, full shape) | 0 | 0 | 0.62 s | 192 s | FAIL (dashboard p95; the PRD's outage bar is 0% failed, which it meets) | PASS |
+
+Commits: reports name the commit the load-test runner ran from. Some name PR branch heads that were squash-merged; the matching commits on main are noted next to them.

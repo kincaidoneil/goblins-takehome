@@ -3,7 +3,7 @@
     "runId": "per-student-990",
     "startedAt": "2026-10-15T18:24:51.567Z",
     "target": "http://localhost:3290",
-    "commit": "5f7df03",
+    "commit": "5f7df03 (head of PR #124; on main as 2523979)",
     "scenario": "normal",
     "mock": "`claude-haiku-5.5` profile: measured from 1,839 real grading calls (p50 3.9 s, p95 8.0 s, p99 11.4 s; no failures in the sample, measured at 8 concurrent calls)",
     "mockSpecExample": "mode=sampled; profile=claude-haiku-5.5; start=<step start>",

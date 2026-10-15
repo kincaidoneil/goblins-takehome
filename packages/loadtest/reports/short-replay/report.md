@@ -4,7 +4,7 @@
 |---|---|
 | Target | http://localhost:3290 |
 | Started | 2026-10-15T18:50:26.750Z |
-| Commit | `4216cf2` |
+| Commit | `4216cf2 (head of PR #129, app as built from PR #124; on main as afbf6fc and 2523979)` |
 | Scenario | replay |
 | Mock model | replay of the `claude-haiku-5.5` recording |
 | Mock spec | `mode=replay; recording=claude-haiku-5.5; start=<step start>` |
