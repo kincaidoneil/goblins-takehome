@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { teacherGrades, teacherSession, teacherStudents } from "../../../lib/sync";
 import { TeacherReport } from "../../../report/components/TeacherReport";
 import type { ProblemMistakes } from "../../../report/mistakes";
-import { buildReport, type ReportInput, type ReportProblem } from "../../../report/model";
+import { buildReport, type ReportInput } from "../../../report/model";
 import type { ReportHeader } from "../../../server/report/data";
 import { getMistakes, getReport, shareReport } from "../../../server/report/fns";
 
@@ -30,7 +30,7 @@ function ReportPage() {
       <LiveReport
         sessionId={sessionId}
         header={result.value.header}
-        problems={result.value.problems}
+        snapshot={result.value.snapshot}
       />
     );
   }
@@ -79,23 +79,32 @@ function Centered({
 function LiveReport({
   sessionId,
   header,
-  problems,
+  snapshot,
 }: {
   readonly sessionId: string;
   readonly header: ReportHeader;
-  readonly problems: ReadonlyArray<ReportProblem>;
+  /** What the server read at load time. */
+  readonly snapshot: ReportInput;
 }) {
-  const { data: sessions = [] } = useLiveQuery(() => teacherSession(sessionId), [sessionId]);
-  const { data: students = [] } = useLiveQuery(() => teacherStudents(sessionId), [sessionId]);
-  const { data: grades = [] } = useLiveQuery(() => teacherGrades(sessionId), [sessionId]);
+  const sessions = useLiveQuery(() => teacherSession(sessionId), [sessionId]);
+  const students = useLiveQuery(() => teacherStudents(sessionId), [sessionId]);
+  const grades = useLiveQuery(() => teacherGrades(sessionId), [sessionId]);
+  const live = sessions.isReady && students.isReady && grades.isReady;
+  // Previews and some school networks have no sync; the snapshot still makes a full report.
+  const syncFailed = sessions.isError || students.isError || grades.isError;
 
   const input: ReportInput = useMemo(
-    () => ({
-      problems,
-      students: [...students].sort((a, b) => a.createdAt.localeCompare(b.createdAt)),
-      grades,
-    }),
-    [problems, students, grades],
+    () =>
+      live
+        ? {
+            problems: snapshot.problems,
+            students: [...(students.data ?? [])].sort((a, b) =>
+              a.createdAt.localeCompare(b.createdAt),
+            ),
+            grades: grades.data ?? [],
+          }
+        : snapshot,
+    [live, snapshot, students.data, grades.data],
   );
 
   // Regroup mistakes when the missed grades on weak problems change, not on every grade update.
@@ -124,7 +133,7 @@ function LiveReport({
       : null;
   };
 
-  const endedAt = sessions[0]?.endedAt ?? header.endedAt;
+  const endedAt = (live ? sessions.data?.[0]?.endedAt : undefined) ?? header.endedAt;
   return (
     <TeacherReport
       meta={{ title: header.title, course: null, topic: header.title, endedAt }}
@@ -132,6 +141,13 @@ function LiveReport({
       mistakes={mistakes}
       dashboardHref={`/sessions/${sessionId}`}
       createShareLink={createShareLink}
+      notice={
+        syncFailed ? (
+          <p className="m-0 px-1 text-sm text-text-muted" data-testid="sync-off">
+            Live updates are off here. Reload the page to see newly checked grades.
+          </p>
+        ) : undefined
+      }
     />
   );
 }

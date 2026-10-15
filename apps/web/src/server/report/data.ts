@@ -3,30 +3,14 @@
  * or found by its share token), the assignment's problems and rubric, and the class's work.
  */
 import { Db, schema } from "@goblins/domain";
-import { and, asc, eq, inArray } from "drizzle-orm";
+import { asc, eq, inArray } from "drizzle-orm";
 import { Data, Effect } from "effect";
 import type { ReportInput, ReportProblem } from "../../report/model";
-import { currentTeacher } from "../teacher";
 
 /** No such session for this teacher, or no such share link. The two look the same on purpose. */
 export class ReportNotFound extends Data.TaggedError("ReportNotFound") {}
 
 export type SessionRow = typeof schema.classSessions.$inferSelect;
-
-/** The session, if the signed-in teacher owns it. */
-export const ownedSession = (sessionId: string) =>
-  Effect.gen(function* () {
-    const teacher = yield* currentTeacher;
-    const db = yield* Db;
-    const [session] = yield* db
-      .select()
-      .from(schema.classSessions)
-      .where(
-        and(eq(schema.classSessions.id, sessionId), eq(schema.classSessions.teacherId, teacher.id)),
-      );
-    if (session === undefined) return yield* Effect.fail(new ReportNotFound());
-    return session;
-  });
 
 /** The session behind a share link. */
 export const sharedSession = (token: string) =>
