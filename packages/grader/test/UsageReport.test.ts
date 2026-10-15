@@ -7,7 +7,8 @@ const totals = (purpose: "grade" | "eval", costUsd: number) => ({
   calls: 10,
   failed: 1,
   costUsd,
-  meanOkCostUsd: costUsd / 9,
+  costPerCallUsd: costUsd / 10,
+  costPerGradeUsd: purpose === "grade" ? costUsd / 8 : null,
   p50LatencyMs: 3000,
   p95LatencyMs: 6000,
 })
@@ -23,6 +24,7 @@ describe("usage report", () => {
     expect(report).toContain("| Production and demo | $4.00 | $0.0100 | 0% | ok |")
     expect(report).toContain("| **Total** | $20.00 | $7.51 | 38% | |")
     expect(report).toContain("The call log accounts for all of it.")
+    expect(report).toContain("| grade | 10 | 1 (10%) | $0.0100 | $0.0010 | $0.0013 |")
     expect(report).not.toContain("Warning")
   })
 

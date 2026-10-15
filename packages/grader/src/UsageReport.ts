@@ -29,8 +29,13 @@ export interface PurposeTotals {
   readonly calls: number
   readonly failed: number
   readonly costUsd: number
-  /** Mean cost of successful calls; for `grade` this is the cost per grade. */
-  readonly meanOkCostUsd: number | null
+  /** All spend, failed calls included, divided by all calls. */
+  readonly costPerCallUsd: number | null
+  /**
+   * For `grade`: all spend divided by the number of distinct submissions graded,
+   * so retries and failed attempts count toward the grade they were for.
+   */
+  readonly costPerGradeUsd: number | null
   readonly p50LatencyMs: number | null
   readonly p95LatencyMs: number | null
 }
@@ -68,13 +73,13 @@ export const render = (input: {
     const logTotal = rows.reduce((sum, r) => sum + r.costUsd, 0)
     out.push(`| **Total** | ${usd(TOTAL_BUDGET_USD)} | ${usd(logTotal)} | ${pct(logTotal, TOTAL_BUDGET_USD)} | |`, "")
 
-    out.push("| Purpose | Calls | Failed | Cost | Mean cost per ok call | p50 latency | p95 latency |", "|---|---|---|---|---|---|---|")
+    out.push("| Purpose | Calls | Failed | Cost | Cost per call | Cost per grade | p50 latency | p95 latency |", "|---|---|---|---|---|---|---|---|")
     for (const r of rows) {
       out.push(
-        `| ${r.purpose} | ${r.calls} | ${r.failed} (${pct(r.failed, r.calls)}) | ${usd(r.costUsd)} | ${r.meanOkCostUsd === null ? "–" : usd(r.meanOkCostUsd)} | ${ms(r.p50LatencyMs)} | ${ms(r.p95LatencyMs)} |`,
+        `| ${r.purpose} | ${r.calls} | ${r.failed} (${pct(r.failed, r.calls)}) | ${usd(r.costUsd)} | ${r.costPerCallUsd === null ? "–" : usd(r.costPerCallUsd)} | ${r.costPerGradeUsd === null ? "–" : usd(r.costPerGradeUsd)} | ${ms(r.p50LatencyMs)} | ${ms(r.p95LatencyMs)} |`,
       )
     }
-    if (rows.length === 0) out.push("| (no calls logged) | | | | | | |")
+    if (rows.length === 0) out.push("| (no calls logged) | | | | | | | |")
     out.push("")
   } else {
     out.push(`Call log: not available: ${input.logError ?? "unknown reason"}`, "")

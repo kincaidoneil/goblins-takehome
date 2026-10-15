@@ -53,7 +53,8 @@ const Row = Schema.Struct({
   calls: Schema.NumberFromString,
   failed: Schema.NumberFromString,
   cost_usd: Schema.NumberFromString,
-  mean_ok_cost_usd: Schema.NullOr(Schema.NumberFromString),
+  cost_per_call_usd: Schema.NullOr(Schema.NumberFromString),
+  cost_per_grade_usd: Schema.NullOr(Schema.NumberFromString),
   p50_latency_ms: Schema.NullOr(Schema.Number),
   p95_latency_ms: Schema.NullOr(Schema.Number),
 })
@@ -65,7 +66,8 @@ const readLog = Effect.gen(function* () {
            count(*)::text as calls,
            count(*) filter (where status <> 'ok')::text as failed,
            coalesce(sum(cost_usd), 0)::text as cost_usd,
-           (avg(cost_usd) filter (where status = 'ok'))::text as mean_ok_cost_usd,
+           (coalesce(sum(cost_usd), 0) / nullif(count(*), 0))::text as cost_per_call_usd,
+           (coalesce(sum(cost_usd), 0) / nullif(count(distinct submission_id), 0))::text as cost_per_grade_usd,
            percentile_cont(0.5) within group (order by latency_ms) as p50_latency_ms,
            percentile_cont(0.95) within group (order by latency_ms) as p95_latency_ms
     from model_calls
@@ -79,7 +81,9 @@ const readLog = Effect.gen(function* () {
       calls: r.calls,
       failed: r.failed,
       costUsd: r.cost_usd,
-      meanOkCostUsd: r.mean_ok_cost_usd,
+      costPerCallUsd: r.cost_per_call_usd,
+      // Only grade calls carry a submission id.
+      costPerGradeUsd: r.purpose === "grade" ? r.cost_per_grade_usd : null,
       p50LatencyMs: r.p50_latency_ms,
       p95LatencyMs: r.p95_latency_ms,
     }),
