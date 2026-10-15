@@ -82,6 +82,7 @@ const fromModel = (problem: Extract.ExtractedProblem): Option.Option<ExtractedPr
         text: problem.text,
         answerKey: problem.answerKey,
         diagramDescription: problem.diagramDescription,
+        diagramCrops: [],
         pageNumbers: [...problem.pageNumbers],
         gradingNotes: problem.gradingNotes,
         rubric: cleanRubric([first, ...rest]),

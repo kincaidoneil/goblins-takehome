@@ -30,6 +30,7 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
+import type { DiagramCrop } from "./diagram";
 import type { LinePoints } from "./grade";
 
 const id = () => uuid().primaryKey().defaultRandom();
@@ -137,6 +138,11 @@ export const problems = pgTable(
     answerKey: text().notNull(),
     /** Plain-language description of any diagram, for the grader and the teacher. */
     diagramDescription: text(),
+    /**
+     * Where each of the problem's figures sits on the page images, so a screen can show the figure
+     * alone. Empty when there is no diagram or its position is unknown (extraction gives none).
+     */
+    diagramCrops: jsonb().$type<ReadonlyArray<DiagramCrop>>().notNull().default(sql`'[]'::jsonb`),
     /** The teacher marked this problem as needing the page image to grade. */
     gradeWithPageImage: boolean().notNull().default(false),
     /** Pages the problem appears on. A problem that runs across two pages lists both. */

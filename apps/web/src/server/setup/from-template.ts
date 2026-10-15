@@ -101,6 +101,7 @@ export const extractedFromTemplate = (template: Template): Extracted => {
           ? null
           : problem.diagrams.map((diagram) => diagram.description).join("\n\n");
       const pageNumbers = [...problem.pages];
+      const diagramCrops = problem.diagrams.map((diagram) => diagram.crop);
       switch (problem._tag) {
         case "Whole":
           return [
@@ -109,6 +110,7 @@ export const extractedFromTemplate = (template: Template): Extracted => {
               text: problem.text,
               answerKey: answerKeyFor(problem.answer, problem.solution),
               diagramDescription,
+              diagramCrops,
               pageNumbers,
               ...rubricAndNotes(
                 template.id,
@@ -127,6 +129,7 @@ export const extractedFromTemplate = (template: Template): Extracted => {
             text: problem.stem === "" ? part.text : `${problem.stem}\n\n${part.text}`,
             answerKey: answerKeyFor(part.answer, part.solution),
             diagramDescription,
+            diagramCrops,
             pageNumbers,
             ...rubricAndNotes(
               template.id,

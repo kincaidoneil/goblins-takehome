@@ -29,6 +29,13 @@
       "when": 1792080511770,
       "tag": "0003_load_test_mock_spec",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792083729007,
+      "tag": "0004_problem_diagram_crops",
+      "breakpoints": true
     }
   ]
 }

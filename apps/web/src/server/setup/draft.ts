@@ -208,6 +208,7 @@ export const saveExtracted = (draftId: string, extracted: Extracted) =>
               text: problem.text,
               answerKey: problem.answerKey,
               diagramDescription: problem.diagramDescription,
+              diagramCrops: [...problem.diagramCrops],
               pageNumbers: [...problem.pageNumbers],
               gradingNotes: problem.gradingNotes,
             })
