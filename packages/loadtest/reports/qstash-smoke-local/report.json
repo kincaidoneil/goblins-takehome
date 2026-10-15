@@ -1,0 +1,264 @@
+{
+  "header": {
+    "runId": "qstash-smoke-local",
+    "startedAt": "2026-10-15T16:31:22.047Z",
+    "target": "http://localhost:3290",
+    "commit": "6381114",
+    "scenario": "normal",
+    "mock": "`seed` profile: guessed, not measured (log-normal latency, median 3.5 s, p95 9 s; about 1.2% errors)",
+    "mockSpecExample": "mode=sampled; profile=seed; start=<step start>",
+    "queue": "QStash local dev server (port 8091), flow control parallelism 100",
+    "template": "angle-relationships",
+    "submissionsPerStudent": 9,
+    "timeScale": 0.05,
+    "generator": "one Node v22.22.0 process on macbookpro.lan (8 CPUs, 16 GB)"
+  },
+  "summary": {
+    "capacityStudents": null,
+    "firstFailures": [
+      {
+        "criterion": "Submit latency p99",
+        "step": 1,
+        "students": 30,
+        "component": "Submit function: slow responses (upload, DB write or cold starts)"
+      }
+    ],
+    "stoppedBecause": "step 1 failed submit-p99"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "runId": "qstash-smoke-local-s1",
+      "classes": 1,
+      "students": 30,
+      "metrics": {
+        "window": {
+          "startedAt": 1792081882086,
+          "endedAt": 1792082153712,
+          "minutes": 4.5271
+        },
+        "load": {
+          "plannedStudents": 30,
+          "studentsJoined": 30,
+          "classesFailed": 0,
+          "studentsFailed": 0,
+          "plannedSubmissions": 270,
+          "submissionsAcked": 270,
+          "peakSubmitsPerSecond": 3.2,
+          "meanSubmitsPerSecond": 0.9940138278368051
+        },
+        "submitRequestMs": {
+          "count": 270,
+          "p50": 25,
+          "p95": 839,
+          "p99": 2024,
+          "max": 2170
+        },
+        "submitAckMs": {
+          "count": 270,
+          "p50": 26,
+          "p95": 839,
+          "p99": 2025,
+          "max": 2172
+        },
+        "submitRetries": 0,
+        "submitToDashboardMs": {
+          "count": 270,
+          "p50": 4839,
+          "p95": 9765,
+          "p99": 14134,
+          "max": 18318
+        },
+        "breakdown": {
+          "queueWaitMs": {
+            "count": 270,
+            "p50": 204,
+            "p95": 1207,
+            "p99": 1638,
+            "max": 2436
+          },
+          "gradingMs": {
+            "count": 270,
+            "p50": 4079,
+            "p95": 9126,
+            "p99": 11529,
+            "max": 14972
+          },
+          "syncLagMs": {
+            "count": 270,
+            "p50": 244,
+            "p95": 1185,
+            "p99": 2324,
+            "max": 9097
+          },
+          "attemptsOverOne": 0
+        },
+        "grades": {
+          "byState": {
+            "graded": 234,
+            "needs_teacher": 36,
+            "couldnt_grade": 0
+          },
+          "failureRate": 0,
+          "failureReasons": {},
+          "unexpectedStates": 0
+        },
+        "lost": {
+          "count": 0,
+          "byKind": {}
+        },
+        "pipeline": {
+          "peakQueued": 8,
+          "peakInFlight": 19,
+          "series": [
+            [0, 0, 0],
+            [5, 0, 0],
+            [10, 0, 0],
+            [15, 0, 0],
+            [20, 0, 0],
+            [25, 0, 0],
+            [30, 0, 0],
+            [35, 0, 0],
+            [40, 0, 0],
+            [45, 0, 0],
+            [50, 0, 0],
+            [55, 0, 0],
+            [60, 0, 0],
+            [65, 0, 0],
+            [70, 0, 0],
+            [75, 0, 0],
+            [80, 0, 0],
+            [85, 0, 0],
+            [90, 0, 0],
+            [95, 0, 0],
+            [100, 0, 0],
+            [105, 0, 0],
+            [110, 0, 0],
+            [115, 0, 0],
+            [120, 0, 0],
+            [125, 0, 0],
+            [130, 0, 0],
+            [135, 0, 0],
+            [140, 2, 5],
+            [145, 1, 18],
+            [150, 0, 18],
+            [155, 2, 10],
+            [160, 0, 15],
+            [165, 0, 11],
+            [170, 0, 12],
+            [175, 0, 14],
+            [180, 2, 12],
+            [185, 0, 15],
+            [190, 1, 10],
+            [195, 1, 15],
+            [200, 0, 15],
+            [205, 1, 12],
+            [210, 0, 14],
+            [215, 1, 10],
+            [220, 0, 12],
+            [225, 0, 5],
+            [230, 4, 6],
+            [235, 0, 6],
+            [240, 1, 1],
+            [245, 1, 3],
+            [250, 1, 0],
+            [255, 0, 3],
+            [260, 0, 2],
+            [265, 0, 1],
+            [270, 0, 0]
+          ]
+        },
+        "transitionShare": 0.018518518518518517,
+        "correctness": {
+          "resumes": 1,
+          "resumeFailures": 0,
+          "dashboardStudentMismatches": 0
+        },
+        "errors": {
+          "requests": {},
+          "shapeErrors": 0,
+          "classFailures": {},
+          "studentFailures": {}
+        },
+        "sync": {
+          "requests": 1898,
+          "requestsPerSecond": 6.987549056423171,
+          "liveRequests": 1768,
+          "byView": {
+            "session": 15,
+            "students": 41,
+            "grades": 579,
+            "my-grades": 960,
+            "my-session": 303
+          },
+          "catchUpMs": {
+            "count": 130,
+            "p50": 10,
+            "p95": 50,
+            "p99": 90,
+            "max": 91
+          }
+        },
+        "database": {
+          "samples": 53,
+          "peakConnections": 39,
+          "maxConnections": 200,
+          "peakActive": 5,
+          "peakWaitingOnLock": 0,
+          "peakCommitsPerSecond": 60,
+          "deadlocks": 0
+        },
+        "generator": {
+          "peakEventLoopDelayP99Ms": 83,
+          "peakCpuPercent": 11,
+          "peakOpenRequests": 69,
+          "peakHeapMb": 63,
+          "limited": false
+        }
+      },
+      "criteria": [
+        {
+          "id": "lost",
+          "label": "Lost submissions",
+          "bar": "0",
+          "measured": "0",
+          "pass": true
+        },
+        {
+          "id": "submit-p99",
+          "label": "Submit latency p99",
+          "bar": "< 1 s",
+          "measured": "2.02 s",
+          "pass": false
+        },
+        {
+          "id": "dashboard-p95",
+          "label": "Submit to grade on dashboard p95",
+          "bar": "< 30 s",
+          "measured": "9.77 s",
+          "pass": true
+        },
+        {
+          "id": "failures",
+          "label": "Grades that fail",
+          "bar": "< 0.1%",
+          "measured": "0.00% (0)",
+          "pass": true
+        }
+      ],
+      "verdict": {
+        "_tag": "Fail",
+        "failed": ["submit-p99"]
+      },
+      "attribution": {
+        "submit-p99": "Submit function: slow responses (upload, DB write or cold starts)"
+      },
+      "cleanup": {
+        "classSessions": 2,
+        "assignments": 2,
+        "teachers": 1,
+        "modelCalls": 270
+      }
+    }
+  ]
+}

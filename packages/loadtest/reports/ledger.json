@@ -1,0 +1,16 @@
+{
+  "budgetUsd": 25,
+  "entries": [
+    {
+      "runId": "smoke-production-s1",
+      "step": 1,
+      "date": "2026-10-15T16:44:09.859Z",
+      "target": "https://goblins-takehome-gathers.vercel.app",
+      "scenario": "normal",
+      "students": 30,
+      "submissions": 270,
+      "estimatedMessages": 405,
+      "estimatedUsd": 0.0041
+    }
+  ]
+}
