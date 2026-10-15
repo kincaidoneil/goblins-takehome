@@ -1,83 +1,99 @@
 # Demo script
 
-A 2–3 minute walkthrough recorded on production, https://goblins-takehome-three.vercel.app. Kincaid records it. Timings are rough; cut the waits in editing.
+A 2–3 minute walkthrough recorded on production, https://goblins-takehome-three.vercel.app. Kincaid records it. It shows accurate grading, a student getting a problem wrong, and an ambiguous answer the teacher reviews, then the report, without grading the class by hand. Timings are rough; cut the waits in editing.
 
 ## Pre-flight
 
-- [ ] **Signed in.** Google sign-in on a demo account that has no old assignments, so the assignments list and the report are clean. Sign in before recording; the launch step then skips the Google screen.
+- [ ] **Signed in.** Use a demo Google account with no old assignments, so the assignments list and the report stay clean. Sign in before recording so launch skips the Google screen.
 - [ ] **Real model on.** Production grades with `MODEL_CLIENT=openrouter`. Check with `vercel env ls production | grep MODEL_CLIENT`. A class of 28 makes about 250 grades, roughly $0.15.
 - [ ] **Spend checked.** `pnpm --filter @goblins/grader usage-report` shows what's left of the $20 key.
-- [ ] **Whiteboards match the template.** The simulator submits the mock model's fixture whiteboards, which show `2x + 3 = 11`, not a template's problems. The real model grades those as wrong or flags them. Before recording, confirm with the class-simulator stream which template and whiteboard set give sensible grades on production. `[TBD: template id and simulator flags]`
+- [ ] **Phone ready.** Open the site on your phone, connected to the internet independently of the laptop, with screen mirroring or a camera on it for the recording. You join as "Kincaid O."
 - [ ] **Windows placed.** Allow pop-ups for the site, since launch opens the projector in a new window. Put the dashboard on the left half of the screen and the projector on the right, both in frame.
-- [ ] **Second terminal ready.** Repo on the latest `main`, `pnpm install` done, the simulator command below typed in with the join code left blank.
-- [ ] **Tabs ready for the last beat.** The load-test report and [packages/evals/REPORT.md](../packages/evals/REPORT.md) open in background tabs.
-- [ ] **Dry run.** Do one full run within the hour before recording. It also wakes the database and sync server.
+- [ ] **Second terminal ready.** Repo on the latest `main`, `pnpm install` done, and the simulator command below typed in, with the join code left blank.
+- [ ] **Tabs ready for the last beat.** Open the [production smoke test](../packages/loadtest/reports/smoke-production/report.md) and the [eval report](../packages/evals/REPORT.md) in background tabs.
+- [ ] **Dry run.** Do one full run within the hour before recording, including the three phone problems. It also wakes the database and the sync server.
 - [ ] **Quiet screen.** Notifications off, bookmarks bar hidden, browser zoom at 100%.
 
-Simulator command (second terminal), with the code read off the projector:
+The simulator command for the second terminal. Fill in the join code from the projector:
 
 ```bash
-pnpm --filter @goblins/simulator simulate \
-  --url https://goblins-takehome-three.vercel.app \
-  --join-code <code> --students 28 --time-scale 0.05
+[TBD from the class-simulator stream: simulate --url https://goblins-takehome-three.vercel.app --join-code <code> --students 27, with solving-linear-equations whiteboards, finishing in 2–3 minutes]
 ```
 
-`--time-scale 0.05` gives each student 1–2 minutes of work instead of 20–40, so the dashboard fills while you talk. The same `--seed` gives the same names and whiteboards on every run.
+## What to write on the phone
+
+The template is **Solving Linear Equations**. Its rubrics are the reference rubrics the grader was evaluated on, and on the eval's version of each case the grader gave these scores.
+
+| Problem | Write | Expected grade |
+|---|---|---|
+| 1, correct. "Solve 3(x − 4) = 12x" | `3x − 12 = 12x`, then `−12 = 9x`, then `x = −4/3`, boxed | 2 / 2 |
+| 8, wrong. "Do you agree with Elena?" | `Yes, I agree. 9x is bigger than 3x so they can't be equal.` | 0 / 2. What the grader read and its reason show it on the dashboard. |
+| 6, ambiguous. "Where is Andre's mistake?" | `Line 4 is wrong, it should be 10 = 10x + 20`, then `−10 = 10x`, then `x = −7`. Then write a **1 over the 7** without erasing, so the last digit reads as either. | Needs you: the grader flags it as unclear and gives a best guess. |
+
+Do problem 1, then jump to 8 and then 6 using the progress strip along the top.
+
+The overwritten digit is the least predictable of the three. In the evals Haiku flagged 8 of 11 overwritten or ambiguous digits. If the dry run doesn't flag it, write two final answers instead, `x = −1` and `x = 1`, with neither crossed out. Haiku flagged all 3 two-answer cases in the evals.
 
 ## Beats
 
-### 0:00 Landing (15 s)
+### 0:00 Setup from a template (30 s)
 
-Show the landing page. Scroll once past the graded worksheet.
+On the landing page, click **Start from a template**, then **Solving Linear Equations**. On the review screen, point at problem 1's rubric next to the original page. In the chat panel, type:
 
-> "This is Goblins Grader, a free auto-grader built to get teachers into Goblins. A teacher starts from the worksheet they were already going to hand out. No sign-up yet."
+> make problem 2 worth 4 points
 
-### 0:15 Setup and a chat edit (35 s)
+Show the rubric change.
 
-Click **Start from a template** and pick the template from pre-flight. On the review screen, point at one problem's rubric, then type in the chat panel:
+> "A teacher starts from the worksheet they already have. Every problem gets an answer key and a rubric written like an AP scoring guide. I can edit anything, or just ask."
 
-> "accept answers without the degree sign"
+### 0:30 Launch (15 s)
 
-Show the rubric note change.
+Click **Launch**. The projector window opens with the join code and the QR code.
 
-> "It pulls out every problem with an answer key and a rubric written like an AP scoring guide. I can edit any of it directly, or just ask."
+> "Sign-in comes only at launch. The projector shows a code, like Kahoot. Students join on any device with a first name."
 
-### 0:50 Launch and the projector (15 s)
+### 0:45 One student, live (40 s)
 
-Click **Launch**. The projector window opens with the join code and QR code.
+On the phone, enter the code and "Kincaid O." Your avatar appears on the projector. Click **Start** on the dashboard. Then work the three problems from the table above.
 
-> "Launching asks for Google sign-in, the first time we ask for anything. The projector goes on the board: a code, like Kahoot. Students type it on any device with their first name."
+1. **Problem 1, correct.** The full score shows on the transition, or fills in on the progress strip a few seconds later.
+2. **Problem 8, wrong.** A low score, in a calm color, never red.
+3. **Problem 6, ambiguous.** "Your teacher will check this one."
 
-### 1:05 The class joins (15 s)
+> "Students show their work one problem at a time. They see their score and move on. When the grader can't read something, the student never sees an error. The teacher gets it instead."
 
-Paste the code into the simulator command in the second terminal and run it. Avatars fill the projector lobby. Click **Start** on the dashboard.
+### 1:25 The rest of the class (10 s)
 
-> "These are 28 simulated students on their own devices, submitting whiteboard work at a testing-day pace. The same simulator drives our load test."
+Paste the code into the simulator command in the second terminal and run it. Avatars fill the projector.
 
-### 1:20 The dashboard fills (40 s)
+> "To show a full class, 27 simulated students join on their own connections and submit real work at testing-day pace. The same simulator drives the load test."
 
-Let cells fill for a few seconds. Then:
+### 1:35 The dashboard (35 s)
 
-1. Open a lilac "needs you" cell. Show what the grader read, the points per rubric line and the reason. Click **Accept**; the panel moves to the next one.
-2. Open a graded cell and change the score.
-3. Toggle **Hide names and scores** on and off.
+The grid fills while you talk.
 
-> "Grades land a few seconds after each submission. When the grader isn't sure, it doesn't guess. It asks me, with the reason. I can accept or rescore anything, and the student sees the change. If I'm mirroring my laptop to the projector, one click hides names."
+1. Open your own problem 8 cell. Point at what the grader read and the reason for 0 points.
+2. Open the **Needs you** item for problem 6. Show the grader's best guess and why it's unsure. Click **Accept**, or enter a score.
+3. Open any graded cell and change the score. Say that the student sees the change.
 
-### 2:00 Report and the Goblins pitch (30 s)
+> "Grades land a few seconds after each submission. When the grader isn't sure, it doesn't guess. It asks me, with the reason. I can accept or rescore anything."
+
+### 2:10 Report and the Goblins pitch (25 s)
+
+End whenever the beats are covered: once the dashboard looks full and you've reviewed the flagged item. Don't wait for the simulator to finish. Grading already in progress still finishes, and those grades land in the report as it updates. Problems a simulated student hasn't submitted show as not submitted.
 
 Click **End session**. The report opens.
 
-1. The class summary and the weakest problem's common mistakes.
-2. The CTA: "Give these N students practice on this in Goblins". Click it to show the handoff screen.
-3. Click **Share this report** and open the link in a new tab: names are gone, and the page pitches Goblins to colleagues and administrators.
+1. The class summary, then the struggle section: the weakest problem and its common mistakes.
+2. The CTA: "Give these N students practice on this in Goblins." Click it to show the handoff.
+3. Click **Share this report** and open the link. The names are gone, and the page pitches Goblins to colleagues and administrators.
 
-> "Ending the class gives me the report I'd have spent an evening on: where they struggled and the mistakes they made. One click sends exactly those students to Goblins to practice. The share link is how this spreads to the department head."
+> "Ending the class gives me the report I'd have spent an evening on: where they struggled and why. One click sends exactly those students to Goblins to practice. The share link is how this reaches the department head."
 
-### 2:30 How we know it holds up (15 s)
+### 2:35 How we know it holds up (15 s)
 
-Switch to the load-test report, then the eval report.
+Switch to the eval report, then the smoke-test report.
 
-> "Grading is Claude Haiku 5.5, chosen over seven other cheap models. It matches the correct score 96% of the time, for $0.0006 a grade, or $3.30 per teacher a month. The load test re-runs the testing-day spike on demand with a mocked model, so it costs nothing to repeat. `[CAPACITY: TBD from the ramp]`."
+> "Grading is Claude Haiku 5.5, picked over seven other cheap models. It gives the score a careful teacher would 96% of the time, for $0.0006 a grade, or $3.30 per teacher a month. The load test re-runs the testing-day spike on demand with a mocked model, so it's free to repeat. `[CAPACITY: TBD from the ramp]`."
 
-End at about 2:45.
+End at about 2:50.
