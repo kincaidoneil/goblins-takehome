@@ -243,6 +243,28 @@ describe("grading pipeline", () => {
     }),
   )
 
+  it.effect("treats a reply that scores a rubric line twice as unusable", () =>
+    Effect.gen(function* () {
+      const doubled = {
+        ...reply(),
+        text: JSON.stringify({
+          read: "x = 4",
+          lines: [
+            { lineId: "setup", awarded: 1 },
+            { lineId: "setup", awarded: 1 },
+            { lineId: "answer", awarded: 1 },
+          ],
+          reason: "",
+          unsure: null,
+        }),
+      }
+      const t = yield* setup({ script: always(doubled) })
+      yield* t.submit(input("g1"))
+      yield* runUntilDone(t.queue.drained)
+      expect(yield* t.grade("g1")).toMatchObject({ state: "couldnt_grade" })
+    }),
+  )
+
   it.effect("recovers from a single unusable answer", () =>
     Effect.gen(function* () {
       const t = yield* setup({
@@ -291,6 +313,9 @@ describe("idempotency under at-least-once delivery", () => {
       const { value } = yield* runUntilDone(both)
       expect(value.map((d) => (d._tag === "Done" ? d.result : d._tag)).sort()).toEqual(["graded", "skipped"])
       expect(yield* t.grade("g1")).toMatchObject({ state: "graded" })
+      // Both deliveries call the model: overlap is rare (see the README), and one
+      // extra call is cheaper than a lease column and its crash-recovery path.
+      expect(yield* t.model.totalCalls).toBe(2)
     }),
   )
 

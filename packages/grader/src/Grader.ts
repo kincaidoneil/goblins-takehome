@@ -148,7 +148,11 @@ export const placeholder: Grader["Type"] = {
         const max = known.get(l.lineId)
         return max !== undefined && l.awarded >= 0 && l.awarded <= max
       })
-      if (!valid || new Set(reply.lines.map((l) => l.lineId)).size !== input.rubric.length) {
+      // Exactly one score per rubric line: no unknown lines, no duplicates, none missing.
+      const oneEach =
+        reply.lines.length === input.rubric.length &&
+        new Set(reply.lines.map((l) => l.lineId)).size === input.rubric.length
+      if (!valid || !oneEach) {
         return yield* new BadResponse({ message: "Grade reply scored unknown lines or out of range", usage: completion.usage })
       }
       const assessment = { read: reply.read, lines: reply.lines, reason: reply.reason }
