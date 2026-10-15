@@ -54,6 +54,15 @@
     max-width: none;
   }
 
+  /*
+   * A portrait board as wide as the phone is taller than what's left under the header, strip,
+   * problem and toolbar. Narrow it (keeping 3:4) so the whole board and Submit fit on one screen.
+   */
+  .gb-work-board .gb-board-surface[data-shape="portrait"] {
+    width: min(100%, calc((100dvh - 400px) * 0.75));
+    margin-inline: auto;
+  }
+
   /* The board is tall on a phone; Submit stays in reach at the bottom of the screen. */
   .gb-work-submit {
     position: sticky;

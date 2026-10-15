@@ -70,10 +70,6 @@ export function Workspace({
   );
 
   const own = pages.filter((page) => problem.pageNumbers.includes(page.pageNumber));
-  // A problem with a diagram shows its page beside the text, so the student needn't open the worksheet.
-  // A problem spanning pages usually has its figure after the text, so prefer its last page.
-  const figurePage =
-    problem.diagramDescription === null ? undefined : (own[own.length - 1] ?? pages[0]);
 
   const submit = async () => {
     setExporting(true);
@@ -99,11 +95,20 @@ export function Workspace({
         <ProblemPanel
           label={problem.label}
           total={total}
-          {...(figurePage === undefined || problem.diagramDescription === null
-            ? {}
-            : { figure: { src: figurePage.imageUrl, alt: problem.diagramDescription } })}
+          {...(pages.length > 0
+            ? {
+                action: <WorksheetButton problem={problem} pages={own.length > 0 ? own : pages} />,
+              }
+            : {})}
         >
           <MathText text={problem.text} />
+          {/* Until extraction gives each diagram its own page region, point to the worksheet
+              rather than show a whole page that may hold another problem's figure. */}
+          {problem.diagramDescription !== null && pages.length > 0 && (
+            <p className="mt-2 text-sm text-text-muted">
+              This one has a diagram. Tap See worksheet to look at it.
+            </p>
+          )}
         </ProblemPanel>
       }
       board={
@@ -112,13 +117,6 @@ export function Workspace({
           onChange={setDoc}
           label={`Whiteboard for problem ${problem.label}`}
           disabled={exporting}
-          {...(pages.length > 0
-            ? {
-                accessory: (
-                  <WorksheetButton problem={problem} pages={own.length > 0 ? own : pages} />
-                ),
-              }
-            : {})}
         />
       }
       submit={<SubmitButton state={state} onSubmit={() => void submit()} />}

@@ -37,7 +37,8 @@ function describe(problem: StripProblem): string {
     case "not-started":
       return name;
     case "grading":
-      return `${name}, submitted, score coming`;
+      // "sent", not "submitted": the screen's one button named Submit must stay unambiguous.
+      return `${name}, sent, score coming`;
     case "graded":
       return `${name}, ${problem.status.points} out of ${problem.status.maxPoints}`;
     case "needs-teacher":
