@@ -1,8 +1,8 @@
-import { SignInButton } from "@clerk/tanstack-react-start";
 import { Button, EmptyState } from "@goblins/ui";
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { SignInTrigger } from "../../../lib/auth";
 import { teacherGrades, teacherSession, teacherStudents } from "../../../lib/sync";
 import { TeacherReport } from "../../../report/components/TeacherReport";
 import type { ProblemMistakes } from "../../../report/mistakes";
@@ -41,9 +41,9 @@ function ReportPage() {
           title="Sign in to see this report"
           description="Reports are private to the teacher who ran the class."
         >
-          <SignInButton mode="modal">
+          <SignInTrigger>
             <Button>Sign in with Google</Button>
-          </SignInButton>
+          </SignInTrigger>
         </Centered>
       );
     case "ReportNotFound":
