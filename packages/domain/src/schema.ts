@@ -239,6 +239,12 @@ export const classSessions = pgTable(
     /** Random token for the view-only report link. Null until the teacher shares it. */
     reportShareToken: text().unique(),
     loadTestRunId: loadTestRunId(),
+    /**
+     * The mock model spec a load test asked for (`x-goblins-mock-model`), e.g.
+     * `mode=sampled; profile=seed; scenario=provider-down; start=…`. The grading consumer reads it
+     * at claim time, since it never sees the load test's HTTP requests. Null outside load tests.
+     */
+    loadTestMockSpec: text(),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },

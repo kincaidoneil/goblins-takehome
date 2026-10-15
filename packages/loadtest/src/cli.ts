@@ -41,6 +41,8 @@ Options:
   --keep-data               do not delete the run's data afterward
   --pricing <qstash|none>   queue billing; default qstash, or none for the local stand-in
   --max-usd <n>             stop before the ledger passes this (default and ceiling: 25)
+  --i-have-vercel-approval  required to send more than one class to a non-local target
+                            (Vercel allows load tests only on Enterprise, with its approval)
 Environment: LOAD_TEST_TOKEN (required), GOBLINS_URL`;
 
 const { values, positionals } = parseArgs({
@@ -61,6 +63,7 @@ const { values, positionals } = parseArgs({
     "keep-data": { type: "boolean", default: false },
     pricing: { type: "string" },
     "max-usd": { type: "string", default: "25" },
+    "i-have-vercel-approval": { type: "boolean", default: false },
     help: { type: "boolean", default: false },
   },
 });
@@ -136,6 +139,18 @@ if (command === "cleanup") {
       : values.pricing === "qstash" || values.pricing === "none"
         ? values.pricing
         : fail("--pricing must be qstash or none");
+
+  // A smoke test (one class, one step) may go anywhere. Anything bigger against a deploy is a load
+  // test, which Vercel permits only with an Enterprise approval.
+  const isLocal = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(baseUrl);
+  const isSmoke =
+    Number(values["start-classes"]) <= 1 &&
+    (command !== "ramp" || Number(values["max-steps"]) <= 1);
+  if (!isLocal && !isSmoke && !values["i-have-vercel-approval"]) {
+    fail(
+      `${baseUrl} is not local. Sending more than one class to a deploy is a load test; Vercel permits it only on Enterprise with prior approval. Pass --i-have-vercel-approval if you have it, or use --start-classes 1 --max-steps 1 for a smoke test.`,
+    );
+  }
 
   const ramp: RampPlan = {
     studentsPerClass: positive("students-per-class", values["students-per-class"]),

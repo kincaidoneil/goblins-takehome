@@ -6,8 +6,9 @@
 import { Db, schema } from "@goblins/domain";
 import { and, eq } from "drizzle-orm";
 import { Data, Effect, Option, Schema } from "effect";
+import { loadTestAuth } from "./loadtest/identity";
 import { studentFromCookies } from "./student-identity";
-import { currentTeacher } from "./teacher";
+import { teacherFor } from "./teacher";
 
 /** An Electric shape: one table, a parameterized filter, and the columns to send. */
 export interface ShapeDefinition {
@@ -73,9 +74,9 @@ const bySession = (
   columns,
 });
 
-const teacherOwnsSession = (sessionId: string) =>
+const teacherOwnsSession = (request: Request, sessionId: string) =>
   Effect.gen(function* () {
-    const teacher = yield* currentTeacher;
+    const teacher = yield* teacherFor(loadTestAuth(request));
     const db = yield* Db;
     const [row] = yield* db
       .select({ id: schema.classSessions.id })
@@ -96,13 +97,13 @@ export const resolveShape = (request: Request, view: string, sessionId: string) 
     if (!isUuid(sessionId)) return yield* Effect.fail(new UnknownView());
     switch (view) {
       case "session":
-        yield* teacherOwnsSession(sessionId);
+        yield* teacherOwnsSession(request, sessionId);
         return bySession("class_sessions", sessionId, sessionColumns);
       case "students":
-        yield* teacherOwnsSession(sessionId);
+        yield* teacherOwnsSession(request, sessionId);
         return bySession("students", sessionId, studentColumns);
       case "grades":
-        yield* teacherOwnsSession(sessionId);
+        yield* teacherOwnsSession(request, sessionId);
         return bySession("grades", sessionId, gradeColumnsForTeacher);
       case "my-session": {
         yield* requireStudent(request, sessionId);
