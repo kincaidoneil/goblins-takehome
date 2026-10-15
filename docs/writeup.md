@@ -8,10 +8,12 @@
 
 What is measured so far: one step of 90 students at 20× the real submission rate, on the app's production build on a laptop ([report](../packages/loadtest/reports/local-app-3classes/report.md)). Nothing was lost, grades reached the dashboard at p95 5.9 s, and no grade failed. Submit p99 was 1.38 s, over the 1 s bar.
 
+Production passed a one-class smoke test through the deployed path: Vercel Functions, QStash, Neon and Electric on Fly, with only the model mocked ([report](../packages/loadtest/reports/smoke-production/report.md)). Thirty students made 270 submissions. None were lost and no grade failed. Submit p99 was 0.66 s and grades reached the dashboard at p95 9.2 s.
+
 Two limits apply to production as it is deployed now, separate from what the ramp measures:
 
-- **QStash is on the free plan.** It allows 1,000 messages a day, about three classes of 30, and 10 grades in flight. At Haiku's 4.5 s median, 10 in flight is about 2 grades a second, enough for roughly 15 classes in one window if the day's quota allowed it. Pay-as-you-go lifts both limits (parallelism 100, $1 per 100,000 messages). That is the first change before real use.
-- **The ramp runs on one machine, not on Vercel.** Vercel permits load tests only on Enterprise plans and blocks unannounced traffic, so the ramp drives the production build locally with only the model mocked, and production got a one-class smoke test `[TBD: link]`. The same command runs against Vercel with `--i-have-vercel-approval`.
+- **QStash is on the free plan, and that is the first limit we'd hit.** It allows 1,000 messages a day, about three classes of 30, and 10 grades in flight. In the smoke test, grades in flight peaked at exactly 10. At Haiku's 4.5 s median, that is about 2 grades a second. Moving to pay-as-you-go (parallelism 100, $1 per 100,000 messages) is the first step toward real scale. We didn't make that switch for the review window.
+- **The ramp runs on one machine, not on Vercel.** Vercel permits load tests only on Enterprise plans and blocks unannounced traffic. So the ramp drives the production build locally with only the model mocked, and production gets the one-class smoke test above. The same command runs against Vercel with `--i-have-vercel-approval`.
 
 ## Ship or no ship
 
