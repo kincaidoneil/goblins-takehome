@@ -67,22 +67,26 @@ describe("fixed mode answers each fixture as scripted", () => {
     }),
   );
 
-  it.effect("fails-once fails with a non-retryable 400, then succeeds on the retry", () =>
-    Effect.gen(function* () {
-      const { tally, errors } = yield* callsAt(fixed, 0, 3, fixtureBytes("fails-once.png"));
-      expect(tally).toEqual({ ProviderError: 1, Ok: 2 });
-      expect(errors[0]).toMatchObject({ _tag: "ProviderError", status: 400 });
-    }),
-  );
-
-  it.effect("fails-once counts attempts per grade", () =>
+  it.effect("fails-once fails attempt 1 with a non-retryable 400 every time it is asked", () =>
     Effect.gen(function* () {
       const client = yield* makeMockModelClient(fixed, { seed: 1 });
       const image = fixtureBytes("fails-once.png");
-      const first = yield* Effect.either(client.complete(request(image, "grade-a")));
-      const other = yield* Effect.either(client.complete(request(image, "grade-b")));
-      const retry = yield* Effect.either(client.complete(request(image, "grade-a")));
-      expect([first, other, retry].map(Either.isRight)).toEqual([false, false, true]);
+      for (const attempt of [1, 1, undefined]) {
+        const result = yield* Effect.either(client.complete(request(image, "grade-a", attempt)));
+        expect(Either.isLeft(result) && result.left).toMatchObject({
+          _tag: "ProviderError",
+          status: 400,
+        });
+      }
+    }),
+  );
+
+  it.effect("fails-once answers attempt 2 on any instance, with no earlier calls", () =>
+    Effect.gen(function* () {
+      // A fresh client stands in for a cold instance that never saw attempt 1.
+      const client = yield* makeMockModelClient(fixed, { seed: 1 });
+      const result = yield* client.complete(request(fixtureBytes("fails-once.png"), "grade-a", 2));
+      expect(JSON.parse(result.text)).toMatchObject({ status: "graded", score: 2, maxScore: 2 });
     }),
   );
 

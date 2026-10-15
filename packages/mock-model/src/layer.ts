@@ -78,28 +78,18 @@ const capAtTimeout = (fate: Fate, timeoutMs: number): Fate =>
     ? { _tag: "Fail", latencyMs: timeoutMs, failure: { _tag: "Timeout" } }
     : fate;
 
-interface Resolved {
-  readonly scripted: Scripted;
-  /** Identifies one grade's image, for counting `FailsFirst` attempts. */
-  readonly key: string;
-}
-
 const answerOf = (
   scripted: Scripted,
-  key: string,
-  attempts: Map<string, number>,
+  attempt: number,
   latencyMs: number,
 ): Effect.Effect<Answer, ModelError> => {
   switch (scripted._tag) {
     case "FailsAlways":
       return Effect.fail(toModelError(scripted.failure, latencyMs));
-    case "FailsFirst": {
-      const seen = attempts.get(key) ?? 0;
-      attempts.set(key, seen + 1);
-      return seen < scripted.times
+    case "FailsFirst":
+      return attempt <= scripted.attempts
         ? Effect.fail(toModelError(scripted.failure, latencyMs))
         : Effect.succeed(scripted.afterwards);
-    }
     default:
       return Effect.succeed(scripted);
   }
@@ -124,10 +114,6 @@ export const makeMockModelClient = (config: MockConfig, options: MockOptions = {
     const rng = seededRng(options.seed ?? (yield* Random.nextInt));
     const timing = timingFor(config);
     let calls = 0;
-    /** Calls seen per grade and image, for `FailsFirst` fixtures. */
-    const attempts = new Map<string, number>();
-
-    /** The scripted outcome for a request's image, or the provider's 400 when the image can't be read. */
     /**
      * The scripted outcome for a request. A request can carry more than the
      * submitted whiteboard (a diagram, earlier work), so every image is read:
@@ -138,9 +124,9 @@ export const makeMockModelClient = (config: MockConfig, options: MockOptions = {
     const scriptFor = (
       request: CompletionRequest,
       deadline: AbortSignal,
-    ): Effect.Effect<Resolved, ModelError> => {
+    ): Effect.Effect<Scripted, ModelError> => {
       const urls = imageUrlsOf(request);
-      if (urls.length === 0) return Effect.succeed({ scripted: defaultAnswer, key: "" });
+      if (urls.length === 0) return Effect.succeed(defaultAnswer);
       return Effect.forEach(urls, (url) => Effect.flatMap(imageBytes(url, deadline), sha256Hex), {
         concurrency: "unbounded",
       }).pipe(
@@ -150,14 +136,10 @@ export const makeMockModelClient = (config: MockConfig, options: MockOptions = {
               ? new Timeout({ afterMs: timeoutMs })
               : new ProviderError({ status: 400, message: `mock: ${error.message}` }),
         ),
-        Effect.map((hashes): Resolved => {
+        Effect.map((hashes): Scripted => {
           // The submitted board comes after any earlier work or diagrams, so the last match wins.
           const fixture = hashes.flatMap((hash) => fixtureByHash.get(hash) ?? []).at(-1);
-          const hash = fixture?.sha256 ?? hashes.at(-1) ?? "";
-          return {
-            scripted: fixture?.outcome ?? fallbackFor(hash),
-            key: `${request.tag.subjectId ?? ""}:${hash}`,
-          };
+          return fixture?.outcome ?? fallbackFor(hashes.at(-1) ?? "");
         }),
       );
     };
@@ -169,14 +151,14 @@ export const makeMockModelClient = (config: MockConfig, options: MockOptions = {
         // One timeout covers the whole call: the real time spent reading
         // images, then the modelled latency within what is left.
         const readStarted = performance.now();
-        const { scripted, key } = yield* scriptFor(request, AbortSignal.timeout(timeoutMs));
+        const scripted = yield* scriptFor(request, AbortSignal.timeout(timeoutMs));
         const readMs = Math.round(performance.now() - readStarted);
         const fate = capAtTimeout(timing(now - anchorMs, rng), Math.max(0, timeoutMs - readMs));
         yield* Effect.sleep(fate.latencyMs);
         if (fate._tag === "Fail") {
           return yield* Effect.fail(toModelError(fate.failure, readMs + fate.latencyMs));
         }
-        const answer = yield* answerOf(scripted, key, attempts, fate.latencyMs);
+        const answer = yield* answerOf(scripted, request.tag.attempt ?? 1, fate.latencyMs);
         return {
           id,
           model: request.model,

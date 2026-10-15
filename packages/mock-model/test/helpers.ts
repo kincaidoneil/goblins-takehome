@@ -10,9 +10,10 @@ export const fixtureBytes = (file: string): Uint8Array =>
 export const request = (
   image: Uint8Array | undefined,
   subjectId = "grade-1",
+  attempt?: number,
 ): CompletionRequest => ({
   model: "test/model",
-  tag: { purpose: "grade", subjectId },
+  tag: { purpose: "grade", subjectId, ...(attempt === undefined ? {} : { attempt }) },
   messages: [
     { role: "system", content: "Grade the student's work." },
     {

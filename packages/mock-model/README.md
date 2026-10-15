@@ -47,7 +47,7 @@ The mock hashes each image in the request (SHA-256 of the bytes, from a data URL
 | `wrong.png` | graded 0/2 |
 | `blank.png` | graded 0/2, "No work shown." |
 | `illegible.png` | needs teacher, with a reason |
-| `fails-once.png` | non-retryable 400 on the first try for each grade, graded 2/2 on the retry |
+| `fails-once.png` | non-retryable 400 on grading attempt 1 (`tag.attempt`), graded 2/2 on attempt 2 and later |
 | `fails-always.png` | times out on every try |
 | `malformed.png` | a 200 whose text is not JSON |
 
