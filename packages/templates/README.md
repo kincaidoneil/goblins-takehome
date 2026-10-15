@@ -35,7 +35,7 @@ Each problem is either `Whole` (one answer) or `WithParts` (lettered parts a, b,
 - `dependsOn`: earlier items whose answers this one uses, such as `["3a"]`. A correct method that uses the student's own wrong earlier answer earns follow-through credit.
 - `review`: `Checked` (with an optional note on how a doubt was settled), or `Unsure` with a note for Kincaid.
 
-Each problem also records the pages it appears on (two pages when it runs across a page break), its source lesson and problem number, and a text description of each diagram detailed enough to solve the problem without the image. Problem text keeps the worksheet's wording, with math in LaTeX between `\(` and `\)`.
+Each problem also records the pages it appears on (two pages when it runs across a page break), its source lesson and problem number, and a text description of each diagram detailed enough to solve the problem without the image. Each diagram also has a `crop`: the page and a box (`x`, `y`, `w`, `h` as fractions of the page image, from the top left) holding just that figure, so a screen can show the figure without the rest of the page. Problem text keeps the worksheet's wording, with math in LaTeX between `\(` and `\)`.
 
 "Solve each" problems with several unlettered equations are one `Whole` problem whose answer lists every solution, because that is how the page prints them.
 
@@ -64,7 +64,7 @@ pnpm --filter @goblins/templates exec playwright install chromium
 pnpm --filter @goblins/templates build:worksheets
 ```
 
-[scripts/build-worksheets.ts](scripts/build-worksheets.ts) fetches the practice pages listed in each `template.json` from im.kendallhunt.com, copies the chosen problems' HTML (text and diagram images, no scripts), lays them out with a header, answer space and attribution footer, prints with Chromium and rasterizes with pdftoppm. It then checks the rendered PDF against the answer key: every problem must sit on the pages the key lists, and `files.pages` must match the images. It prints a warning for any mismatch.
+[scripts/build-worksheets.ts](scripts/build-worksheets.ts) fetches the practice pages listed in each `template.json` from im.kendallhunt.com, copies the chosen problems' HTML (text and diagram images, no scripts), lays them out with a header, answer space and attribution footer, prints with Chromium and rasterizes with pdftoppm. It then checks the rendered PDF against the answer key: every problem must sit on the pages the key lists, `files.pages` must match the images, and every diagram's `crop` must match where its figure was drawn. To locate figures it prints the same layout twice more, once with images hidden and once with images drawn as solid boxes, and compares the renders. It prints a warning for any mismatch.
 
 To add a template, create `templates/<id>/template.json` with its problems' sources, run the build, then write the key from the rendered pages and add the import to [src/index.ts](src/index.ts).
 

@@ -64,7 +64,8 @@
       "stem": "The graph shows the relationship between the number of cups of flour and the number of cups of sugar in Lin’s favorite brownie recipe.\nThe table shows the amounts of flour and sugar needed for Noah’s favorite brownie recipe.\n| cups of sugar | cups of flour |\n| \\(\\frac32\\) | 1 |\n| 3 | 2 |\n| \\(4\\frac12\\) | 3 |",
       "diagrams": [
         {
-          "description": "Graph for Lin's recipe. Horizontal axis: cups of sugar, 0 to 5. Vertical axis: cups of flour, 0 to 4. Points at (1, 0.5), (2, 1), (3, 1.5), (4, 2) and (5, 2.5), so Lin uses half a cup of flour per cup of sugar."
+          "description": "Graph for Lin's recipe. Horizontal axis: cups of sugar, 0 to 5. Vertical axis: cups of flour, 0 to 4. Points at (1, 0.5), (2, 1), (3, 1.5), (4, 2) and (5, 2.5), so Lin uses half a cup of flour per cup of sugar.",
+          "crop": { "page": 1, "x": 0.162, "y": 0.389, "w": 0.275, "h": 0.189 }
         }
       ],
       "parts": [
@@ -105,7 +106,8 @@
       "stem": "To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.",
       "diagrams": [
         {
-          "description": "Blank first-quadrant grid for part b, on page 2. Horizontal axis: x (hours), 0 to 60, labeled every 10. Vertical axis: y (dollars), 0 to 4,000, labeled every 1,000."
+          "description": "Blank first-quadrant grid for part b, on page 2. Horizontal axis: x (hours), 0 to 60, labeled every 10. Vertical axis: y (dollars), 0 to 4,000, labeled every 1,000.",
+          "crop": { "page": 2, "x": 0.191, "y": 0.129, "w": 0.294, "h": 0.189 }
         }
       ],
       "parts": [
@@ -183,7 +185,8 @@
       "stem": "Tyler and Elena are on the cross country team.\nTyler's distances and times for a training run are shown on the graph.\nElena’s distances and times for a training run are given by the equation \\(y=8.5x\\), where \\(x\\) represents distance in miles and \\(y\\) represents time in minutes.",
       "diagrams": [
         {
-          "description": "Graph of Tyler's run. Horizontal axis: distance (miles), 0 to 4. Vertical axis: time (minutes), 0 to 12, labeled every 2, with grid lines every 1/3 minute. A straight line starts at (0, 0) and passes through (1, 8 1/3) and (1.2, 10)."
+          "description": "Graph of Tyler's run. Horizontal axis: distance (miles), 0 to 4. Vertical axis: time (minutes), 0 to 12, labeled every 2, with grid lines every 1/3 minute. A straight line starts at (0, 0) and passes through (1, 8 1/3) and (1.2, 10).",
+          "crop": { "page": 3, "x": 0.16, "y": 0.115, "w": 0.435, "h": 0.189 }
         }
       ],
       "parts": [
@@ -246,7 +249,8 @@
       "stem": "Customers at the gym pay a membership fee to join and then a fee for each class they attend. Here is a graph that represents the situation.",
       "diagrams": [
         {
-          "description": "Points plotted on a grid. Horizontal axis: number of classes, 0 to 8. Vertical axis: cost in dollars, 0 to 200 by 20s. Points at (0, 60), (1, 80), (2, 100), (3, 120), (4, 140), (5, 160), (6, 180) and (7, 200)."
+          "description": "Points plotted on a grid. Horizontal axis: number of classes, 0 to 8. Vertical axis: cost in dollars, 0 to 200 by 20s. Points at (0, 60), (1, 80), (2, 100), (3, 120), (4, 140), (5, 160), (6, 180) and (7, 200).",
+          "crop": { "page": 4, "x": 0.572, "y": 0.115, "w": 0.214, "h": 0.187 }
         }
       ],
       "parts": [
@@ -287,7 +291,8 @@
       "stem": "The graph shows the height in inches, \\(h\\), of a bamboo plant \\(t\\) months after it has been planted.",
       "diagrams": [
         {
-          "description": "Graph with t (months) from 0 to 15 on the horizontal axis and h (inches) from 0 to 50 by 5s on the vertical axis. A straight line starts at (0, 12) and passes through (1, 15), (2, 18), (6, 30) and (11, 45)."
+          "description": "Graph with t (months) from 0 to 15 on the horizontal axis and h (inches) from 0 to 50 by 5s on the vertical axis. A straight line starts at (0, 12) and passes through (1, 15), (2, 18), (6, 30) and (11, 45).",
+          "crop": { "page": 4, "x": 0.16, "y": 0.427, "w": 0.287, "h": 0.189 }
         }
       ],
       "parts": [

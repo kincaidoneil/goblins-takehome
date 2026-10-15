@@ -50,6 +50,19 @@ const BuildSpec = Schema.Struct({
       number: Schema.Number,
       pages: Schema.Array(Schema.Number),
       source: Schema.Struct({ url: Schema.String, problem: Schema.Number }),
+      diagrams: Schema.Array(
+        Schema.Struct({
+          crop: Schema.optional(
+            Schema.Struct({
+              page: Schema.Number,
+              x: Schema.Number,
+              y: Schema.Number,
+              w: Schema.Number,
+              h: Schema.Number,
+            }),
+          ),
+        }),
+      ),
     }),
   ),
 });
@@ -187,16 +200,26 @@ async function build(browser: Browser, id: string): Promise<void> {
   await page.goto(`file://${htmlFile}`, { waitUntil: "networkidle" });
   await page.waitForSelector("body[data-typeset=done]");
   const pdf = join(dir, "worksheet.pdf");
-  await page.pdf({
-    path: pdf,
+  const pdfOptions = {
     format: "letter",
     preferCSSPageSize: true,
     printBackground: true,
     displayHeaderFooter: true,
     headerTemplate: "<span></span>",
     footerTemplate: `<div style="font: 7.5pt Helvetica, Arial, sans-serif; color: #555; width: 100%; padding: 0 0.7in; display: flex; justify-content: space-between; gap: 16px;"><span>${spec.source.attribution}</span><span style="white-space: nowrap">Page <span class="pageNumber"></span> of <span class="totalPages"></span></span></div>`,
-  });
+  } as const;
+  await page.pdf({ ...pdfOptions, path: pdf });
+  // The same layout twice more: with every image hidden, and with every image drawn as a solid
+  // box. Comparing the three renders locates each figure.
+  const hidden = join(cacheDir, `${id}-images-hidden.pdf`);
+  const solid = join(cacheDir, `${id}-images-solid.pdf`);
+  const style = await page.addStyleTag({ content: "img { visibility: hidden; }" });
+  await page.pdf({ ...pdfOptions, path: hidden });
+  await style.evaluate((node) => node.parentNode?.removeChild(node));
+  await page.addStyleTag({ content: "img { object-position: -9999px; background: #000; }" });
+  await page.pdf({ ...pdfOptions, path: solid });
   await page.close();
+  checkCrops(spec, figureBoxes(pdf, hidden, solid));
 
   for (const f of readdirSync(dir)) if (/^page-\d+\.png$/.test(f)) rmSync(join(dir, f));
   execFileSync("pdftoppm", ["-r", "150", "-png", pdf, join(dir, "page")]);
@@ -227,6 +250,130 @@ async function build(browser: Browser, id: string): Promise<void> {
     }
   }
   console.log(`${id}: ${images.length} pages`);
+}
+
+interface Box {
+  readonly page: number;
+  readonly x: number;
+  readonly y: number;
+  readonly w: number;
+  readonly h: number;
+}
+
+/** A grayscale PNM (P5) image, as pdftoppm -gray writes it. */
+function readPgm(file: string): { width: number; height: number; pixels: Uint8Array } {
+  const data = readFileSync(file);
+  const header = /^P5\s+(\d+)\s+(\d+)\s+255\s/.exec(data.subarray(0, 32).toString("latin1"));
+  if (!header?.[1] || !header[2]) throw new Error(`${file}: not an 8-bit PGM`);
+  const width = Number(header[1]);
+  const height = Number(header[2]);
+  return { width, height, pixels: data.subarray(header[0].length) };
+}
+
+/** Groups set pixels into components; pixels within `gap` of each other join one component. */
+function components(
+  mask: Uint8Array,
+  width: number,
+  height: number,
+  gap: number,
+): ReadonlyArray<Array<number>> {
+  const seen = new Uint8Array(mask.length);
+  const groups: Array<Array<number>> = [];
+  for (let start = 0; start < mask.length; start++) {
+    if (!mask[start] || seen[start]) continue;
+    const group: Array<number> = [];
+    const stack = [start];
+    seen[start] = 1;
+    while (stack.length > 0) {
+      const i = stack.pop() ?? 0;
+      group.push(i);
+      const x = i % width;
+      const y = Math.floor(i / width);
+      for (let ny = Math.max(0, y - gap); ny <= Math.min(height - 1, y + gap); ny++) {
+        for (let nx = Math.max(0, x - gap); nx <= Math.min(width - 1, x + gap); nx++) {
+          const j = ny * width + nx;
+          if (mask[j] && !seen[j]) {
+            seen[j] = 1;
+            stack.push(j);
+          }
+        }
+      }
+    }
+    groups.push(group);
+  }
+  return groups;
+}
+
+/**
+ * The box around each figure's drawn pixels, in reading order. Rasterizes three renders of the
+ * same layout at 50 dpi: as printed, with images hidden, and with images as solid boxes. The solid
+ * render gives each image's bounds; inside those bounds, the pixels that differ between the
+ * printed and hidden renders are the figure itself.
+ */
+function figureBoxes(pdf: string, hidden: string, solid: string): ReadonlyArray<Box> {
+  const dpi = 50;
+  const raster = (file: string, name: string) => {
+    for (const f of readdirSync(cacheDir)) if (f.startsWith(`${name}-`)) rmSync(join(cacheDir, f));
+    execFileSync("pdftoppm", ["-r", `${dpi}`, "-gray", file, join(cacheDir, name)]);
+    return readdirSync(cacheDir)
+      .filter((f) => f.startsWith(`${name}-`) && f.endsWith(".pgm"))
+      .sort()
+      .map((f) => readPgm(join(cacheDir, f)));
+  };
+  const printed = raster(pdf, "printed");
+  const hiddenPages = raster(hidden, "hidden");
+  const solidPages = raster(solid, "solid");
+  const diff = (a: Uint8Array, b: Uint8Array) =>
+    Uint8Array.from(a, (v, i) => (Math.abs(v - (b[i] ?? 0)) > 40 ? 1 : 0));
+  const round = (n: number) => Math.round(n * 1000) / 1000;
+  return printed.flatMap((page, index) => {
+    const blank = hiddenPages[index];
+    const boxes = solidPages[index];
+    if (!blank || !boxes) return [];
+    const { width, height } = page;
+    const drawn = diff(page.pixels, blank.pixels);
+    return components(diff(boxes.pixels, blank.pixels), width, height, 1)
+      .filter((bounds) => bounds.length >= 20)
+      .map((bounds) => {
+        const inside = bounds.filter((i) => drawn[i]);
+        const pixels = inside.length > 0 ? inside : bounds;
+        const xs = pixels.map((i) => i % width);
+        const ys = pixels.map((i) => Math.floor(i / width));
+        // Two pixels of margin at 50 dpi, clamped to the page.
+        const x0 = Math.max(0, Math.min(...xs) - 2);
+        const y0 = Math.max(0, Math.min(...ys) - 2);
+        const x1 = Math.min(width, Math.max(...xs) + 3);
+        const y1 = Math.min(height, Math.max(...ys) + 3);
+        return {
+          page: index + 1,
+          x: round(x0 / width),
+          y: round(y0 / height),
+          w: round((x1 - x0) / width),
+          h: round((y1 - y0) / height),
+        };
+      })
+      .sort((p, q) => p.y - q.y || p.x - q.x);
+  });
+}
+
+/** Matches figures to diagrams in order and checks each diagram's crop against its figure. */
+function checkCrops(spec: BuildSpec, boxes: ReadonlyArray<Box>): void {
+  const diagrams = spec.problems.flatMap((p) => p.diagrams.map((d) => ({ problem: p.number, d })));
+  if (diagrams.length !== boxes.length) {
+    mismatch(`${spec.id}: found ${boxes.length} figures for ${diagrams.length} diagrams`);
+    return;
+  }
+  diagrams.forEach(({ problem, d }, i) => {
+    const box = boxes[i];
+    const close =
+      box &&
+      d.crop &&
+      d.crop.page === box.page &&
+      (["x", "y", "w", "h"] as const).every((k) => Math.abs((d.crop?.[k] ?? -1) - box[k]) <= 0.006);
+    if (!close) {
+      mismatch(`${spec.id}: problem ${problem} diagram crop should be ${JSON.stringify(box)}`);
+    }
+  });
 }
 
 /** Reports a difference between the rendered worksheet and its answer key, and fails the run. */

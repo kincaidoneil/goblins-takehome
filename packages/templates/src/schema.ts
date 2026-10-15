@@ -51,8 +51,29 @@ export const Part = Schema.Struct({
 });
 export type Part = typeof Part.Type;
 
-/** A figure the grader needs, described in enough detail to solve the problem without the image. */
-export const Diagram = Schema.Struct({ description: Schema.NonEmptyString });
+const Fraction = Schema.Number.pipe(Schema.between(0, 1));
+
+/**
+ * Where a figure sits on the worksheet: a 1-based page and a box given as fractions of that page
+ * image's width and height, measured from the top left corner.
+ */
+export const Crop = Schema.Struct({
+  page: Schema.Int.pipe(Schema.positive()),
+  x: Fraction,
+  y: Fraction,
+  w: Fraction,
+  h: Fraction,
+});
+export type Crop = typeof Crop.Type;
+
+/**
+ * A figure the grader needs, described in enough detail to solve the problem without the image.
+ * `crop` locates it on the page images so a screen can show the figure alone.
+ */
+export const Diagram = Schema.Struct({
+  description: Schema.NonEmptyString,
+  crop: Crop,
+});
 export type Diagram = typeof Diagram.Type;
 
 export const Source = Schema.Struct({

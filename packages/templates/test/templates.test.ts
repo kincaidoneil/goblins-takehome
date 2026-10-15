@@ -85,6 +85,16 @@ describe("templates", () => {
       expect(last).toBe(pageCount);
     });
 
+    it("keeps every diagram's crop inside one of its problem's pages", () => {
+      for (const problem of template.problems) {
+        for (const { crop } of problem.diagrams) {
+          expect(problem.pages, `problem ${problem.number}`).toContain(crop.page);
+          expect(crop.x + crop.w).toBeLessThanOrEqual(1);
+          expect(crop.y + crop.h).toBeLessThanOrEqual(1);
+        }
+      }
+    });
+
     it("takes every problem from one of its listed lessons", () => {
       const lessons = new Set(template.source.lessons.map((l) => l.url));
       for (const problem of template.problems) expect(lessons).toContain(problem.source.url);
