@@ -11,12 +11,16 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as JoinRouteImport } from './routes/join'
+import { Route as NewRouteImport } from './routes/new'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as ApiShapeRouteImport } from './routes/api/shape'
+import { Route as AssignmentsAssignmentIdRouteImport } from './routes/assignments/$assignmentId'
 import { Route as PlaySessionIdRouteImport } from './routes/play/$sessionId'
 import { Route as ReportDemoRouteImport } from './routes/report/demo'
 import { Route as ShareDemoRouteImport } from './routes/share/demo'
-import { Route as ApiWhiteboardsNameRouteImport } from './routes/api/whiteboards/$name'
+import { Route as ApiGradingSweepRouteImport } from './routes/api/grading/sweep'
+import { Route as SessionsSessionIdIndexRouteImport } from './routes/sessions/$sessionId/index'
+import { Route as SessionsSessionIdProjectorRouteImport } from './routes/sessions/$sessionId/projector'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,6 +32,11 @@ const JoinRoute = JoinRouteImport.update({
   path: '/join',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NewRoute = NewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiHealthRoute = ApiHealthRouteImport.update({
   id: '/api/health',
   path: '/api/health',
@@ -36,6 +45,11 @@ const ApiHealthRoute = ApiHealthRouteImport.update({
 const ApiShapeRoute = ApiShapeRouteImport.update({
   id: '/api/shape',
   path: '/api/shape',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssignmentsAssignmentIdRoute = AssignmentsAssignmentIdRouteImport.update({
+  id: '/assignments/$assignmentId',
+  path: '/assignments/$assignmentId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlaySessionIdRoute = PlaySessionIdRouteImport.update({
@@ -53,85 +67,124 @@ const ShareDemoRoute = ShareDemoRouteImport.update({
   path: '/share/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiWhiteboardsNameRoute = ApiWhiteboardsNameRouteImport.update({
-  id: '/api/whiteboards/$name',
-  path: '/api/whiteboards/$name',
+const ApiGradingSweepRoute = ApiGradingSweepRouteImport.update({
+  id: '/api/grading/sweep',
+  path: '/api/grading/sweep',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SessionsSessionIdIndexRoute = SessionsSessionIdIndexRouteImport.update({
+  id: '/sessions/$sessionId/',
+  path: '/sessions/$sessionId/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SessionsSessionIdProjectorRoute =
+  SessionsSessionIdProjectorRouteImport.update({
+    id: '/sessions/$sessionId/projector',
+    path: '/sessions/$sessionId/projector',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/join': typeof JoinRoute
+  '/new': typeof NewRoute
   '/api/health': typeof ApiHealthRoute
   '/api/shape': typeof ApiShapeRoute
+  '/assignments/$assignmentId': typeof AssignmentsAssignmentIdRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/share/demo': typeof ShareDemoRoute
-  '/api/whiteboards/$name': typeof ApiWhiteboardsNameRoute
+  '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
+  '/sessions/$sessionId/': typeof SessionsSessionIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/join': typeof JoinRoute
+  '/new': typeof NewRoute
   '/api/health': typeof ApiHealthRoute
   '/api/shape': typeof ApiShapeRoute
+  '/assignments/$assignmentId': typeof AssignmentsAssignmentIdRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/share/demo': typeof ShareDemoRoute
-  '/api/whiteboards/$name': typeof ApiWhiteboardsNameRoute
+  '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
+  '/sessions/$sessionId': typeof SessionsSessionIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/join': typeof JoinRoute
+  '/new': typeof NewRoute
   '/api/health': typeof ApiHealthRoute
   '/api/shape': typeof ApiShapeRoute
+  '/assignments/$assignmentId': typeof AssignmentsAssignmentIdRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/share/demo': typeof ShareDemoRoute
-  '/api/whiteboards/$name': typeof ApiWhiteboardsNameRoute
+  '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
+  '/sessions/$sessionId/': typeof SessionsSessionIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/join'
+    | '/new'
     | '/api/health'
     | '/api/shape'
+    | '/assignments/$assignmentId'
     | '/play/$sessionId'
     | '/report/demo'
     | '/share/demo'
-    | '/api/whiteboards/$name'
+    | '/api/grading/sweep'
+    | '/sessions/$sessionId/projector'
+    | '/sessions/$sessionId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/join'
+    | '/new'
     | '/api/health'
     | '/api/shape'
+    | '/assignments/$assignmentId'
     | '/play/$sessionId'
     | '/report/demo'
     | '/share/demo'
-    | '/api/whiteboards/$name'
+    | '/api/grading/sweep'
+    | '/sessions/$sessionId/projector'
+    | '/sessions/$sessionId'
   id:
     | '__root__'
     | '/'
     | '/join'
+    | '/new'
     | '/api/health'
     | '/api/shape'
+    | '/assignments/$assignmentId'
     | '/play/$sessionId'
     | '/report/demo'
     | '/share/demo'
-    | '/api/whiteboards/$name'
+    | '/api/grading/sweep'
+    | '/sessions/$sessionId/projector'
+    | '/sessions/$sessionId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   JoinRoute: typeof JoinRoute
+  NewRoute: typeof NewRoute
   ApiHealthRoute: typeof ApiHealthRoute
   ApiShapeRoute: typeof ApiShapeRoute
+  AssignmentsAssignmentIdRoute: typeof AssignmentsAssignmentIdRoute
   PlaySessionIdRoute: typeof PlaySessionIdRoute
   ReportDemoRoute: typeof ReportDemoRoute
   ShareDemoRoute: typeof ShareDemoRoute
-  ApiWhiteboardsNameRoute: typeof ApiWhiteboardsNameRoute
+  ApiGradingSweepRoute: typeof ApiGradingSweepRoute
+  SessionsSessionIdProjectorRoute: typeof SessionsSessionIdProjectorRoute
+  SessionsSessionIdIndexRoute: typeof SessionsSessionIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -150,6 +203,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JoinRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/new': {
+      id: '/new'
+      path: '/new'
+      fullPath: '/new'
+      preLoaderRoute: typeof NewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/health': {
       id: '/api/health'
       path: '/api/health'
@@ -162,6 +222,13 @@ declare module '@tanstack/react-router' {
       path: '/api/shape'
       fullPath: '/api/shape'
       preLoaderRoute: typeof ApiShapeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assignments/$assignmentId': {
+      id: '/assignments/$assignmentId'
+      path: '/assignments/$assignmentId'
+      fullPath: '/assignments/$assignmentId'
+      preLoaderRoute: typeof AssignmentsAssignmentIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/play/$sessionId': {
@@ -185,11 +252,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShareDemoRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/whiteboards/$name': {
-      id: '/api/whiteboards/$name'
-      path: '/api/whiteboards/$name'
-      fullPath: '/api/whiteboards/$name'
-      preLoaderRoute: typeof ApiWhiteboardsNameRouteImport
+    '/api/grading/sweep': {
+      id: '/api/grading/sweep'
+      path: '/api/grading/sweep'
+      fullPath: '/api/grading/sweep'
+      preLoaderRoute: typeof ApiGradingSweepRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sessions/$sessionId/': {
+      id: '/sessions/$sessionId/'
+      path: '/sessions/$sessionId'
+      fullPath: '/sessions/$sessionId/'
+      preLoaderRoute: typeof SessionsSessionIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sessions/$sessionId/projector': {
+      id: '/sessions/$sessionId/projector'
+      path: '/sessions/$sessionId/projector'
+      fullPath: '/sessions/$sessionId/projector'
+      preLoaderRoute: typeof SessionsSessionIdProjectorRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -198,12 +279,16 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   JoinRoute: JoinRoute,
+  NewRoute: NewRoute,
   ApiHealthRoute: ApiHealthRoute,
   ApiShapeRoute: ApiShapeRoute,
+  AssignmentsAssignmentIdRoute: AssignmentsAssignmentIdRoute,
   PlaySessionIdRoute: PlaySessionIdRoute,
   ReportDemoRoute: ReportDemoRoute,
   ShareDemoRoute: ShareDemoRoute,
-  ApiWhiteboardsNameRoute: ApiWhiteboardsNameRoute,
+  ApiGradingSweepRoute: ApiGradingSweepRoute,
+  SessionsSessionIdProjectorRoute: SessionsSessionIdProjectorRoute,
+  SessionsSessionIdIndexRoute: SessionsSessionIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

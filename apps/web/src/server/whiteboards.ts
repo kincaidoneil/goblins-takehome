@@ -1,11 +1,8 @@
 /**
- * Whiteboard images. In production they go to Vercel Blob; without a Blob token (local
- * development, E2E against a local server) they go to a folder on disk and are served by
- * `/api/whiteboards/$name`.
+ * Whiteboard images. In production they go to Vercel Blob. Without a Blob token (local
+ * development and local E2E runs) the image is kept inline as a `data:` URL on the submission,
+ * which needs no file server.
  */
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import { put } from "@vercel/blob";
 import { Config, Context, Effect, Layer, Option } from "effect";
 
@@ -16,14 +13,6 @@ export class WhiteboardStore extends Context.Tag("@goblins/web/WhiteboardStore")
     readonly put: (name: string, png: Uint8Array) => Effect.Effect<string>;
   }
 >() {}
-
-export const localWhiteboardDir = join(tmpdir(), "goblins-whiteboards");
-
-/** Reads a whiteboard stored on local disk. Names are generated server-side, never paths. */
-export const readLocalWhiteboard = (name: string) =>
-  /^[a-zA-Z0-9-]+\.png$/.test(name)
-    ? Effect.promise(() => readFile(join(localWhiteboardDir, name))).pipe(Effect.option)
-    : Effect.succeed(Option.none<Buffer>());
 
 export const WhiteboardStoreLive = Layer.effect(
   WhiteboardStore,
@@ -42,12 +31,8 @@ export const WhiteboardStoreLive = Layer.effect(
       };
     }
     return {
-      put: (name, png) =>
-        Effect.promise(async () => {
-          await mkdir(localWhiteboardDir, { recursive: true });
-          await writeFile(join(localWhiteboardDir, name), png);
-          return `/api/whiteboards/${name}`;
-        }),
+      put: (_name, png) =>
+        Effect.succeed(`data:image/png;base64,${Buffer.from(png).toString("base64")}`),
     };
   }),
 );
