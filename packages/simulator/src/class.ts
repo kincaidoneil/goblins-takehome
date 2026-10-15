@@ -473,9 +473,11 @@ const submitWithRetry = (
   });
 
 const describe = (error: { readonly _tag: string }): string => {
-  if ("status" in error && "body" in error)
-    return `${error._tag} ${String(error.status)}: ${String(error.body)}`;
-  if ("message" in error) return `${error._tag}: ${String(error.message)}`;
+  // Check the specific fields first: every tagged error also has an (often empty) `message`.
   if ("outcome" in error) return `${error._tag}: ${JSON.stringify(error.outcome)}`;
+  if ("status" in error && "body" in error) {
+    return `${error._tag} ${String(error.status)}: ${String(error.body)}`;
+  }
+  if ("message" in error && error.message !== "") return `${error._tag}: ${String(error.message)}`;
   return error._tag;
 };

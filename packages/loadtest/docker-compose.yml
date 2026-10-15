@@ -7,8 +7,17 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: goblins
-    # Neon's free tier allows about 100 direct connections; keep the local cap close to it.
-    command: ["postgres", "-c", "wal_level=logical", "-c", "max_connections=200"]
+    # synchronous_commit=off: Docker Desktop on macOS makes every fsync slow enough that commits
+    # queue on WAL writes at a few hundred students, which measures the laptop, not the app.
+    # Neon commits durably; this is for local dry runs only.
+    command:
+      - postgres
+      - -c
+      - wal_level=logical
+      - -c
+      - max_connections=200
+      - -c
+      - synchronous_commit=off
     ports: ["55433:5432"]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
