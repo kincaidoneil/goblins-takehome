@@ -35,6 +35,8 @@ export const getSession = createServerFn({ method: "GET" })
             label: schema.problems.label,
             text: schema.problems.text,
             answerKey: schema.problems.answerKey,
+            diagramDescription: schema.problems.diagramDescription,
+            diagramCrops: schema.problems.diagramCrops,
           })
           .from(schema.problems)
           .where(eq(schema.problems.assignmentId, session.assignmentId))
@@ -57,13 +59,36 @@ export const getSession = createServerFn({ method: "GET" })
                   ),
                 )
                 .orderBy(asc(schema.rubricLines.position));
+        const pages = yield* db
+          .select({
+            pageNumber: schema.worksheetPages.pageNumber,
+            imageUrl: schema.worksheetPages.imageUrl,
+          })
+          .from(schema.worksheetPages)
+          .where(eq(schema.worksheetPages.assignmentId, session.assignmentId));
+        /** The problem's first diagram, cut from its worksheet page, for the cell detail. */
+        const figureOf = (problem: (typeof problems)[number]) => {
+          const crop = problem.diagramCrops[0];
+          const page = pages.find((p) => p.pageNumber === crop?.page);
+          return crop === undefined || page === undefined
+            ? null
+            : {
+                src: page.imageUrl,
+                alt: problem.diagramDescription ?? `The diagram for problem ${problem.label}`,
+                crop: { x: crop.x, y: crop.y, w: crop.w, h: crop.h },
+              };
+        };
         return ok({
           id: session.id,
           joinCode: session.joinCode,
           assignmentTitle: assignment?.title ?? "",
           teacher: { name: teacher.name, hideNamesAndScores: teacher.hideNamesAndScores },
           problems: problems.map((problem) => ({
-            ...problem,
+            id: problem.id,
+            label: problem.label,
+            text: problem.text,
+            answerKey: problem.answerKey,
+            figure: figureOf(problem),
             rubricLines: lines.filter((line) => line.problemId === problem.id),
           })),
         });
