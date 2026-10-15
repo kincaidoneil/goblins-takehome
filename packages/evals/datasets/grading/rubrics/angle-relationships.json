@@ -1,0 +1,115 @@
+[
+  {
+    "itemId": "1",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "Uses that supplementary angles sum to 180°: 180 − 74."
+      },
+      { "id": "L2", "points": 1, "description": "m∠C = 106°." }
+    ],
+    "notes": "Accept 106 with or without the degree sign. A correct answer with no work earns both points: the problem does not ask for reasoning."
+  },
+  {
+    "itemId": "2a",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "Names one pair of angles from the figure that sum to 90°."
+      },
+      { "id": "L2", "points": 1, "description": "Names a second, different pair that sums to 90°." }
+    ],
+    "notes": "Valid pairs: DCM & DMC (27 + 63), MGF & GMF (26 + 64), DCM & MCG (27 + 63), MGF & CGM (26 + 64). Angle names need the vertex in the middle; accept the reversed letter order (MCD for DCM). A pair given only by measures (27° and 63°) without naming the angles earns the line only if it is clear which angles are meant. A single valid pair earns L1, whichever position it is written in."
+  },
+  {
+    "itemId": "2b",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "Names three angles from the figure whose measures sum to 180°."
+      }
+    ],
+    "notes": "Valid sets: DMC, CMG, GMF (the straight angle at M), or the three angles of triangle CDM, MFG or CMG. No justification is required."
+  },
+  {
+    "itemId": "3",
+    "lines": [
+      { "id": "L1", "points": 1, "description": "b = 42 (vertical angles)." },
+      { "id": "L2", "points": 1, "description": "c = 138 (supplementary to 42)." }
+    ],
+    "notes": "Accept values with or without degree signs. Each line stands on its own."
+  },
+  {
+    "itemId": "4",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "Uses that complementary angles sum to 90°: 90 − 62."
+      },
+      { "id": "L2", "points": 1, "description": "m∠S = 28°." }
+    ],
+    "notes": "A correct answer with no work earns both points."
+  },
+  {
+    "itemId": "5",
+    "lines": [
+      { "id": "L1", "points": 1, "description": "Uses that vertical angles are equal." },
+      {
+        "id": "L2",
+        "points": 1,
+        "description": "Vertical and supplementary: yes, both angles are 90°."
+      },
+      {
+        "id": "L3",
+        "points": 1,
+        "description": "Vertical and complementary is possible: both angles are 45°."
+      }
+    ],
+    "notes": "L1 can be shown by writing x and x, or by saying the angles are equal or the same."
+  },
+  {
+    "itemId": "6",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "Sets up 53 + g = 90 (angle DCB is a right angle), or 90 − 53."
+      },
+      { "id": "L2", "points": 1, "description": "g = 37." }
+    ],
+    "notes": "A correct answer with no work earns both points."
+  },
+  {
+    "itemId": "7",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "Sets up x + 148 + x = 180, or 2x = 32, or (180 − 148) ÷ 2."
+      },
+      { "id": "L2", "points": 1, "description": "x = 16." }
+    ],
+    "notes": "A correct answer with no work earns both points."
+  },
+  {
+    "itemId": "8",
+    "lines": [
+      { "id": "L1", "points": 1, "description": "w = 42 (180 − 138)." },
+      {
+        "id": "L2",
+        "points": 1,
+        "description": "Sets up 19 + x + w = 90 (the three angles fill the right angle)."
+      },
+      {
+        "id": "L3",
+        "points": 1,
+        "description": "x = 29, or x = 71 − w for the student's own value of w."
+      }
+    ],
+    "notes": "Follow-through inside the problem: a wrong w carried correctly into 19 + x + w = 90 earns L2 and L3. The key follows the diagram (138°), not IM's alt text (128°); Kincaid confirmed this."
+  }
+]
