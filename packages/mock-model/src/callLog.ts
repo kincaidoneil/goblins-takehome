@@ -121,3 +121,43 @@ export const recordingFromCallLog = (
   options: { readonly source: string; readonly model?: string },
 ): Either.Either<Recording, CallLogError> =>
   Either.map(toLoggedCalls(rows, options.model), (calls) => ({ source: options.source, calls }));
+
+/** A grader `CallLogEntry` as exported to JSONL. */
+const CallLogEntryExport = Schema.Struct({
+  startedAt: Schema.String,
+  purpose: Schema.String,
+  modelRequested: Schema.String,
+  status: Schema.String,
+  statusCode: Schema.optional(Schema.NullOr(Schema.Number)),
+  latencyMs: Schema.Number,
+  promptTokens: Schema.optional(Schema.NullOr(Schema.Number)),
+  completionTokens: Schema.optional(Schema.NullOr(Schema.Number)),
+  /** The completion id: OpenRouter's start with `gen-`, the mock's with `mock-`. */
+  providerId: Schema.optional(Schema.NullOr(Schema.String)),
+  loadTestRunId: Schema.optional(Schema.NullOr(Schema.String)),
+});
+const decodeEntry = Schema.decodeUnknownEither(CallLogEntryExport);
+
+/**
+ * Maps a grader `CallLogEntry` export to a `model_calls` row, and passes
+ * anything else through to be validated as a row. An entry has no provider
+ * field, so it counts as an OpenRouter call only with an OpenRouter generation
+ * id; its load-test run id is kept, so mock and load-test entries stay out.
+ */
+export const rowFromExport = (raw: unknown): unknown => {
+  const entry = decodeEntry(raw);
+  if (Either.isLeft(entry)) return raw;
+  const e = entry.right;
+  return {
+    purpose: e.purpose,
+    provider: e.providerId?.startsWith("gen-") === true ? "openrouter" : "unknown",
+    model: e.modelRequested,
+    status: e.status,
+    statusCode: e.statusCode ?? null,
+    latencyMs: e.latencyMs,
+    inputTokens: e.promptTokens ?? null,
+    outputTokens: e.completionTokens ?? null,
+    loadTestRunId: e.loadTestRunId ?? null,
+    createdAt: new Date(Date.parse(e.startedAt) + e.latencyMs).toISOString(),
+  };
+};

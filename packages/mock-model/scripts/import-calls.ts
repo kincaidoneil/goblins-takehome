@@ -6,13 +6,16 @@
  * Reads JSONL in either shape: `model_calls` rows (as Drizzle returns them) or
  * grader `CallLogEntry` exports (`startedAt`, `modelRequested`, `promptTokens`,
  * ...). Every line is validated, and only real grading calls for <model> are
- * kept (see `src/callLog.ts`). Writes `src/data/<name>.ts`; register it in
- * `src/registry.ts`.
+ * kept (see `src/callLog.ts`); a `CallLogEntry` counts as an OpenRouter call
+ * only if its `providerId` is an OpenRouter generation id. Idle gaps over 30 s
+ * are shortened to 10 s (see `closeIdleGaps`). Writes `src/data/<name>.ts`;
+ * register it in `src/registry.ts`.
  */
 import { readFileSync, writeFileSync } from "node:fs";
-import { Either, Schema } from "effect";
-import { recordingFromCallLog } from "../src/callLog.ts";
+import { Either } from "effect";
+import { recordingFromCallLog, rowFromExport } from "../src/callLog.ts";
 import { compactCall } from "../src/compact.ts";
+import { closeIdleGaps } from "../src/replay.ts";
 
 const [input, name, model, source] = process.argv.slice(2);
 if (input === undefined || name === undefined || model === undefined || source === undefined) {
@@ -20,48 +23,16 @@ if (input === undefined || name === undefined || model === undefined || source =
   process.exit(2);
 }
 
-/** A grader `CallLogEntry` as exported to JSONL. */
-const CallLogEntryExport = Schema.Struct({
-  startedAt: Schema.String,
-  purpose: Schema.String,
-  modelRequested: Schema.String,
-  status: Schema.String,
-  statusCode: Schema.optional(Schema.NullOr(Schema.Number)),
-  latencyMs: Schema.Number,
-  promptTokens: Schema.optional(Schema.NullOr(Schema.Number)),
-  completionTokens: Schema.optional(Schema.NullOr(Schema.Number)),
-});
-const decodeEntry = Schema.decodeUnknownEither(CallLogEntryExport);
-
-/** Maps a `CallLogEntry` export to a `model_calls` row; passes anything else through to be validated as one. */
-const toRow = (raw: unknown): unknown => {
-  const entry = decodeEntry(raw);
-  if (Either.isLeft(entry)) return raw;
-  const e = entry.right;
-  return {
-    purpose: e.purpose,
-    provider: "openrouter",
-    model: e.modelRequested,
-    status: e.status,
-    statusCode: e.statusCode ?? null,
-    latencyMs: e.latencyMs,
-    inputTokens: e.promptTokens ?? null,
-    outputTokens: e.completionTokens ?? null,
-    loadTestRunId: null,
-    createdAt: new Date(Date.parse(e.startedAt) + e.latencyMs).toISOString(),
-  };
-};
-
 const lines = readFileSync(input, "utf8")
   .split("\n")
   .filter((line) => line.trim() !== "");
-const rows = lines.map((line) => toRow(JSON.parse(line)));
+const rows = lines.map((line) => rowFromExport(JSON.parse(line)));
 const recording = recordingFromCallLog(rows, { source, model });
 if (Either.isLeft(recording)) {
   console.error(recording.left);
   process.exit(1);
 }
-const calls = recording.right.calls;
+const calls = closeIdleGaps(recording.right.calls);
 const t0 = calls[0].startedAt;
 const tuples = calls.map((call) => `  ${JSON.stringify(compactCall(t0, call))},`).join("\n");
 const ident = name.replace(/[^A-Za-z0-9]+(.)?/g, (_, c: string | undefined) =>

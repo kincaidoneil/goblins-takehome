@@ -23,6 +23,18 @@ describe("claude-haiku-5.5 profile (measured)", () => {
     expect(quantile(latencies, 0.95) / 7967).toBeCloseTo(1, 1);
   });
 
+  it.effect(
+    "replays varied latencies in the first minutes, not one call stretched over a gap",
+    () =>
+      Effect.gen(function* () {
+        const replay: MockConfig = { _tag: "Replay", recording: "claude-haiku-5.5", anchorMs: 0 };
+        for (const minute of [1, 3, 5, 8]) {
+          const { latencies } = yield* callsAt(replay, minute * 60_000, 100);
+          expect(new Set(latencies).size).toBeGreaterThan(5);
+        }
+      }),
+  );
+
   it.effect("is the default for sampled and replay modes, with no errors outside scenarios", () =>
     Effect.gen(function* () {
       const sampled: MockConfig = {

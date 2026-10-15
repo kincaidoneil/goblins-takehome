@@ -80,7 +80,7 @@ To import new calls, export them as JSONL (either `model_calls` rows or the grad
 node packages/mock-model/scripts/import-calls.ts calls.jsonl <name> <model> "<source>"
 ```
 
-That validates every line, keeps only real grading calls for `<model>` (`provider = 'openrouter'`, `purpose` `grade` or `eval`, no load-test run id, not `interrupted`), and writes `src/data/<name>.ts`. Register the result in `src/registry.ts`. Rows without a status code replay provider errors as 502s, and replayed 429s carry no retry hint.
+That validates every line, keeps only real grading calls for `<model>` (`provider = 'openrouter'`, `purpose` `grade` or `eval`, no load-test run id, not `interrupted`), shortens idle gaps over 30 s to 10 s so replays of batch runs stay dense, and writes `src/data/<name>.ts`. A grader `CallLogEntry` counts as an OpenRouter call only when its `providerId` is an OpenRouter generation id (`gen-…`). Register the result in `src/registry.ts`. Rows without a status code replay provider errors as 502s, and replayed 429s carry no retry hint.
 
 ## Tests
 
