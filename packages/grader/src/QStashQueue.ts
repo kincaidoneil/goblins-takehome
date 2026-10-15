@@ -63,13 +63,16 @@ export type Publish = (
   options: { readonly deduplicationId: string; readonly delaySeconds: number },
 ) => Promise<void>;
 
+/** QStash rejects `:` in deduplication ids, which our keys use as a separator. */
+export const toDeduplicationId = (key: string) => key.replaceAll(":", "_");
+
 export const makePublish = (config: QStashConfig): Publish => {
   const client = new Client({ token: Redacted.value(config.token), baseUrl: config.baseUrl });
   return async (envelope, options) => {
     await client.publishJSON({
       url: config.consumerUrl,
       body: envelope,
-      deduplicationId: options.deduplicationId,
+      deduplicationId: toDeduplicationId(options.deduplicationId),
       delay: options.delaySeconds,
       retries: QSTASH_RETRIES,
       flowControl: { key: FLOW_CONTROL_KEY, parallelism: config.parallelism },

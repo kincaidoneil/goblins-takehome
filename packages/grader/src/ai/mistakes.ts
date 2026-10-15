@@ -43,6 +43,8 @@ export interface Mistake {
 }
 
 export interface MistakesResult {
+  /** What the problem practices, in at most six words: "Distributing a negative sign". */
+  readonly skill: string;
   /** Most common first. A student appears in at most one group. */
   readonly mistakes: ReadonlyArray<Mistake>;
   readonly usage: Usage;
@@ -51,18 +53,21 @@ export interface MistakesResult {
 /** The report shows at most this many mistakes per problem. */
 export const maxGroups = 5;
 
-export const mistakesSystemPrompt = `A teacher is reading the report for a graded assignment. For one problem, you get the rubric and, for each student who lost points, the grader's one-line reason and the rubric lines they lost. Group the students by the mistake they made.
+export const mistakesSystemPrompt = `A teacher is reading the report for a graded assignment. For one problem, you get the rubric and, for each student who lost points, the grader's one-line reason and the rubric lines they lost. Name the skill the problem practices, and group the students by the mistake they made.
 
+- skill: what the problem practices, at most six words, as a teacher would title it: "Distributing a negative sign", "Supplementary angles". Not "Problem 7".
 - Each group's mistake is one plain sentence a teacher would write about the math, under 15 words: "Used 90° instead of 180° for supplementary angles." Not about grading, points or the rubric.
-- Put a student in the group whose mistake matches their reason. A student goes in at most one group. Leave out students whose reason doesn't say what went wrong.
+- Put a student in the group whose mistake matches their reason. A student goes in at most one group. Leave out only students whose reason doesn't say what went wrong; any reason that names a missing step or an error belongs in a group.
+- Group by what the student did wrong, not by what they got right. Some problems ask students to find someone else's error: a reason like "Fixed 12 · 5 = 60 but still wrote −(5 − 9y) as −5 − 9y" means the student's mistake is the sign, not the multiplication.
 - Merge groups that are the same mistake in different words. Order groups by size, largest first. At most five groups.
 - Refer to students only by the ids given.`;
 
 const replyJsonSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["groups"],
+  required: ["skill", "groups"],
   properties: {
+    skill: { type: "string" },
     groups: {
       type: "array",
       maxItems: maxGroups,
@@ -81,6 +86,7 @@ const replyJsonSchema = {
 
 const Reply = Schema.parseJson(
   Schema.Struct({
+    skill: Schema.String,
     groups: Schema.Array(
       Schema.Struct({ mistake: Schema.String, studentIds: Schema.Array(Schema.String) }),
     ),
@@ -96,18 +102,23 @@ export const cleanGroups = (
   knownIds: ReadonlySet<string>,
 ): ReadonlyArray<Mistake> => {
   const seen = new Set<string>();
-  return groups
-    .map((g) => ({
-      mistake: g.mistake.trim(),
-      studentIds: g.studentIds.filter((id) => {
-        if (!knownIds.has(id) || seen.has(id)) return false;
-        seen.add(id);
-        return true;
-      }),
-    }))
-    .filter((g) => g.mistake !== "" && g.studentIds.length > 0)
-    .sort((a, b) => b.studentIds.length - a.studentIds.length)
-    .slice(0, maxGroups);
+  return (
+    groups
+      .map((g) => ({ mistake: g.mistake.trim(), studentIds: g.studentIds }))
+      // Drop blank groups before any id is claimed, so they can't take a student from a real group.
+      .filter((g) => g.mistake !== "")
+      .map((g) => ({
+        mistake: g.mistake,
+        studentIds: g.studentIds.filter((id) => {
+          if (!knownIds.has(id) || seen.has(id)) return false;
+          seen.add(id);
+          return true;
+        }),
+      }))
+      .filter((g) => g.studentIds.length > 0)
+      .sort((a, b) => b.studentIds.length - a.studentIds.length)
+      .slice(0, maxGroups)
+  );
 };
 
 export const groupMistakes = (
@@ -146,7 +157,9 @@ export const groupMistakes = (
         usage: completion.usage,
       });
     }
+    const skill = decoded.right.skill.trim().split(/\s+/).slice(0, 6).join(" ");
     return {
+      skill: skill === "" ? `Problem ${input.problem.label}` : skill,
       mistakes: cleanGroups(decoded.right.groups, new Set(input.grades.map((g) => g.studentId))),
       usage: completion.usage,
     };

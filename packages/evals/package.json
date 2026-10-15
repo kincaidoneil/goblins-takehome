@@ -11,9 +11,15 @@
     "typecheck": "tsc -p .",
     "test": "vitest run",
     "dataset:render": "node datasets/scripts/render.ts",
-    "dataset:check": "node datasets/scripts/check.ts"
+    "dataset:check": "node datasets/scripts/check.ts",
+    "eval:grading": "tsx scripts/eval-grading.ts",
+    "eval:extraction": "tsx scripts/eval-extraction.ts",
+    "eval:chat": "tsx scripts/eval-chat.ts",
+    "eval:tables": "tsx scripts/tables.ts",
+    "eval:export-calls": "tsx scripts/export-calls.ts"
   },
   "dependencies": {
+    "@goblins/grader": "workspace:*",
     "@goblins/templates": "workspace:*",
     "effect": "^3.22.2"
   },
@@ -28,6 +34,7 @@
     "@fontsource/shadows-into-light": "^5.3.0",
     "@napi-rs/canvas": "^1.0.11",
     "@types/node": "^22.20.5",
+    "tsx": "^4.23.15",
     "typescript": "7.0.2",
     "vitest": "^3.2.4"
   }

@@ -1,0 +1,256 @@
+[
+ {
+  "label": "1a",
+  "pages": [
+   1
+  ],
+  "text": "Triangle \\(ABC\\) is equilateral. What is the value of \\(x\\)?",
+  "diagramDescription": "Equilateral triangle with vertices A (top), C (bottom left), B (bottom right). Side AC is labeled 8. Dashed altitude from A to point D on side CB, with a right angle mark at D; the altitude is labeled x. Angles at C and B are marked as equal.",
+  "answerKey": "x = 4\\sqrt{3} \\approx 6.93. The altitude bisects the base, so CD = 4. Then x^2 = 8^2 - 4^2 = 48, so x = 4\\sqrt{3}. Check: 4^2 + (4\\sqrt{3})^2 = 16 + 48 = 64 = 8^2.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: uses the altitude to split the base into 4 and 4 (or 30-60-90 ratios), and sets up x^2 = 8^2 - 4^2 or equivalent."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: answer: x = 4\\sqrt{3} (about 6.93)."
+   }
+  ],
+  "gradingNotes": "Accept 4\\sqrt{3} or 6.9 approximately. Units do not matter.",
+  "dependsOn": []
+ },
+ {
+  "label": "1b",
+  "pages": [
+   1
+  ],
+  "text": "Triangle \\(ABC\\) is equilateral. What is the measure of angle \\(B\\)?",
+  "diagramDescription": "Equilateral triangle with vertices A (top), C (bottom left), B (bottom right). Side AC is labeled 8. Dashed altitude from A to point D on side CB, with a right angle mark at D; the altitude is labeled x. Angles at C and B are marked as equal.",
+  "answerKey": "60 degrees. All angles of an equilateral triangle are equal, and they sum to 180 degrees, so each is 60 degrees.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: answer: 60 degrees (accept 60\\degree or pi/3)."
+   }
+  ],
+  "gradingNotes": "Units do not matter.",
+  "dependsOn": []
+ },
+ {
+  "label": "2",
+  "pages": [
+   1
+  ],
+  "text": "An equilateral triangle has side length 8 units. What is the area?",
+  "diagramDescription": null,
+  "answerKey": "16\\sqrt{3} square units (about 27.71). Area = (\\sqrt{3}/4) s^2 = (\\sqrt{3}/4)(64) = 16\\sqrt{3}. Equivalent: altitude 4\\sqrt{3} times base 8 divided by 2 gives 16\\sqrt{3}.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: correct setup, such as (\\sqrt{3}/4)s^2 or (1/2)(8)(4\\sqrt{3}) using the altitude."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: answer: 16\\sqrt{3} (about 27.7) square units."
+   }
+  ],
+  "gradingNotes": "Accept 27.7 approximately. Units do not matter.",
+  "dependsOn": []
+ },
+ {
+  "label": "3a",
+  "pages": [
+   1
+  ],
+  "text": "The quilt is made of squares with diagonals. The length of \\(BD\\) is 4. Find the length of \\(AE\\).",
+  "diagramDescription": "Large square ABCD with A at bottom left, B at top left, C at top right, D at bottom right. Midpoints marked: G on top side BC, H on left side AB, F on right side CD, E on bottom side AD. Segments drawn: both diagonals of the big square (BD and AC), plus the segments connecting the midpoints (GE vertical, HF horizontal, and the diagonals of the four small squares). BD is the big square's diagonal and is labeled 4. Each small square has side equal to half the big square's side.",
+  "answerKey": "AE = \\sqrt{2}. BD is the diagonal of square ABCD, so its side is 4/\\sqrt{2} = 2\\sqrt{2}. E is the midpoint of side AD, so AE = (1/2)(2\\sqrt{2}) = \\sqrt{2} (about 1.41). Check: AE is half a side, and the diagonal of the square with side 2\\sqrt{2} is 4.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: finds the side of square ABCD from diagonal 4 (side = 2\\sqrt{2}, using the 45-45-90 ratio or Pythagorean theorem)."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: answer: AE = \\sqrt{2} (about 1.41), since E is the midpoint of the side."
+   }
+  ],
+  "gradingNotes": "Accept 2\\sqrt{2}/2 or 1.41 approximately. Units do not matter.",
+  "dependsOn": []
+ },
+ {
+  "label": "3b",
+  "pages": [
+   1
+  ],
+  "text": "The quilt is made of squares with diagonals. The length of \\(BD\\) is 4. Find the area of square \\(ABCD\\).",
+  "diagramDescription": "Large square ABCD with A at bottom left, B at top left, C at top right, D at bottom right. Midpoints marked: G on top side BC, H on left side AB, F on right side CD, E on bottom side AD. Segments drawn: both diagonals of the big square (BD and AC), plus the segments connecting the midpoints (GE vertical, HF horizontal, and the diagonals of the four small squares). BD is the big square's diagonal and is labeled 4. Each small square has side equal to half the big square's side.",
+  "answerKey": "8 square units. Diagonal d = 4 gives area d^2/2 = 16/2 = 8. Equivalently, side = 2\\sqrt{2} and area = (2\\sqrt{2})^2 = 8.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: method: area from diagonal (d^2/2) or side found from diagonal and then squared."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: answer: 8 square units."
+   }
+  ],
+  "gradingNotes": "Units do not matter.",
+  "dependsOn": []
+ },
+ {
+  "label": "4",
+  "pages": [
+   2
+  ],
+  "text": "Kiran is flying a kite. He gets tired, so he stakes the kite into the ground. The kite is on a string that is 18 feet long and makes a 30 degree angle with the ground. How high is the kite?",
+  "diagramDescription": "Right triangle with a string as the hypotenuse, labeled 18, from a stake on the ground at the lower left to the kite at the upper right. The angle at the stake between the string and the ground is 30 degrees. The vertical side from the ground to the kite is the height. The right angle is at the bottom right, on the ground, where the vertical height meets the ground.",
+  "answerKey": "9 feet. Height h = 18 sin 30 degrees = 18(1/2) = 9. Check: cos 30 degrees times 18 gives the horizontal distance 9\\sqrt{3} and 9^2 + (9\\sqrt{3})^2 = 81 + 243 = 324 = 18^2.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: sets up sin 30 degrees = h/18 (or an equivalent Pythagorean setup)."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: answer: 9 feet."
+   }
+  ],
+  "gradingNotes": "Units (feet) do not matter.",
+  "dependsOn": []
+ },
+ {
+  "label": "5",
+  "pages": [
+   2
+  ],
+  "text": "What is the length of side \\(AB\\)? Triangle ABC has a right angle at A. The angle at C is 30 degrees. Side AC is 6.",
+  "diagramDescription": "Right triangle ABC with the right angle at A (bottom left). Side AC is horizontal, labeled 6, with C at the bottom right. Side AB is vertical, from A up to B at the top. Hypotenuse BC is the slanted side. The angle at C is labeled 30 degrees.",
+  "answerKey": "AB = 2\\sqrt{3} (about 3.46). Since AB is opposite the 30 degree angle at C and AC = 6 is adjacent, tan 30 degrees = AB/6, so AB = 6 tan 30 degrees = 6/\\sqrt{3} = 2\\sqrt{3}. Check: BC = 4\\sqrt{3} and 6^2 + (2\\sqrt{3})^2 = 36 + 12 = 48 = (4\\sqrt{3})^2.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: sets up a correct trig ratio with AB and AC, such as tan 30 degrees = AB/6."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: answer: AB = 2\\sqrt{3} (about 3.46)."
+   }
+  ],
+  "gradingNotes": "Accept 6/\\sqrt{3} or 3.5 approximately. Units do not matter.",
+  "dependsOn": []
+ },
+ {
+  "label": "6",
+  "pages": [
+   2
+  ],
+  "text": "Find the lengths of segments \\(AD\\) and \\(BD\\). Then check your answers using a different method.",
+  "diagramDescription": "Triangle with vertices A (bottom left), C (bottom right), and B (top). The angle at B is a right angle. D is on side AC, and segment BD is drawn perpendicular to AC, with a right angle mark at D. Side BC is labeled 13 (hypotenuse of triangle BDC). Segment DC is labeled 12 along the base. A lies to the left of D.",
+  "answerKey": "BD = 5 and AD = 25/12 (about 2.08). In right triangle BDC, BD = \\sqrt{13^2 - 12^2} = 5. The altitude to the hypotenuse satisfies BD^2 = AD * DC, so AD = 25/12. Check by a different method: AB^2 = AD^2 + BD^2 = (625/144) + 25 = 4225/144, so AB = 65/12. Also AB^2 = AD * AC = (25/12)(169/12) = 4225/144, which agrees.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: finds BD = 5 using the Pythagorean theorem in triangle BDC."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: finds AD = 25/12 (about 2.08), for example from BD^2 = AD * DC or from similar triangles, using their own BD value (follow-through)."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: checks the answers with a different method that agrees, such as finding AB two ways or using the altitude relation, showing the values are consistent."
+   }
+  ],
+  "gradingNotes": "Accept 2.08 approximately. The check line needs a genuinely different method from the first, not just restating the answers. Units do not matter.",
+  "dependsOn": []
+ },
+ {
+  "label": "7",
+  "pages": [
+   3
+  ],
+  "text": "Write an expression that can be used to find the length of \\(JH\\) and an expression that can be used to find the length of \\(GJ\\).",
+  "diagramDescription": "Triangle GHJ with a right angle at J (top). G is at the bottom left, H at the bottom right, and J at the top. The side GH is the base, labeled 9. The angle at G is labeled 35 degrees. The hypotenuse is GH, opposite the right angle at J.",
+  "answerKey": "JH = 9 sin 35 degrees (about 5.16) and GJ = 9 cos 35 degrees (about 7.37). JH is opposite the 35 degree angle at G, and GJ is adjacent to it, with hypotenuse GH = 9. Check: (5.16)^2 + (7.37)^2 is about 26.6 + 54.3 = 81, which equals 9^2.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: expression for JH, such as 9 sin 35 degrees (or 9 cos 55 degrees, or an equivalent Pythagorean form)."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: expression for GJ, such as 9 cos 35 degrees (or 9 sin 55 degrees, or an equivalent form)."
+   }
+  ],
+  "gradingNotes": "Accept any correct equivalent expression, including the Pythagorean form such as \\sqrt{81 - GJ^2}. Numerical values are not required. Units do not matter.",
+  "dependsOn": []
+ },
+ {
+  "label": "8a",
+  "pages": [
+   3
+  ],
+  "text": "A triangle has sides with lengths 5, 12, and 13. Verify this is a Pythagorean triple.",
+  "diagramDescription": null,
+  "answerKey": "Yes. 5^2 + 12^2 = 25 + 144 = 169 = 13^2, and 5, 12, 13 are positive integers, so they form a Pythagorean triple.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: shows 5^2 + 12^2 = 13^2 (25 + 144 = 169)."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: concludes it is a Pythagorean triple (positive integers satisfying a^2 + b^2 = c^2)."
+   }
+  ],
+  "gradingNotes": "Units do not matter.",
+  "dependsOn": []
+ },
+ {
+  "label": "8b",
+  "pages": [
+   3
+  ],
+  "text": "A triangle has sides with lengths 5, 12, and 13. Approximate the acute angles in this triangle.",
+  "diagramDescription": null,
+  "answerKey": "The triangle is right (since 5^2 + 12^2 = 13^2). The angle opposite the side 5 is arcsin(5/13), about 22.6 degrees. The other acute angle is arcsin(12/13), about 67.4 degrees, and 22.6 + 67.4 = 90, as required.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: sets up an inverse trig ratio, such as sin^-1(5/13) or tan^-1(5/12), for one acute angle."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: answers: about 22.6 degrees and about 67.4 degrees (or 90 degrees minus the first)."
+   }
+  ],
+  "gradingNotes": "Accept rounding to the nearest degree (23 and 67) or better. Units do not matter.",
+  "dependsOn": [
+   "8a"
+  ]
+ },
+ {
+  "label": "9",
+  "pages": [
+   3
+  ],
+  "text": "Find the length of each leg.",
+  "diagramDescription": "Right triangle QRP with the right angle at Q (bottom left). Q is at the bottom left, R at the top, and P at the bottom right. Leg QR is vertical and leg QP is horizontal. The hypotenuse RP is labeled 4. The angle at R is labeled 30 degrees and the angle at P is labeled 60 degrees.",
+  "answerKey": "QP = 2 and QR = 2\\sqrt{3} (about 3.46). QP is opposite the 30 degree angle at R: QP = 4 sin 30 degrees = 2. QR is opposite the 60 degree angle at P: QR = 4 sin 60 degrees = 2\\sqrt{3}. Check: 2^2 + (2\\sqrt{3})^2 = 4 + 12 = 16 = 4^2.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: finds QP = 2 with a correct trig ratio or 30-60-90 relationship."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: finds QR = 2\\sqrt{3} (about 3.46) with a correct method."
+   }
+  ],
+  "gradingNotes": "Accept 2 and 2\\sqrt{3} in either order as long as each leg is matched correctly. Units do not matter.",
+  "dependsOn": []
+ }
+]

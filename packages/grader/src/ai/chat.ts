@@ -164,7 +164,7 @@ const Problem = Schema.Struct({
   pages: Schema.Array(Schema.Int.pipe(Schema.positive())),
   text: Schema.NonEmptyString,
   diagramDescription: Schema.NullOr(Schema.String),
-  answerKey: Schema.String,
+  answerKey: Schema.NonEmptyTrimmedString,
   rubric: Rubric,
   gradingNotes: Schema.String,
   dependsOn: Schema.Array(Schema.String),

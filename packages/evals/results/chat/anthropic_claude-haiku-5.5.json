@@ -1,0 +1,308 @@
+[
+ {
+  "spec": "anthropic/claude-haiku-5.5",
+  "caseId": "points-problem",
+  "ok": true,
+  "problems": [],
+  "reply": "Problem 3 is now worth 4 points: part (a) earns 2 points (clearing the fractions, then the answer m = -7), and parts (b) and (c) earn 1 point each on their answers.",
+  "edits": [
+   {
+    "_tag": "SetRubric",
+    "label": "3",
+    "rubric": [
+     {
+      "points": 1,
+      "description": "1 pt: multiplies both sides by 9 (or otherwise clears the fractions) to get 2m - 16 = 6m + 12 or an equivalent equation"
+     },
+     {
+      "points": 1,
+      "description": "1 pt: solves (1/9)(2m-16)=(1/3)(2m+4) to get m = -7"
+     },
+     {
+      "points": 1,
+      "description": "1 pt: solves -4(r+2)=4(2-2r) to get r = 4"
+     },
+     {
+      "points": 1,
+      "description": "1 pt: solves 12(5+2y)=4y-(6-9y) to get y = -6"
+     }
+    ]
+   },
+   {
+    "_tag": "SetGradingNotes",
+    "label": "3",
+    "gradingNotes": "Part (a) is worth 2 points: clearing the fractions and the final answer m = -7. Parts (b) and (c) are worth 1 point each on the final answer. Accept any correct method. Checking the solution is requested by the problem but is not separately scored."
+   }
+  ],
+  "costUsd": 0.0019457
+ },
+ {
+  "spec": "anthropic/claude-haiku-5.5",
+  "caseId": "points-per-equation",
+  "ok": true,
+  "problems": [],
+  "reply": "Problem 2 already gives 1 point for each of its three equations (3 points total), so I made no changes. If you meant a different total or per-equation value, tell me which and I'll update it.",
+  "edits": [],
+  "costUsd": 0.0014031
+ },
+ {
+  "spec": "anthropic/claude-haiku-5.5",
+  "caseId": "points-two-problems",
+  "ok": true,
+  "problems": [],
+  "reply": "Problems 4 and 5 are now each worth 3 points, with a method line, a middle step, and the final answer line. The answers and grading notes are unchanged.",
+  "edits": [
+   {
+    "_tag": "SetRubric",
+    "label": "4",
+    "rubric": [
+     {
+      "points": 1,
+      "description": "1 pt: sets up sin 30 degrees = h/18 (or an equivalent right-triangle setup)."
+     },
+     {
+      "points": 1,
+      "description": "1 pt: solves for the height: h = 18 sin 30 degrees = 18(1/2) (or an equivalent step)."
+     },
+     {
+      "points": 1,
+      "description": "1 pt: answer: 9 feet."
+     }
+    ]
+   },
+   {
+    "_tag": "SetRubric",
+    "label": "5",
+    "rubric": [
+     {
+      "points": 1,
+      "description": "1 pt: sets up tan 30 degrees = AB/6 (or another correct trig ratio using AB and AC)."
+     },
+     {
+      "points": 1,
+      "description": "1 pt: solves for AB: AB = 6 tan 30 degrees = 6/\\sqrt{3} (or an equivalent step)."
+     },
+     {
+      "points": 1,
+      "description": "1 pt: answer: AB = 2\\sqrt{3} (about 3.46)."
+     }
+    ]
+   }
+  ],
+  "costUsd": 0.0021096
+ },
+ {
+  "spec": "anthropic/claude-haiku-5.5",
+  "caseId": "rubric-lines",
+  "ok": true,
+  "problems": [],
+  "reply": "Problem 1 is now worth 3 points: 1 for distributing the 3, 1 for collecting the x terms on one side, and 1 for the answer x = -4/3.",
+  "edits": [
+   {
+    "_tag": "SetRubric",
+    "label": "1",
+    "rubric": [
+     {
+      "points": 1,
+      "description": "1 pt: distributes the 3 correctly, giving 3x - 12 = 12x or an equivalent"
+     },
+     {
+      "points": 1,
+      "description": "1 pt: collects the x terms on one side, e.g. -12 = 9x or an equivalent"
+     },
+     {
+      "points": 1,
+      "description": "1 pt: answer x = -4/3 (or -1 1/3, or -1.33 rounded)"
+     }
+    ]
+   }
+  ],
+  "costUsd": 0.0014947
+ },
+ {
+  "spec": "anthropic/claude-haiku-5.5",
+  "caseId": "accept-everywhere",
+  "ok": true,
+  "problems": [],
+  "reply": "I added a note to problems 1, 4, 5 and 7 that unsimplified fractions are accepted for their fraction answers. Problems 2, 3, 6 and 8 have no fraction answers, so I left them unchanged.",
+  "edits": [
+   {
+    "_tag": "SetGradingNotes",
+    "label": "1",
+    "gradingNotes": "Accept any equivalent fractional or decimal form of -4/3. Units do not apply. Unsimplified fractions are accepted, such as -8/6 or -12/9."
+   },
+   {
+    "_tag": "SetGradingNotes",
+    "label": "4",
+    "gradingNotes": "Each equation is worth 1 point on its final answer. Accept 29/11 in any equivalent form, such as 2 7/11 or about 2.64. Unsimplified fractions are accepted, such as 58/22."
+   },
+   {
+    "_tag": "SetGradingNotes",
+    "label": "5",
+    "gradingNotes": "Each equation is worth 1 point on its final answer. Accept -7/4 as -1 3/4 or -1.75. Unsimplified fractions are accepted, such as -14/8."
+   },
+   {
+    "_tag": "SetGradingNotes",
+    "label": "7",
+    "gradingNotes": "Accept -65/11 in any equivalent form, such as -5 10/11 or about -5.91. Unsimplified fractions are accepted, such as -130/22. Each mistake is worth 1 point if named, even if the student does not give the full corrected solution."
+   }
+  ],
+  "costUsd": 0.001903
+ },
+ {
+  "spec": "anthropic/claude-haiku-5.5",
+  "caseId": "accept-one",
+  "ok": true,
+  "problems": [],
+  "reply": "No change was needed: problem 2a's grading notes already say units don't matter and to accept 3 and 4 with or without the word \"cups,\" so students who leave it out lose no points.",
+  "edits": [],
+  "costUsd": 0.0023276
+ },
+ {
+  "spec": "anthropic/claude-haiku-5.5",
+  "caseId": "require-units",
+  "ok": true,
+  "problems": [],
+  "reply": "On 3a, the answer point now requires dollar signs or the word dollars, and the notes say so. Nothing else changed.",
+  "edits": [
+   {
+    "_tag": "SetRubric",
+    "label": "3a",
+    "rubric": [
+     {
+      "points": 1,
+      "description": "1 pt: uses 500 + 50 times the hours (or equivalent) for both houses"
+     },
+     {
+      "points": 1,
+      "description": "1 pt: answers: $1500 for 20 hours and $3000 for 50 hours, written with dollar signs or the word dollars"
+     }
+    ]
+   },
+   {
+    "_tag": "SetGradingNotes",
+    "label": "3a",
+    "gradingNotes": "Dollar signs or the word dollars are required for the answer point. Without them, the answer point is not earned."
+   }
+  ],
+  "costUsd": 0.0024827
+ },
+ {
+  "spec": "anthropic/claude-haiku-5.5",
+  "caseId": "missed-problem",
+  "ok": true,
+  "problems": [],
+  "reply": "I added problem 6 (Andre's equation) after problem 5, with the error located in the step where the x terms are combined and the solution x = -1, worth 2 points.",
+  "edits": [
+   {
+    "_tag": "AddProblem",
+    "after": "5",
+    "problem": {
+     "label": "6",
+     "pageNumbers": [
+      2
+     ],
+     "text": "Andre solved an equation, but when he checked his answer he saw his solution was incorrect. He knows he made a mistake, but he can't find it. Where is Andre's mistake and what is the solution to the equation? \\(-2(3x-5)=4(x+3)+8\\); work shown: \\(-6x+10=4x+12+8\\); \\(-6x+10=4x+20\\); \\(10=-2x+20\\); \\(-10=-2x\\); \\(5=x\\)",
+     "diagramDescription": null,
+     "answerKey": "Mistake: in the step from -6x + 10 = 4x + 20 to 10 = -2x + 20, Andre combined 4x and -6x as -2x, which moves -6x to the right side with the wrong sign. Adding 6x to both sides gives 10 = 10x + 20. Correct solution: 10x = -10, so x = -1. Check: LHS -2(3(-1) - 5) = 16 and RHS 4(-1 + 3) + 8 = 16.",
+     "gradingNotes": "Accept -1 in any equivalent form. Students may name the error in different words, but it must point to the step where the x terms were moved. Each point is independent of the other.",
+     "rubric": [
+      {
+       "points": 1,
+       "description": "1 pt: identifies the mistake in the step from -6x + 10 = 4x + 20 to 10 = -2x + 20, where -6x was moved with the wrong sign (should give 10 = 10x + 20)"
+      },
+      {
+       "points": 1,
+       "description": "1 pt: correct solution x = -1"
+      }
+     ],
+     "dependsOn": []
+    }
+   }
+  ],
+  "costUsd": 0.0019529
+ },
+ {
+  "spec": "anthropic/claude-haiku-5.5",
+  "caseId": "link-dependency",
+  "ok": true,
+  "problems": [],
+  "reply": "I made problem 2 depend on 1a and updated its first rubric line so the altitude-based setup earns follow-through credit from the student's own x. The final answer line is unchanged.",
+  "edits": [
+   {
+    "_tag": "SetDependsOn",
+    "label": "2",
+    "dependsOn": [
+     "1a"
+    ]
+   },
+   {
+    "_tag": "SetRubric",
+    "label": "2",
+    "rubric": [
+     {
+      "points": 1,
+      "description": "1 pt: correct setup, such as (\\sqrt{3}/4)s^2, or (1/2)(8)(altitude) where the altitude is the student's own x from 1a, correct or not."
+     },
+     {
+      "points": 1,
+      "description": "1 pt: answer: 16\\sqrt{3} (about 27.7) square units."
+     }
+    ]
+   }
+  ],
+  "costUsd": 0.0021412
+ },
+ {
+  "spec": "anthropic/claude-haiku-5.5",
+  "caseId": "fix-answer-key",
+  "ok": true,
+  "problems": [],
+  "reply": "I changed the answer key for 7b to 18 months, solving 66 = 3t + 12, and updated its answer rubric line to match.",
+  "edits": [
+   {
+    "_tag": "SetAnswerKey",
+    "label": "7b",
+    "answerKey": "Set 66 = 3t + 12 (from h = 3t + 12), so 3t = 54 and t = 18. Answer: 18 months."
+   },
+   {
+    "_tag": "SetRubric",
+    "label": "7b",
+    "rubric": [
+     {
+      "points": 1,
+      "description": "1 pt: sets up 66 = 3t + 12 or an equivalent method from the student's own equation from 7a (follow-through)"
+     },
+     {
+      "points": 1,
+      "description": "1 pt: answer: 18 months"
+     }
+    ]
+   }
+  ],
+  "costUsd": 0.0025759
+ },
+ {
+  "spec": "anthropic/claude-haiku-5.5",
+  "caseId": "remove-problem",
+  "ok": true,
+  "problems": [],
+  "reply": "Removed problem 5 (the vertical and supplementary/complementary angles question). No other problems depended on it, so nothing else changed.",
+  "edits": [
+   {
+    "_tag": "RemoveProblem",
+    "label": "5"
+   }
+  ],
+  "costUsd": 0.0016247
+ },
+ {
+  "spec": "anthropic/claude-haiku-5.5",
+  "caseId": "unclear",
+  "ok": true,
+  "problems": [],
+  "reply": "Which problems should get harder, and how: trickier numbers, more steps per problem, or more points on each?",
+  "edits": [],
+  "costUsd": 0.0016757
+ }
+]

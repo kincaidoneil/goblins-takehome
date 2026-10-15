@@ -227,11 +227,11 @@ describe("parseExtractReply", () => {
     dependsOn,
   });
 
-  it("drops links to missing or later problems and blank diagrams", () => {
+  it("turns blank diagrams into null and keeps links to earlier problems", () => {
     const text = JSON.stringify({
       status: "ok",
       message: "",
-      problems: [extracted("1", ["2"]), extracted("2", ["1", "9"])],
+      problems: [extracted("1", []), extracted("2", ["1", "1"])],
     });
     const result = Either.getOrThrow(parseExtractReply(text));
     expect(
@@ -241,6 +241,16 @@ describe("parseExtractReply", () => {
       [[], null],
       [["1"], null],
     ]);
+  });
+
+  it("rejects links to missing or later problems, so the call is retried", () => {
+    for (const problems of [
+      [extracted("1", ["2"]), extracted("2", [])],
+      [extracted("1", []), extracted("2", ["9"])],
+    ]) {
+      const text = JSON.stringify({ status: "ok", message: "", problems });
+      expect(Either.isLeft(parseExtractReply(text))).toBe(true);
+    }
   });
 
   it("reports a non-math worksheet instead of problems", () => {
@@ -356,6 +366,16 @@ describe("AiGrader.grader", () => {
 });
 
 describe("Mistakes.cleanGroups", () => {
+  it("doesn't let a blank group take a student from a real one", () => {
+    const groups = [
+      { mistake: "  ", studentIds: ["a"] },
+      { mistake: "Subtracted wrong.", studentIds: ["a"] },
+    ];
+    expect(cleanGroups(groups, new Set(["a"]))).toEqual([
+      { mistake: "Subtracted wrong.", studentIds: ["a"] },
+    ]);
+  });
+
   it("drops unknown and repeated students and empty groups, largest group first", () => {
     const groups = [
       { mistake: "Used 90 instead of 180.", studentIds: ["a", "ghost"] },

@@ -9,7 +9,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "usage-report": "tsx scripts/usage-report.ts"
+    "usage-report": "tsx scripts/usage-report.ts",
+    "local-flow-control": "tsx scripts/local-flow-control.ts"
   },
   "dependencies": {
     "@effect/experimental": "^0.61.1",
