@@ -85,7 +85,17 @@ export const POST = QStashQueue.makeHandler({ runtime, verify: QStashQueue.makeV
 
 The consumer route needs `maxDuration` of at least 120 s: one delivery's grading is capped at 100 s.
 
-The QStash resource must be on pay-as-you-go. The free plan silently clamps parallelism to 10 and allows 1,000 messages a day.
+Production runs on QStash's free plan: parallelism 10 (the default, `GRADER_PARALLELISM`) and 1,000 messages a day, which covers the demo and a one-class smoke test. Pay-as-you-go (parallelism up to 100) is the next step for real scale. The sweeper runs on Vercel cron every minute (`apps/web/vercel.json`).
+
+To run against QStash's local dev server, as the load test's local ramp does:
+
+```sh
+npx @upstash/qstash-cli dev -port 8089
+# then, with the printed QSTASH_TOKEN and signing keys, start the app with:
+#   GRADER_QUEUE=qstash QSTASH_URL=http://127.0.0.1:8089 GRADER_CONSUMER_URL=http://127.0.0.1:3000/api/queue/grade GRADER_PARALLELISM=100
+# and check flow control end to end (60 five-second jobs at parallelism 10, about 33 s):
+pnpm --filter @goblins/grader local-flow-control 60 10
+```
 
 ## Tests
 
