@@ -30,7 +30,7 @@ export function Tabs<Value extends string>({
     <BaseTabs.Root
       className={cx("gb-tabs", className)}
       {...(value === undefined ? {} : { value })}
-      defaultValue={defaultValue ?? items[0]?.value}
+      defaultValue={defaultValue ?? items.find((item) => !item.disabled)?.value}
       onValueChange={(next) => {
         if (onValueChange && isValue(next)) onValueChange(next);
       }}
