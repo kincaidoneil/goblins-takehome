@@ -3,7 +3,7 @@ import { Attempt, type GradingInput, SubmissionId } from "@goblins/domain";
 import { Effect, Either, Layer, Option } from "effect";
 import { applyEdits, parseChatReply, type SetupProblem } from "../src/ai/chat.ts";
 import { parseExtractReply } from "../src/ai/extract.ts";
-import { buildGradeMessages, parseGradeReply } from "../src/ai/grade.ts";
+import { buildGradeMessages, mockRender, parseGradeReply } from "../src/ai/grade.ts";
 import { grader, toGradeRequest } from "../src/ai/grader.ts";
 import { cleanGroups } from "../src/ai/mistakes.ts";
 import { ModelClient } from "../src/ModelClient.ts";
@@ -386,5 +386,33 @@ describe("Mistakes.cleanGroups", () => {
       { mistake: "Subtracted wrong.", studentIds: ["b", "c"] },
       { mistake: "Used 90 instead of 180.", studentIds: ["a"] },
     ]);
+  });
+});
+
+describe("Grade.mockRender", () => {
+  const request = {
+    model: "mock",
+    tag: { purpose: "grade" as const },
+    messages: buildGradeMessages({
+      problem: { label: "1", text: "Solve.", answerKey: "x = 7", gradingNotes: "", rubric },
+      whiteboardUrl: "data:image/png;base64,THIS",
+      earlierWork: [],
+      pageImageUrls: [],
+    }),
+  };
+
+  it("writes a reply the grader parses, with the score spread over the lines", () => {
+    const text = mockRender({ _tag: "Graded", score: 2, maxScore: 3, feedback: "Close." }, request);
+    const parsed = Either.getOrThrow(parseGradeReply(text, rubric));
+    expect(parsed.lines.map((l) => l.points)).toEqual([1, 1]);
+    expect(parsed.verdict._tag).toBe("Sure");
+  });
+
+  it("flags a NeedsTeacher answer with its reason", () => {
+    const text = mockRender({ _tag: "NeedsTeacher", reason: "Can't read it." }, request);
+    expect(Either.getOrThrow(parseGradeReply(text, rubric)).verdict).toEqual({
+      _tag: "NeedsTeacher",
+      flagReason: "Can't read it.",
+    });
   });
 });

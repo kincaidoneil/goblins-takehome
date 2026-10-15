@@ -6,9 +6,11 @@
  * this with one call per line; see packages/evals/REPORT.md.
  */
 import { Effect, Either, Schema } from "effect";
+import type { MockAnswer } from "../Grader.ts";
 import {
   BadResponse,
   type CallTag,
+  type CompletionRequest,
   type ContentPart,
   type Message,
   ModelClient,
@@ -314,3 +316,49 @@ export const gradeSubmission = (
     }
     return { ...parsed.right, usage: completion.usage, model: completion.model };
   });
+
+/** Rubric lines as `buildGradeMessages` writes them: `- L1 (up to 2 points): ...`. */
+const promptLinesIn = (request: CompletionRequest) =>
+  request.messages
+    .flatMap((m) =>
+      typeof m.content === "string"
+        ? [m.content]
+        : m.content.flatMap((part) => (part.type === "text" ? [part.text] : [])),
+    )
+    .flatMap((text) =>
+      [...text.matchAll(/^- (L\d+) \(up to (\d+) points?\):/gm)].map((m) => ({
+        id: m[1] ?? "",
+        points: Number(m[2]),
+      })),
+    );
+
+/**
+ * Renders a scripted mock answer as this grader's reply, for the rubric lines in the request, so
+ * the mock model and load tests run through the real parser. A Graded score is spread over the
+ * lines in order; a NeedsTeacher answer scores nothing and flags with its reason. Pass it as
+ * `MockModel.layer(config, { render: Grade.mockRender })`.
+ */
+export const mockRender = (answer: MockAnswer, request: CompletionRequest): string => {
+  if (answer._tag === "Text") return answer.text;
+  const lines = promptLinesIn(request);
+  const total = lines.reduce((sum, l) => sum + l.points, 0);
+  let remaining =
+    answer._tag === "Graded" && answer.maxScore > 0
+      ? Math.round((total * answer.score) / answer.maxScore)
+      : 0;
+  const scored = lines.map((l) => {
+    const points = Math.min(l.points, remaining);
+    remaining -= points;
+    return { lineId: l.id, evidence: "Scripted mock answer.", points };
+  });
+  const note = answer._tag === "Graded" ? answer.feedback : answer.reason;
+  return JSON.stringify({
+    read: note === "" ? "(mock whiteboard)" : note,
+    unclearMarks: "",
+    conflictingAnswers: "",
+    lines: scored,
+    reason: note,
+    needsTeacher: answer._tag === "NeedsTeacher",
+    flagReason: answer._tag === "NeedsTeacher" ? answer.reason : "",
+  });
+};

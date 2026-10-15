@@ -11,8 +11,10 @@
  */
 import { DatabaseLive } from "@goblins/domain";
 import {
+  AiGrader,
   CallLog,
   Consumer,
+  Grade,
   Grader,
   GradeStore,
   ModelClient,
@@ -64,10 +66,10 @@ export const QStashGradeQueue = (config: QStashQueue.QStashConfig) => {
   });
 };
 
-/** The mock answers in the placeholder grader's format, with latency sampled from the seed profile. */
+/** The mock answers in the evaluated grader's reply format, with latency sampled from the seed profile. */
 const mockModel = MockModel.layer(
   { _tag: "Sampled", profile: "seed", scenario: undefined, anchorMs: undefined },
-  { render: Grader.placeholderRender },
+  { render: Grade.mockRender },
 );
 
 const ModelChoice = Config.literal(
@@ -92,7 +94,8 @@ const graderServices = Layer.mergeAll(
     Layer.provide(Layer.mergeAll(configuredModel, loadTestModel, CallLog.postgres)),
   ),
   GradeStore.postgres,
-  Layer.succeed(Grader.Grader, Grader.placeholder),
+  // The evaluated grader (packages/grader/src/ai, chosen in packages/evals/REPORT.md).
+  Layer.succeed(Grader.Grader, AiGrader.grader),
 ).pipe(Layer.provide(DatabaseLive), Layer.orDie);
 
 /** Built on the first delivery, so routes that never grade don't open a second pool. */
