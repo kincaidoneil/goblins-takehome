@@ -1,0 +1,341 @@
+/*
+ * The projector window. Read from the back of a classroom: everything is big, high contrast and
+ * calm. Sizes scale with the window so it works on a 720p projector and a 4K TV alike.
+ */
+
+.pj {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+  background:
+    radial-gradient(60vmax 50vmax at 8% 0%, rgb(164 246 0 / 0.3), transparent 60%),
+    radial-gradient(50vmax 45vmax at 100% 100%, rgb(255 226 154 / 0.55), transparent 60%),
+    var(--gb-paper-100);
+  color: var(--gb-color-text);
+  font-size: clamp(16px, 1.4vw, 28px);
+}
+
+.pj-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  color: var(--gb-green-700);
+  font-weight: var(--gb-weight-heavy);
+}
+
+/* ------------------------------------------------------------------ lobby */
+
+.pj-lobby {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 3vw;
+  min-height: 0;
+  padding: 2vw 4vw 2vw;
+}
+
+@media (max-aspect-ratio: 1 / 1) {
+  .pj-lobby {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pj-join {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.4em;
+}
+
+.pj-join-url {
+  margin: 0;
+  color: var(--gb-green-800);
+  font-size: 1.6em;
+  font-weight: var(--gb-weight-bold);
+  line-height: 1.2;
+}
+
+.pj-join-url strong {
+  font-weight: var(--gb-weight-heavy);
+}
+
+.pj-code-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7em 1em;
+  border-radius: 1.2em;
+  background: var(--gb-paper-0);
+  box-shadow: 0 1.2em 3em rgb(27 111 79 / 0.14);
+}
+
+.pj-code {
+  margin: 0;
+  color: var(--gb-green-700);
+  font-size: clamp(64px, 8vw, 220px);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.pj-scan {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  color: var(--gb-green-800);
+  font-size: 1.15em;
+  font-weight: var(--gb-weight-bold);
+}
+
+.pj-qr {
+  flex-shrink: 0;
+  width: clamp(96px, 9vw, 240px);
+  height: auto;
+  padding: 0.5em;
+  border-radius: 0.8em;
+  background: var(--gb-paper-0);
+  box-shadow: 0 0.6em 1.6em rgb(27 111 79 / 0.12);
+}
+
+.pj-roster {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 1.4em;
+  border-radius: 1.4em;
+  background: rgb(255 255 255 / 0.65);
+  box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.9);
+  backdrop-filter: blur(8px);
+}
+
+.pj-roster-title {
+  margin: 0 0 0.8em;
+  color: var(--gb-green-700);
+  font-size: 1.5em;
+  font-weight: var(--gb-weight-heavy);
+  letter-spacing: var(--gb-tracking-heading);
+}
+
+.pj-roster-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5em, 1fr));
+  align-content: flex-start;
+  gap: 0.55em;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+}
+
+.pj-student {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.3em 0.9em 0.3em 0.3em;
+  border-radius: 999px;
+  background: var(--gb-paper-0);
+  box-shadow: var(--gb-shadow-sm);
+  overflow: hidden;
+  font-size: 1.05em;
+  font-weight: var(--gb-weight-bold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  animation: pj-join 600ms var(--gb-ease-spring) both;
+}
+
+.pj-student .gb-avatar {
+  width: 2em;
+  height: 2em;
+}
+
+.pj-student .gb-avatar svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* A full class still fits without scrolling. */
+.pj-roster-list[data-size="large"] {
+  grid-template-columns: repeat(auto-fill, minmax(8em, 1fr));
+  gap: 0.4em;
+  font-size: 0.85em;
+}
+
+@keyframes pj-join {
+  from {
+    opacity: 0;
+    translate: 0 0.8em;
+    scale: 0.6;
+  }
+}
+
+.pj-waiting {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  color: var(--gb-ink-500);
+  font-size: 1.15em;
+  font-weight: var(--gb-weight-bold);
+  text-align: center;
+}
+
+.pj-bob {
+  animation: pj-bob 2.4s ease-in-out infinite;
+}
+
+@keyframes pj-bob {
+  50% {
+    translate: 0 -0.35em;
+  }
+}
+
+.pj-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  padding: 0 4vw 2.5vw;
+}
+
+.pj-start.gb-button {
+  height: 2.6em;
+  padding: 0 1.6em;
+  font-size: 1.1em;
+}
+
+/* ------------------------------------------------------------------- live */
+
+.pj-live {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4vh;
+  padding: 2vw 6vw;
+  text-align: center;
+}
+
+.pj-clock {
+  margin: 0;
+  color: var(--gb-green-700);
+  font-size: clamp(96px, 16vw, 400px);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+}
+
+.pj-clock[data-text] {
+  font-size: clamp(56px, 7.5vw, 200px);
+  letter-spacing: var(--gb-tracking-display);
+  line-height: 1;
+}
+
+.pj-clock-label {
+  margin: 0;
+  color: var(--gb-ink-500);
+  font-size: 1.4em;
+  font-weight: var(--gb-weight-bold);
+}
+
+.pj-progress {
+  width: min(100%, 64em);
+}
+
+.pj-track {
+  position: relative;
+  height: clamp(28px, 4.2vw, 96px);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.85);
+  box-shadow:
+    inset 0 0 0 3px var(--gb-paper-0),
+    0 0.6em 2em rgb(27 111 79 / 0.12);
+}
+
+.pj-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  min-width: clamp(28px, 4.2vw, 96px);
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--gb-lime-400), var(--gb-green-400));
+  transition: width 900ms var(--gb-ease-out);
+}
+
+/* The creature that rides the front of the fill. */
+.pj-rider {
+  position: absolute;
+  top: 50%;
+  translate: -50% -58%;
+  transition: left 900ms var(--gb-ease-out);
+  filter: drop-shadow(0 0.25em 0.4em rgb(14 59 42 / 0.25));
+}
+
+.pj-rider svg {
+  width: clamp(56px, 7vw, 168px);
+  height: clamp(56px, 7vw, 168px);
+}
+
+.pj-ticks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.pj-ticks span {
+  position: absolute;
+  top: 22%;
+  bottom: 22%;
+  width: 3px;
+  border-radius: 2px;
+  background: rgb(14 59 42 / 0.12);
+}
+
+.pj-progress-caption {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1em;
+  color: var(--gb-green-800);
+  font-size: 1.3em;
+  font-weight: var(--gb-weight-heavy);
+}
+
+.pj-cheer {
+  margin: 0;
+  color: var(--gb-green-700);
+  font-size: 1.9em;
+  font-weight: var(--gb-weight-heavy);
+  letter-spacing: var(--gb-tracking-heading);
+  animation: pj-join 500ms var(--gb-ease-spring);
+}
+
+.pj-late {
+  color: var(--gb-ink-500);
+  font-size: 0.95em;
+  font-weight: var(--gb-weight-bold);
+}
+
+.pj-late strong {
+  color: var(--gb-green-700);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pj-student,
+  .pj-bob,
+  .pj-cheer {
+    animation: none;
+  }
+
+  .pj-fill,
+  .pj-rider {
+    transition: none;
+  }
+}
