@@ -1,5 +1,5 @@
 {
-  "id": "0e9d9204-14b4-493f-8a11-50cd4bdf6905",
+  "id": "b31dddba-c13f-41c1-b825-588175647097",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -1185,9 +1185,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "avatar": {
-          "name": "avatar",
-          "type": "text",
+        "avatar_id": {
+          "name": "avatar_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -1251,6 +1251,10 @@
         "students_name_key_not_empty": {
           "name": "students_name_key_not_empty",
           "value": "\"students\".\"name_key\" <> ''"
+        },
+        "students_avatar_id_nonnegative": {
+          "name": "students_avatar_id_nonnegative",
+          "value": "\"students\".\"avatar_id\" >= 0"
         }
       },
       "isRLSEnabled": false

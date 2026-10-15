@@ -30,7 +30,7 @@ export class InvalidName extends Data.TaggedError("InvalidName")<{
 export const joinSession = (input: {
   readonly joinCode: JoinCode
   readonly name: string
-  readonly pickAvatar: () => string
+  readonly pickAvatar: () => number
 }) =>
   Effect.gen(function* () {
     const displayName = cleanDisplayName(input.name)
@@ -56,7 +56,7 @@ export const joinSession = (input: {
 
         const [created] = yield* db
           .insert(students)
-          .values({ sessionId: session.id, displayName, nameKey, avatar: input.pickAvatar() })
+          .values({ sessionId: session.id, displayName, nameKey, avatarId: input.pickAvatar() })
           .onConflictDoNothing({ target: [students.sessionId, students.nameKey] })
           .returning()
         if (created !== undefined) return { student: created, resumed: false }

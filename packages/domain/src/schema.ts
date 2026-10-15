@@ -276,14 +276,15 @@ export const students = pgTable(
     displayName: text().notNull(),
     /** `normalizeName(displayName)`. Entering a name with the same key resumes this student. */
     nameKey: text().notNull(),
-    /** Avatar id from the set in `packages/ui`. */
-    avatar: text().notNull(),
+    /** Creature avatar id from `packages/ui` (0 to `CREATURE_COUNT - 1`). */
+    avatarId: integer().notNull(),
     createdAt: createdAt(),
     updatedAt: updatedAt()
   },
   (t) => [
     uniqueIndex().on(t.sessionId, t.nameKey),
-    check("students_name_key_not_empty", sql`${t.nameKey} <> ''`)
+    check("students_name_key_not_empty", sql`${t.nameKey} <> ''`),
+    check("students_avatar_id_nonnegative", sql`${t.avatarId} >= 0`)
   ]
 )
 

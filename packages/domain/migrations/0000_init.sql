@@ -143,10 +143,11 @@ CREATE TABLE "students" (
 	"session_id" uuid NOT NULL,
 	"display_name" text NOT NULL,
 	"name_key" text NOT NULL,
-	"avatar" text NOT NULL,
+	"avatar_id" integer NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "students_name_key_not_empty" CHECK ("students"."name_key" <> '')
+	CONSTRAINT "students_name_key_not_empty" CHECK ("students"."name_key" <> ''),
+	CONSTRAINT "students_avatar_id_nonnegative" CHECK ("students"."avatar_id" >= 0)
 );
 --> statement-breakpoint
 CREATE TABLE "submissions" (
