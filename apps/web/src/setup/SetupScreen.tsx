@@ -7,7 +7,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Draft, DraftProblem } from "../server/setup/draft";
 import type { Edit } from "../server/setup/edits";
-import { editDraft, sendChatMessage } from "../server/setup/fns";
+import { editDraft, getDraft, sendChatMessage } from "../server/setup/fns";
 import { ChatPanel } from "./ChatPanel";
 import { EditableText } from "./EditableText";
 import { LaunchDialog } from "./LaunchDialog";
@@ -90,6 +90,8 @@ export function SetupScreen({
   const latest = useRef(draft);
   const queue = useRef<Promise<void>>(Promise.resolve());
   const inFlight = useRef(0);
+  /** The last edit that ran failed; stays set until an edit saves. */
+  const failed = useRef(false);
 
   const applyEdits = (build: ReadonlyArray<Edit> | ((latest: Draft) => ReadonlyArray<Edit>)) => {
     inFlight.current++;
@@ -98,8 +100,19 @@ export function SetupScreen({
       const edits = typeof build === "function" ? build(latest.current) : build;
       const outcome = edits.length === 0 ? null : await runEdits(edits);
       inFlight.current--;
-      if (outcome === "failed") setSave("failed");
-      else if (inFlight.current === 0) setSave("saved");
+      if (outcome === "failed") {
+        failed.current = true;
+        // Show what is actually saved, so the screen never holds an edit the server lost.
+        const fresh = await getDraft({ data: { draftId: draft.id } }).catch(() => null);
+        if (fresh?._tag === "Ok") {
+          latest.current = fresh.value.draft;
+          setDraft(fresh.value.draft);
+        }
+      } else if (outcome === "saved") {
+        failed.current = false;
+      }
+      if (inFlight.current === 0) setSave(failed.current ? "failed" : "saved");
+      else setSave("saving");
     });
     return queue.current;
   };
@@ -150,9 +163,11 @@ export function SetupScreen({
 
   const sendChat = async (message: string) => {
     setPendingMessage(message);
-    const result = await sendChatMessage({ data: { draftId: draft.id, message } });
+    const result = await sendChatMessage({ data: { draftId: draft.id, message } }).catch(
+      () => null,
+    );
     setPendingMessage(null);
-    if (result._tag !== "Ok") {
+    if (result === null || result._tag !== "Ok") {
       toast({
         title: "The chat couldn't make that change",
         description: "Try again, or edit the problem directly.",

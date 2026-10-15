@@ -10,9 +10,11 @@ import { draftOwnerForRequest, saveDraftOwner } from "../../../server/setup/view
 export const Route = createFileRoute("/setup/template/$templateId")({
   server: {
     handlers: {
-      GET: async ({ params }) => {
+      GET: async ({ params, request }) => {
         const owner = draftOwnerForRequest();
-        const result = await run(startTemplateDraft(params.templateId, owner.id));
+        const result = await run(
+          startTemplateDraft(params.templateId, owner.id, new URL(request.url).origin),
+        );
         if (result._tag === "Ok") saveDraftOwner(owner);
         const location = result._tag === "Ok" ? `/setup/${result.value.draftId}` : "/#templates";
         return new Response(null, { status: 303, headers: { location } });
