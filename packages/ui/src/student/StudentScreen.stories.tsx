@@ -111,7 +111,7 @@ function StudentScreen({ start, gradeAfterMs }: ScreenProps) {
 
   const submitState: SubmitState = start.offline
     ? { _tag: "QueuedOffline" }
-    : phase._tag === "Submitting"
+    : phase._tag !== "Working"
       ? { _tag: "Submitting" }
       : isDocEmpty(doc)
         ? { _tag: "Empty" }

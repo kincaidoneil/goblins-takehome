@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { CreatureArt } from "../components/creatures";
 import type { GradeStatus } from "../components/grade";
 import { ScoreChip } from "../components/ScoreChip";
@@ -28,7 +28,8 @@ export interface SubmitTransitionProps {
 
 /**
  * The ~1.5 s moment between problems: a cheer about the effort first, the
- * score only if it is already in, then on to the next problem.
+ * score only if it is already in, then on to the next problem. Keep Submit
+ * disabled while it is up; the overlay blocks pointers but not the keyboard.
  */
 export function SubmitTransition({
   creatureId,
@@ -37,10 +38,14 @@ export function SubmitTransition({
   grade,
   onDone,
 }: SubmitTransitionProps) {
+  // The timer starts once, on mount: a new onDone (e.g. an inline arrow on a
+  // re-render when the grade arrives) must not restart it.
+  const onDoneRef = useRef(onDone);
+  onDoneRef.current = onDone;
   useEffect(() => {
-    const timer = window.setTimeout(onDone, TRANSITION_MS);
+    const timer = window.setTimeout(() => onDoneRef.current(), TRANSITION_MS);
     return () => window.clearTimeout(timer);
-  }, [onDone]);
+  }, []);
 
   const cheer = CHEERS[problemIndex % CHEERS.length];
   const graded =
