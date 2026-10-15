@@ -5,6 +5,8 @@ import { expect, test } from "../fixtures";
 test("landing page pitches, lists templates and rejects a wrong file", async ({ classroom }) => {
   const page = classroom.teacher;
   await page.goto("/");
+  // The drop zone's handlers attach on hydration; a file set before then is ignored.
+  await page.waitForLoadState("networkidle");
 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Grade your next test for you.");
   await expect(page.getByRole("button", { name: "Choose a file" })).toBeVisible();
