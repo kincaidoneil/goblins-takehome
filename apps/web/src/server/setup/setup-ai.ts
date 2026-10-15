@@ -18,7 +18,7 @@ import {
   ManagedRuntime,
   Option,
 } from "effect";
-import { toAppEdits, toSetupProblems } from "./chat-edits";
+import { cleanRubric, toAppEdits, toSetupProblems } from "./chat-edits";
 import { stubChat } from "./chat-stub";
 import type { Draft } from "./draft";
 import type { Edit } from "./edits";
@@ -84,7 +84,7 @@ const fromModel = (problem: Extract.ExtractedProblem): Option.Option<ExtractedPr
         diagramDescription: problem.diagramDescription,
         pageNumbers: [...problem.pageNumbers],
         gradingNotes: problem.gradingNotes,
-        rubric: [first, ...rest],
+        rubric: cleanRubric([first, ...rest]),
         dependsOn: [...problem.dependsOn],
       });
 };
