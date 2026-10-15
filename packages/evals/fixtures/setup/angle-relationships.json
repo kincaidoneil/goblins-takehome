@@ -1,0 +1,199 @@
+[
+ {
+  "label": "1",
+  "pages": [
+   1
+  ],
+  "text": "Angles \\(A\\) and \\(C\\) are supplementary. Find the measure of angle \\(C\\).",
+  "diagramDescription": "Two separate angle diagrams. Left: angle A at vertex A, formed by ray AE (up and slightly right) and ray AB (horizontal to the right). The angle is labeled 74°. Right: angle C at vertex C, formed by ray CF (up and slightly left) and ray CD (horizontal to the right). Angle C is drawn with an arc but has no measure given.",
+  "answerKey": "Angle C = 106°. Supplementary angles sum to 180°, so C = 180 − 74 = 106°. Check: 74 + 106 = 180.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: uses supplementary sum of 180° with A = 74° (e.g., 180 − 74)."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: answer: 106°."
+   }
+  ],
+  "gradingNotes": "Accept 106 with or without the degree symbol. Units do not matter by default.",
+  "dependsOn": []
+ },
+ {
+  "label": "2a",
+  "pages": [
+   1
+  ],
+  "text": "List two pairs of angles in square \\(CDFG\\) that are complementary.",
+  "diagramDescription": "Square CDFG with C at top-left, D at top-right, F at bottom-right, G at bottom-left. Point M lies on the right side DF. Segments CM and GM are drawn from C and G to M. The angle between CD and CM at C is 27°. At M, the angle between MC and MD (above M, toward the top right side) is 63°, and the angle between MG and MF (below M) is 64°. The angle between GF and GM at G is 26°. The square's corners are right angles (not marked).",
+  "answerKey": "Any two valid complementary pairs (each pair sums to 90°). Example 1: ∠DCM = 27° and ∠CMD = 63° (27 + 63 = 90). Example 2: ∠MGF = 26° and ∠CGM = 64° (26 + 64 = 90, since ∠CGF = 90°). Other valid pairs: ∠DCM = 27° and ∠MCG = 63° (since ∠DCG = 90°). Check: each pair sums to 90.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: names a first pair of complementary angles from the figure (e.g., ∠DCM and ∠CMD, or 27° and 63°)."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: names a second, different pair of complementary angles (e.g., ∠MGF and ∠CGM, or 26° and 64°)."
+   }
+  ],
+  "gradingNotes": "Accept any two different pairs whose measures sum to 90°. Angle names may be given with or without vertex-middle-vertex notation as long as the pair is clearly identified. A pair that repeats the same two angles counts once.",
+  "dependsOn": []
+ },
+ {
+  "label": "2b",
+  "pages": [
+   1
+  ],
+  "text": "Name three angles that sum to \\(180^\\circ\\).",
+  "diagramDescription": "Square CDFG with C at top-left, D at top-right, F at bottom-right, G at bottom-left. Point M lies on the right side DF. Segments CM and GM are drawn from C and G to M. The angle between CD and CM at C is 27°. At M, the angle between MC and MD is 63°, and the angle between MG and MF is 64°. The angle between GF and GM at G is 26°. The square's corners are right angles (not marked).",
+  "answerKey": "Any three angles of one triangle. Example: ∠DCM = 27°, ∠CMD = 63°, and ∠CDM = 90° (triangle CDM); 27 + 63 + 90 = 180. Another: ∠MCG = 63°, ∠CMG = 53°, ∠CGM = 64° (triangle CMG); 63 + 53 + 64 = 180.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: names three angles that form one triangle (e.g., ∠DCM, ∠CMD, ∠CDM)."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: the three angles' measures add to 180° (e.g., 27 + 63 + 90 = 180)."
+   }
+  ],
+  "gradingNotes": "Accept any valid set of three angles of one triangle, or any other three angles whose measures sum to 180° with correct values. Do not accept three angles that do not total 180°.",
+  "dependsOn": []
+ },
+ {
+  "label": "3",
+  "pages": [
+   2
+  ],
+  "text": "Two lines intersect. Find the value of \\(b\\) and \\(c\\).",
+  "diagramDescription": "Two straight lines crossing at one point. One line runs from upper-left to lower-right; the other runs from lower-left to upper-right. The angle on the left side of the crossing point, between the upper-left ray and the lower-left ray, is labeled b°. The angle on the right side, between the upper-right ray and the lower-right ray, is labeled 42°. The angle at the bottom of the crossing point, between the lower-left ray and the lower-right ray, is labeled c° (drawn with an arc).",
+  "answerKey": "b = 42 and c = 138. The left angle b and the right angle 42° are vertical angles, so they are equal: b = 42. The bottom angle c and the 42° angle form a straight line together: c = 180 − 42 = 138. Check: b + c = 42 + 138 = 180, which is consistent with b and c forming a straight line along one of the lines.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: b = 42, with reason that b and the 42° angle are vertical (equal) angles."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: c = 138, with reason that c and 42° are supplementary (sum to 180°)."
+   }
+  ],
+  "gradingNotes": "Accept b = 42 and c = 138 with or without degree symbols. Full credit requires the correct value for each; a student may give the reason in any clear form.",
+  "dependsOn": []
+ },
+ {
+  "label": "4",
+  "pages": [
+   2
+  ],
+  "text": "In this figure, angles \\(R\\) and \\(S\\) are complementary. Find the measure of angle \\(S\\).",
+  "diagramDescription": "Triangle QRS. Q is at the top left with a right angle marked (small square) between sides QR and QS. R is at the bottom left, with the angle at R labeled 62°. S is at the right, with its angle not given numerically.",
+  "answerKey": "Angle S = 28°. Complementary angles sum to 90°, so S = 90 − 62 = 28°. Check: triangle angles 90 + 62 + 28 = 180, which is consistent.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: uses complementary sum of 90° with R = 62° (e.g., 90 − 62)."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: answer: 28°."
+   }
+  ],
+  "gradingNotes": "Accept 28 with or without the degree symbol.",
+  "dependsOn": []
+ },
+ {
+  "label": "5",
+  "pages": [
+   2
+  ],
+  "text": "If two angles are both vertical and supplementary, can we determine the angles? Is it possible to be both vertical and complementary? If so, can you determine the angles? Explain how you know.",
+  "diagramDescription": null,
+  "answerKey": "Yes. Vertical angles are equal, and supplementary angles sum to 180°, so each angle is 180 ÷ 2 = 90°; both are right angles. Yes, it is possible to be both vertical and complementary. Vertical angles are equal, and complementary angles sum to 90°, so each angle is 90 ÷ 2 = 45°; the angles can be determined as 45° each. Sample full-credit answer: Vertical angles are congruent. If x + x = 180, then x = 90 (both right angles). If x + x = 90, then x = 45 (both 45°). So in both cases the angles are determined.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: states that vertical + supplementary angles are equal with sum 180, so each is 90° (both right angles), and the angles can be determined."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: states that vertical + complementary is possible, since the equal angles can each be 45°, and that the angles can be determined."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: explanation uses that vertical angles are equal and the sum condition (e.g., x + x = 180 or x + x = 90)."
+   }
+  ],
+  "gradingNotes": "Full credit needs both the yes/no answers and a reason based on vertical angles being equal. Do not require a particular wording. A student who says it is not possible to be both vertical and complementary should not get the second point.",
+  "dependsOn": []
+ },
+ {
+  "label": "6",
+  "pages": [
+   3
+  ],
+  "text": "Segments \\(AB\\), \\(EF\\), and \\(CD\\) intersect at point \\(C\\), and angle \\(ACD\\) is a right angle. Find the value of \\(g\\).",
+  "diagramDescription": "Segments AB and EF cross at point C. AB is nearly horizontal with A on the left and B on the right. EF runs from lower-left F to upper-right E through C. Segment CD goes straight up from C, with D above C. A right angle is marked at C between CA and CD. The angle between CD and CE is labeled 53°. The angle between CE and CB (below and to the right of CE) is labeled g°.",
+  "answerKey": "g = 37. Angle ACD is 90°, so angle DCB = 180 − 90 = 90° because A, C, B form a straight line. Angle DCB = 53 + g, so g = 90 − 53 = 37. Check: 90 + 53 + 37 = 180.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: finds angle DCB = 90° (supplementary to ACD = 90°, or 180 − 90)."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: answer: g = 37, using 53 + g = 90 (or equivalent)."
+   }
+  ],
+  "gradingNotes": "Accept 37 with or without the degree symbol.",
+  "dependsOn": []
+ },
+ {
+  "label": "7",
+  "pages": [
+   3
+  ],
+  "text": "Segments \\(AB\\), \\(DC\\), and \\(EC\\) intersect at point \\(C\\). Angle \\(DCE\\) measures \\(148^\\circ\\). Find the value of \\(x\\).",
+  "diagramDescription": "Horizontal segment AB with A on the left, B on the right, and point C on AB. Segment CD goes down-left from C to D, and segment CE goes down-right from C to E. The angle DCE at C, measured below the line through the bottom of C, is labeled 148° (drawn with an arc). The angle between CA (the left part of AB) and CD is labeled x°, and the angle between CE and CB (the right part of AB) is labeled x°.",
+  "answerKey": "x = 16. Angles ACD, DCE, and ECB together form a straight angle along AB: x + 148 + x = 180, so 2x = 32 and x = 16. Check: 16 + 148 + 16 = 180.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: sets up x + 148 + x = 180 (or 2x = 32), using the straight angle along AB."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: answer: x = 16."
+   }
+  ],
+  "gradingNotes": "Accept 16 with or without the degree symbol.",
+  "dependsOn": []
+ },
+ {
+  "label": "8",
+  "pages": [
+   3
+  ],
+  "text": "Line \\(\\ell\\) is perpendicular to line \\(m\\). Find the value of \\(x\\) and \\(w\\).",
+  "diagramDescription": "Line l is vertical and line m is horizontal, crossing at point O; a right angle is marked at O. Line m extends to the left and right, with the label m near the right end. Line l extends upward from O. Three rays go from O: one steep ray up and to the right, between l and a diagonal ray; the diagonal ray goes up and to the right from O; and that diagonal line continues straight through O down and to the left. The angle between line l (upward) and the steep ray is labeled 19°. The angle between the steep ray and the diagonal ray (up-right) is labeled x°. The angle between the diagonal ray (up-right) and the right part of m is labeled w°. The angle below O, between the down-left part of the diagonal line and the right part of m, is labeled 138°.",
+  "answerKey": "w = 42 and x = 29. The diagonal is a straight line through O, so w + 138 = 180 and w = 42. The right angle at O is split into 19°, x°, and w°: 19 + x + 42 = 90, so x = 29. Check: 19 + 29 + 42 = 90.",
+  "rubric": [
+   {
+    "points": 1,
+    "text": "1 pt: w = 42, from w + 138 = 180 (the diagonal is a straight line through O)."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: sets up 19 + x + w = 90 (the right angle between l and m is split into three parts), or equivalent."
+   },
+   {
+    "points": 1,
+    "text": "1 pt: answer: x = 29 (follow-through from the student's w: x = 90 − 19 − w)."
+   }
+  ],
+  "gradingNotes": "Accept x = 29 and w = 42 with or without degree symbols. If the student's w is wrong, give the x point for a correct x computed as 90 − 19 − (their w) with correct setup.",
+  "dependsOn": []
+ }
+]
