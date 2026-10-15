@@ -17,7 +17,7 @@ export const extractInBackground = (
   draftId: string,
   pages: ReadonlyArray<{ pageNumber: number; imageUrl: string }>,
 ) =>
-  extractWorksheet(pages).pipe(
+  extractWorksheet(draftId, pages).pipe(
     Effect.flatMap((extracted) => saveExtracted(draftId, extracted)),
     Effect.catchTags({
       NotMath: (e) => markExtractionFailed(draftId, e.message),
