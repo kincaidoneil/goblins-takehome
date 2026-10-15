@@ -65,6 +65,17 @@ const replies: Record<string, Reply> = {
       { error: { code: 402, message: "spend limit in flight" } },
       { "retry-after": "3" },
     ),
+  "limited-mid-answer": (_req, res) =>
+    json(res, 200, {
+      ...ok("partial"),
+      choices: [
+        {
+          finish_reason: "error",
+          message: { role: "assistant", content: "partial" },
+          error: { code: 429, message: "upstream rate limit" },
+        },
+      ],
+    }),
   "cut-off": (_req, res) => json(res, 200, ok("partial", "length")),
   empty: (_req, res) => json(res, 200, ok(null)),
   "no-cost": (_req, res) =>
@@ -184,6 +195,11 @@ describe("OpenRouter client", () => {
         retryAfterMs: 3000,
       });
       expect(tagOf(yield* run("cut-off"))).toMatchObject({ truncated: true });
+      expect(tagOf(yield* run("limited-mid-answer"))).toMatchObject({
+        _tag: "RateLimited",
+        mayBeBilled: true,
+        usage: { costUsd: 0.00042 },
+      });
       expect(tagOf(yield* run("cut-off"))).toMatchObject({
         _tag: "BadResponse",
         usage: { promptTokens: 1200, completionTokens: 80, costUsd: 0.00042 },
@@ -290,6 +306,16 @@ describe("OpenRouter reasoning and spend cap", () => {
       yield* Effect.either(counting.complete(request("cut-off")));
       yield* Effect.either(counting.complete(request("error-mid-answer")));
       expect(added).toEqual([0.00042, 0.00042, 0.00042]);
+    }),
+  );
+});
+
+describe("OpenRouter per-request timeout", () => {
+  it.live("lets a request wait longer than the client's default", () =>
+    Effect.gen(function* () {
+      // The client defaults to 500 ms; "slow" answers after 2 s.
+      const result = yield* client().complete({ ...request("slow"), timeoutMs: 5_000 });
+      expect(result.text).toBe("late");
     }),
   );
 });

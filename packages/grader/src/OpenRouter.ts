@@ -20,7 +20,7 @@ import * as SpendGuard from "./SpendGuard.ts";
 
 export interface OpenRouterConfig {
   readonly apiKey: Redacted.Redacted;
-  /** Deadline for one call, including reading the body. */
+  /** Default deadline for one call, including reading the body. A request can override it. */
   readonly timeoutMs: number;
   readonly baseUrl: string;
   /** Shown on OpenRouter's dashboard next to each call. */
@@ -151,7 +151,7 @@ const parseCompletion = (
           new BadResponse({ message: `Unrecognized response body: ${text.slice(0, 200)}` }),
         onSome: (body): RateLimited | ProviderError =>
           body.error.code === 429
-            ? new RateLimited({})
+            ? new RateLimited({ mayBeBilled: true })
             : new ProviderError({
                 status: typeof body.error.code === "number" ? body.error.code : 502,
                 message: body.error.message,
@@ -176,7 +176,7 @@ const parseCompletion = (
     const code = choice.error?.code;
     return Either.left(
       code === 429
-        ? new RateLimited({})
+        ? new RateLimited({ mayBeBilled: true, ...(usage === undefined ? {} : { usage }) })
         : new ProviderError({
             status: typeof code === "number" ? code : 502,
             message: choice.error?.message ?? "The provider failed partway through the answer",
@@ -220,8 +220,8 @@ export const make = (
         catch: (cause) => new ProviderError({ status: 0, message: String(cause) }),
       }).pipe(
         Effect.timeoutFail({
-          duration: config.timeoutMs,
-          onTimeout: () => new Timeout({ afterMs: config.timeoutMs }),
+          duration: request.timeoutMs ?? config.timeoutMs,
+          onTimeout: () => new Timeout({ afterMs: request.timeoutMs ?? config.timeoutMs }),
         }),
       );
       if (response.status !== 200) {
@@ -231,7 +231,9 @@ export const make = (
       // Count every reported cost toward the cap, including unusable answers.
       const usage = Either.match(parsed, {
         onLeft: (e) =>
-          e._tag === "BadResponse" || e._tag === "ProviderError" ? e.usage : undefined,
+          e._tag === "BadResponse" || e._tag === "ProviderError" || e._tag === "RateLimited"
+            ? e.usage
+            : undefined,
         onRight: (c) => c.usage,
       });
       if (usage !== undefined) yield* guard.add(usage.costUsd);

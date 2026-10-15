@@ -6,7 +6,14 @@
 import { Context, type Effect, Schema } from "effect";
 
 /** What a call is for. The usage report maps these onto the PRD's budget lines. */
-export type CallPurpose = "grade" | "extract" | "rubric-chat" | "eval" | "calibration";
+export type CallPurpose =
+  | "grade"
+  | "extract"
+  | "rubric-chat"
+  /** Grouping graders' reasons into common mistakes for the class report. */
+  | "report"
+  | "eval"
+  | "calibration";
 
 /** Metadata recorded in the call log next to each call. Not sent to the provider. */
 export interface CallTag {
@@ -36,6 +43,11 @@ export interface CompletionRequest {
   readonly tag: CallTag;
   readonly maxTokens?: number;
   readonly temperature?: number;
+  /**
+   * Deadline for this call, overriding the client's default (45 s for OpenRouter).
+   * Extraction of a multi-page worksheet can take over a minute.
+   */
+  readonly timeoutMs?: number;
   /**
    * How hard a reasoning model may think. Cheap models often reason by default, and
    * reasoning tokens are billed, so graders usually set this low. Sent as
@@ -67,6 +79,18 @@ export interface Completion {
 /** HTTP 429, or the provider said it is out of capacity. Retry after the hint if there is one. */
 export class RateLimited extends Schema.TaggedError<RateLimited>()("RateLimited", {
   retryAfterMs: Schema.optional(Schema.Number),
+  /**
+   * The limit hit after the model started work (OpenRouter's 429 inside a 200 body),
+   * so the call may have been billed. With `usage`, the bill is known.
+   */
+  mayBeBilled: Schema.optional(Schema.Boolean),
+  usage: Schema.optional(
+    Schema.Struct({
+      promptTokens: Schema.Number,
+      completionTokens: Schema.Number,
+      costUsd: Schema.Number,
+    }),
+  ),
 }) {}
 
 /** No complete response within the deadline. The call may still have been billed. */

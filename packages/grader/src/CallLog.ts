@@ -68,7 +68,12 @@ const failureFields = (
 ): Pick<CallLogEntry, "status" | "statusCode" | "cost" | "error"> => {
   switch (error._tag) {
     case "RateLimited":
-      return { status: "rate_limited", statusCode: 429, cost: NOT_BILLED, error: "rate limited" };
+      return {
+        status: "rate_limited",
+        statusCode: 429,
+        cost: error.usage ?? (error.mayBeBilled === true ? null : NOT_BILLED),
+        error: "rate limited",
+      };
     case "Timeout":
       // The provider may have finished and billed the call after we stopped waiting.
       return { status: "timeout", cost: null, error: `no response after ${error.afterMs} ms` };
