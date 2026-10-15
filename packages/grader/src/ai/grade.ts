@@ -142,11 +142,16 @@ export const replyJsonSchema = (rubric: ReadonlyArray<RubricLine>) => ({
 
 const Reply = Schema.parseJson(
   Schema.Struct({
-    read: Schema.String,
+    // What the teacher sees to check the grade, so it can't be blank.
+    read: Schema.NonEmptyTrimmedString,
     unclearMarks: Schema.String,
     conflictingAnswers: Schema.String,
     lines: Schema.Array(
-      Schema.Struct({ lineId: Schema.String, evidence: Schema.String, points: Schema.Int }),
+      Schema.Struct({
+        lineId: Schema.String,
+        evidence: Schema.NonEmptyTrimmedString,
+        points: Schema.Int,
+      }),
     ),
     reason: Schema.String,
     needsTeacher: Schema.Boolean,

@@ -6,7 +6,7 @@
  * report groups students by which rubric lines they lost points on, which needs no model.
  */
 import { Schema } from "effect";
-import type { Miss, ProblemStats, ReportStudent, RubricLine } from "./model";
+import type { ProblemStats, ReportStudent, RubricLine } from "./model";
 
 /** Students who made the same mistake. */
 export interface MistakeGroup {
@@ -85,27 +85,6 @@ export function fromModel(stats: ProblemStats, grouping: ModelGrouping): Problem
     source: "model",
     groups: [...groups.sort((a, b) => b.studentIds.length - a.studentIds.length), ...rest],
   };
-}
-
-/** The prompt for one weak problem. Student names never leave the server; ids stand in. */
-export function groupingPrompt(stats: ProblemStats): string {
-  const lines = stats.misses.map(
-    (m: Miss) =>
-      `- ${m.student.id}: ${m.points}/${m.maxPoints}. ${m.reason ?? "No reason recorded."}`,
-  );
-  return [
-    "A math teacher is reading a report on a worksheet their class just finished.",
-    `Problem ${stats.problem.label}: ${stats.problem.text}`,
-    "",
-    "Each line below is one student who lost points, with the grader's reason:",
-    ...lines,
-    "",
-    "Group the students by the mistake they made. Use at most 4 groups, largest first.",
-    "Describe each mistake in one short, specific sentence a teacher would say to a colleague,",
-    "naming the math (for example: “Distributed the minus sign to the 5 but not the 9y.”).",
-    "Put each student in exactly one group. Also name the skill the problem practices in at",
-    "most six words (for example: “Distributing a negative sign”).",
-  ].join("\n");
 }
 
 /** A mistake group with its students looked up, for display. */

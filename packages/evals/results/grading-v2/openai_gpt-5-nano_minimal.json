@@ -1,0 +1,4204 @@
+{
+ "spec": "openai/gpt-5-nano@minimal",
+ "limit": null,
+ "summary": {
+  "cases": 230,
+  "exact": 83,
+  "lineAgreement": 0.7530864197530864,
+  "meanAbsError": 0.5673758865248227,
+  "flagged": 27,
+  "autoCorrect": 72,
+  "autoUnder": 16,
+  "autoOver": 26,
+  "flagRecall": {
+   "should": 12,
+   "did": 3
+  },
+  "falseFlags": {
+   "shouldNot": 110,
+   "did": 19
+  },
+  "failed": 89,
+  "meanCostUsd": 0.0003618151304347827,
+  "p50LatencyMs": 3204,
+  "p95LatencyMs": 7888,
+  "meanCompletionTokens": 245.4468085106383
+ },
+ "outcomes": [
+  {
+   "_tag": "Graded",
+   "caseId": "ar-1-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Angles A and C are supplementary. Find the measure of angle C.\nDiagram (as described for you; the student sees the drawing): Two separate angles side by side. Angle EAB has vertex A, a horizontal ray AB to the right and a ray AE up and slightly right; it is labeled 74°. Angle FCD has vertex C, a horizontal ray CD to the right and a ray CF up and slightly left, so it is obtuse; it is marked with an arc but no measure.\nAnswer key (the student never saw this): 106° (also accept: 106; m∠C = 106°). Worked solution: Supplementary angles sum to 180°, so m∠C = 180° − 74° = 106°.\nRubric (2 points):\n- L1 (up to 1 point): Uses that supplementary angles sum to 180°: 180 − 74.\n- L2 (up to 1 point): m∠C = 106°.\nTeacher's grading notes (rules): Accept 106 with or without the degree sign. A correct answer with no work earns both points: the problem does not ask for reasoning.",
+   "reason": "Correct use of supplementary angle concept and final value; no extra steps needed beyond the written work.",
+   "costUsd": 0.00024265,
+   "latencyMs": 4511,
+   "attempts": 1,
+   "promptTokens": 2045,
+   "completionTokens": 351
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-1-answer-only",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "C = 106°",
+   "reason": "Correct answer shown; no work demonstrating understanding of supplementary angles was provided.",
+   "costUsd": 0.00014185,
+   "latencyMs": 2474,
+   "attempts": 1,
+   "promptTokens": 2045,
+   "completionTokens": 99
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-1-used-90",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00056355,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-1-borrow-slip",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "A + C = 180\nC = 180 - 74\n",
+   "reason": "Correct use of supplementary angles and correct calculation for C = 106, though the final numeric value is shown as 116 on the board in the left box (likely a miswriting).",
+   "costUsd": 0.00016825,
+   "latencyMs": 3635,
+   "attempts": 1,
+   "promptTokens": 2045,
+   "completionTokens": 165
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-1-overwritten-digit",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "A + C = 180\n180 - 74\n\n⃝ C = 106",
+   "reason": "Student correctly used supplementary angles and computed C as 106; however, the final circled answer is shown as C = 106 without full explanation on L1, but the method is present.",
+   "costUsd": 0.00015945,
+   "latencyMs": 3273,
+   "attempts": 1,
+   "promptTokens": 2045,
+   "completionTokens": 143
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2a-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "pair 1: ∠DCM and ∠DMC\n27 + 63 = 90\n\npair 2: ∠MGF and ∠GMF\n26 + 64 = 90",
+   "reason": "Two valid 90° pairs identified; angles named with vertex in middle.",
+   "costUsd": 0.00013552,
+   "latencyMs": 3768,
+   "attempts": 1,
+   "promptTokens": 2256,
+   "completionTokens": 172
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2a-corner-pairs",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 2a: List two pairs of angles in square CDFG that are complementary.\nDiagram (as described for you; the student sees the drawing): Square CDFG with C top left, D top right, F bottom right and G bottom left. Point M is on side DF. Segments CM and GM are drawn. Labeled angles: angle DCM = 27°, angle DMC = 63°, angle GMF = 64°, angle MGF = 26°. The square's corners are right angles. Unlabeled but derivable: angle MCG = 63°, angle CGM = 64°, angle CMG = 53°.\nAnswer key (the student never saw this): Sample answer: Angle DCM (27°) and angle DMC (63°); angle GMF (64°) and angle MGF (26°). Must include: Names two different pairs of angles from the figure; Each pair sums to 90°. Valid pairs: DCM & DMC, DCM & MCG, MGF & GMF, MGF & CGM. Worked solution: 27 + 63 = 90 and 26 + 64 = 90. Because each corner of the square is 90°, angle MCG = 90 − 27 = 63° and angle CGM = 90 − 26 = 64°, which give two more valid pairs.",
+   "reason": "Student listed two valid angle pairs that sum to 90° but wrote only two lines; need explicit angle names matching the pairs.",
+   "costUsd": 0.0002832,
+   "latencyMs": 5469,
+   "attempts": 1,
+   "promptTokens": 2256,
+   "completionTokens": 426
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2a-measures-only",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear angle naming; both lines need named angle pairs or clear mapping to a 90° sum.",
+   "read": "27° and 63°\n26° and 64°\nthey both add up to 90",
+   "reason": "Only two lines show angle measures with no explicit angle names; cannot confirm two distinct complementary pairs by naming angles.",
+   "costUsd": 0.0001712,
+   "latencyMs": 3351,
+   "attempts": 1,
+   "promptTokens": 2256,
+   "completionTokens": 146
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2a-wrong-vertex",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "∠CDM (27) + ∠CMD (63) = 90\n∠GMF (64) + ∠MGF (26) = 90",
+   "reason": "Both pairs sum to 90° and use labeled angles from the figure.",
+   "costUsd": 0.00012872,
+   "latencyMs": 2344,
+   "attempts": 1,
+   "promptTokens": 2256,
+   "completionTokens": 155
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2a-used-180",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "complementary = 180\n\n∠D and ∠F (90 + 90)\n∠C and ∠G (90 + 90)",
+   "reason": "Two valid complementary pairs named; angles labeled correctly with a vertex in the middle.",
+   "costUsd": 0.0001712,
+   "latencyMs": 2489,
+   "attempts": 1,
+   "promptTokens": 2256,
+   "completionTokens": 146
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-2b-straight-angle",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005736000000000001,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2b-triangle",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "triangle CDM\n∠DCM, ∠CDM, ∠DMC\n27 + 90 + 63 = 180",
+   "reason": "Correct identification of three angles in triangle CDM summing to 180; but some angles listed earlier (DMC etc.) rely on given diagram angles rather than explicit values on board.",
+   "costUsd": 0.0001692,
+   "latencyMs": 2114,
+   "attempts": 1,
+   "promptTokens": 2184,
+   "completionTokens": 150
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2b-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no work)",
+   "reason": "No written work to assess for problem 2b.",
+   "costUsd": 0.000144,
+   "latencyMs": 1179,
+   "attempts": 1,
+   "promptTokens": 2184,
+   "completionTokens": 87
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-2b-measures-only",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005124,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-2b-wrong-vertex",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "∠DMC + ∠CMG + ∠MGF = 180\n\n63 + 53 + 64 = 180",
+   "reason": "Correct set of three angles summing to 180°, though order could vary; values used match given/derivable measures.",
+   "costUsd": 0.0001596,
+   "latencyMs": 2232,
+   "attempts": 1,
+   "promptTokens": 2184,
+   "completionTokens": 126
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-3-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "b = 42 (vertical angles)\nc + 42 = 180\nc = 180 - 42\nc = 138\n\nb = 42, c = 138",
+   "reason": "Correct: b is 42 as a vertical angle, c is 138 as supplementary to 42.",
+   "costUsd": 0.0001593,
+   "latencyMs": 2584,
+   "attempts": 1,
+   "promptTokens": 2026,
+   "completionTokens": 145
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-3-c-complementary",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0004875,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-3-adjacent-as-vertical",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005547,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-3-crossed-out-messy",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005151,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-3-two-answers",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "b = 42\n\nc = 180 - 42 = 138\n\nor c = 90 - 42 = 48",
+   "reason": "Correct: b is vertical to 42; c is supplementary to 42. Minor extra/alternative expression for c (48) is incorrect context.",
+   "costUsd": 0.0001581,
+   "latencyMs": 2974,
+   "attempts": 1,
+   "promptTokens": 2026,
+   "completionTokens": 142
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-4-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0004722,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-4-answer-only",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "L1: ⟂ (no) \nL2: ∠S = 28°",
+   "reason": "Student wrote only the final answer; no work shown to justify 28°.",
+   "costUsd": 0.000155,
+   "latencyMs": 3881,
+   "attempts": 1,
+   "promptTokens": 1988,
+   "completionTokens": 139
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-4-used-180",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "R + S = 180\nS = 180 - 62\n\n[S = 118°]",
+   "reason": "Student used supplementary sum (180) instead of complementary (90); wrote incorrect S = 118°.",
+   "costUsd": 0.0001638,
+   "latencyMs": 2922,
+   "attempts": 1,
+   "promptTokens": 1988,
+   "completionTokens": 161
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-4-triangle-sum",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005058,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-4-subtraction-slip",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Two inconsistent final values (38° vs 28°) need clarification; confirm actual target value for ∠S and whether 28° was intended.",
+   "read": "Problem 4: In this figure, angles \\(R\\) and \\(S\\) are complementary. Find the measure of angle \\(S\\).\nDiagram (as described for you; the student sees the drawing): Triangle QRS with a right angle at Q (top left). Angle R (bottom left) is labeled 62°. Angle S (right) is unlabeled.\nAnswer key (the student never saw this): 28° (also accept: 28; m∠S = 28°). Worked solution: Complementary angles sum to 90°, so m∠S = 90° − 62° = 28°.\nRubric (2 points):\n- L1 (up to 1 point): Uses that complementary angles sum to 90°: 90 − 62.\n- L2 (up to 1 point): m∠S = 28°.\nTeacher's grading notes (rules): A correct answer with no work earns both points.The student's whiteboard for 4: [image description]",
+   "reason": "The student wrote 38° from 90−62 and circled 38°, but the drawn angle label shows 38° at S, not 28°. The correct result is 28°.",
+   "costUsd": 0.0002534,
+   "latencyMs": 6137,
+   "attempts": 1,
+   "promptTokens": 1988,
+   "completionTokens": 385
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-4-overwritten-digit",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "9o - 62 = 3? \nS = 3?8",
+   "reason": "No clear use of complementary angles or correct numbers; miswritten equation and wrong final value.",
+   "costUsd": 0.0001474,
+   "latencyMs": 3094,
+   "attempts": 1,
+   "promptTokens": 1988,
+   "completionTokens": 120
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-5-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00062475,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-5-no-explanation",
+   "error": "bad response: Grade reply did not fit the rubric: line L3 was not scored",
+   "costUsd": 0.0005071499999999999,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-5-complementary-impossible",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Vertical angles are the same size.\nIf they are supplementary they are both 90\nbecause 90 + 90 = 180\n\nNo, they can't be complementary.\nComplementary angles have to be next to\neach other to make a right angle\nand vertical angles are across.",
+   "reason": "Student correctly stated vertical angles are equal and that supplementary vertical angles are both 90°, but incorrectly claimed they can’t be complementary.",
+   "costUsd": 0.00019105,
+   "latencyMs": 3223,
+   "attempts": 1,
+   "promptTokens": 2069,
+   "completionTokens": 219
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-5-idk",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 5: If two angles are both vertical and supplementary, can we determine the angles? Is it possible to be both vertical and complementary? If so, can you determine the angles? Explain how you know.\nAnswer key (the student never saw this): Sample answer: Yes. Vertical angles are equal, so if they are also supplementary each is 180 ÷ 2 = 90°. Yes, they can be vertical and complementary: then each is 90 ÷ 2 = 45°. Must include: Uses that vertical angles have equal measures; Vertical and supplementary: both angles are 90°; Vertical and complementary is possible: both angles are 45°. Worked solution: Let each angle be x, since vertical angles are equal. Supplementary: 2x = 180, x = 90. Complementary: 2x = 90, x = 45.\nThe student's whiteboard for 5:  (image shows) idk",
+   "reason": "Board shows only 'idk' with no work, so no points earned.",
+   "costUsd": 0.00022825,
+   "latencyMs": 3088,
+   "attempts": 1,
+   "promptTokens": 2069,
+   "completionTokens": 312
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-5-forgot-halve",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "vertical = same angle\n\napplementary -> yes they are 180\n\ncomplementary -> yes they are 90",
+   "reason": "Student identifies vertical angles are equal and that supplementary gives 90 and complementary gives 90, but wording shows typos and mix-up 'applementary' and incorrect inference may be read.",
+   "costUsd": 0.00017105,
+   "latencyMs": 2271,
+   "attempts": 1,
+   "promptTokens": 2069,
+   "completionTokens": 169
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-5-drawings-only",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear interpretation of L3; potential mixed messages on complementary case; check if 45°+45° equals 90 is shown clearly",
+   "read": "Problem 5: If two angles are both vertical and supplementary, can we determine the angles? Is it possible to be both vertical and complementary? If so, can you determine the angles? Explain how you know.\nAnswer key (the student never saw this): Sample answer: Yes. Vertical angles are equal, so if they are also supplementary each is 180 ÷ 2 = 90°. Yes, they can be vertical and complementary: then each is 90 ÷ 2 = 45°. Must include: Uses that vertical angles have equal measures; Vertical and supplementary: both angles are 90°; Vertical and complementary is possible: both angles are 45°. Worked solution: Let each angle be x, since vertical angles are equal. Supplementary: 2x = 180, x = 90. Complementary: 2x = 90, x = 45.\nRubric (3 points):\n- L1 (up to 1 point): Uses that vertical angles are equal.\n- L2 (up to 1 point): Vertical and supplementary: yes, both angles are 90°.\n- L3 (up to 1 point): Vertical and complementary is possible: both angles are 45°.\nTeacher's grading notes (rules): L1 can be shown by writing x and x, or by saying the angles are equal or the same.The student's whiteboard for 5:  (image)",
+   "reason": "L1 is shown by equal right angles; L2 is shown with 45-45 vertical pair; L3 not clearly shown (no 45° being complementary described)",
+   "costUsd": 0.00030625,
+   "latencyMs": 4709,
+   "attempts": 1,
+   "promptTokens": 2069,
+   "completionTokens": 507
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-6-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005409,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-6-answer-only",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "g = 37°",
+   "reason": "Work shows g = 37°, but no explicit setup of 53° + g = 90° is written.",
+   "costUsd": 0.0001451,
+   "latencyMs": 3121,
+   "attempts": 1,
+   "promptTokens": 2078,
+   "completionTokens": 103
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-6-used-180",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005337,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-6-straight-line",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "g = 37? (note: the whiteboard shows working)  A to B is a line = 180  90 + 53 + g = 180  143 + g = 180  g = 37",
+   "reason": "Correct setup and final value; both lines earned.",
+   "costUsd": 0.0001599,
+   "latencyMs": 3693,
+   "attempts": 1,
+   "promptTokens": 2078,
+   "completionTokens": 140
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-6-copied-problem",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "AB, EF, CD intersect at C\nACD is a right angle\n\ng = ?",
+   "reason": "Right: DCB is 90° via A-C-B line; g from 53° given equals 37°.",
+   "costUsd": 0.0001531,
+   "latencyMs": 3533,
+   "attempts": 1,
+   "promptTokens": 2078,
+   "completionTokens": 123
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-7-messy-diagram",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 7: Segments AB, DC, and EC intersect at point C. Angle DCE measures 148°. Find the value of x.\nDiagram (as described for you; the student sees the drawing): Horizontal segment AB with C between A and B. Segments CD and CE go down from C, to D on the lower left and E on the lower right. Angle ACD is labeled x°, angle DCE is labeled 148°, and angle ECB is labeled x°.\nAnswer key (the student never saw this): x = 16 (also accept: 16; 16°; x = 16°). Worked solution: The three angles make the straight angle ACB: x + 148 + x = 180, so 2x = 32 and x = 16.\nRubric (2 points):\n- L1 (up to 1 point): Sets up x + 148 + x = 180, or 2x = 32, or (180 − 148) ÷ 2.\n- L2 (up to 1 point): x = 16.\nTeacher's grading notes (rules): A correct answer with no work earns both points.The student's whiteboard for 7:",
+   "reason": "L1 shows the setup; L2 shows the final value x = 16. Whiteboard has correct steps and final answer.",
+   "costUsd": 0.00024965,
+   "latencyMs": 5631,
+   "attempts": 1,
+   "promptTokens": 2049,
+   "completionTokens": 368
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-7-halve-difference",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "A to B is a straight line\n180 - 148 = 32\n2 x's share the 32\n32 ÷ 2 = 16\n\n[x = 16]",
+   "reason": "Correct setup and solution, though the diagram text is informal; both lines show x = 16.",
+   "costUsd": 0.00016925,
+   "latencyMs": 2870,
+   "attempts": 1,
+   "promptTokens": 2049,
+   "completionTokens": 167
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-7-forgot-second-x",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00048615,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-7-answer-only",
+   "error": "bad response: Grade reply did not fit the rubric: line L1 got 2 of 1",
+   "costUsd": 0.00045374999999999994,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-7-borrow-slip",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00058815,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-8-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0006103500000000001,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-8-w-from-right-angle",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00063795,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-8-x-used-180",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "w = 180 - 138 = 42\n\n19 + x + 42 = 180\n\nx = 180 - 61",
+   "reason": "Correct w from straight angle, but line 2 uses 180 instead of 90 for the right angle; x is not found correctly.",
+   "costUsd": 0.00017585,
+   "latencyMs": 2259,
+   "attempts": 1,
+   "promptTokens": 2181,
+   "completionTokens": 167
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "ar-8-borrow-slip",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00058995,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-8-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no text on board)",
+   "reason": "No work shown on the board to evaluate.",
+   "costUsd": 0.00015425,
+   "latencyMs": 1716,
+   "attempts": 1,
+   "promptTokens": 2181,
+   "completionTokens": 113
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "ar-8-overwritten-digit",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "w = 180 - 138 = 42\n\nx = 90 - 19 - 42\n\nx = 29",
+   "reason": "Correct use of w from supplementary angle, correct equation for x, and correct final value.",
+   "costUsd": 0.00017025,
+   "latencyMs": 1969,
+   "attempts": 1,
+   "promptTokens": 2181,
+   "completionTokens": 153
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-1-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00056595,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-1-distribute-first-term",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00058875,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-1-moved-without-sign",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00059955,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-1-unsimplified-messy",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00059715,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-1-answer-only",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear formatting; if - - 3 is meant as -4/3, still L1 missing distribution.",
+   "read": "x = - -  3",
+   "reason": "Only a circled answer with no distribution is shown; L1 requires the distribution 3x − 12 = 12x.",
+   "costUsd": 0.00015265,
+   "latencyMs": 2313,
+   "attempts": 1,
+   "promptTokens": 1989,
+   "completionTokens": 133
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-1-divide-by-3",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00054675,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-2-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "2(x+5) = 3x+1\n2x + 10 = 3x + 1\n10 = x + 1\nx = 9\n\n3y - 4 = 6 - 2y\n5y - 4 = 6\n5y = 10\ny = 2\n\n3(n+2) = 9(6-n)\n3n + 6 = 54 - 9n\n12n + 6 = 54\n12n = 48\nn = 4",
+   "reason": "x and y show correct steps and values; n's work has an incorrect intermediate line but final is correct.",
+   "costUsd": 0.00023,
+   "latencyMs": 4909,
+   "attempts": 1,
+   "promptTokens": 2040,
+   "completionTokens": 320
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-2-answer-only",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "x = 9\n\ny = 2\n\nn = 4",
+   "reason": "No work shown for any line, so zero on each line per rubric; the numbers match but lack of intermediate steps fails requirement.",
+   "costUsd": 0.0001564,
+   "latencyMs": 2345,
+   "attempts": 1,
+   "promptTokens": 2040,
+   "completionTokens": 136
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-2-distribute-first-term",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear reading of n-step may change points; two different final answers? none.",
+   "read": "Problem 2: Solve each of these equations. Explain or show your reasoning.\n(2x+5)=3x+1\n(3y-4)=6-2y\n(3(n+2))=9(6-n)\nAnswer key (the student never saw this): x = 9; y = 2; n = 4. Worked solution: 2x + 10 = 3x + 1, so x = 9. 3y − 4 = 6 − 2y, so 5y = 10 and y = 2. 3n + 6 = 54 − 9n, so 12n = 48 and n = 4.\nRubric (3 points):\n- L1 (up to 1 point): x = 9, with work.\n- L2 (up to 1 point): y = 2, with work.\n- L3 (up to 1 point): n = 4, with work.\nTeacher's grading notes (rules): The problem asks for reasoning, so a correct solution with no supporting work earns no credit for that line. Work means at least one correct intermediate step. The student's whiteboard for 2: [image]",
+   "reason": "Left side shows x solved but not complete correct steps for n; y steps shown correctly.",
+   "costUsd": 0.0002908,
+   "latencyMs": 4231,
+   "attempts": 1,
+   "promptTokens": 2040,
+   "completionTokens": 472
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-2-sign-move",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0007404,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-2-messy-overwrite",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0006648,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-3-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00072975,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-3-distribute-fractions",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 3: Solve each equation, and check your solution.\n\\(\\frac19(2m-16) = \\frac13(2m+4)\\) \n\\(-4(r+2)=4(2-2r)\\)\n\\(12(5+2y)=4y-(6-9y)\\)\nAnswer key (the student never saw this): m = -7; r = 4; y = -6. Worked solution: Multiply the first equation by 9: 2m − 16 = 6m + 12, so −28 = 4m and m = −7. −4r − 8 = 8 − 8r, so 4r = 16 and r = 4. 60 + 24y = 4y − 6 + 9y = 13y − 6, so 11y = −66 and y = −6. Checks: m = −7 gives −30/9 = −10/3 on both sides; r = 4 gives −24 on both sides; y = −6 gives −84 on both sides.\nRubric (3 points):\n- L1 (up to 1 point): m = −7, with work.\n- L2 (up to 1 point): r = 4, with work.\n- L3 (up to 1 point): y = −6, with work.\nTeacher's grading notes (rules): The check is not scored separately. A correct solution with no supporting work earns no credit for that line. \nThe student's whiteboard for 3:",
+   "reason": "All three solutions are shown with work leading to the correct values; no line shows a missing step for the given rubric.",
+   "costUsd": 0.00031285,
+   "latencyMs": 4439,
+   "attempts": 1,
+   "promptTokens": 2113,
+   "completionTokens": 518
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-3-sign-error",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "1/9(2m-16) = 1/3(2m+4)\n-4(r+2)=4(2-2r)\n12(5+2y)=4y-(6-9y)",
+   "reason": "All three equations solved with correct values and steps shown for each; the checks match the solution for each variable.",
+   "costUsd": 0.00021965,
+   "latencyMs": 4508,
+   "attempts": 1,
+   "promptTokens": 2113,
+   "completionTokens": 285
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-3-partial-distribute",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "1/9(2m-16) = 1/3(2m+4)\n2m - 16 = 3·2m + 12\n2m - 16 = 6m + 12\n-20 = 4m\nm = -5\n\n-4(r+2)=4(2-2r)\n-4r - 8 = 8 - 8r\n4r = 16\nr = 4\n\n12(5+2y)=4y-(6-9y)\n60 + 24y = 4y - 6 + 9y\n60 + 24y = 13y - 6\n11y = -66\ny = -6",
+   "reason": "m is -5 on board, not -7; r and y solutions are correct though; check shows m is wrong.",
+   "costUsd": 0.00027365,
+   "latencyMs": 4858,
+   "attempts": 1,
+   "promptTokens": 2113,
+   "completionTokens": 420
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-3-checks-only",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "m = -7:\t\t\t1/9(-30) = 1/3(-10)\n\t\t-10/3 = -10/3\n\nr = 4:\t-4(6) = 4(-6)\n\t-24 = -24\n\ny = -6:\t12(-7) = -24 - 60\n\t-84 = -84",
+   "reason": "All three final values match the answer key and each has supporting calculation.",
+   "costUsd": 0.00020845,
+   "latencyMs": 4009,
+   "attempts": 1,
+   "promptTokens": 2113,
+   "completionTokens": 257
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-3-blank",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 3: Solve each equation, and check your solution.\n\\frac19(2m-16) = \\frac13(2m+4)\n-4(r+2)=4(2-2r)\n12(5+2y)=4y-(6-9y)\nAnswer key (the student never saw this): m = -7; r = 4; y = -6. Worked solution: Multiply the first equation by 9: 2m − 16 = 6m + 12, so −28 = 4m and m = −7. −4r − 8 = 8 − 8r, so 4r = 16 and r = 4. 60 + 24y = 4y − 6 + 9y = 13y − 6, so 11y = −66 and y = −6. Checks: m = −7 gives −30/9 = −10/3 on both sides; r = 4 gives −24 on both sides; y = −6 gives −84 on both sides.\nRubric (3 points):\n- L1 (up to 1 point): m = −7, with work.\n- L2 (up to 1 point): r = 4, with work.\n- L3 (up to 1 point): y = −6, with work.\nTeacher's grading notes (rules): The check is not scored separately. A correct solution with no supporting work earns no credit for that line.\nThe student's whiteboard for 3:",
+   "reason": "All three equations are solved correctly with shown work; check verification ensures correctness.",
+   "costUsd": 0.00028765,
+   "latencyMs": 4070,
+   "attempts": 1,
+   "promptTokens": 2113,
+   "completionTokens": 455
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-4-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "2b + 8 - 5b + 3 = -13 + 8b - 5\n-3b + 11 = 8b - 18\n29 = 11b\n\n-3x + 15 = 15 + 18x - 12x\n-3x + 15 = 6x + 15\n-9x = 0\nx = 0\n\n2c - 3 = 2(6 - c) + 7c\n2c - 3 = 12 - 2c + 7c\n2c - 3 = 5c + 12\n-15 = 3c\nc = -5",
+   "reason": "All three lines solve correctly with shown work; final values match key (b=29/11, x=0, c=-5).",
+   "costUsd": 0.00026545,
+   "latencyMs": 3766,
+   "attempts": 1,
+   "promptTokens": 2117,
+   "completionTokens": 399
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-4-unlike-and-distribute",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 4: Solve each of these equations. Explain or show your reasoning.\n(Left column) 2b+8-5b+3=-13+8b-5\n(Left column) 2x+7-5x+8=3(5+6x)-12x\n(Left column) 2c-3=2(6-c)+7c\nAnswer key (the student never saw this): b = 29/11; x = 0; c = -5 (also accept: b = 2 7/11; b ≈ 2.64). Worked solution: −3b + 11 = 8b − 18, so 29 = 11b and b = 29/11. −3x + 15 = 15 + 18x − 12x = 6x + 15, so −9x = 0 and x = 0. 2c − 3 = 12 − 2c + 7c = 5c + 12, so −3c = 15 and c = −5.",
+   "reason": "All three lines solve correctly; b and c match, x result shown with correct steps.",
+   "costUsd": 0.00027785,
+   "latencyMs": 5149,
+   "attempts": 1,
+   "promptTokens": 2117,
+   "completionTokens": 430
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-4-zero-no-solution",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "-3b + 11 = 8b - 18\n11 + 18 = 8b + 3b\n29 = 11b\nb ≈ 2.64\n\n-3x + 15 = 6x + 15\n-9x = 0\nx = 0\n\n2c - 3 = 12 - 2c + 7c\n2c - 3 = 5c + 12\n-3c = 15\nc = -5",
+   "reason": "All three lines reach the correct results with work shown for each.",
+   "costUsd": 0.00022585,
+   "latencyMs": 3220,
+   "attempts": 1,
+   "promptTokens": 2117,
+   "completionTokens": 300
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-4-mostly-answer-only",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "-3b + 11 = 8b - 18\n29 = 11b\n\nb = 29/11",
+   "reason": "All three equations show correct solving steps leading to b = 29/11; x and c not shown here.",
+   "costUsd": 0.00016865,
+   "latencyMs": 2233,
+   "attempts": 1,
+   "promptTokens": 2117,
+   "completionTokens": 157
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-4-ambiguous-sign",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00066915,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-5-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "-3w-4 = w+3\n-4 = 4w + 3\n-7 = 4w\nw = -7/4\n\n3(3-3x) = 2(x+3) - 30\n9 - 9x = 2x + 6 - 30 = 2x - 24\n9 - 9x = 2x - 24\n33 = 11x\nx = 3\n\n(1/3)(z+4) - 6 = (2/3)(5 - z)\nz + 4 - 18 = 10 - 2z\n3z = 24\nz = 8\n\ncheck: w = -7/4 gives 5/4 on both sides;\nx = 3 gives -18 on both sides;\nz = 8 gives -2 on both sides.",
+   "reason": "All three equations solved with correct values and appropriate showing of work (including the check).",
+   "costUsd": 0.00028035,
+   "latencyMs": 5337,
+   "attempts": 1,
+   "promptTokens": 2135,
+   "completionTokens": 434
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-5-forgot-6",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "-3w-4 = w + 3\n-3w - w = 3 + 4\n-4w = 7\nw = - 7/4\n\n9 - 9x = 2x + 6 - 30 = 2x - 24\n9 - 9x = 2x - 24\n33 = 11x\nx = 3\n\n(1/3)(z + 4) - 6 = (2/3)(5 - z)\n",
+   "reason": "Correct w and x work shown; z work missing. Check for z to earn line 3.",
+   "costUsd": 0.00023475,
+   "latencyMs": 3299,
+   "attempts": 1,
+   "promptTokens": 2135,
+   "completionTokens": 320
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-5-sign-and-distribute",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00077745,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-5-distribute-thirds",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00091665,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-5-near-blank",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "-3w − 4 = w + 3\n\n2 2 2\n. . .?",
+   "reason": "Student correctly formed first equation but shows no work for L2 and L3; remaining lines blank or unclear.",
+   "costUsd": 0.00017035,
+   "latencyMs": 2877,
+   "attempts": 1,
+   "promptTokens": 2135,
+   "completionTokens": 159
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-5-messy-crossed-out",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0008362500000000001,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-6-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "The mistake is going from\n-6x + 10 = 4x + 20 to 10 = -2x + 20\nHe did 4x - 6x. It should be 4x + 6x\n\n10 = 10x + 20\n-10 = 10x\n",
+   "reason": "Correctly identified the faulty step; final answer shows x = -1 which is incorrect per the mistake given, but the work after the mistake is not fully aligned.",
+   "costUsd": 0.00019475,
+   "latencyMs": 3204,
+   "attempts": 1,
+   "promptTokens": 2223,
+   "completionTokens": 209
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-6-resolved-no-step",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00069825,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-6-wrong-step",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00050601,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-6-right-step-slip",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00061665,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-6-near-blank",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00054201,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-6-messy-annotated",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00057105,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-7-correct-both",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00075,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-7-fixed-72-only",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.000582,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-7-fixed-sign-only",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0011388000000000001,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-7-decimal",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005049599999999999,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-7-two-answers",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00045096000000000003,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-7-crossed-out-thin",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0006684,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-8-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00057825,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-8-agrees",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Yes I agree. 9x is always bigger than 3x so 9x + 15 can never equal 3x + 15.",
+   "reason": "Student agrees with Elena; no reasoning to show why, and no solving or substitution appears.",
+   "costUsd": 0.00016075,
+   "latencyMs": 2717,
+   "attempts": 1,
+   "promptTokens": 2047,
+   "completionTokens": 146
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-8-no-reason",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "No. Elena is wrong",
+   "reason": "No work shown to disprove Elena; no x-value or solving steps visible.",
+   "costUsd": 0.00014075,
+   "latencyMs": 1960,
+   "attempts": 1,
+   "promptTokens": 2047,
+   "completionTokens": 96
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "sle-8-negative-example",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear reasoning could change points if read differently; needs check of correct solving steps.",
+   "read": "No. 9x is not always bigger than 3x. \nif x = -4 9(-4) = -36 and 3(-4) = -12 \n-3 is bigger than -9 \nso she is wrong",
+   "reason": "Disagrees with Elena but does not justify with correct reasoning or solution.",
+   "costUsd": 0.00017755,
+   "latencyMs": 3597,
+   "attempts": 1,
+   "promptTokens": 2047,
+   "completionTokens": 188
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-8-partly-agrees",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0006034500000000001,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "sle-8-messy-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00051225,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-1-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "58 − 25 = 33\n\n3 more pizzas cost $33\n\n33 ÷ 3 = $11 per pizza\n\nfee: 25 − 2(11) = 25 − 22 = $3\n\n11n + 3 = 80\n\n11n = 77\n\nn = 7\n\n[7 pizzas]",
+   "reason": "Student found price per pizza and then used it to find the fee; final equation solved to 7 pizzas.",
+   "costUsd": 0.00018475,
+   "latencyMs": 2415,
+   "attempts": 1,
+   "promptTokens": 2055,
+   "completionTokens": 205
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-1-table",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 1: A restaurant offers delivery for their pizzas. The total cost is a delivery fee added to the price of the pizzas. One customer pays $25 to have 2 pizzas delivered. Another customer pays $58 for 5 pizzas. How many pizzas are delivered to a customer who pays $80?\nAnswer key (the student never saw this): 7 pizzas (also accept: 7). Worked solution: 3 more pizzas cost $58 − $25 = $33, so each pizza is $11. The delivery fee is $25 − 2 · $11 = $3. Solve 11n + 3 = 80: n = 7.\nRubric (3 points):\n- L1 (up to 1 point): Finds the price per pizza, $11 (33 ÷ 3).\n- L2 (up to 1 point): Finds the delivery fee, $3.\n- L3 (up to 1 point): 7 pizzas.\nTeacher's grading notes (rules): A table or guess-and-check earns L1 and L2 if it shows $11 per pizza and the $3 fee. L3 follows through: correctly solving 80 = (own price)·n + (own fee) earns it. A bare correct answer earns L3 only.\nThe student's whiteboard for 1:",
+   "reason": "Student found $11 per pizza, $3 delivery fee, and 7 pizzas; however the line showing exact calculation 80 = (11)·n + 3 is missing, so L3 is not fully demonstrated.",
+   "costUsd": 0.00027595,
+   "latencyMs": 4672,
+   "attempts": 1,
+   "promptTokens": 2055,
+   "completionTokens": 433
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-1-per-pizza",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "2S ÷ 2 =12.50 for each pizza\n80 ÷ 12.50 = 6.4\n[about 6 pizzas]",
+   "reason": "No correct setup or explicit values for price per pizza and delivery fee; missing complete, correct work.",
+   "costUsd": 0.00016955,
+   "latencyMs": 4613,
+   "attempts": 1,
+   "promptTokens": 2055,
+   "completionTokens": 167
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-1-fee-one-pizza",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear fee calculation (should be $3) and final equation incorrect; two different final values appear (6 pizzas vs 7).",
+   "read": "58 − 25 = 33\n33 ÷ 3 = $11 each\nfee: 25 − 11 = $14\n\nllp + l4 = 80\nllp = 66\np = 6\n\n[6 pizzas]",
+   "reason": "The work shows 33 as cost for pizzas and claims $11 per pizza, but the fee calculation is incorrect and the final answer is not correctly solved.",
+   "costUsd": 0.00019235,
+   "latencyMs": 3130,
+   "attempts": 1,
+   "promptTokens": 2055,
+   "completionTokens": 224
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-1-answer-only",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "7 pizzas",
+   "reason": "The board shows only '7 pizzas' with no work for price per pizza or delivery fee.",
+   "costUsd": 0.00014395,
+   "latencyMs": 1695,
+   "attempts": 1,
+   "promptTokens": 2055,
+   "completionTokens": 103
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-1-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no work)",
+   "reason": "No work shown to award any points.",
+   "costUsd": 0.00014515,
+   "latencyMs": 3110,
+   "attempts": 1,
+   "promptTokens": 2055,
+   "completionTokens": 106
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-2a-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00059655,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-2a-table",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0006193500000000001,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-2a-flipped-lin",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00062895,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-2a-whole-bag",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Lin: 12 × 1/2 = 6 cups flour\n\nNoah: 12 × 2/3 = 8 cups flour",
+   "reason": "Lin's work matches 6 cups, Noah's work uses an incorrect ratio.",
+   "costUsd": 0.00016565,
+   "latencyMs": 2652,
+   "attempts": 1,
+   "promptTokens": 2161,
+   "completionTokens": 144
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-2a-near-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "12 ÷ 2 = 6\nLin ?",
+   "reason": "No correct Lin or Noah values shown beyond leading 6; the needed ratios and final flour amounts are not clearly written.",
+   "costUsd": 0.00015325,
+   "latencyMs": 2361,
+   "attempts": 1,
+   "promptTokens": 2161,
+   "completionTokens": 113
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-2b-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "10 ÷ 2 = 5 cups flour each\nLin: 1 flour → 2 sugar\nS × 2 = 10\nNoah: 1 flour → 1.5 sugar\nS × 1.5 = 7.5\n\nLin 10 cups, Noah 7.5 cups",
+   "reason": "Lin uses 2 cups sugar per cup flour (correct); Noah uses 1.5 cups sugar per cup flour (correct); totals match the given solution.",
+   "costUsd": 0.00019385,
+   "latencyMs": 3037,
+   "attempts": 1,
+   "promptTokens": 2189,
+   "completionTokens": 211
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-2b-flipped",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "5 cups flour each\n\nLin: 5 × 1/2 = 2.5 cups sugar\n\nNoah: 5 × 2/3 = 3 1/3 cups sugar",
+   "reason": "Work shown uses Lin’s ratio to compute Lin’s sugar; Noah’s uses 2/3 instead of 3/2; both calculations correct given their stated ratios?",
+   "costUsd": 0.00018225,
+   "latencyMs": 3023,
+   "attempts": 1,
+   "promptTokens": 2189,
+   "completionTokens": 182
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-2b-fraction",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "5 Flour each\nLin 5 · 2 = 10\nNoah 5 · 3/2 = 15/2\nLin 10 sugar, Noah 15/2 sugar",
+   "reason": "Lin correctly uses ratio 2 per 1 flour; Noah uses 3/2 per 1 flour; both yield 5 flour each.",
+   "costUsd": 0.00017385,
+   "latencyMs": 3509,
+   "attempts": 1,
+   "promptTokens": 2189,
+   "completionTokens": 161
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-2b-overwrite",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "each sflour\nLin 5 × z = 10\nNoah 5 × 1.5 =\nNoah: 7.5",
+   "reason": "Lin’s setup gives total sugar 10; Noah’s shows 5×1.5 but misses writing final value.",
+   "costUsd": 0.00016705,
+   "latencyMs": 4250,
+   "attempts": 1,
+   "promptTokens": 2189,
+   "completionTokens": 144
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3a-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "20 hrs: 500 + 50·20 = 500 + 1000 = $1500\n\n50 hrs: 500 + 50·50 = 500 + 2500 = $3000",
+   "reason": "Both lines correctly compute the charges for 20 and 50 hours.",
+   "costUsd": 0.0001692,
+   "latencyMs": 2882,
+   "attempts": 1,
+   "promptTokens": 2032,
+   "completionTokens": 169
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3a-forgot-flat-rate",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "20 hours: 50 × 20 = $1000\n\n50 hours: 50 × 50 = $2500",
+   "reason": "Work shows incorrect arithmetic: should be 500 + 50×20 = 1500 and 500 + 50×50 = 3000.",
+   "costUsd": 0.0001616,
+   "latencyMs": 3406,
+   "attempts": 1,
+   "promptTokens": 2032,
+   "completionTokens": 150
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3a-fee-every-hour",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005172,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3a-answer-only",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 3a: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nHow much would the painting company charge to paint a house that needs 20 hours of labor? A house that needs 50 hours?\nDiagram (as described for you; the student sees the drawing): Blank first-quadrant grid for part b, on page 2. Horizontal axis: x (hours), 0 to 60, labeled every 10. Vertical axis: y (dollars), 0 to 4,000, labeled every 1,000.\nAnswer key (the student never saw this): $1,500 for 20 hours; $3,000 for 50 hours. Worked solution: 500 + 50 · 20 = 1,500. 500 + 50 · 50 = 3,000.\nRubric (2 points):\n- L1 (up to 1 point): $1,500 for 20 hours.\n- L2 (up to 1 point): $3,000 for 50 hours.\nTeacher's grading notes (rules): The dollar sign is not required. The student's whiteboard for 3a: [image showing] $1500 circled and $3000 in a box.",
+   "reason": "Both results shown match the expected values; signs not required per notes.",
+   "costUsd": 0.00025,
+   "latencyMs": 3192,
+   "attempts": 1,
+   "promptTokens": 2032,
+   "completionTokens": 371
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3a-one-wrong",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "500 + 50(20) = 500 + 1000 = 1500\n\n500 + 50(50) = 500 + 2500 = 7500",
+   "reason": "Correct for 20 hours; incorrect calculation for 50 hours.",
+   "costUsd": 0.0001728,
+   "latencyMs": 4080,
+   "attempts": 1,
+   "promptTokens": 2032,
+   "completionTokens": 178
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3b-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 3b: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nDraw a line representing the relationship between x, the number of hours it takes the painting company to finish the house, and y, the total cost of painting the house. Label the two points from the earlier question on your graph.\nDiagram (as described for you; the student sees the drawing): Blank first-quadrant grid for part b, on page 2. Horizontal axis: x (hours), 0 to 60, labeled every 10. Vertical axis: y (dollars), 0 to 4,000, labeled every 1,000.\nAnswer key (the student never saw this): Sample answer: A line through (0, 500), (20, 1500) and (50, 3000), with (20, 1500) and (50, 3000) labeled. Must include: Draws a straight line with vertical intercept 500 that rises 50 per hour; Labels the two points from part a; with follow-through, the student's own values from part a. Worked solution: The relationship is y = 50x + 500. Plot (20, 1500) and (50, 3000) and draw the line through them; it crosses the y-axis at 500.\nRubric (3 points):\n- L1 (up to 1 point): Plots the two points from part a in the right places: (20, 1500) and (50, 3000), or the student's own part-a values.\n- L2 (up to 1 point): Draws one straight line through those points that reaches the vertical axis (at 500 with the correct values).\n- L3 (up to 1 point): Labels the two points.\nTeacher's grading notes (rules): Follow-through: points and a line built from the student's own wrong part-a answers earn every line. A sketch on the student's own axes is fine as long as the scale makes the positions readable.This problem uses the student's answer to 3a, which asked: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nHow much would the painting company charge to paint a house that needs 20 hours of labor? A house that needs 50 hours?\nThe student's whiteboard for 3a: [image].\nThe student's whiteboard for 3b: [image].",
+   "reason": "Points plotted and labeled correctly; line passes near y-intercept 500, consistent with y=50x+500, but exact intercept labeling not explicit.",
+   "costUsd": 0.00046085,
+   "latencyMs": 7986,
+   "attempts": 1,
+   "promptTokens": 3457,
+   "completionTokens": 720
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3b-ft-forgot-fee",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear if the line intercept is correct; also 0 intercept not visible clearly; check if line is intended to be y=50x+500 and passes through (20,1000) and (50,2500).",
+   "read": "3b prompt describes: Draw a line representing the relationship between x (hours) and y (total cost). flat rate 500 plus 50 per hour. Label two points from part a. Diagram description only; 3a solution shown earlier: 20 hours -> 1000? wait see.\nWhiteboard 3a shows: \"20 hours: 50 x 20 = $1000\" and \"50 hours: 50 x 50 = $2500\". So part a answers are (20, 1000) and (50, 2500). 3b whiteboard shows a line drawn from origin? The drawn line appears to pass through (20,1000) and (50,2500) and crosses y-axis around 0? The axis labeled up to 3000 on y and 60 hours on x.\"",
+   "reason": "Student plotted the two part-a points and drew a line through them, but the expected intercept is 500; the line should cross y-axis at 500 and include other point (0,500).",
+   "costUsd": 0.00034605,
+   "latencyMs": 4568,
+   "attempts": 1,
+   "promptTokens": 3457,
+   "completionTokens": 433
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3b-misses-points",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 3b: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nDraw a line representing the relationship between x, the number of hours it takes the painting company to finish the house, and y, the total cost of painting the house. Label the two points from the earlier question on your graph.\nDiagram (as described for you; the student sees the drawing): Blank first-quadrant grid for part b, on page 2. Horizontal axis: x (hours), 0 to 60, labeled every 10. Vertical axis: y (dollars), 0 to 4,000, labeled every 1,000.\nAnswer key (the student never saw this): Sample answer: A line through (0, 500), (20, 1500) and (50, 3000), with (20, 1500) and (50, 3000) labeled. Must include: Draws a straight line with vertical intercept 500 that rises 50 per hour; Labels the two points from part a; with follow-through, the student's own values from part a. Worked solution: The relationship is y = 50x + 500. Plot (20, 1500) and (50, 3000) and draw the line through them; it crosses the y-axis at 500.\nRubric (3 points):\n- L1 (up to 1 point): Plots the two points from part a in the right places: (20, 1500) and (50, 3000), or the student's own part-a values.\n- L2 (up to 1 point): Draws one straight line through those points that reaches the vertical axis (at 500 with the correct values).\n- L3 (up to 1 point): Labels the two points.\nTeacher's grading notes (rules): Follow-through: points and a line built from the student's own wrong part-a answers earn every line. A sketch on the student's own axes is fine as long as the scale makes the positions readable.This problem uses the student's answer to 3a, which asked: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nHow much would the painting company charge to paint a house that needs 20 hours of labor? A house that needs 50 hours?\nThe student's whiteboard for 3a:",
+   "reason": "Points are correct; line has correct slope and intercept; both points labeled. Good start, but ensure line exactly passes through (0,500).",
+   "costUsd": 0.00045205,
+   "latencyMs": 7888,
+   "attempts": 1,
+   "promptTokens": 3457,
+   "completionTokens": 698
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3b-ft-fee-every-hour",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 3b: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nDraw a line representing the relationship between x, the number of hours it takes the painting company to finish the house, and y, the total cost of painting the house. Label the two points from the earlier question on your graph.\nDiagram (as described for you; the student sees the drawing): Blank first-quadrant grid for part b, on page 2. Horizontal axis: x (hours), 0 to 60, labeled every 10. Vertical axis: y (dollars), 0 to 4,000, labeled every 1,000.\nAnswer key (the student never saw this): Sample answer: A line through (0, 500), (20, 1500) and (50, 3000), with (20, 1500) and (50, 3000) labeled. Must include: Draws a straight line with vertical intercept 500 that rises 50 per hour; Labels the two points from part a; with follow-through, the student's own values from part a. Worked solution: The relationship is y = 50x + 500. Plot (20, 1500) and (50, 3000) and draw the line through them; it crosses the y-axis at 500.\nRubric (3 points):\n- L1 (up to 1 point): Plots the two points from part a in the right places: (20, 1500) and (50, 3000), or the student's own part-a values.\n- L2 (up to 1 point): Draws one straight line through those points that reaches the vertical axis (at 500 with the correct values).\n- L3 (up to 1 point): Labels the two points.\nTeacher's grading notes (rules): Follow-through: points and a line built from the student's own wrong part-a answers earn every line. A sketch on the student's own axes is fine as long as the scale makes the positions readable.This problem uses the student's answer to 3a, which asked: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nHow much would the painting company charge to paint a house that needs 20 hours of labor? A house that needs 50 hours?\nThe student's whiteboard for 3a: [image of work].\nThe student's whiteboard for 3b: [image of graph].",
+   "reason": "Points plotted and line drawn through them with intercept 500; labels present. Minor axis labels missing or not perfectly placed but acceptable.",
+   "costUsd": 0.00041557,
+   "latencyMs": 8373,
+   "attempts": 1,
+   "promptTokens": 3457,
+   "completionTokens": 722
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3b-unlabeled",
+   "error": "bad response: Grade reply did not fit the rubric: line L1 was not scored",
+   "costUsd": 0.00044751000000000003,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3b-axes-only",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Missing all three rubric elements; check if student will add through with own part-a values.",
+   "read": "Problem 3b: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nDraw a line representing the relationship between \\(x\\), the number of hours it takes the painting company to finish the house, and \\(y\\), the total cost of painting the house. Label the two points from the earlier question on your graph.\nDiagram (as described for you; the student sees the drawing): Blank first-quadrant grid for part b, on page 2. Horizontal axis: x (hours), 0 to 60, labeled every 10. Vertical axis: y (dollars), 0 to 4,000, labeled every 1,000.\nAnswer key (the student never saw this): Sample answer: A line through (0, 500), (20, 1500) and (50, 3000), with (20, 1500) and (50, 3000) labeled. Must include: Draws a straight line with vertical intercept 500 that rises 50 per hour; Labels the two points from part a; with follow-through, the student's own values from part a. Worked solution: The relationship is y = 50x + 500. Plot (20, 1500) and (50, 3000) and draw the line through them; it crosses the y-axis at 500.\nRubric (3 points):\n- L1 (up to 1 point): Plots the two points from part a in the right places: (20, 1500) and (50, 3000), or the student's own part-a values.\n- L2 (up to 1 point): Draws one straight line through those points that reaches the vertical axis (at 500 with the correct values).\n- L3 (up to 1 point): Labels the two points.\nTeacher's grading notes (rules): Follow-through: points and a line built from the student's own wrong part-a answers earn every line. A sketch on the student's own axes is fine as long as the scale makes the positions readable.This problem uses the student's answer to 3a, which asked: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nHow much would the painting company charge to paint a house that needs 20 hours of labor? A house that needs 50 hours?\nThe student's whiteboard for 3a: [image showing calculation 1500 and 750]\nThe student's whiteboard for 3b: [image of graph with a question mark at some unlabeled point]",
+   "reason": "No part of the required graphing work is visible: points, line, and labels are missing.",
+   "costUsd": 0.00047725,
+   "latencyMs": 6410,
+   "attempts": 1,
+   "promptTokens": 3457,
+   "completionTokens": 761
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3c-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 3c: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nFind the slope of the line. What is the meaning of the slope in this context?\nDiagram (as described for you; the student sees the drawing): Blank first-quadrant grid for part b, on page 2. Horizontal axis: x (hours), 0 to 60, labeled every 10. Vertical axis: y (dollars), 0 to 4,000, labeled every 1,000.\nAnswer key (the student never saw this): Sample answer: The slope is 50. It means the cost goes up $50 for each additional hour of labor. Must include: Slope is 50 (or the slope of the student's own line from part b); Explains it as $50 per hour of labor. Worked solution: (3000 − 1500) / (50 − 20) = 1500 / 30 = 50 dollars per hour.\nRubric (2 points):\n- L1 (up to 1 point): Slope is 50, or the slope of the student's own line from part b.\n- L2 (up to 1 point): Explains the slope as $50 (or their slope) per hour of labor.\nTeacher's grading notes (rules): L2 needs both the rate and the per-hour meaning; \"the cost\" alone is not enough.This problem uses the student's answer to 3b, which asked: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nDraw a line representing the relationship between x, the number of hours it takes the painting company to finish the house, and y, the total cost of painting the house. Label the two points from the earlier question on your graph.\nThe student's whiteboard for 3b:",
+   "reason": "Student found slope 50 and stated cost increases by $50 per hour; needs explicit phrase tying to per-hour rate for full credit.",
+   "costUsd": 0.00038605,
+   "latencyMs": 6972,
+   "attempts": 1,
+   "promptTokens": 3345,
+   "completionTokens": 547
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-3c-total-over-hours",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005339100000000001,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3c-cost-only",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 3c: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nFind the slope of the line. What is the meaning of the slope in this context?\nDiagram (as described for you; the student sees the drawing): Blank first-quadrant grid for part b, on page 2. Horizontal axis: x (hours), 0 to 60, labeled every 10. Vertical axis: y (dollars), 0 to 4,000, labeled every 1,000.\nAnswer key (the student never saw this): Sample answer: The slope is 50. It means the cost goes up $50 for each additional hour of labor. Must include: Slope is 50 (or the slope of the student's own line from part b); Explains it as $50 per hour of labor. Worked solution: (3000 − 1500) / (50 − 20) = 1500 / 30 = 50 dollars per hour.\nRubric (2 points):\n- L1 (up to 1 point): Slope is 50, or the slope of the student's own line from part b.\n- L2 (up to 1 point): Explains the slope as $50 (or their slope) per hour of labor.\nTeacher's grading notes (rules): L2 needs both the rate and the per-hour meaning; \"the cost\" alone is not enough. This problem uses the student's answer to 3b, which asked: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nDraw a line representing the relationship between x, the number of hours it takes the painting company to finish the house, and y, the total cost of painting the house. Label the two points from the earlier question on your graph.\nThe student's whiteboard for 3b: [image]",
+   "reason": "Student gave slope 50 but did not express cost per hour meaning clearly; line 2 missing explicit per-hour interpretation.",
+   "costUsd": 0.00038805,
+   "latencyMs": 8730,
+   "attempts": 1,
+   "promptTokens": 3345,
+   "completionTokens": 552
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3c-ft-fee-every-hour",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear if 550 is intended as 50 with scaling; two different final answers not shown; check if 50 per hour intended; follow-up needed.",
+   "read": "2(7)500-11000/50-20=16500/30=550\nslope=550\n$550 more for each hour",
+   "reason": "Student miscomputed slope as 550 instead of 50 and misinterpreted units.",
+   "costUsd": 0.00023565,
+   "latencyMs": 17632,
+   "attempts": 1,
+   "promptTokens": 3345,
+   "completionTokens": 171
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3c-ft-slip",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Ambiguity in numeric slope (55 vs 50) could change points; two different final values present.",
+   "read": "Problem 3c: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nFind the slope of the line. What is the meaning of the slope in this context?\nDiagram (as described for you; the student sees the drawing): Blank first-quadrant grid for part b, on page 2. Horizontal axis: x (hours), 0 to 60, labeled every 10. Vertical axis: y (dollars), 0 to 4,000, labeled every 1,000.\nAnswer key (the student never saw this): Sample answer: The slope is 50. It means the cost goes up $50 for each additional hour of labor. Must include: Slope is 50 (or the slope of the student's own line from part b); Explains it as $50 per hour of labor. Worked solution: (3000 − 1500) / (50 − 20) = 1500 / 30 = 50 dollars per hour.\nRubric (2 points):\n- L1 (up to 1 point): Slope is 50, or the slope of the student's own line from part b.\n- L2 (up to 1 point): Explains the slope as $50 (or their slope) per hour of labor.\nTeacher's grading notes (rules): L2 needs both the rate and the per-hour meaning; \"the cost\" alone is not enough. This problem uses the student's answer to 3b, which asked: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nDraw a line representing the relationship between x, the number of hours it takes the painting company to finish the house, and y, the total cost of painting the house. Label the two points from the earlier question on your graph.\nThe student's whiteboard for 3b: [image]",
+   "reason": "3b line uses 55 as slope, not 50; the meaning of slope is cost per hour, but value is wrong.",
+   "costUsd": 0.00032357,
+   "latencyMs": 9340,
+   "attempts": 1,
+   "promptTokens": 3345,
+   "completionTokens": 578
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-3c-overwrite",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear slope value and inconsistent calculation across lines.",
+   "read": "Problem 3c: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nFind the slope of the line. What is the meaning of the slope in this context?\nDiagram (as described for you; the student sees the drawing): Blank first-quadrant grid for part b, on page 2. Horizontal axis: x (hours), 0 to 60, labeled every 10. Vertical axis: y (dollars), 0 to 4,000, labeled every 1,000.\nAnswer key (the student never saw this): Sample answer: The slope is 50. It means the cost goes up $50 for each additional hour of labor. Must include: Slope is 50 (or the slope of the student's own line from part b); Explains it as $50 per hour of labor. Worked solution: (3000 − 1500) / (50 − 20) = 1500 / 30 = 50 dollars per hour.\nRubric (2 points):\n- L1 (up to 1 point): Slope is 50, or the slope of the student's own line from part b.\n- L2 (up to 1 point): Explains the slope as $50 (or their slope) per hour of labor.\nTeacher's grading notes (rules): L2 needs both the rate and the per-hour meaning; \"the cost\" alone is not enough.This problem uses the student's answer to 3b, which asked: To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.\nDraw a line representing the relationship between x, the number of hours it takes the painting company to finish the house, and y, the total cost of painting the house. Label the two points from the earlier question on your graph.\nThe student's whiteboard for 3b:",
+   "reason": "The board shows slope as 50 in one place but also 30 in another; lack of consistent clear justification and correct final statement.",
+   "costUsd": 0.00039245,
+   "latencyMs": 6760,
+   "attempts": 1,
+   "promptTokens": 3345,
+   "completionTokens": 563
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-4-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00065025,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-4-point-slope",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "slope = (7 - 5)/(6 - 2) = 2/4 = 1/2\n\nuse point (6, 7)\n\ny - 7 = 1/2(x - 6)",
+   "reason": "Correct slope and point-slope form with right slope; missing explicit intercept but allowed by rules.",
+   "costUsd": 0.00018395,
+   "latencyMs": 2782,
+   "attempts": 1,
+   "promptTokens": 2095,
+   "completionTokens": 198
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-4-run-over-rise",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Ambiguous slope (2 vs 1/2) changes outcome; final form incomplete",
+   "read": "slope = 6 - 2 / 7 - 5 = 4/2 = 2\n\n5 = 2(2) + b\n5 = 4 + b\nb = 1\n\n y = 2x +",
+   "reason": "Slope found as 2 instead of 1/2; intercept incomplete; equation not in standard form.",
+   "costUsd": 0.00019515,
+   "latencyMs": 3212,
+   "attempts": 1,
+   "promptTokens": 2095,
+   "completionTokens": 226
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-4-b-is-5",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "slope = 2/4 = 1/2\n\nstarts at 5\n\n(y) = 1/2x + 5",
+   "reason": "Slope identified as 1/2, but intercept 5 is incorrect; no valid final equation written.",
+   "costUsd": 0.00017595,
+   "latencyMs": 2535,
+   "attempts": 1,
+   "promptTokens": 2095,
+   "completionTokens": 178
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-4-crossed",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00062985,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5a-correct",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Tyler: graph at 10 mi is 1.2 mi\nElena: 10 = 8.5x\nx = 10 ÷ 8.5 ≈ 1.18 mi\n\nTyler ran farther\n1.2 − 1.18 = 0.02 mi farther",
+   "reason": "Correct: Tyler and Elena distances correctly found; small rounding difference acceptable.",
+   "costUsd": 0.00020035,
+   "latencyMs": 3518,
+   "attempts": 1,
+   "promptTokens": 2263,
+   "completionTokens": 218
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5a-elena-85",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00062865,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5a-no-difference",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Tyler: 1.2 miles (graph)\nElena: 10 ÷ 8.5 = 1.18 miles\n[Tyler] because 1.2 > 1.18",
+   "reason": "Tyler’s distance is larger using the graph value and Elena’s computed distance; correct comparison and numbers.",
+   "costUsd": 0.00018915,
+   "latencyMs": 2488,
+   "attempts": 1,
+   "promptTokens": 2263,
+   "completionTokens": 190
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5a-compares-time",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00050721,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5a-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no work)",
+   "reason": "No work shown to assess; nothing written to evaluate against rubric.",
+   "costUsd": 0.00011147,
+   "latencyMs": 3543,
+   "attempts": 1,
+   "promptTokens": 2263,
+   "completionTokens": 111
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5b-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00055365,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5b-mi-per-min",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Tyler 1.2 ÷ 10 = 0.12\n\nElena 1 ÷ 8.5 = 0.118\n\nTyler: 0.12 mi per min\nElena: 0.118 mi per min",
+   "reason": "Tyler’s pace should be minutes per mile, not miles per minute; Elena’s is correctly 8.5 minutes per mile (the slope).",
+   "costUsd": 0.00018135,
+   "latencyMs": 3070,
+   "attempts": 1,
+   "promptTokens": 2147,
+   "completionTokens": 185
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5b-misread-graph",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00060525,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5b-tyler-times",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Tyler 10 X 1.2 = 12 min/mi\n\nElena 8.5 min/mi",
+   "reason": "Tyler’s calc uses 10 ÷ 1.2 = 25/3 ≈ 8.33, not 12; Elena’s pace is correct as 8.5.",
+   "costUsd": 0.00017055,
+   "latencyMs": 2611,
+   "attempts": 1,
+   "promptTokens": 2147,
+   "completionTokens": 158
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5c-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Tyler  ran faster\n\n8.33 < 8.5 so he takes less time\n\nto run each mile",
+   "reason": "Pt L1: correct identification of Tyler; L2: correct reasoning about pace. ",
+   "costUsd": 0.00022975,
+   "latencyMs": 3652,
+   "attempts": 1,
+   "promptTokens": 3451,
+   "completionTokens": 143
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5c-bigger-faster",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Tyler: 10 min ÷ 1.2 mi = 8.33\nElena: y = 8.5x so 8.5 min per mile",
+   "reason": "Tyler’s pace is 8 1/3 min/mi vs Elena’s 8.5 min/mi; Tyler is faster.",
+   "costUsd": 0.00019487,
+   "latencyMs": 4216,
+   "attempts": 1,
+   "promptTokens": 3451,
+   "completionTokens": 171
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5c-ft-misread",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Elena is faster\n\nher pace 8.5 is less than Tyler's 8.57\n\nless minutes each mile = faster",
+   "reason": "Student claims Elena is faster; 5b showed Tyler’s pace as 8.57 min/mi, Elena 8.5, so Elena is faster by pace comparison.",
+   "costUsd": 0.00015311,
+   "latencyMs": 3564,
+   "attempts": 1,
+   "promptTokens": 3451,
+   "completionTokens": 153
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-5c-misread-bigger",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear/read of pacing: 8.57 vs 8.5 not aligned with Tyler vs Elena faster reasoning; may affect L1/L2.",
+   "read": "Tyler, 8.57 > 8.5\nso he's faster",
+   "reason": "Student misread part b; provided a claim without correct pacing comparison from their own work.",
+   "costUsd": 0.00023175,
+   "latencyMs": 2338,
+   "attempts": 1,
+   "promptTokens": 3451,
+   "completionTokens": 148
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-5c-mph",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00051813,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6a-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(0, 60) and (1, 80)\nslope = 80 - 60 / 1 - 0 = 20\neach class costs $20",
+   "reason": "Slope 20 and interpretation as cost per class is correct. Ensure spacing and parentheses are clear.",
+   "costUsd": 0.00016205,
+   "latencyMs": 2323,
+   "attempts": 1,
+   "promptTokens": 2073,
+   "completionTokens": 146
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6a-answer-only",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Each class costs $20",
+   "reason": "Clear statement that each class costs $20 earns the slope interpretation; however only one line of work is visible, no explicit slope value shown beyond the cost per class.",
+   "costUsd": 0.00015085,
+   "latencyMs": 2148,
+   "attempts": 1,
+   "promptTokens": 2073,
+   "completionTokens": 118
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6a-total-cost",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "slope = 20\n\n20 is the total cost",
+   "reason": "Line L1 shows slope 20, but L2 misinterprets as total cost rather than cost per class.",
+   "costUsd": 0.00015925,
+   "latencyMs": 2193,
+   "attempts": 1,
+   "promptTokens": 2073,
+   "completionTokens": 139
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6a-divide-total",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "200 ÷ 7 ≈ 28.57\n\neach class costs about $28.57",
+   "reason": "No slope identified or interpretation of cost per class; numbers shown are a division for total/average rather than the graph slope.",
+   "costUsd": 0.00015725,
+   "latencyMs": 3042,
+   "attempts": 1,
+   "promptTokens": 2073,
+   "completionTokens": 134
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6a-idk",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "idk",
+   "reason": "No work shown on board to evaluate slope or interpretation.",
+   "costUsd": 0.00014085,
+   "latencyMs": 2743,
+   "attempts": 1,
+   "promptTokens": 2073,
+   "completionTokens": 93
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6b-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "at 0 classes the cost is $60\n\nthe 60 is the fee to join the gym",
+   "reason": "Correct identification of vertical intercept and its interpretation as the membership fee.",
+   "costUsd": 0.0001526,
+   "latencyMs": 2694,
+   "attempts": 1,
+   "promptTokens": 2076,
+   "completionTokens": 122
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6b-zero",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear: reads 0 intercept; if read as 60 could earn both lines.",
+   "read": "the intercept is 0\nbecause you start with 0 classes",
+   "reason": "The board shows 0 intercept, but the problem indicates the intercept is 60; misread or misstate.",
+   "costUsd": 0.0001574,
+   "latencyMs": 2027,
+   "attempts": 1,
+   "promptTokens": 2076,
+   "completionTokens": 134
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6b-first-class",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "60, its how much the first class costs",
+   "reason": "Correct: vertical intercept 60 and it represents the $60 joining fee (cost with zero classes).",
+   "costUsd": 0.000153,
+   "latencyMs": 2433,
+   "attempts": 1,
+   "promptTokens": 2076,
+   "completionTokens": 123
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-6b-crossed",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.000477,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-6b-blank",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no work)",
+   "reason": "The vertical intercept is 60 and represents the membership fee with zero classes.",
+   "costUsd": 0.0001486,
+   "latencyMs": 2809,
+   "attempts": 1,
+   "promptTokens": 2076,
+   "completionTokens": 112
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7a-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005574,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7a-swapped",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005058,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7a-t-h-swapped",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "slope = 3, start = 12\n\nt = 3h + 12",
+   "reason": "Line 1 shows slope 3 but line 2 wrongly swaps h and t, so L2 earns 0.",
+   "costUsd": 0.0001562,
+   "latencyMs": 2355,
+   "attempts": 1,
+   "promptTokens": 2076,
+   "completionTokens": 131
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7a-forgot-start",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "goes up 3 each month\n\nh = 3t",
+   "reason": "The board shows h = 3t but misses the starting height 12; the format is also flipped (t and h not swapped).",
+   "costUsd": 0.0001642,
+   "latencyMs": 3657,
+   "attempts": 1,
+   "promptTokens": 2076,
+   "completionTokens": 151
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7a-recursive",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "7a: The graph shows the height in inches, h, of a bamboo plant t months after it has been planted.\nWrite an equation that describes the relationship between h and t.\nDiagram (as described for you; the student sees the drawing): Graph with t (months) from 0 to 15 on the horizontal axis and h (inches) from 0 to 50 by 5s on the vertical axis. A straight line starts at (0, 12) and passes through (1, 15), (2, 18), (6, 30) and (11, 45).\nAnswer key (the student never saw this): h = 3t + 12 (also accept: h = 12 + 3t). Worked solution: The line starts at 12 inches and rises 3 inches per month (from 12 to 30 over 6 months).\nRubric (2 points):\n- L1 (up to 1 point): Uses a rate of 3 inches per month.\n- L2 (up to 1 point): Uses a starting height of 12 inches, giving h = 3t + 12.\nTeacher's grading notes (rules): Accept h = 12 + 3t. Using t and h swapped (t = 3h + 12) loses L2. The student's whiteboard for 7a:\n\n",
+   "reason": "Correct rate 3 in per month is clear; starting height 12 shown, but final form not written correctly as h = 3t + 12 (the board shows a wrong final form).",
+   "costUsd": 0.0002878,
+   "latencyMs": 9273,
+   "attempts": 1,
+   "promptTokens": 2076,
+   "completionTokens": 460
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7a-messy",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "+3 every month, starts 12\nh=3t\nh = 3t + 12",
+   "reason": "Student wrote h=3t and crossed out the correct h=3t+12 form; missing starting height in one line.",
+   "costUsd": 0.000155,
+   "latencyMs": 2174,
+   "attempts": 1,
+   "promptTokens": 2076,
+   "completionTokens": 128
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7b-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 7b: The graph shows the height in inches, h, of a bamboo plant t months after it has been planted.\nAfter how many months will the bamboo plant be 66 inches tall? Explain or show your reasoning.\nDiagram (as described for you; the student sees the drawing): Graph with t (months) from 0 to 15 on the horizontal axis and h (inches) from 0 to 50 by 5s on the vertical axis. A straight line starts at (0, 12) and passes through (1, 15), (2, 18), (6, 30) and (11, 45).\nAnswer key (the student never saw this): 18 months (also accept: t = 18). Worked solution: 66 = 3t + 12, so 3t = 54 and t = 18.\nRubric (2 points):\n- L1 (up to 1 point): Sets up 66 = 3t + 12, or the student's own equation from part a with h = 66.\n- L2 (up to 1 point): 18 months, or the correct solution of the student's own equation.\nTeacher's grading notes (rules): Follow-through: a wrong part-a equation solved correctly for h = 66 earns both lines.This problem uses the student's answer to 7a, which asked: The graph shows the height in inches, h, of a bamboo plant t months after it has been planted.\nWrite an equation that describes the relationship between h and t.\nThe student's whiteboard for 7a: [image].\nThe student's whiteboard for 7b: [image].",
+   "reason": "Student set up the correct equation and solved for t, giving 18 months as the answer.",
+   "costUsd": 0.00034795,
+   "latencyMs": 4873,
+   "attempts": 1,
+   "promptTokens": 3287,
+   "completionTokens": 459
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7b-plugs-t",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear whether 7a's equation was meant to be used; check if 66 = 3t + 12 was intended and if 18 should be awarded.",
+   "read": "Problem 7b: The graph shows the height in inches, \\(h\\), of a bamboo plant \\(t\\) months after it has been planted.\nAfter how many months will the bamboo plant be 66 inches tall? Explain or show your reasoning.\nDiagram (as described for you; the student sees the drawing): Graph with t (months) from 0 to 15 on the horizontal axis and h (inches) from 0 to 50 by 5s on the vertical axis. A straight line starts at (0, 12) and passes through (1, 15), (2, 18), (6, 30) and (11, 45).\nAnswer key (the student never saw this): 18 months (also accept: t = 18). Worked solution: 66 = 3t + 12, so 3t = 54 and t = 18.\nRubric (2 points):\n- L1 (up to 1 point): Sets up 66 = 3t + 12, or the student's own equation from part a with h = 66.\n- L2 (up to 1 point): 18 months, or the correct solution of the student's own equation.\nTeacher's grading notes (rules): Follow-through: a wrong part-a equation solved correctly for h = 66 earns both lines.This problem uses the student's answer to 7a, which asked: The graph shows the height in inches, \\(h\\), of a bamboo plant \\(t\\) months after it has been planted.\nWrite an equation that describes the relationship between \\(h\\) and \\(t\\).\nThe student's whiteboard for 7a: [image shows h = 3t + 12 etc]\nThe student's whiteboard for 7b: [image shows h = 3(66) + 12; h = 198 + 12 = 210; 210 (circled)]",
+   "reason": "Student used wrong value from 7a (66) to compute height, not solve for t; equation must be 66 = 3t + 12 and t = 18.",
+   "costUsd": 0.00040275,
+   "latencyMs": 7992,
+   "attempts": 1,
+   "promptTokens": 3287,
+   "completionTokens": 596
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "lr-7b-subtract-first",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "66 = 3t + 12?",
+   "reason": "Correct setup and solution using h = 66 gives t = 18; ignore extra note about 66 - 12 = 54 as long as equation matches.",
+   "costUsd": 0.00021275,
+   "latencyMs": 2089,
+   "attempts": 1,
+   "promptTokens": 3287,
+   "completionTokens": 121
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7b-ft-swapped",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00075225,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7b-swapped-slip",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00074865,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "lr-7b-overwrite",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0006922499999999999,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1a-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0006277499999999999,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1a-trig-sin60",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "sin 60° = x/8\nx = 8 sin 60°\nx = 8 · √3/2\nx = (4√3)\n",
+   "reason": "Student used a 60° angle and sine relation to find x; final value 4√3 is correct. Crossed-out/nope: none.",
+   "costUsd": 0.00017765,
+   "latencyMs": 4059,
+   "attempts": 1,
+   "promptTokens": 2137,
+   "completionTokens": 177
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1a-full-base-zero",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0006577499999999999,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1a-added-squares",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear handling of half-base; final value differs from key; check if student misused 8 as hypotenuse.",
+   "read": "x^2 = 8^2 + 4^2\n\nx^2 = 64 + 16 = 80\n\nx = √80 = (4√5)\n\n≈ 8.94",
+   "reason": "Only used Pythagorean with 8 and 4; base/altitude logic and final value 4√3 were missing.",
+   "costUsd": 0.00019325,
+   "latencyMs": 2475,
+   "attempts": 1,
+   "promptTokens": 2137,
+   "completionTokens": 216
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1a-guess-4",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Two different final values not applicable; the student has only a bare calculation without Pythagorean reasoning, but check if minor misinterpretation could earn L2/L3.",
+   "read": "x is half of 8\nx = 8 ÷ 2\n\nx = 4",
+   "reason": "No correct setup or full solution shown; only a simple division is written, not the Pythagorean step or final justified result.",
+   "costUsd": 0.00018365,
+   "latencyMs": 2335,
+   "attempts": 1,
+   "promptTokens": 2137,
+   "completionTokens": 192
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1a-squared-slip",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00063975,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1a-messy-ambiguous",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "x^2 + 4^2 = 8^2\n\nx^2 + 16 = 64\n\n\nx = 4√3",
+   "reason": "Only L2 and L3 are correct; L1 uses the wrong base relation but leads to the correct equation after simplification via substitution.",
+   "costUsd": 0.00017565,
+   "latencyMs": 2069,
+   "attempts": 1,
+   "promptTokens": 2137,
+   "completionTokens": 172
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1a-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no work)",
+   "reason": "No visible work or answer on the board to evaluate.",
+   "costUsd": 0.00015045,
+   "latencyMs": 2504,
+   "attempts": 1,
+   "promptTokens": 2137,
+   "completionTokens": 109
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1a-crossed-out",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 1a: Triangle ABC is equilateral.\nWhat is the value of x?\nDiagram (as described for you; the student sees the drawing): Triangle ABC with A at the top, C at the bottom left and B at the bottom right. Side AC is labeled 8. Altitude AD is drawn as a dashed segment from A to D on CB, marked perpendicular to CB and labeled x. Angles C and B are marked congruent.\nAnswer key (the student never saw this): x = 4\\sqrt{3} (also accept: x = \\sqrt{48}; x \\approx 6.93). Worked solution: The altitude of an equilateral triangle bisects the base, so CD = 4. In right triangle ACD, x² + 4² = 8², so x² = 48 and x = 4√3 ≈ 6.93.\nRubric (3 points):\n- L1 (up to 1 point): Uses that the altitude splits the base in half: CD = 4. A trig route (8 sin 60°) earns this line instead.\n- L2 (up to 1 point): Sets up x² + 4² = 8², or x = 8 sin 60°.\n- L3 (up to 1 point): x = 4√3 (accept √48 or ≈ 6.93).\nTeacher's grading notes (rules): Follow-through inside the problem: a wrong half-base carried correctly through the Pythagorean theorem earns L2 but not L3. A bare correct answer with no work earns the answer line only.The student's whiteboard for 1a: [image]",
+   "reason": "Student used half-base and Pythagorean setup, but wrote √48 instead of simplifying to 4√3; final numeric ≈6.93 is correct.",
+   "costUsd": 0.00032125,
+   "latencyMs": 5123,
+   "attempts": 1,
+   "promptTokens": 2137,
+   "completionTokens": 536
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-1b-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0004623,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1b-answer-only",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "60",
+   "reason": "Correct answer; no work shown beyond the final value, which matches rubric.",
+   "costUsd": 0.0001269,
+   "latencyMs": 1445,
+   "attempts": 1,
+   "promptTokens": 1962,
+   "completionTokens": 72
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1b-thirty",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(diagram)",
+   "reason": "Student shows a bisected angle reasoning but drew altitude and congruent base angles, not explicitly stating equilateral property; final answer B = 30° is incorrect.",
+   "costUsd": 0.0001641,
+   "latencyMs": 1929,
+   "attempts": 1,
+   "promptTokens": 1962,
+   "completionTokens": 165
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1b-near-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "B = ?",
+   "reason": "No work shown to justify the 60° answer; only a blank prompt is visible.",
+   "costUsd": 0.0001297,
+   "latencyMs": 2759,
+   "attempts": 1,
+   "promptTokens": 1962,
+   "completionTokens": 79
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-1b-overwritten",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "<B> = 80°",
+   "reason": "The board shows an incorrect angle value; the correct answer is 60°, not 80°.",
+   "costUsd": 0.0001337,
+   "latencyMs": 1487,
+   "attempts": 1,
+   "promptTokens": 1962,
+   "completionTokens": 89
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-2-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 2: An equilateral triangle has side length 8 units. What is the area?\nAnswer key (the student never saw this): 16\\sqrt{3} square units (also accept: 16\\sqrt{3}; \\approx 27.7 square units; \\frac12 \\cdot 8 \\cdot 4\\sqrt{3}). Worked solution: This is the triangle from problem 1. Its height is x = 4√3, so the area is 1/2 · 8 · 4√3 = 16√3 ≈ 27.7 square units.\nRubric (2 points):\n- L1 (up to 1 point): Uses area = 1/2 · base · height with base 8 and the height from problem 1a (4√3, or the student's own 1a value).\n- L2 (up to 1 point): Area = 16√3 ≈ 27.7 square units, or the correct product for the student's own height.\nTeacher's grading notes (rules): Follow-through on 1a applies (the worksheet does not state the link; Kincaid confirmed it). Units are not required. The formula (√3/4)·s² is also correct. A bare correct answer with no work earns the answer line only.This problem uses the student's answer to 1a, which asked: Triangle ABC is equilateral.\nWhat is the value of x?\nThe student's whiteboard for 1a: [image]",
+   "reason": "Shows correct height use and gives correct area; needs to confirm final numeric form aligns with 1a value.",
+   "costUsd": 0.0003533,
+   "latencyMs": 7059,
+   "attempts": 1,
+   "promptTokens": 3258,
+   "completionTokens": 476
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-2-follow-through-root5",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 2: An equilateral triangle has side length 8 units. What is the area?\nAnswer key (the student never saw this): 16\\sqrt{3} square units (also accept: 16\\sqrt{3}; \\approx 27.7 square units; \\frac12 \\cdot 8 \\cdot 4\\sqrt{3}). Worked solution: This is the triangle from problem 1. Its height is x = 4√3, so the area is 1/2 · 8 · 4√3 = 16√3 ≈ 27.7 square units.\nRubric (2 points):\n- L1 (up to 1 point): Uses area = 1/2 · base · height with base 8 and the height from problem 1a (4√3, or the student's own 1a value).\n- L2 (up to 1 point): Area = 16√3 ≈ 27.7 square units, or the correct product for the student's own height.\nTeacher's grading notes (rules): Follow-through on 1a applies (the worksheet does not state the link; Kincaid confirmed it). Units are not required. The formula (√3/4)·s² is also correct. A bare correct answer with no work earns the answer line only.This problem uses the student's answer to 1a, which asked: Triangle \\(ABC\\) is equilateral.\nWhat is the value of \\(x\\)?\nThe student's whiteboard for 1a: [image].",
+   "reason": "Correctly uses base and height from 1a to compute area; final numeric form present.",
+   "costUsd": 0.0003561,
+   "latencyMs": 6552,
+   "attempts": 1,
+   "promptTokens": 3258,
+   "completionTokens": 483
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-2-follow-through-4",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 2: An equilateral triangle has side length 8 units. What is the area?\nAnswer key (the student never saw this): 16\\sqrt{3} square units (also accept: 16\\sqrt{3}; \\approx 27.7 square units; \\frac12 \\cdot 8 \\cdot 4\\sqrt{3}). Worked solution: This is the triangle from problem 1. Its height is x = 4√3, so the area is 1/2 · 8 · 4√3 = 16√3 ≈ 27.7 square units.\nRubric (2 points):\n- L1 (up to 1 point): Uses area = 1/2 · base · height with base 8 and the height from problem 1a (4√3, or the student's own 1a value).\n- L2 (up to 1 point): Area = 16√3 ≈ 27.7 square units, or the correct product for the student's own height.\nTeacher's grading notes (rules): Follow-through on 1a applies (the worksheet does not state the link; Kincaid confirmed it). Units are not required. The formula (√3/4)·s² is also correct. A bare correct answer with no work earns the answer line only.This problem uses the student's answer to 1a, which asked: Triangle ABC is equilateral.\nWhat is the value of x?\nThe student's whiteboard for 1a: [image]",
+   "reason": "L1 uses base=8 and height from 1a; L2 yields correct area using that height.",
+   "costUsd": 0.0003421,
+   "latencyMs": 6538,
+   "attempts": 1,
+   "promptTokens": 3258,
+   "completionTokens": 448
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-2-carried-wrong",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 2: An equilateral triangle has side length 8 units. What is the area?\nAnswer key (the student never saw this): 16\\sqrt{3} square units (also accept: 16\\sqrt{3}; \\approx 27.7 square units; \\frac12 \\cdot 8 \\cdot 4\\sqrt{3}). Worked solution: This is the triangle from problem 1. Its height is x = 4√3, so the area is 1/2 · 8 · 4√3 = 16√3 ≈ 27.7 square units.\nRubric (2 points):\n- L1 (up to 1 point): Uses area = 1/2 · base · height with base 8 and the height from problem 1a (4√3, or the student's own 1a value).\n- L2 (up to 1 point): Area = 16√3 ≈ 27.7 square units, or the correct product for the student's own height.\nTeacher's grading notes (rules): Follow-through on 1a applies (the worksheet does not state the link; Kincaid confirmed it). Units are not required. The formula (√3/4)·s² is also correct. A bare correct answer with no work earns the answer line only.This problem uses the student's answer to 1a, which asked: Triangle ABC is equilateral.\nWhat is the value of x?\nThe student's whiteboard for 1a: [image]",
+   "reason": "Correct use of base and height; final area equals 16√3; no other incorrect steps shown.",
+   "costUsd": 0.0003525,
+   "latencyMs": 7136,
+   "attempts": 1,
+   "promptTokens": 3258,
+   "completionTokens": 474
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-2-sqrt3-over-4",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Ambiguity: the 0th line shows .64 rather than 64; verify values and ensure correct multiplication to 16√3.",
+   "read": "Problem 2: An equilateral triangle has side length 8 units. What is the area?\nAnswer key (the student never saw this): 16\\sqrt{3} square units (also accept: 16\\sqrt{3}; \\approx 27.7 square units; \\frac12 \\cdot 8 \\cdot 4\\sqrt{3}). Worked solution: This is the triangle from problem 1. Its height is x = 4√3, so the area is 1/2 \\cdot 8 \\cdot 4√3 = 16√3 ≈ 27.7 square units.\nRubric (2 points):\n- L1 (up to 1 point): Uses area = 1/2 · base · height with base 8 and the height from problem 1a (4√3, or the student's own 1a value).\n- L2 (up to 1 point): Area = 16√3 ≈ 27.7 square units, or the correct product for the student's own height.\nTeacher's grading notes (rules): Follow-through on 1a applies (the worksheet does not state the link; Kincaid confirmed it). Units are not required. The formula (√3/4)·s² is also correct. A bare correct answer with no work earns the answer line only.This problem uses the student's answer to 1a, which asked: Triangle ABC is equilateral.\nWhat is the value of x?\nThe student's whiteboard for 1a: [image of height x in equilateral triangle]\n\nThe student's board for 2: [image of area calculation showing A = √3/4 s^2, then A = √3/4 · .64, then = [16√3] with box around].",
+   "reason": "Uses correct height from 1a and computes area; final numeric form shown (16√3) but the second line lacks explicit units and is miswritten as .64 instead of 64; needs clarity.",
+   "costUsd": 0.0003833,
+   "latencyMs": 7039,
+   "attempts": 1,
+   "promptTokens": 3258,
+   "completionTokens": 551
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-2-side-as-height",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear interpretation of 1a height; check whether height is 4√3 from equilateral triangle or if student reused 8 as height.",
+   "read": "Problem 2: An equilateral triangle has side length 8 units. What is the area?\nAnswer key (the student never saw this): 16\\sqrt{3} square units (also accept: 16\\sqrt{3}; \\approx 27.7 square units; \\frac12 \\cdot 8 \\cdot 4\\sqrt{3}). Worked solution: This is the triangle from problem 1. Its height is x = 4√3, so the area is 1/2 · 8 · 4√3 = 16√3 ≈ 27.7 square units.\nRubric (2 points):\n- L1 (up to 1 point): Uses area = 1/2 · base · height with base 8 and the height from problem 1a (4√3, or the student's own 1a value).\n- L2 (up to 1 point): Area = 16√3 ≈ 27.7 square units, or the correct product for the student's own height.\nTeacher's grading notes (rules): Follow-through on 1a applies (the worksheet does not state the link; Kincaid confirmed it). Units are not required. The formula (√3/4)·s² is also correct. A bare correct answer with no work earns the answer line only.This problem uses the student's answer to 1a, which asked: Triangle \\(ABC\\) is equilateral.\nWhat is the value of \\(x\\)?\nThe student's whiteboard for 1a:",
+   "reason": "Correct height used and product yields 16√3; no unit needed. The height from 1a should be 4√3, not 8.",
+   "costUsd": 0.0003653,
+   "latencyMs": 7665,
+   "attempts": 1,
+   "promptTokens": 3258,
+   "completionTokens": 506
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-2-two-answers",
+   "error": "bad response: Grade reply did not fit the rubric: line L2 got 2 of 1",
+   "costUsd": 0.0010635,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-2-near-blank",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "Problem 2: An equilateral triangle has side length 8 units. What is the area?\nAnswer key (the student never saw this): 16\\sqrt{3} square units (also accept: 16\\sqrt{3}; \\approx 27.7 square units; \\frac12 \\cdot 8 \\cdot 4\\sqrt{3}). Worked solution: This is the triangle from problem 1. Its height is x = 4√3, so the area is 1/2 \\cdot 8 \\cdot 4√3 = 16√3 ≈ 27.7 square units.\nRubric (2 points):\n- L1 (up to 1 point): Uses area = 1/2 · base · height with base 8 and the height from problem 1a (4√3, or the student's own 1a value).\n- L2 (up to 1 point): Area = 16√3 ≈ 27.7 square units, or the correct product for the student's own height.\nTeacher's grading notes (rules): Follow-through on 1a applies (the worksheet does not state the link; Kincaid confirmed it). Units are not required. The formula (√3/4)·s² is also correct. A bare correct answer with no work earns the answer line only.This problem uses the student's answer to 1a, which asked: Triangle \\(ABC\\) is equilateral.\nWhat is the value of \\(x\\)?\nThe student's whiteboard for 1a:",
+   "reason": "Student used base 8 and height from 1a (4√3) but did not show the height explicitly in L2; missing complete calculation.",
+   "costUsd": 0.0003421,
+   "latencyMs": 6038,
+   "attempts": 1,
+   "promptTokens": 3258,
+   "completionTokens": 448
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-3a-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "BD is the diagonal\ns^2 + s^2 = 4^2\n2s^2 = 16\ns^2 = 8, s = 2√2\nAE = 1/2 s = √2",
+   "reason": "Correctly found side length and AE as half the side; but must note AE is half of AB, not the entire diagonal, and match the provided method.",
+   "costUsd": 0.000187,
+   "latencyMs": 3375,
+   "attempts": 1,
+   "promptTokens": 2140,
+   "completionTokens": 200
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-3a-bd-as-side",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Two different interpretations of AE (2 vs √2) could change points; check if student meant side length 4/√2 or 2√2.",
+   "read": "side = 4\nAE = half of the side\nAE = 4 ÷ 2 = 2",
+   "reason": "The board shows incorrect side calculation and incorrect AE value for L1 and L2 respectively.",
+   "costUsd": 0.0001702,
+   "latencyMs": 2057,
+   "attempts": 1,
+   "promptTokens": 2140,
+   "completionTokens": 158
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-3a-forgot-halve",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear if AE should be √2; student has incorrect AE given their note, need check.",
+   "read": "45-45-90 triangle\n\nside = 4/\\sqrt{2} = 2\\sqrt{2}\n\n(\\overline{AE} = 2\\sqrt{2})",
+   "reason": "L1 shows the correct side length; L2 shows AE as 2√2, but the circle indicates it should be √2; no work for AE halved shown.",
+   "costUsd": 0.0001878,
+   "latencyMs": 3024,
+   "attempts": 1,
+   "promptTokens": 2140,
+   "completionTokens": 202
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-3a-messy-crossed",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "AE = 4 ÷ 4?\\\\n s = \\frac{4}{\\sqrt{2}} \\approx 2.83\\\\n AE = 2.83 ÷ 2\\\\n AE ≈ [1.41]",
+   "reason": "No correct identification of the side length or correct execution; the work is muddled and the given final is boxed but derived incorrectly.",
+   "costUsd": 0.0001742,
+   "latencyMs": 3426,
+   "attempts": 1,
+   "promptTokens": 2140,
+   "completionTokens": 168
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-3b-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00049965,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-3b-diagonal",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "A = \\frac{d^2}{2}\n\n= \\frac{d^2}{2} = \\frac{16}{2}\n\n= [8]",
+   "reason": "Correct use of diagonal relation to area, but missing explicit side length or clear link to BD=4; final value 8 shown.",
+   "costUsd": 0.00017655,
+   "latencyMs": 3653,
+   "attempts": 1,
+   "promptTokens": 2083,
+   "completionTokens": 181
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-3b-bd-as-side",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00046965000000000006,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-3b-small-squares",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005368500000000001,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-4-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "sin 30° = h/18\nh = 18 sin 30°\nh = 18(0.5)\n\nh = 9 ft",
+   "reason": "Shows setup using sine with opposite side 30°, but uses feet unit; final answer 9 ft shown on board.",
+   "costUsd": 0.0001609,
+   "latencyMs": 2694,
+   "attempts": 1,
+   "promptTokens": 2074,
+   "completionTokens": 143
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-4-cos",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005667000000000001,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-4-radians",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005438999999999999,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-4-answer-only",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "9 ft",
+   "reason": "Student wrote 9 ft but did not show setup using 18 sin 30° or indicate opposite side relation; however the final answer 9 is correct.",
+   "costUsd": 0.0001465,
+   "latencyMs": 5623,
+   "attempts": 1,
+   "promptTokens": 2074,
+   "completionTokens": 107
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-5-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "tan 30° = AB/6\n\nAB = 6 tan 30°\nAB ≈ 6(0.577)\n\nAB ≈ 3.46",
+   "reason": " Student used tangent with correct setup and computed AB ≈ 3.46, so both steps earned.",
+   "costUsd": 0.00016095,
+   "latencyMs": 2385,
+   "attempts": 1,
+   "promptTokens": 2043,
+   "completionTokens": 147
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-5-tan-upside-down",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005860500000000001,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-5-30-60-90",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0008368499999999999,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-5-half-of-6",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Ambiguous method: uses half of AC instead of tan30° or 3-4-5 reasoning; could change points if interpreted as tan relationship.",
+   "read": "side across from 30° is half\n\nAB = 1/2 · 6\n\n[AB box] = 3",
+   "reason": "Setup uses the wrong relation; 1/2 of 6 is 3, but AB is not given by half of AC in this triangle.",
+   "costUsd": 0.00017215,
+   "latencyMs": 3930,
+   "attempts": 1,
+   "promptTokens": 2043,
+   "completionTokens": 175
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-5-near-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "tan 30 =",
+   "reason": "Only shows ‘tan 30 =’ with no further steps or answer.",
+   "costUsd": 0.00014415,
+   "latencyMs": 2411,
+   "attempts": 1,
+   "promptTokens": 2043,
+   "completionTokens": 105
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "BD^2 + 12^2 = 13^2\n\nBD^2 = 169 - 144 = 25\n\n[BD] = 5\n\n△ADB ∼ △BDC\n\nAD / BD = BD / DC\n\nAD / 5 = 5 / 12\n\nAD = 25/12 ≈ 2.08",
+   "reason": "Correct BD and AD from similar triangles; third method partially shown but not completed as a distinct check.",
+   "costUsd": 0.00022755,
+   "latencyMs": 3201,
+   "attempts": 1,
+   "promptTokens": 2191,
+   "completionTokens": 295
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-trig-check",
+   "points": 3,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "BD = √(169 − 144) = √25 = 5\n\nAD/5 = 5/12\n\nAD = 25/12 ≈ 2.08\n\ncheck w/ trig:\n\ntan C = 5/12 , ∠C ≈ 22.6°\n∠ABD = ∠C ≈ 22.6°\nAD = 5 tan 22.6° ≈ 2.08 yes",
+   "reason": "Correct BD and AD via similar triangles; AD value matches. L3 uses a different method but written as trig here, not a distinct second method.",
+   "costUsd": 0.00020915,
+   "latencyMs": 2422,
+   "attempts": 1,
+   "promptTokens": 2191,
+   "completionTokens": 249
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-restate-check",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "L3 needs a different method, e.g., AB^2 = AD·AC or another independent check; unclear if this counts as second method.",
+   "read": "BD^2 = 13^2 - 12^2 = 25\nBD = 5\n\nAD/5 = 5/12\n\nAD = 25/12\n\ncheck: 5^2 + 12^2\n= 25 + 144 = 169 = 13^2 ok",
+   "reason": "L1 and L2 are shown; L3 uses the same Pythagorean check, not a different method.",
+   "costUsd": 0.00021675,
+   "latencyMs": 4075,
+   "attempts": 1,
+   "promptTokens": 2191,
+   "completionTokens": 268
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-wrong-ratio",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear read: AD value derived as 60/13 or 60/73; if read as 60/13 or 60/73, points would change; two different final AD values appear.",
+   "read": "BD^2 + 144 = 169 → BD = 5\n\nAD/12 = 5/13\n\nAD = 60/13 ≈ 4.62",
+   "reason": "L1 correctly finds BD = 5. L2 uses an incorrect proportion and L3 carries wrong AD value.",
+   "costUsd": 0.00019715,
+   "latencyMs": 3525,
+   "attempts": 1,
+   "promptTokens": 2191,
+   "completionTokens": 219
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-6-messy-crossed",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0008218500000000001,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-6-near-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    },
+    {
+     "id": "L2",
+     "points": 0
+    },
+    {
+     "id": "L3",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "BD = ?\nAD = ?\n\n",
+   "reason": "No numerical steps or justifications were written on the board.",
+   "costUsd": 0.00015595,
+   "latencyMs": 2017,
+   "attempts": 1,
+   "promptTokens": 2191,
+   "completionTokens": 116
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-7-correct",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "JH ⅈpp 35°, GJ adj\n\nJH = 9 sin 35° ≈ 5.16\n\nGJ = 9 cos 35° ≈ 7.37",
+   "reason": "Correct use of sine and cosine with 9 as hypotenuse; both expressions match the diagram. No explicit JH identity with 55° shown, but equivalent forms exist.",
+   "costUsd": 0.00017835,
+   "latencyMs": 3098,
+   "attempts": 1,
+   "promptTokens": 2119,
+   "completionTokens": 181
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-7-swapped",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00061785,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-7-angle-55",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear: JH vs GJ expressions swapped; check if JH should be 9 sin 35° and GJ 9 cos 35° per rubric.",
+   "read": "∠JH? (no; the board shows):\n- On left: \"∠H = 180 - 90 - 35 = 55°\" (note: looks like a calculation for angle H)\n- Then: \"H = 9 cos 55°\"\n- Then: \"GJ = 9 sin 55°\"\n- Diagram: triangle with G at left bottom, H at right bottom, J at top right forming a right angle at J; angle at G labeled 35°, angle at H labeled 55°; hypotenuse GH labeled 9.\n",
+   "reason": "Correct approach uses complementary angle 55° for both expressions, but JH should be the opposite side to 35° (or adjacent to 55°) and GJ should be adjacent to 35° (or opposite 55°). The expressions are swapped relative to the problem’s labeling.",
+   "costUsd": 0.00023275,
+   "latencyMs": 4866,
+   "attempts": 1,
+   "promptTokens": 2119,
+   "completionTokens": 317
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-7-pythagoras",
+   "points": 1,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 0
+    }
+   ],
+   "flagged": true,
+   "flagReason": "Unclear if GJ expression matches allowed forms; compute form should match cos 35° or sin 55° per rubric.",
+   "read": "JH = 9 sin 35° ≈ 5.16\n\nGJ = √(9^2 − 5.16^2)\n= √81 − 26.63\n= √54.37 ≈ 7.37",
+   "reason": "Line 1 has correct expression, line 2 uses a computed value but the method is not the form expected (should be 9 cos 35° or 9 sin 55°)",
+   "costUsd": 0.00020115,
+   "latencyMs": 3773,
+   "attempts": 1,
+   "promptTokens": 2119,
+   "completionTokens": 238
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-8a-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00049935,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-8a-statement-only",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005125500000000001,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-8a-doubled",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00049575,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-8a-blank",
+   "points": 0,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 0
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "(no work)",
+   "reason": "No work or arithmetic shown to verify the Pythagorean triple.",
+   "costUsd": 0.00012845,
+   "latencyMs": 2507,
+   "attempts": 1,
+   "promptTokens": 1953,
+   "completionTokens": 77
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-8b-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00053625,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-8b-radians",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00059265,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-8b-wrong-hypotenuse",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.0005578499999999999,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-8b-messy-overwrite",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00056505,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-8b-ratio-table",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00059745,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-9-correct",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00060195,
+   "attempts": 3
+  },
+  {
+   "_tag": "Graded",
+   "caseId": "rt-9-swapped",
+   "points": 2,
+   "lines": [
+    {
+     "id": "L1",
+     "points": 1
+    },
+    {
+     "id": "L2",
+     "points": 1
+    }
+   ],
+   "flagged": false,
+   "flagReason": "",
+   "read": "RQ = 4 sin 30° = 2\n\nQP = 4 cos 30° = 2√3",
+   "reason": "L1 correct: RQ = 2. L2 correct: QP = 2√3. However, for a 30-60-90 with hypotenuse 4, the opposite 30° leg is 2 and the other leg is 2√3; the given order matches the diagram.",
+   "costUsd": 0.00017785,
+   "latencyMs": 2950,
+   "attempts": 1,
+   "promptTokens": 2085,
+   "completionTokens": 184
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-9-30-60-90",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00052755,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-9-pythagoras-slip",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00058995,
+   "attempts": 3
+  },
+  {
+   "_tag": "Failed",
+   "caseId": "rt-9-unlabeled",
+   "error": "bad response: Grade reply did not fit the rubric: a rubric line was scored twice",
+   "costUsd": 0.00055155,
+   "attempts": 3
+  }
+ ]
+}

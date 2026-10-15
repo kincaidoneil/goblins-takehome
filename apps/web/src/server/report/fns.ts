@@ -3,7 +3,6 @@
  */
 import { randomBytes } from "node:crypto";
 import { Db, schema } from "@goblins/domain";
-import { layer as mockModel } from "@goblins/mock-model";
 import { createServerFn } from "@tanstack/react-start";
 import { and, eq, isNull } from "drizzle-orm";
 import { Effect, Schema } from "effect";
@@ -13,12 +12,10 @@ import { err, ok } from "../result";
 import { run } from "../runtime";
 import { reportHeader, reportInput, reportProblems, sharedSession } from "./data";
 import { mistakesFor } from "./mistakes";
+import { ReportModelClient } from "./model-client";
 
-/**
- * The model the grouping call uses. The mock until the app's runtime provides the shared,
- * call-logged ModelClient; then this goes away and real calls follow `MODEL_CLIENT`.
- */
-const withModel = Effect.provide(mockModel({ _tag: "Fixed", latencyMs: 0 }));
+/** Real calls only with `MODEL_CLIENT=openrouter`; every call is logged. */
+const withModel = Effect.provide(ReportModelClient);
 
 const BySession = Schema.Struct({ sessionId: Schema.UUID });
 
