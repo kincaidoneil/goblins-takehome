@@ -1,0 +1,3810 @@
+[
+  {
+    "id": "ar-1-correct",
+    "itemId": "1",
+    "tags": ["correct"],
+    "summary": "Subtracts 74 from 180 and boxes 106°.",
+    "style": {
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "∠A + ∠C = 180°"
+      },
+      {
+        "_tag": "Text",
+        "text": "74 + C = 180"
+      },
+      {
+        "_tag": "Text",
+        "text": "C = 180 - 74"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[C = 106°]]",
+        "gap": 8
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Uses supplementary angles (180 − 74) and gets 106°."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-1-answer-only",
+    "itemId": "1",
+    "tags": ["correct", "answer-only"],
+    "summary": "Writes only the boxed answer 106°.",
+    "style": {
+      "font": "caveat",
+      "ink": "black",
+      "size": 48,
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "[[C = 106°]]",
+        "at": [70, 70]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Bare 106°; the rubric gives both points for a correct answer with no work."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-1-used-90",
+    "itemId": "1",
+    "tags": ["incorrect", "common-mistake"],
+    "summary": "Treats supplementary as summing to 90 and gets 16°.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "blue",
+      "size": 40,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "supplementary",
+        "at": [50, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "A + C = 90"
+      },
+      {
+        "_tag": "Text",
+        "text": "74 + C = 90"
+      },
+      {
+        "_tag": "Text",
+        "text": "C = 90 - 74"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[C = 16°]]",
+        "gap": 6
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Uses 90 instead of 180, so no setup point, and 16° is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-1-borrow-slip",
+    "itemId": "1",
+    "tags": ["partial", "diagram"],
+    "summary": "Redraws both angles, sets up 180 − 74 but slips on the borrow and gets 116°.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "blue",
+      "size": 38,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[641, 186], [600, 330], [750, 330]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[769, 186], [810, 330], [960, 330]]
+      },
+      {
+        "_tag": "Arc",
+        "center": [600, 330],
+        "r": 34.0,
+        "from": 0,
+        "to": 74
+      },
+      {
+        "_tag": "Text",
+        "text": "74°",
+        "at": [636, 272],
+        "size": 26
+      },
+      {
+        "_tag": "Arc",
+        "center": [810, 330],
+        "r": 34.0,
+        "from": 0,
+        "to": 106
+      },
+      {
+        "_tag": "Text",
+        "text": "?",
+        "at": [846, 256],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [586, 340],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [744, 340],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "E",
+        "at": [648, 160],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [804, 340],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [954, 340],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "F",
+        "at": [748, 160],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "A + C = 180",
+        "at": [50, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "C = 180 - 74"
+      },
+      {
+        "_tag": "Text",
+        "text": "180",
+        "at": [110, 230],
+        "gap": 0
+      },
+      {
+        "_tag": "Text",
+        "text": "-  74",
+        "indent": -30
+      },
+      {
+        "_tag": "Path",
+        "points": [[70, 340], [200, 340]]
+      },
+      {
+        "_tag": "Text",
+        "text": "116",
+        "at": [110, 350]
+      },
+      {
+        "_tag": "Text",
+        "text": "[[∠C = 116°]]",
+        "at": [50, 450]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Correct setup 180 − 74 earns L1; the subtraction gives 116 instead of 106, so L2 is lost."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-1-overwritten-digit",
+    "itemId": "1",
+    "tags": ["partial", "messy"],
+    "summary": "Writes 180 − 74 and an answer whose middle digit is written over, reading as 106 or 116.",
+    "style": {
+      "font": "reenie-beanie",
+      "ink": "black",
+      "size": 46,
+      "mess": 3
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "A + C = 180",
+        "at": [60, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "180 - 74"
+      },
+      {
+        "_tag": "Text",
+        "text": "C =",
+        "at": [60, 230],
+        "size": 46
+      },
+      {
+        "_tag": "Text",
+        "text": "1",
+        "at": [140, 230],
+        "size": 46
+      },
+      {
+        "_tag": "Text",
+        "text": "0",
+        "at": [164, 230],
+        "size": 46
+      },
+      {
+        "_tag": "Text",
+        "text": "1",
+        "at": [166, 231],
+        "size": 46
+      },
+      {
+        "_tag": "Text",
+        "text": "6",
+        "at": [188, 230],
+        "size": 46
+      },
+      {
+        "_tag": "Ring",
+        "at": [40, 215],
+        "size": [210, 80]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Setup 180 − 74 is correct; the answer's middle digit is written over and could be 0 or 1.",
+      "scoreOn": "flag"
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). Middle digit overwritten: 106 or 116. Chose L2 = 1 because the correct setup above makes 106 the likely reading; a teacher could equally withhold it. Flag is what matters."
+    }
+  },
+  {
+    "id": "ar-2a-correct",
+    "itemId": "2a",
+    "tags": ["correct", "diagram"],
+    "summary": "Redraws the square and names DCM & DMC and MGF & GMF with their sums.",
+    "style": {
+      "font": "kalam",
+      "ink": "blue",
+      "size": 36,
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[640, 200], [940, 200], [940, 500], [640, 500]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[640, 200], [940, 353]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[640, 500], [940, 353]]
+      },
+      {
+        "_tag": "Arc",
+        "center": [640, 200],
+        "r": 20,
+        "from": 333,
+        "to": 360
+      },
+      {
+        "_tag": "Text",
+        "text": "27",
+        "at": [728, 210],
+        "size": 22
+      },
+      {
+        "_tag": "Arc",
+        "center": [940, 353],
+        "r": 20,
+        "from": 90,
+        "to": 153
+      },
+      {
+        "_tag": "Text",
+        "text": "63",
+        "at": [897, 289],
+        "size": 22
+      },
+      {
+        "_tag": "Arc",
+        "center": [940, 353],
+        "r": 20,
+        "from": 207,
+        "to": 270
+      },
+      {
+        "_tag": "Text",
+        "text": "64",
+        "at": [897, 391],
+        "size": 22
+      },
+      {
+        "_tag": "Arc",
+        "center": [640, 500],
+        "r": 20,
+        "from": 0,
+        "to": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "26",
+        "at": [729, 466],
+        "size": 22
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [618, 170],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [950, 170],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "F",
+        "at": [950, 502],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "G",
+        "at": [618, 502],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "M",
+        "at": [954, 339],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "pair 1: ∠DCM and ∠DMC",
+        "at": [40, 80]
+      },
+      {
+        "_tag": "Text",
+        "text": "27 + 63 = 90",
+        "indent": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "pair 2: ∠MGF and ∠GMF",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "26 + 64 = 90",
+        "indent": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Two valid complementary pairs, each named with the vertex in the middle."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-2a-corner-pairs",
+    "itemId": "2a",
+    "tags": ["correct", "alternate-method", "diagram"],
+    "summary": "Finds MCG = 63 and CGM = 64 from the square's corners and pairs them with DCM and MGF.",
+    "style": {
+      "font": "caveat",
+      "ink": "black",
+      "size": 40,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[660, 230], [950, 230], [950, 520], [660, 520]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[660, 230], [950, 378]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[660, 520], [950, 378]]
+      },
+      {
+        "_tag": "Arc",
+        "center": [660, 230],
+        "r": 20,
+        "from": 333,
+        "to": 360
+      },
+      {
+        "_tag": "Text",
+        "text": "27",
+        "at": [745, 239],
+        "size": 22
+      },
+      {
+        "_tag": "Arc",
+        "center": [660, 230],
+        "r": 20,
+        "from": 270,
+        "to": 333
+      },
+      {
+        "_tag": "Text",
+        "text": "63",
+        "at": [684, 278],
+        "size": 22
+      },
+      {
+        "_tag": "Arc",
+        "center": [660, 520],
+        "r": 20,
+        "from": 0,
+        "to": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "26",
+        "at": [746, 486],
+        "size": 22
+      },
+      {
+        "_tag": "Arc",
+        "center": [660, 520],
+        "r": 20,
+        "from": 26,
+        "to": 90
+      },
+      {
+        "_tag": "Text",
+        "text": "64",
+        "at": [686, 448],
+        "size": 22
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [638, 200],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [960, 200],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "F",
+        "at": [960, 522],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "G",
+        "at": [638, 522],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "M",
+        "at": [964, 364],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "corners of a square = 90",
+        "at": [40, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "∠MCG = 90 - 27 = 63"
+      },
+      {
+        "_tag": "Text",
+        "text": "∠CGM = 90 - 26 = 64"
+      },
+      {
+        "_tag": "Text",
+        "text": "1) ∠DCM + ∠MCG",
+        "gap": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "2) ∠MGF + ∠CGM"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "DCM & MCG and MGF & CGM each fill a 90° corner; both pairs are on the rubric's list."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-2a-measures-only",
+    "itemId": "2a",
+    "tags": ["partial", "off-rubric"],
+    "summary": "Gives the two pairs only as measures, 27 & 63 and 26 & 64, without naming angles.",
+    "style": {
+      "font": "shadows-into-light",
+      "ink": "purple",
+      "size": 44,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "27° and 63°",
+        "at": [60, 70]
+      },
+      {
+        "_tag": "Text",
+        "text": "26° and 64°"
+      },
+      {
+        "_tag": "Text",
+        "text": "they both add up to 90",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "Pairs given by measure only; each measure is labeled once in the figure, so the angles meant are clear."
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 4). No angle names. The rubric note allows measures when it is clear which angles are meant; 27, 63, 26 and 64 each appear once in the figure, so chose 2/2. A teacher who insists on names would give 0."
+    }
+  },
+  {
+    "id": "ar-2a-wrong-vertex",
+    "itemId": "2a",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Names the 27° angle as CDM (vertex D) in the first pair; the second pair MGF & GMF is right.",
+    "style": {
+      "font": "caveat",
+      "ink": "black",
+      "size": 42,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "∠CDM (27) + ∠CMD (63) = 90",
+        "at": [40, 70]
+      },
+      {
+        "_tag": "Text",
+        "text": "∠GMF (64) + ∠MGF (26) = 90",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "Either",
+      "reason": "∠CDM has its vertex at D, the 90° corner, so the first pair misnames the 27° angle; the second pair (GMF and MGF) is valid and earns L1."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-2a-used-180",
+    "itemId": "2a",
+    "tags": ["incorrect", "common-mistake"],
+    "summary": "Thinks complementary means summing to 180 and pairs the square's right-angle corners.",
+    "style": {
+      "font": "nanum-pen-script",
+      "ink": "blue",
+      "size": 48,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "complementary = 180",
+        "at": [60, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "∠D and ∠F   (90 + 90)",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "∠C and ∠G   (90 + 90)"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Both pairs sum to 180, not 90; the student confused complementary with supplementary."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-2b-straight-angle",
+    "itemId": "2b",
+    "tags": ["correct", "diagram"],
+    "summary": "Marks the three angles at M on a redrawn square and shows 63 + 53 + 64 = 180.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "blue",
+      "size": 36,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[660, 220], [950, 220], [950, 510], [660, 510]],
+        "closed": true
+      },
+      {
+        "_tag": "Path",
+        "points": [[660, 220], [950, 368]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[660, 510], [950, 368]]
+      },
+      {
+        "_tag": "Arc",
+        "center": [950, 368],
+        "r": 20,
+        "from": 90,
+        "to": 153
+      },
+      {
+        "_tag": "Text",
+        "text": "63",
+        "at": [908, 305],
+        "size": 22
+      },
+      {
+        "_tag": "Arc",
+        "center": [950, 368],
+        "r": 20,
+        "from": 153,
+        "to": 207
+      },
+      {
+        "_tag": "Text",
+        "text": "53",
+        "at": [881, 355],
+        "size": 22
+      },
+      {
+        "_tag": "Arc",
+        "center": [950, 368],
+        "r": 20,
+        "from": 207,
+        "to": 270
+      },
+      {
+        "_tag": "Text",
+        "text": "64",
+        "at": [908, 404],
+        "size": 22
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [638, 190],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [960, 190],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "F",
+        "at": [960, 512],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "G",
+        "at": [638, 512],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "M",
+        "at": [964, 354],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "D, M, F are on a straight line",
+        "at": [40, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "∠DMC + ∠CMG + ∠GMF"
+      },
+      {
+        "_tag": "Text",
+        "text": "63 + 53 + 64 = 180",
+        "indent": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "∠CMG = 180 - 127 = 53",
+        "gap": 40,
+        "size": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Names DMC, CMG and GMF, the straight angle at M."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-2b-triangle",
+    "itemId": "2b",
+    "tags": ["correct", "alternate-method", "diagram"],
+    "summary": "Uses the angles of triangle CDM: 27 + 90 + 63 = 180.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "black",
+      "size": 40,
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[640, 180], [940, 180], [940, 340]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [940, 180],
+        "a": [640, 180],
+        "b": [940, 340],
+        "size": 18
+      },
+      {
+        "_tag": "Arc",
+        "center": [640, 180],
+        "r": 50,
+        "from": 332,
+        "to": 360
+      },
+      {
+        "_tag": "Arc",
+        "center": [940, 340],
+        "r": 36,
+        "from": 90,
+        "to": 152
+      },
+      {
+        "_tag": "Text",
+        "text": "27°",
+        "at": [704, 186],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "63°",
+        "at": [887, 276],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [618, 144],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [954, 144],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "M",
+        "at": [958, 339],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "triangle CDM",
+        "at": [40, 70]
+      },
+      {
+        "_tag": "Text",
+        "text": "∠DCM, ∠CDM, ∠DMC"
+      },
+      {
+        "_tag": "Text",
+        "text": "27 + 90 + 63 = 180",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "The three angles of triangle CDM are a valid set."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-2b-blank",
+    "itemId": "2b",
+    "tags": ["blank"],
+    "summary": "Leaves the board empty.",
+    "style": {
+      "font": "kalam",
+      "ink": "blue"
+    },
+    "board": [],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "No work; nothing earns the line."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-2b-measures-only",
+    "itemId": "2b",
+    "tags": ["partial", "off-rubric"],
+    "summary": "Finds the third angle at M as 53 and lists 63, 53, 64 as numbers without naming any angle.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "black",
+      "size": 42,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "63 + 64 = 127",
+        "at": [60, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "180 - 127 = 53"
+      },
+      {
+        "_tag": "Text",
+        "text": "63, 53, 64",
+        "gap": 30
+      },
+      {
+        "_tag": "Ring",
+        "at": [35, 188],
+        "size": [250, 88]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Lists measures, not angle names; 63, 53, 64 matches the angles at M, but the problem asks to name angles."
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 4). Item asks to name angles and the student gives only measures. Any reading of 63, 53, 64 (angles at M or triangle CMG) is a valid set, so chose 1; a teacher who requires names would give 0."
+    }
+  },
+  {
+    "id": "ar-2b-wrong-vertex",
+    "itemId": "2b",
+    "tags": ["incorrect", "common-mistake"],
+    "summary": "Lists DMC, CMG and MGF with 63 + 53 + 64, naming the 64° angle with the wrong vertex.",
+    "style": {
+      "font": "kalam",
+      "ink": "purple",
+      "size": 40,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "∠DMC + ∠CMG + ∠MGF = 180",
+        "at": [40, 70]
+      },
+      {
+        "_tag": "Text",
+        "text": "63 + 53 + 64 = 180",
+        "indent": 40
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        }
+      ],
+      "flag": "Either",
+      "reason": "∠MGF is the 26° angle at G, so the named angles sum to 142; the student meant GMF."
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 4). The 64 shows the student meant ∠GMF but wrote ∠MGF. Chose 0 because the named set does not sum to 180 and the item is about naming angles; a lenient teacher may accept the intent."
+    }
+  },
+  {
+    "id": "ar-3-correct",
+    "itemId": "3",
+    "tags": ["correct", "diagram"],
+    "summary": "Redraws the crossing lines, gives b = 42 as vertical and c = 180 − 42 = 138.",
+    "style": {
+      "font": "caveat",
+      "ink": "blue",
+      "size": 40,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[983, 246], [577, 354]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[593, 205], [967, 395]]
+      },
+      {
+        "_tag": "Arc",
+        "center": [780, 300],
+        "r": 30,
+        "from": 333,
+        "to": 375
+      },
+      {
+        "_tag": "Arc",
+        "center": [780, 300],
+        "r": 34,
+        "from": 153,
+        "to": 195
+      },
+      {
+        "_tag": "Arc",
+        "center": [780, 300],
+        "r": 38,
+        "from": 195,
+        "to": 333
+      },
+      {
+        "_tag": "Text",
+        "text": "b°",
+        "at": [696, 276],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "42°",
+        "at": [834, 291],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "c°",
+        "at": [758, 355],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "b = 42  (vertical angles)",
+        "at": [40, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "c + 42 = 180",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "c = 180 - 42"
+      },
+      {
+        "_tag": "Text",
+        "text": "c = 138"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[b = 42,  c = 138]]",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "b = 42 by vertical angles and c = 138 as the supplement of 42."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-3-c-complementary",
+    "itemId": "3",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Gets b = 42 but subtracts 42 from 90 for c.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "black",
+      "size": 42,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "b = 42°   vertical",
+        "at": [50, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "c = 90 - 42",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "[[c = 48°]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "b = 42 is right; c uses 90 instead of 180, so 48 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-3-adjacent-as-vertical",
+    "itemId": "3",
+    "tags": ["incorrect", "common-mistake", "diagram"],
+    "summary": "Treats c as vertical to 42 and b as its supplement: b = 138, c = 42.",
+    "style": {
+      "font": "shadows-into-light",
+      "ink": "black",
+      "size": 42,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[973, 278], [587, 382]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[602, 239], [958, 421]]
+      },
+      {
+        "_tag": "Arc",
+        "center": [780, 330],
+        "r": 30,
+        "from": 333,
+        "to": 375
+      },
+      {
+        "_tag": "Arc",
+        "center": [780, 330],
+        "r": 34,
+        "from": 153,
+        "to": 195
+      },
+      {
+        "_tag": "Arc",
+        "center": [780, 330],
+        "r": 38,
+        "from": 195,
+        "to": 333
+      },
+      {
+        "_tag": "Text",
+        "text": "b°",
+        "at": [696, 306],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "42°",
+        "at": [834, 321],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "c°",
+        "at": [758, 385],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "c is across from 42",
+        "at": [40, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "so c = 42"
+      },
+      {
+        "_tag": "Text",
+        "text": "b and 42 make a line",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "b = 180 - 42 = 138"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[b = 138  c = 42]]",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Swaps the relationships: c is adjacent to 42, not vertical, so both values are wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-3-crossed-out-messy",
+    "itemId": "3",
+    "tags": ["correct", "messy", "crossed-out"],
+    "summary": "Crosses out c = 48, then writes c = 180 − 42 = 138 with b = 42.",
+    "style": {
+      "font": "reenie-beanie",
+      "ink": "blue",
+      "size": 48,
+      "mess": 2
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "b = 42",
+        "at": [60, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "~~c = 90 - 42 = 48~~",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "c = 180 - 42 = 138"
+      },
+      {
+        "_tag": "Text",
+        "text": "b = 42  c = 138",
+        "gap": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "The 48 is crossed out; b = 42 and c = 138 are both right."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-3-two-answers",
+    "itemId": "3",
+    "tags": ["partial", "diagram"],
+    "summary": "Writes b = 42 and leaves two values for c, 138 and 48, with neither crossed out.",
+    "style": {
+      "font": "kalam",
+      "ink": "black",
+      "size": 36,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[974, 203], [626, 297]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[640, 168], [960, 332]]
+      },
+      {
+        "_tag": "Arc",
+        "center": [800, 250],
+        "r": 30,
+        "from": 333,
+        "to": 375
+      },
+      {
+        "_tag": "Arc",
+        "center": [800, 250],
+        "r": 34,
+        "from": 153,
+        "to": 195
+      },
+      {
+        "_tag": "Arc",
+        "center": [800, 250],
+        "r": 38,
+        "from": 195,
+        "to": 333
+      },
+      {
+        "_tag": "Text",
+        "text": "b°",
+        "at": [716, 226],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "42°",
+        "at": [854, 241],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "c°",
+        "at": [778, 305],
+        "size": 28
+      },
+      {
+        "_tag": "Text",
+        "text": "b = 42",
+        "at": [40, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "c = 180 - 42 = 138"
+      },
+      {
+        "_tag": "Text",
+        "text": "or c = 90 - 42 = 48",
+        "gap": 60,
+        "indent": 40
+      },
+      {
+        "_tag": "Text",
+        "text": "c = 48",
+        "at": [640, 520],
+        "size": 40
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "b = 42 earns L1; c is left as both 138 and 48 with neither crossed out."
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 2). Two final values for c and neither crossed out; the last thing written is 48. Chose L2 = 0 because the student did not commit to 138; a teacher might take the first correct line."
+    }
+  },
+  {
+    "id": "ar-4-correct",
+    "itemId": "4",
+    "tags": ["correct", "diagram"],
+    "summary": "Redraws triangle QRS, marks S with a question mark and computes 90 − 62 = 28.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "blue",
+      "size": 40,
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[640, 280], [600, 440], [941, 355]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [640, 280],
+        "a": [600, 440],
+        "b": [941, 355],
+        "size": 14
+      },
+      {
+        "_tag": "Arc",
+        "center": [600, 440],
+        "r": 36,
+        "from": 14,
+        "to": 76
+      },
+      {
+        "_tag": "Text",
+        "text": "62°",
+        "at": [632, 373],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "Q",
+        "at": [628, 242],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "R",
+        "at": [586, 448],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "S",
+        "at": [948, 357],
+        "size": 26
+      },
+      {
+        "_tag": "Arc",
+        "center": [941, 355],
+        "r": 50,
+        "from": 166,
+        "to": 194
+      },
+      {
+        "_tag": "Text",
+        "text": "?",
+        "at": [850, 339],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "R + S = 90",
+        "at": [40, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "62 + S = 90"
+      },
+      {
+        "_tag": "Text",
+        "text": "S = 90 - 62"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[S = 28°]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Uses 90 − 62 for complementary angles and gets 28°."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-4-answer-only",
+    "itemId": "4",
+    "tags": ["correct", "answer-only"],
+    "summary": "Writes only ∠S = 28° and circles it.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "purple",
+      "size": 50,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "∠S = 28°",
+        "at": [90, 90]
+      },
+      {
+        "_tag": "Ring",
+        "at": [70, 75],
+        "size": [215, 95]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Correct answer with no work earns both points."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-4-used-180",
+    "itemId": "4",
+    "tags": ["incorrect", "common-mistake"],
+    "summary": "Subtracts 62 from 180 and gets 118°.",
+    "style": {
+      "font": "caveat",
+      "ink": "black",
+      "size": 44,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "R + S = 180",
+        "at": [50, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "S = 180 - 62"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[S = 118°]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Uses 180 instead of 90 for complementary angles; 118° is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-4-triangle-sum",
+    "itemId": "4",
+    "tags": ["correct", "alternate-method", "messy", "diagram"],
+    "summary": "Uses the triangle angle sum: 180 − 90 − 62 = 28.",
+    "style": {
+      "font": "nanum-pen-script",
+      "ink": "black",
+      "size": 48,
+      "mess": 2
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[656, 304], [620, 450], [930, 373]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [656, 304],
+        "a": [620, 450],
+        "b": [930, 373],
+        "size": 14
+      },
+      {
+        "_tag": "Arc",
+        "center": [620, 450],
+        "r": 36,
+        "from": 14,
+        "to": 76
+      },
+      {
+        "_tag": "Text",
+        "text": "62°",
+        "at": [652, 383],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "Q",
+        "at": [644, 266],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "R",
+        "at": [606, 458],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "S",
+        "at": [938, 375],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "triangle = 180",
+        "at": [50, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "90 + 62 = 152"
+      },
+      {
+        "_tag": "Text",
+        "text": "180 - 152 = 28"
+      },
+      {
+        "_tag": "Text",
+        "text": "S = 28",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "Triangle sum 180 − 90 − 62 is equivalent to 90 − 62 and gives 28; both points."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-4-subtraction-slip",
+    "itemId": "4",
+    "tags": ["partial", "diagram"],
+    "summary": "Sets up 90 − 62 but gets 38 and labels S as 38° on the diagram.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "blue",
+      "size": 38,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[640, 270], [600, 430], [941, 345]],
+        "closed": true
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [640, 270],
+        "a": [600, 430],
+        "b": [941, 345],
+        "size": 14
+      },
+      {
+        "_tag": "Arc",
+        "center": [600, 430],
+        "r": 36,
+        "from": 14,
+        "to": 76
+      },
+      {
+        "_tag": "Text",
+        "text": "62°",
+        "at": [632, 363],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "Q",
+        "at": [628, 232],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "R",
+        "at": [586, 438],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "S",
+        "at": [948, 347],
+        "size": 26
+      },
+      {
+        "_tag": "Arc",
+        "center": [941, 345],
+        "r": 50,
+        "from": 166,
+        "to": 194
+      },
+      {
+        "_tag": "Text",
+        "text": "38°",
+        "at": [838, 329],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "complementary = 90",
+        "at": [40, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "90 - 62 = 38"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[∠S = 38°]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Setup 90 − 62 is right; the subtraction slips to 38, so the answer point is lost."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-4-overwritten-digit",
+    "itemId": "4",
+    "tags": ["partial", "messy"],
+    "summary": "Writes 90 − 62 and an answer whose tens digit is written over, reading as 28 or 38.",
+    "style": {
+      "font": "shadows-into-light",
+      "ink": "black",
+      "size": 44,
+      "mess": 3
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "90 - 62 =",
+        "at": [60, 70]
+      },
+      {
+        "_tag": "Text",
+        "text": "2",
+        "at": [250, 70],
+        "size": 44
+      },
+      {
+        "_tag": "Text",
+        "text": "3",
+        "at": [252, 71],
+        "size": 44
+      },
+      {
+        "_tag": "Text",
+        "text": "8",
+        "at": [274, 70],
+        "size": 44
+      },
+      {
+        "_tag": "Text",
+        "text": "S =",
+        "at": [60, 200],
+        "size": 44
+      },
+      {
+        "_tag": "Text",
+        "text": "2",
+        "at": [140, 200],
+        "size": 44
+      },
+      {
+        "_tag": "Text",
+        "text": "3",
+        "at": [142, 201],
+        "size": 44
+      },
+      {
+        "_tag": "Text",
+        "text": "8",
+        "at": [164, 200],
+        "size": 44
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Setup 90 − 62 is right; the answer's tens digit is overwritten and reads as 2 or 3.",
+      "scoreOn": "flag"
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). Tens digit overwritten: 28 or 38. Chose L2 = 1 because the setup makes 28 the likely reading; a teacher could withhold it. The case is mainly for the flag."
+    }
+  },
+  {
+    "id": "ar-5-correct",
+    "itemId": "5",
+    "tags": ["correct"],
+    "summary": "Lets both vertical angles be x and solves 2x = 180 and 2x = 90.",
+    "style": {
+      "font": "kalam",
+      "ink": "black",
+      "size": 34,
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "vertical angles are equal, so x and x",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "supplementary: x + x = 180",
+        "gap": 14
+      },
+      {
+        "_tag": "Text",
+        "text": "2x = 180,  x = 90",
+        "indent": 40
+      },
+      {
+        "_tag": "Text",
+        "text": "yes, both are 90°",
+        "indent": 40
+      },
+      {
+        "_tag": "Text",
+        "text": "complementary: x + x = 90",
+        "gap": 14
+      },
+      {
+        "_tag": "Text",
+        "text": "2x = 90,  x = 45",
+        "indent": 40
+      },
+      {
+        "_tag": "Text",
+        "text": "yes it's possible, both are 45°",
+        "indent": 40
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "States vertical angles are equal, gets 90° and 45°."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-5-no-explanation",
+    "itemId": "5",
+    "tags": ["partial", "answer-only"],
+    "summary": "Writes only 'yes, 90°' and 'yes, 45°' with no explanation.",
+    "style": {
+      "font": "caveat",
+      "ink": "blue",
+      "size": 46,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "1)  yes, 90°",
+        "at": [60, 70]
+      },
+      {
+        "_tag": "Text",
+        "text": "2)  yes, 45°",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "Both answers are right, but nothing says vertical angles are equal."
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Decided 2026-10-15: L1 stays 0; the problem asks to explain, and nothing on the board says vertical angles are equal."
+    }
+  },
+  {
+    "id": "ar-5-complementary-impossible",
+    "itemId": "5",
+    "tags": ["partial", "common-mistake"],
+    "summary": "Gets 90° for the supplementary case but says vertical angles cannot be complementary because they are not next to each other.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "blue",
+      "size": 36,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "Vertical angles are the same size.",
+        "at": [40, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "If they are supplementary they are both 90",
+        "gap": 14
+      },
+      {
+        "_tag": "Text",
+        "text": "because 90 + 90 = 180"
+      },
+      {
+        "_tag": "Text",
+        "text": "No, they can't be complementary.",
+        "gap": 14
+      },
+      {
+        "_tag": "Text",
+        "text": "Complementary angles have to be next"
+      },
+      {
+        "_tag": "Text",
+        "text": "to each other to make a right angle"
+      },
+      {
+        "_tag": "Text",
+        "text": "and vertical angles are across."
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Equal angles and 90° earn L1 and L2; claiming complementary is impossible loses L3."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-5-idk",
+    "itemId": "5",
+    "tags": ["near-blank"],
+    "summary": "Writes only 'idk'.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "black",
+      "size": 40,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "idk",
+        "at": [80, 80]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "No work."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-5-forgot-halve",
+    "itemId": "5",
+    "tags": ["partial", "common-mistake", "messy"],
+    "summary": "Says vertical angles are the same but gives the sums, 180 and 90, as the angle sizes.",
+    "style": {
+      "font": "shadows-into-light",
+      "ink": "black",
+      "size": 42,
+      "mess": 2
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "vertical = same angle",
+        "at": [50, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "supplementary → yes they are 180",
+        "gap": 20
+      },
+      {
+        "_tag": "Text",
+        "text": "complementary → yes they are 90",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "Either",
+      "reason": "Says vertical angles are equal (L1) but never halves: each angle would be 90 and 45, not 180 and 90."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-5-drawings-only",
+    "itemId": "5",
+    "tags": ["correct", "off-rubric", "diagram"],
+    "summary": "Answers with two drawings: perpendicular lines labeled 90 in opposite angles, and an X with 45° in opposite angles.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "purple",
+      "size": 38,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[110, 230], [410, 230]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[260, 90], [260, 370]]
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [260, 230],
+        "a": [410, 230],
+        "b": [260, 90],
+        "size": 18
+      },
+      {
+        "_tag": "Text",
+        "text": "1)",
+        "at": [40, 80],
+        "size": 40
+      },
+      {
+        "_tag": "Text",
+        "text": "2)",
+        "at": [520, 80],
+        "size": 40
+      },
+      {
+        "_tag": "Text",
+        "text": "90",
+        "at": [295, 162],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "90",
+        "at": [195, 262],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "yes",
+        "at": [440, 200],
+        "size": 44
+      },
+      {
+        "_tag": "Path",
+        "points": [[857, 165], [543, 295]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[543, 165], [857, 295]]
+      },
+      {
+        "_tag": "Arc",
+        "center": [700, 230],
+        "r": 40,
+        "from": 337.5,
+        "to": 382.5
+      },
+      {
+        "_tag": "Arc",
+        "center": [700, 230],
+        "r": 40,
+        "from": 157.5,
+        "to": 202.5
+      },
+      {
+        "_tag": "Text",
+        "text": "45",
+        "at": [760, 212],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "45",
+        "at": [610, 212],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "45 + 45 = 90",
+        "at": [580, 420]
+      },
+      {
+        "_tag": "Text",
+        "text": "yes",
+        "at": [880, 200],
+        "size": 44
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "Drawings show equal opposite angles of 90 and of 45; no written explanation."
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 3). Only labeled drawings and 'yes'. The equal labels on opposite angles show vertical angles are equal and give 90 and 45, so chose 3/3; a teacher who requires a written explanation could withhold L1."
+    }
+  },
+  {
+    "id": "ar-6-correct",
+    "itemId": "6",
+    "tags": ["correct", "diagram"],
+    "summary": "Redraws the figure, marks DCB as a second right angle and solves 53 + g = 90.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "blue",
+      "size": 36,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[573, 327], [947, 393]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[625, 429], [929, 274]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[760, 360], [791, 182]]
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [760, 360],
+        "a": [573, 327],
+        "b": [791, 182],
+        "size": 16
+      },
+      {
+        "_tag": "Arc",
+        "center": [760, 360],
+        "r": 38,
+        "from": 27,
+        "to": 80
+      },
+      {
+        "_tag": "Arc",
+        "center": [760, 360],
+        "r": 52,
+        "from": 350,
+        "to": 387
+      },
+      {
+        "_tag": "Text",
+        "text": "53°",
+        "at": [784, 283],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "g°",
+        "at": [838, 328],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [562, 287],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [944, 399],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [788, 146],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "E",
+        "at": [934, 244],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "F",
+        "at": [604, 423],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [754, 374],
+        "size": 26
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [760, 360],
+        "a": [791, 182],
+        "b": [947, 393],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "∠ACD = 90 so ∠DCB = 90 too",
+        "at": [40, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "53 + g = 90",
+        "gap": 14
+      },
+      {
+        "_tag": "Text",
+        "text": "g = 90 - 53"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[g = 37]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Uses 53 + g = 90 because DCB is a right angle; g = 37."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-6-answer-only",
+    "itemId": "6",
+    "tags": ["correct", "answer-only"],
+    "summary": "Writes only g = 37°.",
+    "style": {
+      "font": "kalam",
+      "ink": "black",
+      "size": 46,
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "g = 37°",
+        "at": [80, 80]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Correct answer with no work earns both points."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-6-used-180",
+    "itemId": "6",
+    "tags": ["incorrect", "common-mistake", "diagram"],
+    "summary": "Treats 53 and g as supplementary and gets 127.",
+    "style": {
+      "font": "caveat",
+      "ink": "blue",
+      "size": 42,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[583, 329], [937, 391]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[632, 425], [920, 278]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[760, 360], [790, 192]]
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [760, 360],
+        "a": [583, 329],
+        "b": [790, 192],
+        "size": 16
+      },
+      {
+        "_tag": "Arc",
+        "center": [760, 360],
+        "r": 38,
+        "from": 27,
+        "to": 80
+      },
+      {
+        "_tag": "Arc",
+        "center": [760, 360],
+        "r": 52,
+        "from": 350,
+        "to": 387
+      },
+      {
+        "_tag": "Text",
+        "text": "53°",
+        "at": [784, 283],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "g°",
+        "at": [838, 328],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [572, 289],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [934, 397],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [788, 156],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "E",
+        "at": [926, 248],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "F",
+        "at": [612, 419],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [754, 374],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "53 + g = 180",
+        "at": [50, 70]
+      },
+      {
+        "_tag": "Text",
+        "text": "g = 180 - 53"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[g = 127]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "53 and g fill the right angle DCB, not a straight angle; 127 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-6-straight-line",
+    "itemId": "6",
+    "tags": ["correct", "alternate-method", "crossed-out", "messy", "diagram"],
+    "summary": "Crosses out g = 53, then uses the straight line ACB: 90 + 53 + g = 180.",
+    "style": {
+      "font": "reenie-beanie",
+      "ink": "black",
+      "size": 46,
+      "mess": 2
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[593, 349], [947, 411]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[642, 445], [930, 298]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[770, 380], [800, 212]]
+      },
+      {
+        "_tag": "RightAngle",
+        "vertex": [770, 380],
+        "a": [593, 349],
+        "b": [800, 212],
+        "size": 16
+      },
+      {
+        "_tag": "Arc",
+        "center": [770, 380],
+        "r": 38,
+        "from": 27,
+        "to": 80
+      },
+      {
+        "_tag": "Arc",
+        "center": [770, 380],
+        "r": 52,
+        "from": 350,
+        "to": 387
+      },
+      {
+        "_tag": "Text",
+        "text": "53°",
+        "at": [794, 303],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "g°",
+        "at": [848, 348],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [582, 309],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [944, 417],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [798, 176],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "E",
+        "at": [936, 268],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "F",
+        "at": [622, 439],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [764, 394],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "~~g = 53~~",
+        "at": [50, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "A to B is a line = 180",
+        "gap": 14
+      },
+      {
+        "_tag": "Text",
+        "text": "90 + 53 + g = 180"
+      },
+      {
+        "_tag": "Text",
+        "text": "143 + g = 180"
+      },
+      {
+        "_tag": "Text",
+        "text": "g = 37",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "Crossed-out 53 is not the answer; 90 + 53 + g = 180 is equivalent to 53 + g = 90 and gives 37."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-6-copied-problem",
+    "itemId": "6",
+    "tags": ["near-blank"],
+    "summary": "Copies the problem statement and writes g = ?.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "purple",
+      "size": 36,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "AB, EF, CD intersect at C",
+        "at": [50, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "ACD is a right angle"
+      },
+      {
+        "_tag": "Text",
+        "text": "g = ?",
+        "gap": 20
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Restates the problem; no setup and no value for g."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-7-messy-diagram",
+    "itemId": "7",
+    "tags": ["correct", "messy", "diagram", "crossed-out"],
+    "summary": "Redraws the straight angle, crosses out a first try of 180 − 148 = 32, then solves 2x = 32.",
+    "style": {
+      "mess": 3,
+      "font": "reenie-beanie",
+      "ink": "black"
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[580, 250], [980, 250]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[780, 250], [607, 300]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[780, 250], [953, 300]]
+      },
+      {
+        "_tag": "Arc",
+        "center": [780, 250],
+        "r": 30,
+        "from": 196,
+        "to": 344
+      },
+      {
+        "_tag": "Text",
+        "text": "x°",
+        "at": [644, 251],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "x°",
+        "at": [890, 251],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "148°",
+        "at": [754, 289],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "~~x = 180 - 148 = 32~~",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "x + x + 148 = 180",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "2x = 32"
+      },
+      {
+        "_tag": "Text",
+        "text": "x = \\frac{32}{2}"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 16]]"
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "Crossed-out 32 is not the answer; x + x + 148 = 180 gives x = 16."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-7-halve-difference",
+    "itemId": "7",
+    "tags": ["correct", "alternate-method", "diagram"],
+    "summary": "Finds 180 − 148 = 32 and splits it between the two x angles: x = 16.",
+    "style": {
+      "font": "kalam",
+      "ink": "blue",
+      "size": 40,
+      "mess": 0
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[590, 260], [970, 260]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[780, 260], [616, 307]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[780, 260], [944, 307]]
+      },
+      {
+        "_tag": "Arc",
+        "center": [780, 260],
+        "r": 30,
+        "from": 196,
+        "to": 344
+      },
+      {
+        "_tag": "Text",
+        "text": "x°",
+        "at": [650, 260],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "x°",
+        "at": [884, 260],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "148°",
+        "at": [754, 299],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "A",
+        "at": [584, 218],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "C",
+        "at": [774, 218],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "B",
+        "at": [964, 218],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "D",
+        "at": [604, 313],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "E",
+        "at": [944, 313],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "A to B is a straight line",
+        "at": [40, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "180 - 148 = 32"
+      },
+      {
+        "_tag": "Text",
+        "text": "2 x's share the 32"
+      },
+      {
+        "_tag": "Text",
+        "text": "32 ÷ 2 = 16"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 16]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "(180 − 148) ÷ 2 is the rubric's setup; x = 16."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-7-forgot-second-x",
+    "itemId": "7",
+    "tags": ["incorrect", "common-mistake", "diagram"],
+    "summary": "Writes x + 148 = 180 using only one x and gets 32.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "black",
+      "size": 42,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[590, 260], [970, 260]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[780, 260], [616, 307]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[780, 260], [944, 307]]
+      },
+      {
+        "_tag": "Arc",
+        "center": [780, 260],
+        "r": 30,
+        "from": 196,
+        "to": 344
+      },
+      {
+        "_tag": "Text",
+        "text": "x°",
+        "at": [650, 260],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "x°",
+        "at": [884, 260],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "148°",
+        "at": [754, 299],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "x + 148 = 180",
+        "at": [50, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "x = 180 - 148"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 32]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Leaves out the second x angle; 32 is the sum of both, so x = 32 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-7-answer-only",
+    "itemId": "7",
+    "tags": ["correct", "answer-only"],
+    "summary": "Writes only x = 16°.",
+    "style": {
+      "font": "shadows-into-light",
+      "ink": "blue",
+      "size": 48,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "x = 16°",
+        "at": [90, 80]
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Correct answer with no work earns both points."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-7-borrow-slip",
+    "itemId": "7",
+    "tags": ["partial"],
+    "summary": "Sets up x + 148 + x = 180 but gets 2x = 42 and x = 21.",
+    "style": {
+      "font": "patrick-hand",
+      "ink": "purple",
+      "size": 38,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "x + 148 + x = 180",
+        "at": [50, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "2x + 148 = 180"
+      },
+      {
+        "_tag": "Text",
+        "text": "2x = 42"
+      },
+      {
+        "_tag": "Text",
+        "text": "x = 21",
+        "gap": 10
+      },
+      {
+        "_tag": "Text",
+        "text": "180",
+        "at": [420, 70],
+        "size": 30
+      },
+      {
+        "_tag": "Text",
+        "text": "-148",
+        "at": [408, 105],
+        "size": 30
+      },
+      {
+        "_tag": "Path",
+        "points": [[405, 145], [490, 145]]
+      },
+      {
+        "_tag": "Text",
+        "text": "42",
+        "at": [440, 152],
+        "size": 30
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "Correct equation earns L1; 180 − 148 is 32, not 42, so x = 21 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-8-correct",
+    "itemId": "8",
+    "tags": ["correct", "crossed-out", "messy", "diagram"],
+    "summary": "Crosses out w = 138, finds w = 42 from the straight line, then 19 + x + 42 = 90 gives x = 29.",
+    "style": {
+      "font": "caveat",
+      "ink": "blue",
+      "size": 40,
+      "mess": 2
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[760, 180], [760, 400]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[540, 400], [980, 400]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[760, 400], [828, 202]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[629, 518], [923, 253]]
+      },
+      {
+        "_tag": "Arc",
+        "center": [760, 400],
+        "r": 30,
+        "from": 222,
+        "to": 360
+      },
+      {
+        "_tag": "Text",
+        "text": "19°",
+        "at": [762, 249],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "x°",
+        "at": [813, 283],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "w°",
+        "at": [829, 352],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "138°",
+        "at": [754, 439],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "l",
+        "at": [742, 174],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "m",
+        "at": [964, 404],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "~~w = 138~~",
+        "at": [40, 40]
+      },
+      {
+        "_tag": "Text",
+        "text": "w + 138 = 180"
+      },
+      {
+        "_tag": "Text",
+        "text": "w = 42"
+      },
+      {
+        "_tag": "Text",
+        "text": "19 + x + 42 = 90",
+        "gap": 14
+      },
+      {
+        "_tag": "Text",
+        "text": "61 + x = 90"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 29]]   [[w = 42]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "Either",
+      "reason": "w = 180 − 138 = 42, then 19 + x + 42 = 90 gives x = 29."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-8-w-from-right-angle",
+    "itemId": "8",
+    "tags": ["partial", "common-mistake", "diagram"],
+    "summary": "Reads 138 as the right angle plus w, gets w = 48, then carries it correctly to x = 23.",
+    "style": {
+      "font": "kalam",
+      "ink": "black",
+      "size": 36,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[760, 190], [760, 400]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[550, 400], [970, 400]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[760, 400], [825, 211]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[635, 512], [916, 259]]
+      },
+      {
+        "_tag": "Arc",
+        "center": [760, 400],
+        "r": 30,
+        "from": 222,
+        "to": 360
+      },
+      {
+        "_tag": "Text",
+        "text": "19°",
+        "at": [760, 255],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "x°",
+        "at": [810, 287],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "w°",
+        "at": [825, 354],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "138°",
+        "at": [754, 439],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "l",
+        "at": [742, 184],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "m",
+        "at": [954, 404],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "138 = 90 + w",
+        "at": [40, 50]
+      },
+      {
+        "_tag": "Text",
+        "text": "w = 48"
+      },
+      {
+        "_tag": "Text",
+        "text": "19 + x + 48 = 90",
+        "gap": 14
+      },
+      {
+        "_tag": "Text",
+        "text": "67 + x = 90"
+      },
+      {
+        "_tag": "Text",
+        "text": "x = 23"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 23, w = 48]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "w is 180 − 138 = 42, not 48; the student's w carried into 19 + x + w = 90 gives x = 71 − 48 = 23, so L2 and L3 follow through."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-8-x-used-180",
+    "itemId": "8",
+    "tags": ["partial", "common-mistake", "diagram"],
+    "summary": "Gets w = 42 but sets the three angles equal to 180 and gets x = 119.",
+    "style": {
+      "font": "indie-flower",
+      "ink": "blue",
+      "size": 38,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Path",
+        "points": [[780, 200], [780, 400]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[580, 400], [980, 400]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[780, 400], [842, 220]]
+      },
+      {
+        "_tag": "Path",
+        "points": [[661, 507], [929, 266]]
+      },
+      {
+        "_tag": "Arc",
+        "center": [780, 400],
+        "r": 30,
+        "from": 222,
+        "to": 360
+      },
+      {
+        "_tag": "Text",
+        "text": "19°",
+        "at": [780, 262],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "x°",
+        "at": [827, 292],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "w°",
+        "at": [842, 355],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "138°",
+        "at": [774, 439],
+        "size": 26
+      },
+      {
+        "_tag": "Text",
+        "text": "l",
+        "at": [762, 194],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "m",
+        "at": [964, 404],
+        "size": 24
+      },
+      {
+        "_tag": "Text",
+        "text": "w = 180 - 138 = 42",
+        "at": [40, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "19 + x + 42 = 180",
+        "gap": 14
+      },
+      {
+        "_tag": "Text",
+        "text": "x = 180 - 61"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 119]]",
+        "gap": 10
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "w = 42 is right; the three angles fill the 90° right angle, not 180, so x = 119 is wrong."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-8-borrow-slip",
+    "itemId": "8",
+    "tags": ["partial"],
+    "summary": "Finds w = 42 and sets up x + 19 + 42 = 90, then slips on 90 − 61 and gets 39.",
+    "style": {
+      "font": "gochi-hand",
+      "ink": "black",
+      "size": 40,
+      "mess": 1
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "w = 180 - 138 = 42",
+        "at": [50, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "x + 19 + 42 = 90",
+        "gap": 14
+      },
+      {
+        "_tag": "Text",
+        "text": "x + 61 = 90"
+      },
+      {
+        "_tag": "Text",
+        "text": "x = 39"
+      },
+      {
+        "_tag": "Text",
+        "text": "[[x = 39   w = 42]]",
+        "gap": 14
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "w = 42 and the setup are right; 90 − 61 is 29, not 39."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-8-blank",
+    "itemId": "8",
+    "tags": ["blank"],
+    "summary": "Leaves the board empty.",
+    "style": {
+      "font": "caveat",
+      "ink": "black"
+    },
+    "board": [],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 0
+        },
+        {
+          "id": "L2",
+          "points": 0
+        },
+        {
+          "id": "L3",
+          "points": 0
+        }
+      ],
+      "flag": "ShouldNotFlag",
+      "reason": "No work."
+    },
+    "review": {
+      "_tag": "Checked"
+    }
+  },
+  {
+    "id": "ar-8-overwritten-digit",
+    "itemId": "8",
+    "tags": ["partial", "messy"],
+    "summary": "Finds w = 42 and writes 90 − 19 − 42, with the answer's tens digit written over, reading as 29 or 39.",
+    "style": {
+      "font": "nanum-pen-script",
+      "ink": "black",
+      "size": 48,
+      "mess": 3
+    },
+    "board": [
+      {
+        "_tag": "Text",
+        "text": "w = 180 - 138 = 42",
+        "at": [50, 60]
+      },
+      {
+        "_tag": "Text",
+        "text": "x = 90 - 19 - 42",
+        "gap": 14
+      },
+      {
+        "_tag": "Text",
+        "text": "x =",
+        "at": [50, 260],
+        "size": 48
+      },
+      {
+        "_tag": "Text",
+        "text": "2",
+        "at": [120, 260],
+        "size": 48
+      },
+      {
+        "_tag": "Text",
+        "text": "3",
+        "at": [122, 261],
+        "size": 48
+      },
+      {
+        "_tag": "Text",
+        "text": "9",
+        "at": [144, 260],
+        "size": 48
+      }
+    ],
+    "earlier": [],
+    "expected": {
+      "lines": [
+        {
+          "id": "L1",
+          "points": 1
+        },
+        {
+          "id": "L2",
+          "points": 1
+        },
+        {
+          "id": "L3",
+          "points": 1
+        }
+      ],
+      "flag": "ShouldFlag",
+      "reason": "w = 42 and x = 90 − 19 − 42 are right; the answer's tens digit is overwritten and reads as 2 or 3.",
+      "scoreOn": "flag"
+    },
+    "review": {
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). Tens digit of x overwritten: 29 or 39. Chose L3 = 1 because the setup makes 29 the likely reading; a teacher could withhold it. The case is mainly for the flag."
+    }
+  }
+]
