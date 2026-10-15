@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.output/
+.vercel/
+.turbo/
+coverage/
+playwright-report/
+test-results/
+storybook-static/
+.DS_Store
+
+# Secrets. Never commit these.
+.env
+.env.*
+!.env.example
