@@ -46,6 +46,11 @@ const proxy = (request: Request) =>
     headers.delete("content-encoding");
     headers.delete("content-length");
     headers.set("vary", "cookie");
+    // Electric marks snapshots as publicly cacheable for an hour. Behind this proxy every
+    // response depends on who is asking, and a CDN keyed by URL would serve a stale snapshot
+    // (whose shape Electric may have since replaced, sending the client into a refetch loop),
+    // or one teacher's rows to another browser. Never cache.
+    headers.set("cache-control", "private, no-store");
     return new Response(response.body, {
       status: response.status,
       statusText: response.statusText,
