@@ -146,9 +146,16 @@ const checkLinePoints = (submissionId: SubmissionId, linePoints: LinePoints) =>
 // ---------------------------------------------------------------------------
 // Grading pipeline
 
+/** A consumer's hold on one attempt. Pass it back to `recordOutcome`. */
+export interface Lease {
+  readonly submissionId: SubmissionId
+  readonly attempt: Attempt
+  readonly claimId: string
+}
+
 /** Everything the grader needs for one attempt. */
 export interface GradingInput {
-  readonly job: GradeJob
+  readonly lease: Lease
   readonly whiteboardUrl: string
   readonly problem: {
     readonly label: string
@@ -199,9 +206,10 @@ const stale: Claim = { _tag: "Stale" }
 export const startGrading = (job: GradeJob) =>
   Effect.gen(function* () {
     const db = yield* Db
+    const claimId = crypto.randomUUID()
     const [claimed] = yield* db
       .update(grades)
-      .set({ state: "grading", claimedAt: new Date(), outcomeAt: null })
+      .set({ state: "grading", claimedAt: new Date(), claimId, outcomeAt: null })
       .where(
         and(
           eq(grades.submissionId, job.submissionId),
@@ -274,7 +282,7 @@ export const startGrading = (job: GradeJob) =>
       .orderBy(asc(problems.position))
 
     const input: GradingInput = {
-      job,
+      lease: { submissionId: job.submissionId, attempt: job.attempt, claimId },
       whiteboardUrl: submission.whiteboardUrl,
       problem: {
         label: problem.label,
@@ -302,21 +310,21 @@ export const startGrading = (job: GradeJob) =>
  * Fails with `LinePointsMismatch` when the model's line points do not fit the rubric. The
  * pipeline treats that as a bad response: retry, and record `Failed` when retries run out.
  */
-export const recordOutcome = (job: GradeJob, outcome: GraderOutcome) =>
+export const recordOutcome = (lease: Lease, outcome: GraderOutcome) =>
   Effect.gen(function* () {
     const db = yield* Db
     const now = new Date()
     // Check staleness first, so a superseded attempt is acknowledged rather than retried.
     const [current] = yield* db
-      .select({ state: grades.state, attempt: grades.attempt })
+      .select({ state: grades.state, claimId: grades.claimId })
       .from(grades)
-      .where(eq(grades.submissionId, job.submissionId))
-    if (current?.state !== "grading" || current.attempt !== job.attempt) return "stale" as const
+      .where(eq(grades.submissionId, lease.submissionId))
+    if (current?.state !== "grading" || current.claimId !== lease.claimId) return "stale" as const
 
     const values = yield* (() => {
       switch (outcome._tag) {
         case "Sure":
-          return Effect.as(checkLinePoints(job.submissionId, outcome.result.linePoints), {
+          return Effect.as(checkLinePoints(lease.submissionId, outcome.result.linePoints), {
             state: "graded" as const,
             outcomeAt: now,
             graderRead: outcome.result.read,
@@ -328,7 +336,7 @@ export const recordOutcome = (job: GradeJob, outcome: GraderOutcome) =>
             gradedAt: now
           })
         case "Unsure":
-          return Effect.as(checkLinePoints(job.submissionId, outcome.result.linePoints), {
+          return Effect.as(checkLinePoints(lease.submissionId, outcome.result.linePoints), {
             state: "needs_teacher" as const,
             outcomeAt: now,
             graderRead: outcome.result.read,
@@ -349,8 +357,8 @@ export const recordOutcome = (job: GradeJob, outcome: GraderOutcome) =>
       .set(values)
       .where(
         and(
-          eq(grades.submissionId, job.submissionId),
-          eq(grades.attempt, job.attempt),
+          eq(grades.submissionId, lease.submissionId),
+          eq(grades.claimId, lease.claimId),
           eq(grades.state, "grading")
         )
       )
@@ -438,6 +446,7 @@ export const retryGrade = (submissionId: SubmissionId) =>
         state: "submitted",
         attempt: sql`${grades.attempt} + 1`,
         claimedAt: null,
+        claimId: null,
         outcomeAt: null,
         graderRead: null,
         modelLinePoints: null,

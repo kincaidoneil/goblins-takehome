@@ -41,29 +41,35 @@ export const joinSession = (input: {
     }
 
     const db = yield* Db
-    const [session] = yield* db
-      .select({ id: classSessions.id })
-      .from(classSessions)
-      .where(and(eq(classSessions.joinCode, input.joinCode), sql`${classSessions.status} <> 'ended'`))
-    if (session === undefined) {
-      return yield* Effect.fail(new SessionNotFound({ joinCode: input.joinCode }))
-    }
+    const sqlClient = yield* SqlClient
+    return yield* sqlClient.withTransaction(
+      Effect.gen(function* () {
+        const [session] = yield* db
+          .select({ id: classSessions.id })
+          .from(classSessions)
+          .where(and(eq(classSessions.joinCode, input.joinCode), sql`${classSessions.status} <> 'ended'`))
+          // Holds off a concurrent "end session" until the join commits.
+          .for("share")
+        if (session === undefined) {
+          return yield* Effect.fail(new SessionNotFound({ joinCode: input.joinCode }))
+        }
 
-    const [created] = yield* db
-      .insert(students)
-      .values({ sessionId: session.id, displayName, nameKey, avatar: input.pickAvatar() })
-      .onConflictDoNothing({ target: [students.sessionId, students.nameKey] })
-      .returning()
-    if (created !== undefined) return { student: created, resumed: false }
+        const [created] = yield* db
+          .insert(students)
+          .values({ sessionId: session.id, displayName, nameKey, avatar: input.pickAvatar() })
+          .onConflictDoNothing({ target: [students.sessionId, students.nameKey] })
+          .returning()
+        if (created !== undefined) return { student: created, resumed: false }
 
-    const [existing] = yield* db
-      .select()
-      .from(students)
-      .where(and(eq(students.sessionId, session.id), eq(students.nameKey, nameKey)))
-    // The conflict that skipped the insert guarantees the row; a concurrent split or rename
-    // could only move it, which the student fixes by joining again.
-    if (existing === undefined) return yield* Effect.die("student vanished between insert and select")
-    return { student: existing, resumed: true }
+        const [existing] = yield* db
+          .select()
+          .from(students)
+          .where(and(eq(students.sessionId, session.id), eq(students.nameKey, nameKey)))
+        // The conflict that skipped the insert guarantees the row.
+        if (existing === undefined) return yield* Effect.die("student vanished between insert and select")
+        return { student: existing, resumed: true }
+      })
+    )
   })
 
 // ---------------------------------------------------------------------------

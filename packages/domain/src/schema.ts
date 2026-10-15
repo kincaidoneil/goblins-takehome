@@ -380,6 +380,11 @@ export const grades = pgTable(
     // Pipeline timing, for the load test and usage reports. Teacher actions leave them alone.
     /** When a consumer claimed the current attempt. A claim older than the lease can be taken over. */
     claimedAt: timestamp({ withTimezone: true }),
+    /**
+     * Fencing token for the current claim. `recordOutcome` must present it, so a consumer whose
+     * lease expired and was taken over cannot overwrite the new holder's result.
+     */
+    claimId: uuid(),
     /** When the pipeline recorded the current attempt's outcome. */
     outcomeAt: timestamp({ withTimezone: true }),
 

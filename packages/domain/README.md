@@ -8,7 +8,7 @@ The shared data model: Drizzle schema, migrations, Effect schemas for the grade 
 |---|---|
 | `src/schema.ts` | Every table. Read its header comment first. |
 | `src/grade.ts` | The grade state machine as an Effect Schema tagged union, the queue message (`GradeJob`) and what the pipeline reports (`GraderOutcome`) |
-| `src/grades.ts` | All writes to `grades`: `startGrading` and `recordOutcome` for the pipeline; `acceptGrade`, `scoreGrade` and `retryGrade` for the teacher |
+| `src/grades.ts` | All writes to `grades`: `startGrading` (returns a lease) and `recordOutcome(lease, outcome)` for the pipeline; `acceptGrade`, `scoreGrade` and `retryGrade` for the teacher |
 | `src/class-sessions.ts` | `joinSession` (join or resume by name) and `submitWork` |
 | `src/names.ts`, `src/join-code.ts` | Name matching and join codes |
 | `src/load-test.ts` | `deleteLoadTestRun` |
@@ -24,7 +24,7 @@ import { schema } from "@goblins/domain"
 const program = Effect.gen(function* () {
   const claim = yield* startGrading(job) // Claimed | Stale (ack) | InProgress (redeliver later)
   // ...call the model...
-  yield* recordOutcome(job, outcome) // "recorded" | "stale"
+  yield* recordOutcome(claim.input.lease, outcome) // "recorded" | "stale"
 }).pipe(Effect.provide(DatabaseLive))
 ```
 
@@ -36,7 +36,7 @@ Queue delivery is at-least-once. Each grading attempt has a number; the queue me
 
 - A redelivered message after the result is written matches nothing and is acknowledged.
 - A message for an attempt the teacher has since retried or scored is stale and dropped.
-- A redelivery while another consumer holds the attempt gets `InProgress`: leave the message for redelivery. A claim older than `CLAIM_LEASE_SECONDS` (120 s) can be taken over, which recovers from a consumer that crashed mid-call. So one message never pays for two model calls unless a call outlives the lease.
+- A redelivery while another consumer holds the attempt gets `InProgress`: leave the message for redelivery. A claim older than `CLAIM_LEASE_SECONDS` (120 s) can be taken over, which recovers from a consumer that crashed mid-call. So one message never pays for two model calls unless a call outlives the lease. Each claim carries a fencing token (`lease.claimId`); `recordOutcome` requires it, so a consumer whose lease was taken over cannot overwrite the new holder's result.
 
 `submitWork` is idempotent per student and problem. While the grade is still `submitted` it returns the job again, so a client retry also re-enqueues a message that was lost after the first write. `pendingJobs(sessionId)` lists grades still waiting, for a sweeper.
 

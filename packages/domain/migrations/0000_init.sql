@@ -68,6 +68,7 @@ CREATE TABLE "grades" (
 	"points" integer,
 	"graded_at" timestamp with time zone,
 	"claimed_at" timestamp with time zone,
+	"claim_id" uuid,
 	"outcome_at" timestamp with time zone,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,

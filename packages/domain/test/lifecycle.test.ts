@@ -100,6 +100,12 @@ const submit = (sessionId: string, studentId: string, problemId: string) =>
     submittedAt: new Date()
   })
 
+/** Claims the job's attempt, as a queue consumer would, and returns the lease. */
+const claim = (job: GradeJob) =>
+  Effect.flatMap(startGrading(job), (result) =>
+    result._tag === "Claimed" ? Effect.succeed(result.input.lease) : Effect.die(`expected a claim, got ${result._tag}`)
+  )
+
 const jobOf = (result: { readonly job: Option.Option<GradeJob> }): GradeJob =>
   Option.getOrThrow(result.job)
 
@@ -148,16 +154,18 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
       expect(jobOf(retried)).toEqual(jobOf(first))
 
       const job = jobOf(first)
-      expect((yield* startGrading(job))._tag).toBe("Claimed")
+      const expired = yield* claim(job)
       // A redelivery while the first consumer holds the attempt does not grade it again.
       expect((yield* startGrading(job))._tag).toBe("InProgress")
-      // Once the lease runs out (the consumer crashed), a redelivery takes the attempt over.
+      // Once the lease runs out (the consumer hung), a redelivery takes the attempt over.
       const db = yield* Db
       yield* db
         .update(grades)
         .set({ claimedAt: new Date(Date.now() - (CLAIM_LEASE_SECONDS + 1) * 1000) })
         .where(eq(grades.submissionId, job.submissionId))
-      expect((yield* startGrading(job))._tag).toBe("Claimed")
+      const lease = yield* claim(job)
+      // The expired holder finishing late cannot overwrite the new holder.
+      expect(yield* recordOutcome(expired, { _tag: "Failed", failureReason: "late" })).toBe("stale")
 
       const outcome: GraderOutcome = {
         _tag: "Sure",
@@ -167,8 +175,8 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
           reason: "Correct setup and answer."
         }
       }
-      expect(yield* recordOutcome(job, outcome)).toBe("recorded")
-      expect(yield* recordOutcome(job, outcome)).toBe("stale")
+      expect(yield* recordOutcome(lease, outcome)).toBe("recorded")
+      expect(yield* recordOutcome(lease, outcome)).toBe("stale")
       expect((yield* startGrading(job))._tag).toBe("Stale")
 
       const grade = Option.getOrThrow(yield* getGrade(first.submissionId))
@@ -187,8 +195,7 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
       const { session, joinCode, p1, p2, p1Lines } = yield* seed()
       const { student } = yield* join(joinCode, "Sam")
       const s1 = yield* submit(session.id, student.id, p1.id)
-      yield* startGrading(jobOf(s1))
-      yield* recordOutcome(jobOf(s1), {
+      yield* recordOutcome(yield* claim(jobOf(s1)), {
         _tag: "Sure",
         result: {
           read: "x = 5",
@@ -197,9 +204,9 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
         }
       })
       const s2 = yield* submit(session.id, student.id, p2.id)
-      const claim = yield* startGrading(jobOf(s2))
-      if (claim._tag !== "Claimed") return yield* Effect.die("expected a claim")
-      const input = claim.input
+      const claimed = yield* startGrading(jobOf(s2))
+      if (claimed._tag !== "Claimed") return yield* Effect.die("expected a claim")
+      const input = claimed.input
       expect(input.problem.label).toBe("1b")
       expect(input.rubricLines).toHaveLength(1)
       expect(input.dependencies).toHaveLength(1)
@@ -212,8 +219,7 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
       const { session, joinCode, p1, p1Lines } = yield* seed()
       const { student } = yield* join(joinCode, "Lee")
       const s = yield* submit(session.id, student.id, p1.id)
-      yield* startGrading(jobOf(s))
-      yield* recordOutcome(jobOf(s), {
+      yield* recordOutcome(yield* claim(jobOf(s)), {
         _tag: "Unsure",
         result: {
           read: "x = 8/2",
@@ -248,8 +254,8 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
       const { student } = yield* join(joinCode, "Kai")
       const s = yield* submit(session.id, student.id, p1.id)
       const attempt1 = jobOf(s)
-      yield* startGrading(attempt1)
-      yield* recordOutcome(attempt1, { _tag: "Failed", failureReason: "Provider timed out 3 times" })
+      const lease1 = yield* claim(attempt1)
+      yield* recordOutcome(lease1, { _tag: "Failed", failureReason: "Provider timed out 3 times" })
       expect(Option.getOrThrow(yield* getGrade(s.submissionId)).status._tag).toBe("CouldntGrade")
 
       const attempt2 = yield* retryGrade(s.submissionId)
@@ -263,9 +269,8 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
         }
       }
       expect((yield* startGrading(attempt1))._tag).toBe("Stale")
-      expect(yield* recordOutcome(attempt1, sure)).toBe("stale")
-      expect((yield* startGrading(attempt2))._tag).toBe("Claimed")
-      expect(yield* recordOutcome(attempt2, sure)).toBe("recorded")
+      expect(yield* recordOutcome(lease1, sure)).toBe("stale")
+      expect(yield* recordOutcome(yield* claim(attempt2), sure)).toBe("recorded")
       const grade = Option.getOrThrow(yield* getGrade(s.submissionId))
       expect(grade.status._tag === "Graded" && grade.status.attempt).toBe(2)
     }))
@@ -275,9 +280,9 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
       const { session, joinCode, p1, p1Lines } = yield* seed()
       const { student } = yield* join(joinCode, "Ivy")
       const s = yield* submit(session.id, student.id, p1.id)
-      yield* startGrading(jobOf(s))
+      const lease = yield* claim(jobOf(s))
       const over = yield* Effect.either(
-        recordOutcome(jobOf(s), {
+        recordOutcome(lease, {
           _tag: "Sure",
           result: {
             read: "x = 4",
