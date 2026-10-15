@@ -22,7 +22,7 @@ database_url=$(grep '^DATABASE_URL_UNPOOLED=' "$tmp/prod.env" | cut -d= -f2- | t
 
 # The Electric secret is created once and stored on both sides. Neither Fly nor
 # Vercel returns it afterwards, so a re-run leaves it alone.
-if fly secrets list --app "$app" | grep -q '^ELECTRIC_SECRET'; then
+if fly secrets list --app "$app" | grep -qw ELECTRIC_SECRET; then
   fly secrets set --app "$app" --stage DATABASE_URL="$database_url" >/dev/null
   new_secret=""
 else
