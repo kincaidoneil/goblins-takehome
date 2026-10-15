@@ -16,6 +16,7 @@ import { Route as ApiShapeRouteImport } from './routes/api/shape'
 import { Route as PlaySessionIdRouteImport } from './routes/play/$sessionId'
 import { Route as ReportDemoRouteImport } from './routes/report/demo'
 import { Route as ShareDemoRouteImport } from './routes/share/demo'
+import { Route as ApiWhiteboardsNameRouteImport } from './routes/api/whiteboards/$name'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +53,11 @@ const ShareDemoRoute = ShareDemoRouteImport.update({
   path: '/share/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiWhiteboardsNameRoute = ApiWhiteboardsNameRouteImport.update({
+  id: '/api/whiteboards/$name',
+  path: '/api/whiteboards/$name',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/share/demo': typeof ShareDemoRoute
+  '/api/whiteboards/$name': typeof ApiWhiteboardsNameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/share/demo': typeof ShareDemoRoute
+  '/api/whiteboards/$name': typeof ApiWhiteboardsNameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   '/play/$sessionId': typeof PlaySessionIdRoute
   '/report/demo': typeof ReportDemoRoute
   '/share/demo': typeof ShareDemoRoute
+  '/api/whiteboards/$name': typeof ApiWhiteboardsNameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/play/$sessionId'
     | '/report/demo'
     | '/share/demo'
+    | '/api/whiteboards/$name'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/play/$sessionId'
     | '/report/demo'
     | '/share/demo'
+    | '/api/whiteboards/$name'
   id:
     | '__root__'
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/play/$sessionId'
     | '/report/demo'
     | '/share/demo'
+    | '/api/whiteboards/$name'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +131,7 @@ export interface RootRouteChildren {
   PlaySessionIdRoute: typeof PlaySessionIdRoute
   ReportDemoRoute: typeof ReportDemoRoute
   ShareDemoRoute: typeof ShareDemoRoute
+  ApiWhiteboardsNameRoute: typeof ApiWhiteboardsNameRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShareDemoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/whiteboards/$name': {
+      id: '/api/whiteboards/$name'
+      path: '/api/whiteboards/$name'
+      fullPath: '/api/whiteboards/$name'
+      preLoaderRoute: typeof ApiWhiteboardsNameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -183,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlaySessionIdRoute: PlaySessionIdRoute,
   ReportDemoRoute: ReportDemoRoute,
   ShareDemoRoute: ShareDemoRoute,
+  ApiWhiteboardsNameRoute: ApiWhiteboardsNameRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
