@@ -16,6 +16,14 @@ export interface ShapeDefinition {
   readonly where: string;
   readonly params: ReadonlyArray<string>;
   readonly columns: ReadonlyArray<string>;
+  /**
+   * Which of the shape's rows the caller receives. `OfStudent` reads the class's shared shape
+   * and the proxy keeps only that student's rows, so Electric serves one shape per class
+   * instead of one per student (see docs/decisions.md, "shared grade shape").
+   */
+  readonly rows:
+    | { readonly _tag: "All" }
+    | { readonly _tag: "OfStudent"; readonly studentId: string };
 }
 
 export class Forbidden extends Data.TaggedError("Forbidden") {}
@@ -72,6 +80,7 @@ const bySession = (
   where: table === "class_sessions" ? "id = $1" : "session_id = $1",
   params: [sessionId],
   columns,
+  rows: { _tag: "All" },
 });
 
 const teacherOwnsSession = (request: Request, sessionId: string) =>
@@ -116,10 +125,8 @@ export const resolveShape = (request: Request, view: string, sessionId: string) 
       case "my-grades": {
         const studentId = yield* requireStudent(request, sessionId);
         return {
-          table: "grades",
-          where: "student_id = $1",
-          params: [studentId],
-          columns: gradeColumnsForStudent,
+          ...bySession("grades", sessionId, gradeColumnsForStudent),
+          rows: { _tag: "OfStudent", studentId },
         } satisfies ShapeDefinition;
       }
       default:
