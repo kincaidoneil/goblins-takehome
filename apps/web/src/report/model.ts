@@ -306,5 +306,7 @@ export const percent = (share: number): string => `${Math.round(share * 100)}%`;
 
 /** Minutes a teacher would spend grading by hand, at about 30 seconds a problem. */
 export const SECONDS_PER_PROBLEM = 30;
-export const minutesSaved = (report: ClassReport): number =>
-  Math.round((report.submissions * SECONDS_PER_PROBLEM) / 60);
+export const minutesSaved = (report: ClassReport): number => {
+  const graded = report.problems.reduce((sum, p) => sum + p.full + p.partial + p.low, 0);
+  return Math.round((graded * SECONDS_PER_PROBLEM) / 60);
+};
