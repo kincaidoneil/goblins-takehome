@@ -141,6 +141,6 @@ One line of reasoning per decision. Newest last. The fixed decisions in [prd.md]
 | 2026-10-15 | Setup | `/setup/template/$templateId` starts a draft with a server redirect | A plain link works before JavaScript loads and starts exactly one draft per click |
 | 2026-10-15 | Setup | The draft-owner cookie is a random UUID, unsigned; launch claims every draft that cookie owns | An unguessable id is already a bearer token, so signing it adds nothing |
 | 2026-10-15 | Setup | Launch asks for an optional time limit (none, 20, 30, 45 or 60 minutes), opens the projector window inside the click and the dashboard in the current tab | The projector shows time remaining, so the limit belongs at launch; opening the window before any await keeps popup blockers out of the way |
-| 2026-10-15 | Setup | Launch hands off to `/teach/$sessionId` and `/projector/$sessionId` | Assumed paths for the Dashboard + projector stream; `src/setup/links.ts` holds them in one place |
+| 2026-10-15 | Setup | Launch hands off to `/sessions/$sessionId` (dashboard) and `/sessions/$sessionId/projector` | The web app lead's routes; `src/setup/links.ts` holds them in one place |
 | 2026-10-15 | Setup | A launched assignment's setup page is read-only and links to the dashboard | Matches the rubric lock; a teacher who returns to the setup link should land somewhere useful |
 | 2026-10-15 | Setup | Problem text, answer keys and chat replies render LaTeX with KaTeX and pipe tables as tables | Templates and extraction write math as LaTeX; teachers should read what students will see, not markup |

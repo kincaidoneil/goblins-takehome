@@ -114,11 +114,16 @@ export function LaunchDialog({
       description={`${problemCount} ${problemCount === 1 ? "problem" : "problems"} · ${pointsLabel(points)}. Students join with a code on your projector; they don't need accounts.`}
       actions={
         isSignedIn ? (
-          <Button size="lg" onClick={start} disabled={state._tag === "Launching"}>
+          <Button
+            size="lg"
+            className="setup-launch-cta"
+            onClick={start}
+            disabled={state._tag === "Launching"}
+          >
             {state._tag === "Launching" ? "Opening…" : "Open the projector"}
           </Button>
         ) : (
-          <Button size="lg" onClick={signIn}>
+          <Button size="lg" className="setup-launch-cta" onClick={signIn}>
             <GoogleMark /> Sign in with Google to launch
           </Button>
         )

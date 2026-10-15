@@ -882,7 +882,7 @@
   flex-direction: column;
   gap: var(--gb-space-2);
   margin: 0;
-  padding-left: var(--gb-space-5);
+  padding-left: 1.1em;
   color: var(--gb-color-text-muted);
   font-size: var(--gb-text-sm);
 }
@@ -1100,4 +1100,9 @@ li[data-state="active"] .setup-step-dot {
   flex: none;
   width: 32px;
   height: 32px;
+}
+
+.setup-launch-cta {
+  width: 100%;
+  white-space: normal;
 }

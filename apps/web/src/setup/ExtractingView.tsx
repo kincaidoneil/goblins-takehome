@@ -11,18 +11,20 @@ export interface ExtractingViewProps {
 
 const STEPS = [
   { after: 0, label: "Reading the pages" },
-  { after: 4, label: "Finding each problem" },
-  { after: 10, label: "Writing answer keys" },
-  { after: 16, label: "Drafting rubrics" },
+  { after: 5, label: "Finding each problem" },
+  { after: 20, label: "Writing answer keys" },
+  { after: 40, label: "Drafting rubrics" },
 ] as const;
 
 export function ExtractingView({ pages, startedAt }: ExtractingViewProps) {
-  const [now, setNow] = useState(() => Date.now());
+  // Null until mounted: the server's clock would not match the browser's, and hydration would fail.
+  const [now, setNow] = useState<number | null>(null);
   useEffect(() => {
+    setNow(Date.now());
     const timer = setInterval(() => setNow(Date.now()), 250);
     return () => clearInterval(timer);
   }, []);
-  const seconds = Math.max(0, Math.floor((now - Date.parse(startedAt)) / 1000));
+  const seconds = now === null ? 0 : Math.max(0, Math.floor((now - Date.parse(startedAt)) / 1000));
   const current = STEPS.findLastIndex((step) => seconds >= step.after);
 
   return (
@@ -55,7 +57,7 @@ export function ExtractingView({ pages, startedAt }: ExtractingViewProps) {
         ))}
       </ol>
       <p className="setup-extracting-time">
-        <span className="tabular-nums">{seconds}s</span> · usually under a minute. You can review
+        <span className="tabular-nums">{seconds}s</span> · usually about a minute. You'll review
         everything before students see it.
       </p>
     </div>
