@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type { StudentRow, TeacherGradeRow } from "../../../lib/sync";
 import { accept, getWhiteboard, retry, score } from "../../../server/fns/grading";
 import { MathText } from "../MathText";
+import { CroppedFigure } from "./CroppedFigure";
 import { type DashboardProblem, gradeStatus } from "./model";
 import { SidePanel } from "./SidePanel";
 
@@ -194,6 +195,11 @@ export function CellDetail(props: {
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-3">
           <MathText text={problem.text} className="text-sm text-text-muted" />
+          {problem.figure !== null && (
+            <div className="max-w-sm">
+              <CroppedFigure figure={problem.figure} />
+            </div>
+          )}
           <div className="grid aspect-[4/3] place-items-center overflow-hidden rounded-lg border border-border bg-white">
             {whiteboard._tag === "Loaded" ? (
               <img
