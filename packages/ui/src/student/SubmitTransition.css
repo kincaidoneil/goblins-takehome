@@ -45,6 +45,11 @@
   animation: gb-transition-pop 360ms var(--gb-ease-spring) both;
 }
 
+.gb-transition-note {
+  margin: 0;
+  color: var(--gb-color-text-muted);
+}
+
 .gb-transition-next {
   margin: var(--gb-space-3) 0 0;
   color: var(--gb-color-text-muted);

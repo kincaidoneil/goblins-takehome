@@ -1,9 +1,20 @@
-import { Button, Dialog, DialogClose } from "@goblins/ui";
+import {
+  Button,
+  Dialog,
+  DialogClose,
+  isDocEmpty,
+  ProblemPanel,
+  renderWhiteboardPng,
+  StudentWorkLayout,
+  SubmitButton,
+  type SubmitState,
+  Whiteboard,
+  type WhiteboardDoc,
+} from "@goblins/ui";
+import { Either } from "effect";
 import { useEffect, useState } from "react";
 import { MathText } from "../MathText";
-import { exportWhiteboardPng, hasInk, type Tool, Whiteboard } from "../Whiteboard";
-import { WhiteboardToolbar } from "../WhiteboardToolbar";
-import { useStrokeHistory } from "./useStrokeHistory";
+import { loadBoard, saveBoard } from "./storage";
 
 export interface WorkspaceProblem {
   id: string;
@@ -18,80 +29,90 @@ export interface WorksheetPage {
   imageUrl: string;
 }
 
+/** Base64 without the `data:` prefix, as the outbox stores it. */
+async function toBase64(blob: Blob): Promise<string> {
+  const bytes = new Uint8Array(await blob.arrayBuffer());
+  let binary = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  }
+  return btoa(binary);
+}
+
 /**
- * One problem: the question on the left, the whiteboard on the right; stacked on a phone. Mount
- * it with `key={problem.id}` so each problem gets its own board.
+ * One problem: the question beside the whiteboard, stacked on a phone. The board, its export and
+ * the Submit states come from @goblins/ui. Mount it with `key={problem.id}` so each problem gets
+ * its own board.
  */
 export function Workspace({
   sessionId,
   problem,
+  total,
   pages,
   onSubmit,
 }: {
   sessionId: string;
   problem: WorkspaceProblem;
+  /** How many problems the assignment has, for "Problem 3 of 8". */
+  total: number;
   pages: ReadonlyArray<WorksheetPage>;
   onSubmit: (png: string) => void;
 }) {
-  const board = useStrokeHistory(sessionId, problem.id);
-  const [tool, setTool] = useState<Tool>("pen");
-  const inked = hasInk(board.strokes);
+  const [doc, setDoc] = useState<WhiteboardDoc>(() => loadBoard(sessionId, problem.id));
+  const [exporting, setExporting] = useState(false);
+  useEffect(() => saveBoard(sessionId, problem.id, doc), [sessionId, problem.id, doc]);
+
+  const own = pages.filter((page) => problem.pageNumbers.includes(page.pageNumber));
+  // A problem with a diagram shows its page beside the text, so the student needn't open the worksheet.
+  const figurePage = problem.diagramDescription === null ? undefined : (own[0] ?? pages[0]);
+
+  const submit = async () => {
+    setExporting(true);
+    const png = await renderWhiteboardPng(doc);
+    if (Either.isLeft(png)) {
+      // Canvas export failed (very old browser). Keep the work and let them try again.
+      setExporting(false);
+      return;
+    }
+    onSubmit(await toBase64(png.right));
+  };
+
+  const state: SubmitState = exporting
+    ? { _tag: "Submitting" }
+    : isDocEmpty(doc)
+      ? { _tag: "Empty" }
+      : { _tag: "Ready" };
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-3 px-3 pb-3 md:flex-row md:gap-5 md:px-5 md:pb-5">
-      <section
-        aria-labelledby="problem-heading"
-        className="flex max-h-[34dvh] shrink-0 flex-col gap-3 overflow-y-auto rounded-xl bg-surface p-4 shadow-md md:max-h-none md:w-[38%] md:p-6"
-      >
-        <h1 id="problem-heading" className="text-sm uppercase tracking-wider text-text-muted">
-          Problem {problem.label}
-        </h1>
-        <MathText text={problem.text} className="text-lg leading-snug md:text-xl" />
-        {pages.length > 0 && (
-          <div className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-1">
-            <WorksheetButton problem={problem} pages={pages} />
-            {problem.diagramDescription !== null && (
-              <span className="text-sm text-text-muted">This one has a diagram.</span>
-            )}
-          </div>
-        )}
-      </section>
-
-      <section
-        aria-label="Your work"
-        className="flex min-h-[300px] flex-1 flex-col gap-2 rounded-xl bg-surface p-2 shadow-md md:p-3"
-      >
-        <WhiteboardToolbar
-          tool={tool}
-          onToolChange={setTool}
-          canUndo={board.canUndo}
-          onUndo={board.undo}
-          canClear={board.strokes.length > 0}
-          onClear={board.clear}
+    <StudentWorkLayout
+      progress={null}
+      problem={
+        <ProblemPanel
+          label={problem.label}
+          total={total}
+          {...(figurePage === undefined || problem.diagramDescription === null
+            ? {}
+            : { figure: { src: figurePage.imageUrl, alt: problem.diagramDescription } })}
         >
-          <Button
-            size="md"
-            disabled={!inked}
-            onClick={() => onSubmit(exportWhiteboardPng(board.strokes))}
-          >
-            Submit
-          </Button>
-        </WhiteboardToolbar>
-        <div className="relative min-h-0 flex-1 rounded-lg shadow-[inset_0_0_0_1px_var(--gb-color-border)]">
-          <Whiteboard
-            strokes={board.strokes}
-            tool={tool}
-            onStroke={board.add}
-            label={`Whiteboard for problem ${problem.label}`}
-          />
-          {board.strokes.length === 0 && (
-            <p className="pointer-events-none absolute inset-0 grid place-items-center px-6 text-center text-text-subtle">
-              Show your work here
-            </p>
-          )}
-        </div>
-      </section>
-    </div>
+          <MathText text={problem.text} />
+        </ProblemPanel>
+      }
+      board={
+        <Whiteboard
+          initialDoc={doc}
+          onChange={setDoc}
+          disabled={exporting}
+          {...(pages.length > 0
+            ? {
+                accessory: (
+                  <WorksheetButton problem={problem} pages={own.length > 0 ? own : pages} />
+                ),
+              }
+            : {})}
+        />
+      }
+      submit={<SubmitButton state={state} onSubmit={() => void submit()} />}
+    />
   );
 }
 
@@ -102,8 +123,6 @@ function WorksheetButton({
   problem: WorkspaceProblem;
   pages: ReadonlyArray<WorksheetPage>;
 }) {
-  const own = pages.filter((page) => problem.pageNumbers.includes(page.pageNumber));
-  const shown = own.length > 0 ? own : pages;
   return (
     <Dialog
       size="lg"
@@ -121,7 +140,7 @@ function WorksheetButton({
     >
       {/* Scrolls on its own so focusing the close button doesn't scroll past the top of the page. */}
       <div className="flex max-h-[60dvh] flex-col gap-4 overflow-y-auto">
-        {shown.map((page) => (
+        {pages.map((page) => (
           <img
             key={page.pageNumber}
             src={page.imageUrl}

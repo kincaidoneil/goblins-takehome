@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { type SubmitError, submit } from "../../server/fns/student";
-import { loadOutbox, type OutboxItem, saveOutbox, saveStrokes } from "./storage";
+import { clearBoard, loadOutbox, type OutboxItem, saveOutbox } from "./storage";
 
 const MAX_BACKOFF_MS = 30_000;
 
@@ -54,7 +54,7 @@ export function useOutbox(sessionId: string, handlers: OutboxHandlers) {
         setFailures(0);
         if (result._tag === "Ok") {
           drop();
-          saveStrokes(sessionId, head.problemId, []);
+          clearBoard(sessionId, head.problemId);
           handlersRef.current.onSent(head.problemId);
         } else if (result.error._tag === "SessionNotLive" || result.error._tag === "NotJoined") {
           // Nothing else in the queue can be accepted either.

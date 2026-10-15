@@ -3,7 +3,6 @@
  * and "join again". Copy is warm and about effort, never about speed or mistakes.
  */
 import { Avatar, Button, EmptyState, type GradeStatus, ScoreChip } from "@goblins/ui";
-import { useEffect, useRef, useState } from "react";
 
 export function Lobby({ name, avatarId }: { name: string; avatarId: number }) {
   return (
@@ -38,92 +37,6 @@ function Dots() {
         />
       ))}
     </span>
-  );
-}
-
-export type SendState = "sending" | "sent" | "waiting-for-network";
-
-const TRANSITION_MS = 1500;
-/** If the score arrives late in the transition, keep it up long enough to read. */
-const SCORE_READ_MS = 1200;
-const TRANSITION_MAX_MS = 3000;
-
-const isFinal = (status: GradeStatus) =>
-  status.state === "graded" || status.state === "needs-teacher" || status.state === "couldnt-grade";
-
-/**
- * About 1.5 s between problems. Shows the score if it arrives in time; otherwise the score fills
- * in on the progress strip later.
- */
-export function Transition({
-  label,
-  status,
-  send,
-  nextLabel,
-  onDone,
-}: {
-  label: string;
-  status: GradeStatus;
-  send: SendState;
-  nextLabel: string | null;
-  onDone: () => void;
-}) {
-  const startedAt = useRef(performance.now());
-  const [deadline, setDeadline] = useState(TRANSITION_MS);
-  const final = isFinal(status);
-  const onDoneRef = useRef(onDone);
-  onDoneRef.current = onDone;
-
-  useEffect(() => {
-    if (!final) return;
-    const elapsed = performance.now() - startedAt.current;
-    setDeadline((d) => Math.min(TRANSITION_MAX_MS, Math.max(d, elapsed + SCORE_READ_MS)));
-  }, [final]);
-
-  useEffect(() => {
-    const remaining = deadline - (performance.now() - startedAt.current);
-    const timer = window.setTimeout(() => onDoneRef.current(), Math.max(0, remaining));
-    return () => window.clearTimeout(timer);
-  }, [deadline]);
-
-  return (
-    <div
-      className="flex flex-1 flex-col items-center justify-center gap-5 px-4 py-10 text-center"
-      role="status"
-    >
-      <div className="grid size-24 animate-[gb-pop_500ms_var(--gb-ease-spring)_both] place-items-center rounded-full bg-accent shadow-brand motion-reduce:animate-none">
-        <svg viewBox="0 0 24 24" className="size-12 text-green-800" aria-hidden="true">
-          <path
-            d="M5 12.5l4.5 4.5L19 7.5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </div>
-      <h2 className="text-xl">
-        Problem {label} {send === "waiting-for-network" ? "is saved" : "is in"}
-      </h2>
-      <div className="flex min-h-10 flex-col items-center gap-2">
-        {send === "waiting-for-network" ? (
-          <p className="text-text-muted">We'll send it when you're back online.</p>
-        ) : final ? (
-          <>
-            <ScoreChip status={status} audience="student" />
-            {status.state !== "graded" && (
-              <p className="text-text-muted">Your teacher will check this one.</p>
-            )}
-          </>
-        ) : (
-          <p className="text-text-muted">Your score will show up at the top.</p>
-        )}
-      </div>
-      <p className="font-bold text-text-brand">
-        {nextLabel === null ? "That's every problem!" : `Up next: Problem ${nextLabel}`}
-      </p>
-    </div>
   );
 }
 

@@ -26,4 +26,5 @@ export const ScoreNotYetIn: Story = { args: { problemIndex: 2, grade: { state: "
 export const TeacherWillCheck: Story = {
   args: { problemIndex: 3, grade: { state: "needs-teacher" } },
 };
+export const SavedOffline: Story = { args: { offline: true, grade: { state: "grading" } } };
 export const LastProblem: Story = { args: { problemIndex: 4, nextLabel: undefined } };

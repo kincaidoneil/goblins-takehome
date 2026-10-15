@@ -11,7 +11,8 @@ export interface ProblemPanelProps {
   /** As printed, e.g. "3" or "2b". */
   label: string;
   total: number;
-  points: number;
+  /** Omitted when the app doesn't show point values to students. */
+  points?: number;
   /** The problem text. */
   children: ReactNode;
   /** Shown under the text when the problem has a diagram, so students don't need "See worksheet". */
@@ -26,9 +27,11 @@ export function ProblemPanel({ label, total, points, children, figure }: Problem
         <span>
           Problem {label} of {total}
         </span>
-        <span>
-          {points} {points === 1 ? "point" : "points"}
-        </span>
+        {points !== undefined && (
+          <span>
+            {points} {points === 1 ? "point" : "points"}
+          </span>
+        )}
       </div>
       <div className="gb-problem-text">{children}</div>
       {figure !== undefined && (

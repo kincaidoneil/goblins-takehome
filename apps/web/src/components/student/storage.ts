@@ -1,18 +1,10 @@
 /**
  * Work kept in this browser so a reload, a closed tab or a dropped connection loses nothing:
- * the strokes on each problem's whiteboard, and submissions waiting to be sent. Everything read
+ * each problem's whiteboard, and submissions waiting to be sent. Everything read
  * back is validated, since another version of the app (or the student) may have written it.
  */
-import { Option, Schema } from "effect";
-
-export const Stroke = Schema.Struct({
-  tool: Schema.Literal("pen", "eraser"),
-  /** Line width as a fraction of the board's width, so a stroke scales with the board. */
-  size: Schema.Number,
-  /** Points as fractions of the board's width (both axes, so shapes keep their proportions). */
-  points: Schema.Array(Schema.Tuple(Schema.Number, Schema.Number)),
-});
-export type Stroke = typeof Stroke.Type;
+import { EMPTY_DOC, parseDoc, serializeDoc, type WhiteboardDoc } from "@goblins/ui";
+import { Either, Option, Schema } from "effect";
 
 export const OutboxItem = Schema.Struct({
   problemId: Schema.String,
@@ -22,11 +14,12 @@ export const OutboxItem = Schema.Struct({
 });
 export type OutboxItem = typeof OutboxItem.Type;
 
-const Strokes = Schema.parseJson(Schema.Array(Stroke));
 const Outbox = Schema.parseJson(Schema.Array(OutboxItem));
 
-const strokesKey = (sessionId: string, problemId: string) =>
-  `goblins:strokes:${sessionId}:${problemId}`;
+// "board" rather than the old "strokes" key: work saved by the previous whiteboard is a different
+// shape, and starting that problem's board fresh is better than misreading it.
+const boardKey = (sessionId: string, problemId: string) =>
+  `goblins:board:${sessionId}:${problemId}`;
 const outboxKey = (sessionId: string) => `goblins:outbox:${sessionId}`;
 
 // Storage can be unavailable (private mode, full quota). Work then lives in memory only.
@@ -47,17 +40,16 @@ const write = (key: string, value: string | null) => {
   }
 };
 
-export const loadStrokes = (sessionId: string, problemId: string): ReadonlyArray<Stroke> =>
-  Option.getOrElse(
-    Schema.decodeUnknownOption(Strokes)(read(strokesKey(sessionId, problemId))),
-    () => [],
-  );
+export const loadBoard = (sessionId: string, problemId: string): WhiteboardDoc => {
+  const saved = read(boardKey(sessionId, problemId));
+  return saved === null ? EMPTY_DOC : Either.getOrElse(parseDoc(saved), () => EMPTY_DOC);
+};
 
-export const saveStrokes = (sessionId: string, problemId: string, strokes: ReadonlyArray<Stroke>) =>
-  write(
-    strokesKey(sessionId, problemId),
-    strokes.length === 0 ? null : Schema.encodeSync(Strokes)(strokes),
-  );
+export const saveBoard = (sessionId: string, problemId: string, doc: WhiteboardDoc) =>
+  write(boardKey(sessionId, problemId), doc.strokes.length === 0 ? null : serializeDoc(doc));
+
+export const clearBoard = (sessionId: string, problemId: string) =>
+  write(boardKey(sessionId, problemId), null);
 
 export const loadOutbox = (sessionId: string): ReadonlyArray<OutboxItem> =>
   Option.getOrElse(Schema.decodeUnknownOption(Outbox)(read(outboxKey(sessionId))), () => []);

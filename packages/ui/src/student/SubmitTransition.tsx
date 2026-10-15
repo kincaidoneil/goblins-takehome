@@ -1,10 +1,14 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CreatureArt } from "../components/creatures";
 import type { GradeStatus } from "../components/grade";
 import { ScoreChip } from "../components/ScoreChip";
 
 /** How long the transition stays up before the next problem opens. */
 export const TRANSITION_MS = 1500;
+/** A score that arrives late stays up at least this long, so it can be read. */
+const SCORE_READ_MS = 1200;
+/** Never longer than this, however late the score. */
+const TRANSITION_MAX_MS = 3000;
 
 const CHEERS = [
   "Nice work!",
@@ -23,6 +27,8 @@ export interface SubmitTransitionProps {
   nextLabel: string | undefined;
   /** The grade, if it arrives during the transition. Students never see "needs you" or "couldn't grade". */
   grade: GradeStatus;
+  /** The submission is saved on the device and waiting for the network. */
+  offline?: boolean;
   onDone: () => void;
 }
 
@@ -36,20 +42,30 @@ export function SubmitTransition({
   problemIndex,
   nextLabel,
   grade,
+  offline = false,
   onDone,
 }: SubmitTransitionProps) {
-  // The timer starts once, on mount: a new onDone (e.g. an inline arrow on a
-  // re-render when the grade arrives) must not restart it.
+  const graded =
+    grade.state === "graded" || grade.state === "needs-teacher" || grade.state === "couldnt-grade";
+
+  // The deadline is measured from mount. A new onDone (e.g. an inline arrow on a
+  // re-render) must not restart it; a score arriving late extends it, up to a cap.
+  const startedAt = useRef(performance.now());
+  const [deadline, setDeadline] = useState(TRANSITION_MS);
   const onDoneRef = useRef(onDone);
   onDoneRef.current = onDone;
   useEffect(() => {
-    const timer = window.setTimeout(() => onDoneRef.current(), TRANSITION_MS);
+    if (!graded) return;
+    const elapsed = performance.now() - startedAt.current;
+    setDeadline((d) => Math.min(TRANSITION_MAX_MS, Math.max(d, elapsed + SCORE_READ_MS)));
+  }, [graded]);
+  useEffect(() => {
+    const remaining = deadline - (performance.now() - startedAt.current);
+    const timer = window.setTimeout(() => onDoneRef.current(), Math.max(0, remaining));
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [deadline]);
 
-  const cheer = CHEERS[problemIndex % CHEERS.length];
-  const graded =
-    grade.state === "graded" || grade.state === "needs-teacher" || grade.state === "couldnt-grade";
+  const cheer = offline ? "Saved!" : CHEERS[problemIndex % CHEERS.length];
 
   return (
     <div className="gb-transition" role="status" aria-live="polite">
@@ -65,7 +81,11 @@ export function SubmitTransition({
         </div>
         <h2 className="gb-transition-title">{cheer}</h2>
         <div className="gb-transition-score" data-shown={graded || undefined}>
-          {graded && <ScoreChip status={grade} audience="student" />}
+          {offline ? (
+            <p className="gb-transition-note">It sends as soon as you're back online.</p>
+          ) : (
+            graded && <ScoreChip status={grade} audience="student" />
+          )}
         </div>
         <p className="gb-transition-next">
           {nextLabel === undefined ? "That was the last one." : `Up next: problem ${nextLabel}`}
