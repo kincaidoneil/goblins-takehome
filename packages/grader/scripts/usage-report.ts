@@ -68,7 +68,7 @@ const readLog = Effect.gen(function* () {
            (avg(cost_usd) filter (where status = 'ok'))::text as mean_ok_cost_usd,
            percentile_cont(0.5) within group (order by latency_ms) as p50_latency_ms,
            percentile_cont(0.95) within group (order by latency_ms) as p95_latency_ms
-    from model_call
+    from model_calls
     where load_test_run_id is null
     group by purpose
     order by purpose`
