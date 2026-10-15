@@ -108,6 +108,9 @@ export const submitWork = (input: {
           .select({ status: classSessions.status, assignmentId: classSessions.assignmentId })
           .from(classSessions)
           .where(eq(classSessions.id, input.sessionId))
+          // Holds off a concurrent "end session" until this submission commits, so ending a
+          // session reliably stops new submissions.
+          .for("share")
         if (session === undefined || session.status !== "live") return yield* reject("session_not_live")
 
         const [student] = yield* db
