@@ -87,17 +87,9 @@ const loadTestModel = Layer.effect(Consumer.LoadTestModelClient, ModelClient).pi
   Layer.provide(mockModel),
 );
 
-/**
- * Logs each call to the function logs until the Postgres writer (`CallLog.postgres`)
- * lands with the new `model_calls` columns.
- */
-const callLog = Layer.succeed(CallLog.CallLog, {
-  record: (entry) => Effect.logInfo("model call", entry),
-});
-
 const graderServices = Layer.mergeAll(
   Consumer.ModelRouterLive.pipe(
-    Layer.provide(Layer.mergeAll(configuredModel, loadTestModel, callLog)),
+    Layer.provide(Layer.mergeAll(configuredModel, loadTestModel, CallLog.postgres)),
   ),
   GradeStore.postgres,
   Layer.succeed(Grader.Grader, Grader.placeholder),
