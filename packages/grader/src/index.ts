@@ -1,1 +1,1 @@
-export * from "./ModelClient.ts"
+export * from "./ModelClient.ts";
