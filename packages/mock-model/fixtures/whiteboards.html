@@ -1,0 +1,33 @@
+<!doctype html>
+<!--
+  Source for the fixture whiteboards. Each <section> renders to fixtures/<id>.png:
+    node packages/mock-model/fixtures/render.mjs   (needs the playwright package installed)
+  Re-rendering changes the image bytes, so update the hashes in src/fixtures.ts after (the test prints them).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  body { margin: 0; background: #fff; }
+  section {
+    width: 800px; height: 480px; box-sizing: border-box; padding: 40px 56px;
+    background: #fff; color: #1d2a6b; position: relative; overflow: hidden;
+    font: 40px/1.5 "Bradley Hand", "Noteworthy", "Comic Sans MS", cursive;
+  }
+  .p { font: 22px/1.4 -apple-system, "Helvetica Neue", Arial, sans-serif; color: #555; margin-bottom: 18px; }
+  .x { text-decoration: line-through; opacity: .6; }
+  .smudge { filter: blur(3px); letter-spacing: -6px; }
+  .box { border: 3px solid #1d2a6b; padding: 0 12px; border-radius: 6px; }
+</style>
+</head>
+<body>
+<section id="correct"><div class="p">1. Solve 2x + 3 = 11</div>2x + 3 = 11<br>2x = 8<br><span class="box">x = 4</span></section>
+<section id="partial"><div class="p">1. Solve 2x + 3 = 11</div>2x + 3 = 11<br>2x = 8<br><span class="box">x = 6</span></section>
+<section id="wrong"><div class="p">1. Solve 2x + 3 = 11</div>2x = 11 + 3<br>2x = 14<br><span class="box">x = 7</span></section>
+<section id="illegible"><div class="p">1. Solve 2x + 3 = 11</div>2x + 3 = 11<br><span class="smudge">2x = 8 so x =</span><br><span class="smudge box">4?1</span></section>
+<section id="blank"><div class="p">1. Solve 2x + 3 = 11</div></section>
+<section id="fails-once"><div class="p">1. Solve 2x + 3 = 11</div>11 − 3 = 8<br>8 ÷ 2 = 4<br><span class="box">x = 4</span></section>
+<section id="fails-always"><div class="p">1. Solve 2x + 3 = 11</div>2x + 3 − 3 = 11 − 3<br>2x = 8 → <span class="box">x = 4</span></section>
+<section id="malformed"><div class="p">1. Solve 2x + 3 = 11</div><span class="x">x = 5</span><br>x = 4 because 2·4 + 3 = 11</section>
+</body>
+</html>

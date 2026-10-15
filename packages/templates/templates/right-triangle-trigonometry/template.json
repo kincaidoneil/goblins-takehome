@@ -96,8 +96,8 @@
       "solution": "This is the triangle from problem 1. Its height is x = 4√3, so the area is 1/2 · 8 · 4√3 = 16√3 ≈ 27.7 square units.",
       "dependsOn": ["1a"],
       "review": {
-        "_tag": "Unsure",
-        "note": "The worksheet never says problem 2 uses problem 1, but it is the same triangle and the expected method uses x from 1a. The dependency is ours, so a student who carries a wrong x from 1a gets method credit here. Kincaid to confirm that is the intended grading."
+        "_tag": "Checked",
+        "note": "Reviewed by Kincaid on 2026-10-15: problem 2 stays linked to 1a, so a wrong height from 1a still earns method credit."
       }
     },
     {
