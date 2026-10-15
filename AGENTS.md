@@ -29,7 +29,7 @@ pnpm monorepo. Each workstream owns one package and does not edit another stream
 - Each task gets its own worktree, branch and small PR against `main`. Merging to `main` deploys to production.
 - Before opening a PR, review your own diff. Then wait for CI and the Codex review, address every comment (fix it, or reply with a reason), rebase on `main`, and merge when green. You own your PR until it merges.
 - Codex reviews: fix every P1 and P2 finding. After two review rounds, merge on green CI and list any remaining minor findings as follow-ups in the PR description.
-- `main` has no branch protection until submission. Never merge on red CI. The "Vercel" status fails on PRs whose branch has no `apps/web` until #16 merges; it is a deploy status, not CI.
+- The "Vercel" status fails on PRs whose branch has no `apps/web` until #16 merges; it is a deploy status, not CI.
 - Rebase conflicts: `docs/decisions.md` merges by keeping both sides (`.gitattributes`), so check only that rows stay in date order. Resolve `docs/board.md` by hand: it holds current state. For `pnpm-lock.yaml`, run `git checkout origin/main -- pnpm-lock.yaml && pnpm install`, then commit the result. Never hand-edit the lockfile.
 - Done means evidence: CI and E2E passing, screenshots for UI, a preview URL. Say what you did not verify.
 - Never stop to wait for an answer. Record the assumption in `docs/decisions.md` and keep going. Send questions for Kincaid to the orchestrator session, each with a recommendation.
