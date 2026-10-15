@@ -484,6 +484,8 @@ export const modelCallStatus = pgEnum("model_call_status", [
   "timeout",
   "provider_error",
   "bad_response",
+  /** The caller stopped waiting, e.g. the function shut down mid-call. */
+  "interrupted",
 ]);
 
 /**
@@ -498,14 +500,25 @@ export const modelCalls = pgTable(
     purpose: text().notNull(),
     /** "openrouter" or "mock". */
     provider: text().notNull(),
+    /** The model requested. */
     model: text().notNull(),
+    /** The model that answered, when it differs or is known (OpenRouter may route). */
+    modelAnswered: text(),
     status: modelCallStatus().notNull(),
+    /** HTTP status, or the code in an OpenRouter error body. Null when there was no response. */
+    statusCode: integer(),
+    /** The provider's id for the generation, for reconciling cost with OpenRouter. */
+    providerId: text(),
     latencyMs: integer().notNull(),
     inputTokens: integer(),
     outputTokens: integer(),
+    /** Reasoning tokens, when the model reports them separately. */
+    reasoningTokens: integer(),
     costUsd: numeric({ precision: 12, scale: 8, mode: "number" }),
     /** Set for grading calls. Not a foreign key: the log outlives deleted submissions. */
     submissionId: uuid(),
+    /** What the call was about when it is not a submission, e.g. an assignment for extraction. */
+    subjectId: text(),
     attempt: integer(),
     errorMessage: text(),
     loadTestRunId: loadTestRunId(),

@@ -9,9 +9,9 @@ import { Config, Effect, Option, Redacted } from "effect";
 import { run } from "../../server/runtime";
 import { resolveShape } from "../../server/shapes";
 
+/** Self-hosted Electric: a URL and an optional secret. Previews have no Electric. */
 const electric = Config.all({
-  url: Config.string("ELECTRIC_URL").pipe(Config.withDefault("https://api.electric-sql.cloud")),
-  sourceId: Config.option(Config.string("ELECTRIC_SOURCE_ID")),
+  url: Config.option(Config.string("ELECTRIC_URL")),
   secret: Config.option(Config.redacted("ELECTRIC_SECRET")),
 });
 
@@ -22,8 +22,11 @@ const proxy = (request: Request) =>
     const sessionId = url.searchParams.get("sessionId") ?? "";
     const shape = yield* resolveShape(request, view, sessionId);
     const config = yield* electric;
+    if (Option.isNone(config.url)) {
+      return new Response("Live updates are off in this environment", { status: 503 });
+    }
 
-    const upstream = new URL("/v1/shape", config.url);
+    const upstream = new URL("/v1/shape", config.url.value);
     for (const [key, value] of url.searchParams) {
       if (ELECTRIC_PROTOCOL_QUERY_PARAMS.includes(key)) upstream.searchParams.set(key, value);
     }
@@ -33,8 +36,6 @@ const proxy = (request: Request) =>
       upstream.searchParams.set(`params[${i + 1}]`, value);
     }
     upstream.searchParams.set("columns", shape.columns.join(","));
-    if (Option.isSome(config.sourceId))
-      upstream.searchParams.set("source_id", config.sourceId.value);
     if (Option.isSome(config.secret)) {
       upstream.searchParams.set("secret", Redacted.value(config.secret.value));
     }

@@ -17,21 +17,6 @@ export interface SharedMeta {
   readonly attribution: string | null;
 }
 
-/**
- * Removes everything that names a student. The share route runs this on the server, so names
- * never reach the viewer's browser.
- */
-export function anonymize(input: ReportInput): ReportInput {
-  return {
-    ...input,
-    students: input.students.map((s, i) => ({
-      id: s.id,
-      displayName: `Student ${i + 1}`,
-      avatarId: 0,
-    })),
-  };
-}
-
 const formatDate = (iso: string) =>
   new Date(iso).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
 

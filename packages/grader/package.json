@@ -17,7 +17,7 @@
     "@effect/sql": "^0.52.1",
     "@effect/sql-pg": "^0.53.0",
     "@goblins/domain": "workspace:*",
-    "@vercel/queue": "^0.8.0",
+    "@upstash/qstash": "^2.12.0",
     "drizzle-orm": "~0.45.4",
     "effect": "^3.22.2"
   },

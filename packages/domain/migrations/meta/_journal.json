@@ -15,6 +15,13 @@
       "when": 1792077105322,
       "tag": "0001_report_mistake_groups",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792079063838,
+      "tag": "0002_call_log_columns",
+      "breakpoints": true
     }
   ]
 }

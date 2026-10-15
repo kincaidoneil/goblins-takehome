@@ -27,8 +27,12 @@ export interface CallCost {
   readonly costUsd: number;
 }
 
+/** Which client answered: the real provider or the mock. */
+export type Provider = "openrouter" | "mock";
+
 export interface CallLogEntry {
   readonly startedAt: Date;
+  readonly provider: Provider;
   readonly purpose: CallPurpose;
   readonly modelRequested: string;
   /** The model that answered; absent when the call failed before an answer. */
@@ -96,7 +100,13 @@ const failureFields = (
   }
 };
 
-const baseFields = (request: CompletionRequest, startedMs: number, endedMs: number) => ({
+const baseFields = (
+  provider: Provider,
+  request: CompletionRequest,
+  startedMs: number,
+  endedMs: number,
+) => ({
+  provider,
   startedAt: new Date(startedMs),
   purpose: request.tag.purpose,
   modelRequested: request.model,
@@ -111,7 +121,11 @@ const baseFields = (request: CompletionRequest, startedMs: number, endedMs: numb
  * caller abandons. Latency is measured here, not reported by the client, so the
  * mock and the real client are measured the same way.
  */
-export const wrap = (inner: ModelClient["Type"], log: CallLog["Type"]): ModelClient["Type"] => ({
+export const wrap = (
+  inner: ModelClient["Type"],
+  log: CallLog["Type"],
+  provider: Provider,
+): ModelClient["Type"] => ({
   complete: (request) =>
     // Only the provider call is interruptible. Once it settles, or is interrupted,
     // the row is written before the interruption can propagate.
@@ -119,7 +133,7 @@ export const wrap = (inner: ModelClient["Type"], log: CallLog["Type"]): ModelCli
       Effect.gen(function* () {
         const startedMs = yield* Clock.currentTimeMillis;
         const exit = yield* Effect.exit(restore(inner.complete(request)));
-        const base = baseFields(request, startedMs, yield* Clock.currentTimeMillis);
+        const base = baseFields(provider, request, startedMs, yield* Clock.currentTimeMillis);
         const entry = Exit.match(exit, {
           onSuccess: (completion): Option.Option<CallLogEntry> =>
             Option.some({
@@ -160,12 +174,13 @@ export const wrap = (inner: ModelClient["Type"], log: CallLog["Type"]): ModelCli
 });
 
 /** Replaces the provided ModelClient with one that logs every call. */
-export const withCallLog = Layer.effect(
-  ModelClient,
-  Effect.gen(function* () {
-    return wrap(yield* ModelClient, yield* CallLog);
-  }),
-);
+export const withCallLog = (provider: Provider) =>
+  Layer.effect(
+    ModelClient,
+    Effect.gen(function* () {
+      return wrap(yield* ModelClient, yield* CallLog, provider);
+    }),
+  );
 
 /** Keeps rows in memory. For tests and for local runs without a database. */
 export const inMemory = Effect.gen(function* () {
