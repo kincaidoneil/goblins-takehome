@@ -29,8 +29,8 @@ const inputHash = (stats: ProblemStats): string =>
 const decodeGrouping = Schema.decodeUnknown(ModelGrouping);
 
 /**
- * AI quality's grouping call (`Mistakes.groupMistakes`, Claude Haiku). It returns no skill name,
- * so the problem's label stands in.
+ * AI quality's grouping call (`Mistakes.groupMistakes`, Claude Haiku): the mistakes and the skill
+ * the problem practices, which titles the problem and names the Goblins practice.
  */
 const askModel = (sessionId: string, stats: ProblemStats) =>
   Effect.gen(function* () {
@@ -52,11 +52,11 @@ const askModel = (sessionId: string, stats: ProblemStats) =>
       { purpose: "report", subjectId: sessionId },
     );
     const grouping = yield* decodeGrouping({
-      skill: `Problem ${stats.problem.label}`,
+      skill: result.skill,
       groups: result.mistakes.map((m) => ({ description: m.mistake, studentIds: m.studentIds })),
     });
     return { grouping, model: Models.models.mistakes.model };
-  }).pipe(Effect.timeout(Duration.seconds(20)));
+  }).pipe(Effect.timeout(Duration.seconds(45)));
 
 const groupProblem = (sessionId: string, stats: ProblemStats) =>
   Effect.gen(function* () {
