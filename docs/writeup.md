@@ -1,7 +1,5 @@
 # Statement of confidence
 
-> **Draft for Kincaid to edit.** The ship call waits on the 990-student rerun. Everything else is measured and linked.
-
 ## What the system handles today
 
 **Capacity: at least 510 students in one testing window, on one laptop.** That is a floor, not Vercel's ceiling: the laptop ran the generator, Postgres, Electric and six app processes at once. At 510 students (17 classes starting within 2 minutes of the bell, 9 submissions each, at 4× the real submission rate), every criterion held ([report](../packages/loadtest/reports/after-sync-fix-510/report.md)):
@@ -20,7 +18,7 @@ That run mocked the model with latency measured from 1,839 real Haiku calls. The
 | [ramp-local-6workers](../packages/loadtest/reports/ramp-local-6workers/report.md) | Laptop, 6 processes, before the sync fixes | 990, 4× pace | 0 | 5.8 s | 49 s | 0 | Fail: sync |
 | [ramp-local-qstash](../packages/loadtest/reports/ramp-local-qstash/report.md) | Laptop, ONE app process | 990, 4× pace | 0 | 49.5 s | 254 s | 0 | Fail: one process saturates |
 
-Nothing was lost in any run, and no grade failed, including during a 5-minute model outage. The 990-student runs failed on live sync to the dashboards. The fixes have merged (one shared subscription per class, then per-student filtering, and higher Electric limits), and the 990 rerun is pending. An earlier rerun after the first fix was invalid because of a request storm from the load generator.
+Nothing was lost in any run, and no grade failed, including during a 5-minute model outage and a rate-limit storm. The 990-student runs failed on live sync to the dashboards. The fixes have merged (one shared subscription per class, then per-student filtering, and higher Electric limits). The 990 rerun after them ([report](../packages/loadtest/reports/per-student-990/report.md)) is invalid: the laptop driving the load ran out before the system did. An earlier rerun after the first fix was invalid because of a request storm from the load generator.
 
 Notes on the smoke test:
 
@@ -48,7 +46,7 @@ The criteria were set in the [PRD](prd.md#quality-bar) before the first run.
 | Grades that fail, normal conditions | < 0.1% | 0% |
 | Grades that fail, provider down for 5 minutes | 0% | 0% (at 300 students) |
 
-Ship means capacity of at least 1,000 students in one testing window. **The call waits on the 990-student rerun.** If it passes every criterion: ship, after moving QStash to pay-as-you-go, since on the free plan production handles about three classes a day. If it fails: no ship for a 1,000-student window until the component that failed first is fixed. Today the measured floor is 510.
+Every bar held at 510 students in one testing window, measured on one laptop. 1,000 is not verified, because the laptop driving the load ran out before the system did. **Ship for testing windows up to 510 students.** A 1,000-student window needs the load split across several generator machines to verify it, plus QStash on pay-as-you-go.
 
 ## Cost
 
@@ -66,7 +64,7 @@ Peak load assumes every student tests in the same 30-minute window, which overst
 
 | Students | Model cost a month | Peak grades/s | What changes |
 |---|---|---|---|
-| 1,000 | $25 | 6 | QStash to pay-as-you-go; about 25 model calls in flight, within one provider's default limits. Sync is the part to watch: 510 students pass on one laptop, and the 990 rerun will show whether the sync fixes hold at this size. |
+| 1,000 | $25 | 6 | QStash to pay-as-you-go; about 25 model calls in flight, within one provider's default limits. Sync is the part to watch: 510 students pass on one laptop. |
 | 10,000 | $254 | 56 | About 250 calls in flight. QStash caps parallelism at 100 per key, so shard grades across several flow-control keys. Raise the model's rate limits and fail over to GPT-6 Luna on rate limits. Move whiteboards out of Postgres, where they are stored inline as `data:` URLs (about 6 GB a month at this size), into object storage. Add Electric machines: one Fly machine is capped at 10,000 connections and each student holds two. |
 | 100,000 | $2,500 | 560 | Model cost now matters. Cache the prompt prefix shared by every student on a problem (about a fifth of the cost), trim the per-line evidence text (output is almost half the cost), and send a smaller image. Put Electric behind a CDN, which its HTTP shapes allow. A larger Postgres for about 1,700 writes a second. |
 | 1,000,000 | $25,000 | 5,600 | 1.2 billion tokens a minute at peak is beyond any single provider. Route across several providers and negotiate contract pricing. Replace QStash with a queue built for this rate, such as SQS. Partition grades by district. Self-hosting an open model is the alternative, but the open models we tested are not accurate enough yet. |
