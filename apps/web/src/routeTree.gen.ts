@@ -17,6 +17,7 @@ import { Route as PlaySessionIdRouteImport } from './routes/play/$sessionId'
 import { Route as ReportDemoRouteImport } from './routes/report/demo'
 import { Route as ShareDemoRouteImport } from './routes/share/demo'
 import { Route as ApiGradingSweepRouteImport } from './routes/api/grading/sweep'
+import { Route as ApiQueueGradeRouteImport } from './routes/api/queue/grade'
 import { Route as SessionsSessionIdIndexRouteImport } from './routes/sessions/$sessionId/index'
 import { Route as SessionsSessionIdProjectorRouteImport } from './routes/sessions/$sessionId/projector'
 
@@ -60,6 +61,11 @@ const ApiGradingSweepRoute = ApiGradingSweepRouteImport.update({
   path: '/api/grading/sweep',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiQueueGradeRoute = ApiQueueGradeRouteImport.update({
+  id: '/api/queue/grade',
+  path: '/api/queue/grade',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SessionsSessionIdIndexRoute = SessionsSessionIdIndexRouteImport.update({
   id: '/sessions/$sessionId/',
   path: '/sessions/$sessionId/',
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/report/demo': typeof ReportDemoRoute
   '/share/demo': typeof ShareDemoRoute
   '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/api/queue/grade': typeof ApiQueueGradeRoute
   '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
   '/sessions/$sessionId/': typeof SessionsSessionIdIndexRoute
 }
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/report/demo': typeof ReportDemoRoute
   '/share/demo': typeof ShareDemoRoute
   '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/api/queue/grade': typeof ApiQueueGradeRoute
   '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
   '/sessions/$sessionId': typeof SessionsSessionIdIndexRoute
 }
@@ -106,6 +114,7 @@ export interface FileRoutesById {
   '/report/demo': typeof ReportDemoRoute
   '/share/demo': typeof ShareDemoRoute
   '/api/grading/sweep': typeof ApiGradingSweepRoute
+  '/api/queue/grade': typeof ApiQueueGradeRoute
   '/sessions/$sessionId/projector': typeof SessionsSessionIdProjectorRoute
   '/sessions/$sessionId/': typeof SessionsSessionIdIndexRoute
 }
@@ -120,6 +129,7 @@ export interface FileRouteTypes {
     | '/report/demo'
     | '/share/demo'
     | '/api/grading/sweep'
+    | '/api/queue/grade'
     | '/sessions/$sessionId/projector'
     | '/sessions/$sessionId/'
   fileRoutesByTo: FileRoutesByTo
@@ -132,6 +142,7 @@ export interface FileRouteTypes {
     | '/report/demo'
     | '/share/demo'
     | '/api/grading/sweep'
+    | '/api/queue/grade'
     | '/sessions/$sessionId/projector'
     | '/sessions/$sessionId'
   id:
@@ -144,6 +155,7 @@ export interface FileRouteTypes {
     | '/report/demo'
     | '/share/demo'
     | '/api/grading/sweep'
+    | '/api/queue/grade'
     | '/sessions/$sessionId/projector'
     | '/sessions/$sessionId/'
   fileRoutesById: FileRoutesById
@@ -157,6 +169,7 @@ export interface RootRouteChildren {
   ReportDemoRoute: typeof ReportDemoRoute
   ShareDemoRoute: typeof ShareDemoRoute
   ApiGradingSweepRoute: typeof ApiGradingSweepRoute
+  ApiQueueGradeRoute: typeof ApiQueueGradeRoute
   SessionsSessionIdProjectorRoute: typeof SessionsSessionIdProjectorRoute
   SessionsSessionIdIndexRoute: typeof SessionsSessionIdIndexRoute
 }
@@ -219,6 +232,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiGradingSweepRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/queue/grade': {
+      id: '/api/queue/grade'
+      path: '/api/queue/grade'
+      fullPath: '/api/queue/grade'
+      preLoaderRoute: typeof ApiQueueGradeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sessions/$sessionId/': {
       id: '/sessions/$sessionId/'
       path: '/sessions/$sessionId'
@@ -245,6 +265,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReportDemoRoute: ReportDemoRoute,
   ShareDemoRoute: ShareDemoRoute,
   ApiGradingSweepRoute: ApiGradingSweepRoute,
+  ApiQueueGradeRoute: ApiQueueGradeRoute,
   SessionsSessionIdProjectorRoute: SessionsSessionIdProjectorRoute,
   SessionsSessionIdIndexRoute: SessionsSessionIdIndexRoute,
 }
