@@ -18,6 +18,10 @@ export const UPLOAD_PROBLEM_COPY: Record<UploadProblem, { title: string; body: s
     title: "One PDF at a time",
     body: "Drop a single PDF, or photos of the pages, but not both.",
   },
+  unavailable: {
+    title: "Setup isn't open yet",
+    body: "We're finishing the step after this one. Check back soon; nothing you dropped was kept.",
+  },
   "upload-failed": {
     title: "That didn't upload",
     body: "Check your connection and try again. Nothing was lost.",
