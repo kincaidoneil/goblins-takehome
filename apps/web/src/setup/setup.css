@@ -126,8 +126,24 @@
 }
 
 .setup-column-pages {
-  overflow-y: auto;
-  padding-right: var(--gb-space-1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* The viewer fills its parent's height and pans inside it. */
+.setup-viewer {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.setup-viewer-sheet {
+  height: 70dvh;
+}
+
+.setup-column-chat .gb-tabs-panel:has(.setup-viewer) {
+  display: flex;
+  flex-direction: column;
 }
 
 .setup-phone {
@@ -135,54 +151,6 @@
 }
 
 /* Pages ------------------------------------------------------------------- */
-
-.setup-pages {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gb-space-4);
-}
-
-.setup-page {
-  margin: 0;
-  scroll-margin-top: var(--gb-space-2);
-}
-
-.setup-page-button {
-  display: block;
-  width: 100%;
-  padding: 0;
-  border: 2px solid var(--gb-color-border);
-  border-radius: var(--gb-radius-lg);
-  background: var(--gb-color-surface);
-  overflow: hidden;
-  cursor: zoom-in;
-  transition: border-color var(--gb-duration-base) var(--gb-ease-out);
-}
-
-.setup-page[data-active] .setup-page-button {
-  border-color: var(--gb-green-500);
-  box-shadow: 0 0 0 4px rgb(112 177 69 / 0.18);
-}
-
-.setup-page img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.setup-page figcaption {
-  margin-top: var(--gb-space-1);
-  color: var(--gb-color-text-muted);
-  font-size: var(--gb-text-xs);
-  font-weight: var(--gb-weight-bold);
-  text-align: center;
-}
-
-.setup-enlarged-page {
-  display: block;
-  width: 100%;
-  border-radius: var(--gb-radius-md);
-}
 
 /* Problems ---------------------------------------------------------------- */
 

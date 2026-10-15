@@ -2,7 +2,15 @@
  * The review screen: the worksheet pages, the problems as the grader will know them, and the chat.
  * Three columns on a wide screen; on narrower ones the pages and chat move into tabs or sheets.
  */
-import { Button, CreatureArt, Dialog, Tabs, useToast, Wordmark } from "@goblins/ui";
+import {
+  Button,
+  CreatureArt,
+  Dialog,
+  Tabs,
+  useToast,
+  Wordmark,
+  WorksheetViewer,
+} from "@goblins/ui";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Draft, DraftProblem } from "../server/setup/draft";
@@ -11,7 +19,6 @@ import { editDraft, getDraft, sendChatMessage } from "../server/setup/fns";
 import { ChatPanel } from "./ChatPanel";
 import { EditableText } from "./EditableText";
 import { LaunchDialog } from "./LaunchDialog";
-import { PagesPanel } from "./PagesPanel";
 import { ProblemCard } from "./ProblemCard";
 import { groupProblems, totalPoints } from "./problem-groups";
 import { useMediaQuery } from "./use-media-query";
@@ -54,8 +61,10 @@ export function SetupScreen({
   const [highlighted, setHighlighted] = useState<ReadonlySet<string>>(new Set());
   const [newProblemIds, setNewProblemIds] = useState<ReadonlySet<string>>(new Set());
   const [activeProblemId, setActiveProblemId] = useState<string | null>(null);
-  const [focusPage, setFocusPage] = useState<{ page: number; at: number } | null>(null);
-  const [enlargedPage, setEnlargedPage] = useState<number | null>(null);
+  const [viewPage, setViewPage] = useState(initial.pages[0]?.pageNumber ?? 1);
+  /** Phones show the worksheet in a sheet; tablets in the side panel's Worksheet tab. */
+  const [pagesOpen, setPagesOpen] = useState(false);
+  const [sideTab, setSideTab] = useState<"chat" | "pages">("chat");
   const [launchOpen, setLaunchOpen] = useState(launchOnArrival);
   const [timeLimit, setTimeLimit] = useState<number | null>(initialTimeLimit);
   const [titleError, setTitleError] = useState(false);
@@ -190,8 +199,9 @@ export function SetupScreen({
   };
 
   const showPage = (page: number) => {
-    if (wide) setFocusPage({ page, at: Date.now() });
-    else setEnlargedPage(page);
+    setViewPage(page);
+    if (phone) setPagesOpen(true);
+    else if (!wide) setSideTab("pages");
   };
 
   const openLaunch = () => {
@@ -302,11 +312,12 @@ export function SetupScreen({
   );
 
   const pages = (
-    <PagesPanel
+    <WorksheetViewer
       pages={draft.pages}
-      activePages={activeProblem?.pageNumbers ?? []}
-      focusPage={focusPage}
-      onOpenPage={setEnlargedPage}
+      page={viewPage}
+      onPageChange={setViewPage}
+      highlightPages={activeProblem?.pageNumbers ?? []}
+      className="setup-viewer"
     />
   );
 
@@ -383,6 +394,8 @@ export function SetupScreen({
           <main className="setup-column setup-column-main">{problems}</main>
           <aside className="setup-column setup-column-chat">
             <Tabs
+              value={sideTab}
+              onValueChange={setSideTab}
               items={[
                 { value: "chat", label: "Ask for changes", content: chat },
                 { value: "pages", label: "Worksheet", content: pages },
@@ -392,20 +405,11 @@ export function SetupScreen({
         </div>
       )}
 
-      <Dialog
-        open={enlargedPage !== null}
-        onOpenChange={(open) => !open && setEnlargedPage(null)}
-        title={`Page ${enlargedPage ?? ""}`}
-        size="lg"
-      >
-        {enlargedPage !== null && (
-          <img
-            className="setup-enlarged-page"
-            src={draft.pages.find((p) => p.pageNumber === enlargedPage)?.imageUrl}
-            alt={`Worksheet page ${enlargedPage}`}
-          />
-        )}
-      </Dialog>
+      {phone && (
+        <Dialog open={pagesOpen} onOpenChange={setPagesOpen} title="Worksheet" size="lg">
+          <div className="setup-viewer-sheet">{pages}</div>
+        </Dialog>
+      )}
 
       <LaunchDialog
         open={launchOpen}
