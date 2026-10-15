@@ -1,9 +1,8 @@
-import { Avatar, Button, ScoreChip, useToast } from "@goblins/ui";
+import { Avatar, Button, CroppedFigure, ScoreChip, useToast } from "@goblins/ui";
 import { useEffect, useState } from "react";
 import type { StudentRow, TeacherGradeRow } from "../../../lib/sync";
 import { accept, getWhiteboard, retry, score } from "../../../server/fns/grading";
 import { MathText } from "../MathText";
-import { CroppedFigure } from "./CroppedFigure";
 import { type DashboardProblem, gradeStatus } from "./model";
 import { SidePanel } from "./SidePanel";
 

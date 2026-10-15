@@ -1,12 +1,5 @@
-import type { GradeStatus } from "@goblins/ui";
+import type { GradeStatus, ProblemFigure } from "@goblins/ui";
 import type { StudentRow, TeacherGradeRow } from "../../../lib/sync";
-
-export interface ProblemFigure {
-  readonly src: string;
-  readonly alt: string;
-  /** The figure's box on the page, as fractions of the page's width and height. */
-  readonly crop: { readonly x: number; readonly y: number; readonly w: number; readonly h: number };
-}
 
 export interface DashboardProblem {
   readonly id: string;
