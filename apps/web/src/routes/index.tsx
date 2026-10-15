@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/")({ component: Home })
+export const Route = createFileRoute("/")({ component: Home });
 
 function Home() {
   return (
@@ -8,5 +8,5 @@ function Home() {
       <h1 className="text-3xl">Grade your next test for you</h1>
       <p className="mt-4 text-text-muted">The landing page stream owns this route.</p>
     </main>
-  )
+  );
 }

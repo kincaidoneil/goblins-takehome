@@ -1,65 +1,73 @@
-import { Avatar, Button, Card, Field, Input } from "@goblins/ui"
-import { createFileRoute, useNavigate } from "@tanstack/react-router"
-import { Schema } from "effect"
-import { type FormEvent, useState } from "react"
-import { join } from "../server/fns/join"
+import { Avatar, Button, Card, Field, Input } from "@goblins/ui";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Schema } from "effect";
+import { type FormEvent, useState } from "react";
+import { join } from "../server/fns/join";
 
 // The router parses `?code=123456` as a number; a code with a leading zero stays a string.
-const Search = Schema.Struct({ code: Schema.optional(Schema.Union(Schema.String, Schema.Number)) })
+const Search = Schema.Struct({ code: Schema.optional(Schema.Union(Schema.String, Schema.Number)) });
 
 export const Route = createFileRoute("/join")({
   validateSearch: Schema.standardSchemaV1(Search),
   head: () => ({ meta: [{ title: "Join your class · Goblins" }] }),
-  component: JoinPage
-})
+  component: JoinPage,
+});
 
 type Step =
   | { readonly _tag: "Code"; readonly error?: string }
-  | { readonly _tag: "Name"; readonly code: string; readonly error?: string }
+  | { readonly _tag: "Name"; readonly code: string; readonly error?: string };
 
 function JoinPage() {
-  const search = Route.useSearch()
-  const navigate = useNavigate()
-  const prefilled = String(search.code ?? "").replace(/\D/g, "").padStart(search.code === undefined ? 0 : 6, "0")
+  const search = Route.useSearch();
+  const navigate = useNavigate();
+  const prefilled = String(search.code ?? "")
+    .replace(/\D/g, "")
+    .padStart(search.code === undefined ? 0 : 6, "0");
   const [step, setStep] = useState<Step>(
-    prefilled.length === 6 ? { _tag: "Name", code: prefilled } : { _tag: "Code" }
-  )
-  const [code, setCode] = useState(prefilled)
-  const [name, setName] = useState("")
-  const [pending, setPending] = useState(false)
+    prefilled.length === 6 ? { _tag: "Name", code: prefilled } : { _tag: "Code" },
+  );
+  const [code, setCode] = useState(prefilled);
+  const [name, setName] = useState("");
+  const [pending, setPending] = useState(false);
 
   const submitCode = (event: FormEvent) => {
-    event.preventDefault()
-    const digits = code.replace(/\D/g, "")
+    event.preventDefault();
+    const digits = code.replace(/\D/g, "");
     if (digits.length !== 6) {
-      setStep({ _tag: "Code", error: "The code is 6 numbers. It's on the board." })
-      return
+      setStep({ _tag: "Code", error: "The code is 6 numbers. It's on the board." });
+      return;
     }
-    setStep({ _tag: "Name", code: digits })
-  }
+    setStep({ _tag: "Name", code: digits });
+  };
 
   const submitName = async (event: FormEvent) => {
-    event.preventDefault()
-    if (step._tag !== "Name") return
-    setPending(true)
-    const result = await join({ data: { joinCode: step.code, name } })
-    setPending(false)
+    event.preventDefault();
+    if (step._tag !== "Name") return;
+    setPending(true);
+    const result = await join({ data: { joinCode: step.code, name } });
+    setPending(false);
     if (result._tag === "Ok") {
-      await navigate({ to: "/play/$sessionId", params: { sessionId: result.value.sessionId } })
-      return
+      await navigate({ to: "/play/$sessionId", params: { sessionId: result.value.sessionId } });
+      return;
     }
     switch (result.error._tag) {
       case "SessionNotFound":
-        setStep({ _tag: "Code", error: "We couldn't find that class. Check the code on the board." })
-        return
+        setStep({
+          _tag: "Code",
+          error: "We couldn't find that class. Check the code on the board.",
+        });
+        return;
       case "InvalidName":
         setStep({
           ...step,
-          error: result.error.reason === "empty" ? "Type your first name." : "That's a long name. Try your first name and last initial."
-        })
-        return
+          error:
+            result.error.reason === "empty"
+              ? "Type your first name."
+              : "That's a long name. Try your first name and last initial.",
+        });
+        return;
     }
-  }
+  };
 
   return (
     <main className="min-h-dvh bg-bg px-4 py-10 sm:py-20">
@@ -126,5 +134,5 @@ function JoinPage() {
         )}
       </div>
     </main>
-  )
+  );
 }
