@@ -1,12 +1,34 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { LandingPage, TEMPLATE_SUMMARIES } from "@goblins/ui/landing";
+import landingCss from "@goblins/ui/landing.css?url";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { startDraftFromTemplate, startDraftFromUpload } from "../landing/setup";
+import { toUploadResult } from "../landing/upload";
 
-export const Route = createFileRoute("/")({ component: Home });
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Goblins Grader · Grade your next test for you" },
+      {
+        name: "description",
+        content:
+          "Drop in the worksheet you were going to hand out anyway. Students show their work, and you get a graded class. Free for teachers.",
+      },
+    ],
+    links: [{ rel: "stylesheet", href: landingCss }],
+  }),
+  component: Landing,
+});
 
-function Home() {
+function Landing() {
+  const navigate = useNavigate();
   return (
-    <main className="mx-auto max-w-2xl px-6 py-24 text-center">
-      <h1 className="text-3xl">Grade your next test for you</h1>
-      <p className="mt-4 text-text-muted">The landing page stream owns this route.</p>
-    </main>
+    <LandingPage
+      templates={TEMPLATE_SUMMARIES}
+      onFiles={async (files) => toUploadResult(await startDraftFromUpload(files))}
+      onTemplate={async (templateId) => toUploadResult(await startDraftFromTemplate(templateId))}
+      // The setup route belongs to the setup stream and isn't registered yet, so this is a plain href.
+      onStarted={(draftId) => void navigate({ href: `/setup/${draftId}` })}
+      signInHref="/sign-in"
+    />
   );
 }

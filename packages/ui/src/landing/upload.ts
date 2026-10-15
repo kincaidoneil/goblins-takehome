@@ -27,14 +27,18 @@ export const ACCEPT_ATTRIBUTE = [
 export const MAX_TOTAL_BYTES = 20 * 1024 * 1024;
 export const MAX_FILES = 10;
 
-/** Why the landing page could not take the files. "unreadable" and "upload-failed" come from the server. */
+/**
+ * Why the landing page could not start a draft. "unreadable", "upload-failed"
+ * and "unavailable" (setup isn't accepting drafts) come from the server.
+ */
 export type UploadProblem =
   | "unsupported"
   | "too-large"
   | "too-many"
   | "mixed-pdf"
   | "unreadable"
-  | "upload-failed";
+  | "upload-failed"
+  | "unavailable";
 
 export type FileCheck =
   | { readonly _tag: "Ok"; readonly files: ReadonlyArray<File> }
