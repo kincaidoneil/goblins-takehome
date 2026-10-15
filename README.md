@@ -57,6 +57,7 @@ pnpm --filter @goblins/web db:up && \
 
 # E2E, against a production build as CI runs it (the dev server is too slow for the tests' timeouts)
 pnpm --filter @goblins/web build && (cd apps/web && PORT=3000 node --env-file=local.env .output/server/index.mjs &)
+pnpm --filter @goblins/e2e exec playwright install chromium
 E2E_BASE_URL=http://localhost:3000 pnpm e2e
 
 # Evals: rebuilds the tables from cached responses, at no cost
