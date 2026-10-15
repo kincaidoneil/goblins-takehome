@@ -16,7 +16,7 @@ export const gradingDir = new URL("../grading/", import.meta.url);
 export interface GradingCase extends Case {
   readonly templateId: Template["id"];
   readonly slice: Slice;
-  /** The whiteboard PNG (generated) or photo (human). */
+  /** The whiteboard PNG. */
   readonly image: URL;
   readonly rubric: Rubric;
   readonly maxPoints: number;
@@ -29,14 +29,6 @@ export interface GradingDataset {
   readonly rubrics: ReadonlyArray<{ readonly templateId: string; readonly rubric: Rubric }>;
   readonly cases: ReadonlyArray<GradingCase>;
 }
-
-const HumanEntry = Schema.Struct({
-  /** The generated case whose work was copied by hand. */
-  caseId: Schema.String,
-  /** File name in grading/human/. */
-  image: Schema.String,
-});
-export const HumanManifest = Schema.Array(HumanEntry);
 
 const readJson = (url: URL): unknown => JSON.parse(readFileSync(url, "utf8"));
 
@@ -61,7 +53,7 @@ export const transcript = (board: ReadonlyArray<Element>): string =>
     .join("\n");
 
 /**
- * Reads and decodes every rubric, generated case and human photo. The files are checked in and
+ * Reads and decodes every rubric and case, plus the phone-layout copies. The files are checked in and
  * covered by this package's tests, so a decode failure is a bug in the data, not a runtime case.
  */
 export const loadGradingDataset = (only?: ReadonlyArray<string>): GradingDataset => {
@@ -100,19 +92,6 @@ export const loadGradingDataset = (only?: ReadonlyArray<string>): GradingDataset
       slice: "phone",
       image: new URL(`phone/${source.id}.png`, gradingDir),
     });
-  }
-  const manifestUrl = new URL("human/manifest.json", gradingDir);
-  if (existsSync(manifestUrl)) {
-    for (const entry of Schema.decodeUnknownSync(HumanManifest)(readJson(manifestUrl))) {
-      const source = cases.find((c) => c.id === entry.caseId && c.slice === "generated");
-      if (!source) continue;
-      cases.push({
-        ...source,
-        id: `${source.id}-human`,
-        slice: "human",
-        image: new URL(`human/${entry.image}`, gradingDir),
-      });
-    }
   }
   return { rubrics, cases };
 };
@@ -191,17 +170,14 @@ export const listCaseFiles = (): ReadonlyArray<string> =>
 export const rubrics = (templateId: string): ReadonlyArray<Rubric> =>
   loadGradingDataset([templateId]).rubrics.map((r) => r.rubric);
 
-/** Every case for one template, generated and human. */
+/** Every case for one template, including its phone-layout copies. */
 export const cases = (templateId: string): ReadonlyArray<GradingCase> =>
   loadGradingDataset([templateId]).cases;
 
-/** Absolute path of a case's image: the landscape PNG, or the `-phone` or `-human` variant. */
-export const imagePath = (caseId: string): string => {
-  for (const slice of ["phone", "human"] as const) {
-    const suffix = `-${slice}`;
-    if (caseId.endsWith(suffix)) {
-      return fileURLToPath(new URL(`${slice}/${caseId.slice(0, -suffix.length)}.png`, gradingDir));
-    }
-  }
-  return fileURLToPath(new URL(`images/${caseId}.png`, gradingDir));
-};
+/** Absolute path of a case's image: the landscape PNG, or the phone copy for a `-phone` id. */
+export const imagePath = (caseId: string): string =>
+  fileURLToPath(
+    caseId.endsWith("-phone")
+      ? new URL(`phone/${caseId.slice(0, -"-phone".length)}.png`, gradingDir)
+      : new URL(`images/${caseId}.png`, gradingDir),
+  );

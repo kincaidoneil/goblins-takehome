@@ -2,7 +2,7 @@
 
 Student whiteboards for every gradable item of the four templates in `packages/templates`, each with the points a careful teacher would give per line of a fixed rubric. The grading evals run the grader on these whiteboards and compare its points with ours; that comparison is the answer to "how accurate is the auto-grader with cheaper models?"
 
-**230 cases** over all 41 gradable items (4 to 9 per item), plus 12 phone-layout copies and, once Kincaid draws them, 10 hand-drawn copies.
+**230 cases** over all 41 gradable items (4 to 9 per item), plus 12 phone-layout copies.
 
 | | Cases |
 |---|---|
@@ -20,9 +20,8 @@ Student whiteboards for every gradable item of the four templates in `packages/t
 | `grading/cases/<template>.json` | The cases: what the student wrote (as drawing instructions), tags, the expected points per rubric line, whether the grade should be flagged, and a review status. |
 | `grading/images/<case>.png` | Each case rendered as a 1024 × 768 whiteboard PNG. Checked in, so evals need no rendering step. |
 | `grading/phone/` | Twelve cases redrawn as a phone submits them (the "phone" slice): the work on a 3:4 portrait page, scaled into a 576 px column in the middle of the 1024 × 768 export. |
-| `grading/human/` | Kincaid's hand-drawn copies of ten cases (the "human" slice) and the list of which ten. See [HANDDRAW.md](HANDDRAW.md). |
 | `src/` | Schema, loader and checks (`@goblins/evals/datasets`), the renderer, and the simulator subset (`@goblins/evals/datasets/simulator`). |
-| `scripts/` | `render`, `check` and `add-human`. |
+| `scripts/` | `render` and `check`. |
 
 ```ts
 import { loadGradingDataset } from "@goblins/evals/datasets";
@@ -31,7 +30,7 @@ const { cases } = loadGradingDataset();
 for (const c of cases) {
   // c.image: PNG URL. c.rubric: lines L1..Ln. c.earlier: the student's whiteboards for items this
   // one depends on. c.expected.lines: correct points per line. c.expected.flag: should the grader
-  // ask the teacher? c.slice: "generated", "phone" or "human".
+  // ask the teacher? c.slice: "generated" or "phone".
 }
 ```
 
@@ -57,9 +56,7 @@ The images are drawn by [src/render.ts](src/render.ts) with `@napi-rs/canvas`: e
 
 The format matches the student whiteboard export from `packages/ui`: 1024 × 768 PNG on white, in the whiteboard's three ink colors with its 4 px pen. The phone slice covers the portrait layout phones export.
 
-Generated handwriting is cleaner and more uniform than a real student's. The human slice measures how much that matters: the eval reports accuracy on the ten hand-drawn copies next to accuracy on the same ten generated cases.
-
-Known limits: graphs are drawn with straight lines and neat dots; an overwritten digit is two glyphs placed on top of each other; one item's cases can share a layout. [HANDDRAW.pdf](HANDDRAW.pdf) is printed from [HANDDRAW.md](HANDDRAW.md) with the reference images embedded.
+Generated handwriting is cleaner and more uniform than a real student's, and the dataset has no real handwriting to measure that gap: the hand-drawn slice the PRD planned was dropped for lack of time. Accuracy on these whiteboards is therefore an upper bound for messy real work. Other known limits: graphs are drawn with straight lines and neat dots, an overwritten digit is two glyphs placed on top of each other, and one item's cases can share a layout.
 
 ## Commands
 
@@ -71,11 +68,7 @@ pnpm --filter @goblins/evals dataset:check
 pnpm --filter @goblins/evals dataset:render
 ```
 
-```bash
-pnpm --filter @goblins/evals dataset:add-human ~/Desktop/handdrawn
-```
-
-`dataset:check` validates every file and prints counts and the Unsure list. `dataset:render` re-renders all images, including the phone slice (or `--template <id>`, or case ids). Re-rendering on another OS can shift glyphs by a pixel, so the PNGs are checked in and CI does not compare them. `dataset:add-human` adds Kincaid's photos; see [HANDDRAW.md](HANDDRAW.md). `pnpm --filter @goblins/evals test` runs the same checks in CI.
+`dataset:check` validates every file and prints counts and the Unsure list. `dataset:render` re-renders all images, including the phone slice (or `--template <id>`, or case ids). Re-rendering on another OS can shift glyphs by a pixel, so the PNGs are checked in and CI does not compare them. `pnpm --filter @goblins/evals test` runs the same checks in CI.
 
 To add cases, follow [AUTHORING.md](AUTHORING.md).
 

@@ -210,8 +210,8 @@ export const Case = Schema.Struct({
 export type Case = typeof Case.Type;
 
 /**
- * Where a case's image came from: rendered by our script on the landscape whiteboard, rendered on
- * a phone's portrait page (same work, smaller and centered), or drawn by hand and photographed.
+ * Where a case's image came from: rendered on the landscape whiteboard, or the same work rendered
+ * on a phone's portrait page (smaller and centered).
  */
-export const Slice = Schema.Literal("generated", "phone", "human");
+export const Slice = Schema.Literal("generated", "phone");
 export type Slice = typeof Slice.Type;

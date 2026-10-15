@@ -11,8 +11,7 @@
     "typecheck": "tsc -p .",
     "test": "vitest run",
     "dataset:render": "node datasets/scripts/render.ts",
-    "dataset:check": "node datasets/scripts/check.ts",
-    "dataset:add-human": "node datasets/scripts/add-human.ts"
+    "dataset:check": "node datasets/scripts/check.ts"
   },
   "dependencies": {
     "@goblins/templates": "workspace:*",

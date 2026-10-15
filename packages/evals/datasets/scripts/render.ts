@@ -17,9 +17,7 @@ const { values, positionals } = parseArgs({
 });
 
 const cases = loadGradingDataset(values.template ? [values.template] : undefined).cases.filter(
-  (c) =>
-    c.slice !== "human" &&
-    (positionals.length === 0 || positionals.includes(c.id.replace(/-phone$/, ""))),
+  (c) => positionals.length === 0 || positionals.includes(c.id.replace(/-phone$/, "")),
 );
 for (const c of cases) {
   writeFileSync(c.image, c.slice === "phone" ? renderCasePhone(c) : renderCase(c));
