@@ -1,0 +1,313 @@
+{
+  "id": "linear-relationships",
+  "title": "Linear Relationships in Context",
+  "description": "Slope, intercept and rate of change from stories, tables and graphs, with parts that build on each other.",
+  "course": "Grade 8",
+  "band": "middle-school",
+  "topic": "Linear Relationships",
+  "features": ["dependent-parts", "multi-page-problem", "diagrams"],
+  "source": {
+    "name": "IM 6–8 Math, Grade 8, Unit 3: Linear Relationships",
+    "lessons": [
+      {
+        "title": "Lesson 5: Introduction to Linear Relationships",
+        "url": "https://im.kendallhunt.com/MS/students/3/3/5/practice.html"
+      },
+      {
+        "title": "Lesson 6: More Linear Relationships",
+        "url": "https://im.kendallhunt.com/MS/students/3/3/6/practice.html"
+      },
+      {
+        "title": "Lesson 7: Representations of Linear Relationships",
+        "url": "https://im.kendallhunt.com/MS/students/3/3/7/practice.html"
+      }
+    ],
+    "copyright": "IM 6–8 Math was originally developed by Open Up Resources and authored by Illustrative Mathematics, and is copyright 2017–2019 by Open Up Resources. Adaptations and updates to IM 6–8 Math are copyright 2019 by Illustrative Mathematics.",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "Adapted from IM 6–8 Math by Open Up Resources and Illustrative Mathematics, CC BY 4.0.",
+    "changes": "Selected practice problems from three lessons, renumbered and laid out as one printable worksheet with answer space. Problem text, tables and graphs are unchanged."
+  },
+  "files": {
+    "pdf": "worksheet.pdf",
+    "pages": [
+      { "image": "page-1.png", "width": 1275, "height": 1650 },
+      { "image": "page-2.png", "width": 1275, "height": 1650 },
+      { "image": "page-3.png", "width": 1275, "height": 1650 },
+      { "image": "page-4.png", "width": 1275, "height": 1650 }
+    ]
+  },
+  "problems": [
+    {
+      "_tag": "Whole",
+      "number": 1,
+      "pages": [1],
+      "source": {
+        "url": "https://im.kendallhunt.com/MS/students/3/3/5/practice.html",
+        "problem": 1
+      },
+      "text": "A restaurant offers delivery for their pizzas. The total cost is a delivery fee added to the price of the pizzas. One customer pays $25 to have 2 pizzas delivered. Another customer pays $58 for 5 pizzas. How many pizzas are delivered to a customer who pays $80?",
+      "diagrams": [],
+      "answer": { "_tag": "Exact", "value": "7 pizzas", "accept": ["7"] },
+      "solution": "3 more pizzas cost $58 − $25 = $33, so each pizza is $11. The delivery fee is $25 − 2 · $11 = $3. Solve 11n + 3 = 80: n = 7.",
+      "dependsOn": [],
+      "review": { "_tag": "Checked" }
+    },
+    {
+      "_tag": "WithParts",
+      "number": 2,
+      "pages": [1],
+      "source": {
+        "url": "https://im.kendallhunt.com/MS/students/3/3/6/practice.html",
+        "problem": 3
+      },
+      "stem": "The graph shows the relationship between the number of cups of flour and the number of cups of sugar in Lin’s favorite brownie recipe.\nThe table shows the amounts of flour and sugar needed for Noah’s favorite brownie recipe.\n| cups of sugar | cups of flour |\n| \\(\\frac32\\) | 1 |\n| 3 | 2 |\n| \\(4\\frac12\\) | 3 |",
+      "diagrams": [
+        {
+          "description": "Graph for Lin's recipe. Horizontal axis: cups of sugar, 0 to 5. Vertical axis: cups of flour, 0 to 4. Points at (1, 0.5), (2, 1), (3, 1.5), (4, 2) and (5, 2.5), so Lin uses half a cup of flour per cup of sugar."
+        }
+      ],
+      "parts": [
+        {
+          "label": "a",
+          "text": "Noah and Lin buy a 12-cup bag of sugar and divide it evenly to make their recipes. If they each use all their sugar, how much flour do they each need?",
+          "answer": {
+            "_tag": "Exact",
+            "value": "Lin: 3 cups of flour; Noah: 4 cups of flour",
+            "accept": []
+          },
+          "solution": "Each gets 6 cups of sugar. Lin uses 1/2 cup of flour per cup of sugar: 6 · 1/2 = 3 cups. Noah uses 2/3 cup of flour per cup of sugar: 6 · 2/3 = 4 cups.",
+          "dependsOn": [],
+          "review": { "_tag": "Checked" }
+        },
+        {
+          "label": "b",
+          "text": "Noah and Lin buy a 10-cup bag of flour and divide it evenly to make their recipes. If they each use all their flour, how much sugar do they each need?",
+          "answer": {
+            "_tag": "Exact",
+            "value": "Lin: 10 cups of sugar; Noah: 7.5 cups of sugar",
+            "accept": ["Noah: 7 1/2 cups"]
+          },
+          "solution": "Each gets 5 cups of flour. Lin uses 2 cups of sugar per cup of flour: 5 · 2 = 10 cups. Noah uses 3/2 cups of sugar per cup of flour: 5 · 3/2 = 7.5 cups.",
+          "dependsOn": [],
+          "review": { "_tag": "Checked" }
+        }
+      ]
+    },
+    {
+      "_tag": "WithParts",
+      "number": 3,
+      "pages": [1, 2],
+      "source": {
+        "url": "https://im.kendallhunt.com/MS/students/3/3/5/practice.html",
+        "problem": 2
+      },
+      "stem": "To paint a house, a painting company charges a flat rate of $500 for supplies, plus $50 for each hour of labor.",
+      "diagrams": [
+        {
+          "description": "Blank first-quadrant grid for part b, on page 2. Horizontal axis: x (hours), 0 to 60, labeled every 10. Vertical axis: y (dollars), 0 to 4,000, labeled every 1,000."
+        }
+      ],
+      "parts": [
+        {
+          "label": "a",
+          "text": "How much would the painting company charge to paint a house that needs 20 hours of labor? A house that needs 50 hours?",
+          "answer": {
+            "_tag": "Exact",
+            "value": "$1,500 for 20 hours; $3,000 for 50 hours",
+            "accept": []
+          },
+          "solution": "500 + 50 · 20 = 1,500. 500 + 50 · 50 = 3,000.",
+          "dependsOn": [],
+          "review": { "_tag": "Checked" }
+        },
+        {
+          "label": "b",
+          "text": "Draw a line representing the relationship between \\(x\\), the number of hours it takes the painting company to finish the house, and \\(y\\), the total cost of painting the house. Label the two points from the earlier question on your graph.",
+          "answer": {
+            "_tag": "Open",
+            "sample": "A line through (0, 500), (20, 1500) and (50, 3000), with (20, 1500) and (50, 3000) labeled.",
+            "criteria": [
+              "Draws a straight line with vertical intercept 500 that rises 50 per hour",
+              "Labels the two points from part a; with follow-through, the student's own values from part a"
+            ]
+          },
+          "solution": "The relationship is y = 50x + 500. Plot (20, 1500) and (50, 3000) and draw the line through them; it crosses the y-axis at 500.",
+          "dependsOn": ["3a"],
+          "review": { "_tag": "Checked" }
+        },
+        {
+          "label": "c",
+          "text": "Find the slope of the line. What is the meaning of the slope in this context?",
+          "answer": {
+            "_tag": "Open",
+            "sample": "The slope is 50. It means the cost goes up $50 for each additional hour of labor.",
+            "criteria": [
+              "Slope is 50 (or the slope of the student's own line from part b)",
+              "Explains it as $50 per hour of labor"
+            ]
+          },
+          "solution": "(3000 − 1500) / (50 − 20) = 1500 / 30 = 50 dollars per hour.",
+          "dependsOn": ["3b"],
+          "review": { "_tag": "Checked" }
+        }
+      ]
+    },
+    {
+      "_tag": "Whole",
+      "number": 4,
+      "pages": [2],
+      "source": {
+        "url": "https://im.kendallhunt.com/MS/students/3/3/5/practice.html",
+        "problem": 4
+      },
+      "text": "Write an equation for the line that passes through \\((2,5)\\) and \\((6,7)\\).",
+      "diagrams": [],
+      "answer": {
+        "_tag": "Exact",
+        "value": "y = \\frac12 x + 4",
+        "accept": ["y = 0.5x + 4", "y - 5 = \\frac12(x - 2)", "x - 2y = -8"]
+      },
+      "solution": "Slope = (7 − 5) / (6 − 2) = 1/2. Using (2, 5): 5 = 1/2 · 2 + b, so b = 4.",
+      "dependsOn": [],
+      "review": { "_tag": "Checked" }
+    },
+    {
+      "_tag": "WithParts",
+      "number": 5,
+      "pages": [3],
+      "source": {
+        "url": "https://im.kendallhunt.com/MS/students/3/3/5/practice.html",
+        "problem": 3
+      },
+      "stem": "Tyler and Elena are on the cross country team.\nTyler's distances and times for a training run are shown on the graph.\nElena’s distances and times for a training run are given by the equation \\(y=8.5x\\), where \\(x\\) represents distance in miles and \\(y\\) represents time in minutes.",
+      "diagrams": [
+        {
+          "description": "Graph of Tyler's run. Horizontal axis: distance (miles), 0 to 4. Vertical axis: time (minutes), 0 to 12, labeled every 2, with grid lines every 1/3 minute. A straight line starts at (0, 0) and passes through (1, 8 1/3) and (1.2, 10)."
+        }
+      ],
+      "parts": [
+        {
+          "label": "a",
+          "text": "Who ran farther in 10 minutes? How much farther? Explain how you know.",
+          "answer": {
+            "_tag": "Open",
+            "sample": "Tyler. In 10 minutes Tyler ran 1.2 miles (from the graph) and Elena ran 10 ÷ 8.5 ≈ 1.18 miles, so Tyler ran about 0.02 miles farther.",
+            "criteria": [
+              "Tyler ran farther",
+              "Tyler about 1.2 miles and Elena about 1.18 miles in 10 minutes",
+              "Difference of about 0.02 miles (exactly 2/85 mile)"
+            ]
+          },
+          "solution": "Tyler: the line reaches 10 minutes at 1.2 miles. Elena: 10 = 8.5x, x = 20/17 ≈ 1.176 miles. 1.2 − 1.176 ≈ 0.024 miles.",
+          "dependsOn": [],
+          "review": {
+            "_tag": "Unsure",
+            "note": "Tyler's line was read from the graph's pixels (8 1/3 minutes at 1 mile, on a grid line). The difference is small, so graph-reading error could flip a student's answer; a teacher may accept any reasoned estimate."
+          }
+        },
+        {
+          "label": "b",
+          "text": "Calculate each runner's pace in minutes per mile.",
+          "answer": {
+            "_tag": "Exact",
+            "value": "Tyler: 8 1/3 minutes per mile; Elena: 8.5 minutes per mile",
+            "accept": ["Tyler: 25/3 min/mi", "Tyler: about 8.33 min/mi"]
+          },
+          "solution": "Tyler: 10 minutes ÷ 1.2 miles = 25/3 = 8 1/3 minutes per mile. Elena: the slope of y = 8.5x, 8.5 minutes per mile.",
+          "dependsOn": [],
+          "review": { "_tag": "Checked" }
+        },
+        {
+          "label": "c",
+          "text": "Who ran faster during the training run? Explain or show your reasoning.",
+          "answer": {
+            "_tag": "Open",
+            "sample": "Tyler ran faster, because his pace of 8 1/3 minutes per mile is less than Elena's 8.5 minutes per mile: he needs less time for each mile.",
+            "criteria": [
+              "Tyler",
+              "Reasons from the paces in part b: fewer minutes per mile is faster (follow-through on the student's own paces)"
+            ]
+          },
+          "solution": "Fewer minutes per mile means faster. 8 1/3 < 8.5, so Tyler was faster.",
+          "dependsOn": ["5b"],
+          "review": { "_tag": "Checked" }
+        }
+      ]
+    },
+    {
+      "_tag": "WithParts",
+      "number": 6,
+      "pages": [4],
+      "source": {
+        "url": "https://im.kendallhunt.com/MS/students/3/3/6/practice.html",
+        "problem": 2
+      },
+      "stem": "Customers at the gym pay a membership fee to join and then a fee for each class they attend. Here is a graph that represents the situation.",
+      "diagrams": [
+        {
+          "description": "Points plotted on a grid. Horizontal axis: number of classes, 0 to 8. Vertical axis: cost in dollars, 0 to 200 by 20s. Points at (0, 60), (1, 80), (2, 100), (3, 120), (4, 140), (5, 160), (6, 180) and (7, 200)."
+        }
+      ],
+      "parts": [
+        {
+          "label": "a",
+          "text": "What does the slope of the line shown by the points mean in this situation?",
+          "answer": {
+            "_tag": "Open",
+            "sample": "The slope is 20: each class costs $20.",
+            "criteria": ["Slope is 20", "Interprets it as the cost per class, $20"]
+          },
+          "solution": "Cost rises $20 for each additional class: (80 − 60) / 1 = 20.",
+          "dependsOn": [],
+          "review": { "_tag": "Checked" }
+        },
+        {
+          "label": "b",
+          "text": "What does the vertical intercept mean in this situation?",
+          "answer": {
+            "_tag": "Open",
+            "sample": "The vertical intercept is 60: the membership fee to join is $60, the cost with zero classes.",
+            "criteria": ["Vertical intercept is 60", "Interprets it as the $60 membership fee"]
+          },
+          "solution": "At 0 classes the cost is $60, which is the fee to join.",
+          "dependsOn": [],
+          "review": { "_tag": "Checked" }
+        }
+      ]
+    },
+    {
+      "_tag": "WithParts",
+      "number": 7,
+      "pages": [4],
+      "source": {
+        "url": "https://im.kendallhunt.com/MS/students/3/3/7/practice.html",
+        "problem": 2
+      },
+      "stem": "The graph shows the height in inches, \\(h\\), of a bamboo plant \\(t\\) months after it has been planted.",
+      "diagrams": [
+        {
+          "description": "Graph with t (months) from 0 to 15 on the horizontal axis and h (inches) from 0 to 50 by 5s on the vertical axis. A straight line starts at (0, 12) and passes through (1, 15), (2, 18), (6, 30) and (11, 45)."
+        }
+      ],
+      "parts": [
+        {
+          "label": "a",
+          "text": "Write an equation that describes the relationship between \\(h\\) and \\(t\\).",
+          "answer": { "_tag": "Exact", "value": "h = 3t + 12", "accept": ["h = 12 + 3t"] },
+          "solution": "The line starts at 12 inches and rises 3 inches per month (from 12 to 30 over 6 months).",
+          "dependsOn": [],
+          "review": { "_tag": "Checked" }
+        },
+        {
+          "label": "b",
+          "text": "After how many months will the bamboo plant be 66 inches tall? Explain or show your reasoning.",
+          "answer": { "_tag": "Exact", "value": "18 months", "accept": ["t = 18"] },
+          "solution": "66 = 3t + 12, so 3t = 54 and t = 18.",
+          "dependsOn": ["7a"],
+          "review": { "_tag": "Checked" }
+        }
+      ]
+    }
+  ]
+}
