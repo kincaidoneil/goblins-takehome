@@ -302,6 +302,12 @@ importers:
       '@fontsource-variable/nunito':
         specifier: ^5.2.8
         version: 5.3.0
+      '@fontsource/patrick-hand':
+        specifier: 5.2.8
+        version: 5.2.8
+      '@goblins/templates':
+        specifier: workspace:*
+        version: link:../templates
       effect:
         specifier: ^3.22.2
         version: 3.22.2
@@ -1132,6 +1138,9 @@ packages:
 
   '@fontsource/nanum-pen-script@5.3.0':
     resolution: {integrity: sha512-at9MFL8ga0A3Xce1+CO6/56F/SHIlf++D4vVKw3yCNRPKh6JU0UgZ3r9un0qHPVxx0Miq2bGZ35RRRlu/4BIDg==}
+
+  '@fontsource/patrick-hand@5.2.8':
+    resolution: {integrity: sha512-FZx34VLuiF+Pjv/A/m1bTxjR6hAvmL6vdCp62uypVdgFvSrPrBOxX+vCXVy8lfNVFqvKfm/ghun+aaYVYqfBEg==}
 
   '@fontsource/patrick-hand@5.3.0':
     resolution: {integrity: sha512-V8C38IlIFfdWg0Xtri3F7sLCVpm069rUwn6w4n+oyn38gt7H4arOJmuReg3tAw1Q6jHqZp89wTnAAJagq4Atxw==}
@@ -4493,6 +4502,8 @@ snapshots:
   '@fontsource/kalam@5.3.0': {}
 
   '@fontsource/nanum-pen-script@5.3.0': {}
+
+  '@fontsource/patrick-hand@5.2.8': {}
 
   '@fontsource/patrick-hand@5.3.0': {}
 
