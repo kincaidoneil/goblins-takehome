@@ -25,12 +25,13 @@ export class InvalidName extends Data.TaggedError("InvalidName")<{
 
 /**
  * Joins the open session with this code, or resumes the student with the same name (PRD, "Names").
- * Late joins are normal. `pickAvatar` runs only for a new student.
+ * Late joins are normal. `pickAvatar` runs only for a new student and gets the creature ids
+ * already taken in the session, so the caller can avoid repeats.
  */
 export const joinSession = (input: {
   readonly joinCode: JoinCode;
   readonly name: string;
-  readonly pickAvatar: () => number;
+  readonly pickAvatar: (taken: ReadonlyArray<number>) => number;
 }) =>
   Effect.gen(function* () {
     const displayName = cleanDisplayName(input.name);
@@ -59,9 +60,18 @@ export const joinSession = (input: {
           return yield* Effect.fail(new SessionNotFound({ joinCode: input.joinCode }));
         }
 
+        const taken = yield* db
+          .select({ avatarId: students.avatarId })
+          .from(students)
+          .where(eq(students.sessionId, session.id));
         const [created] = yield* db
           .insert(students)
-          .values({ sessionId: session.id, displayName, nameKey, avatarId: input.pickAvatar() })
+          .values({
+            sessionId: session.id,
+            displayName,
+            nameKey,
+            avatarId: input.pickAvatar(taken.map((row) => row.avatarId)),
+          })
           .onConflictDoNothing({ target: [students.sessionId, students.nameKey] })
           .returning();
         if (created !== undefined) return { student: created, resumed: false };
