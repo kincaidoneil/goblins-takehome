@@ -1,3 +1,4 @@
+import type { DiagramCrop } from "@goblins/domain/diagram";
 import {
   Button,
   Dialog,
@@ -23,6 +24,8 @@ export interface WorkspaceProblem {
   text: string;
   diagramDescription: string | null;
   pageNumbers: ReadonlyArray<number>;
+  /** Where each of the problem's figures sits on the worksheet. Empty when unknown. */
+  diagramCrops: ReadonlyArray<DiagramCrop>;
 }
 
 export interface WorksheetPage {
@@ -101,13 +104,25 @@ export function Workspace({
             : {})}
         >
           <MathText text={problem.text} />
-          {/* Until extraction gives each diagram its own page region, point to the worksheet
-              rather than show a whole page that may hold another problem's figure. */}
-          {problem.diagramDescription !== null && pages.length > 0 && (
-            <p className="mt-2 text-sm text-text-muted">
-              This one has a diagram. Tap See worksheet to look at it.
-            </p>
-          )}
+          {problem.diagramCrops.map((crop) => {
+            const page = pages.find((p) => p.pageNumber === crop.page);
+            return page === undefined ? null : (
+              <CroppedFigure
+                key={`${crop.page}:${crop.x}:${crop.y}`}
+                imageUrl={page.imageUrl}
+                crop={crop}
+              />
+            );
+          })}
+          {/* Without a crop (extracted worksheets), point to the worksheet rather than show a
+              whole page that may hold another problem's figure. */}
+          {problem.diagramCrops.length === 0 &&
+            problem.diagramDescription !== null &&
+            pages.length > 0 && (
+              <p className="mt-2 text-sm text-text-muted">
+                This one has a diagram. Tap See worksheet to look at it.
+              </p>
+            )}
         </ProblemPanel>
       }
       board={
@@ -183,5 +198,39 @@ export function TimeLeft({ startedAt, limitMinutes }: { startedAt: string; limit
       </svg>
       {text}
     </span>
+  );
+}
+
+/**
+ * One figure, cut out of its worksheet page. The page image is scaled so the crop box fills the
+ * frame; the frame's aspect ratio comes from the image's own size once it loads.
+ */
+function CroppedFigure({ imageUrl, crop }: { imageUrl: string; crop: DiagramCrop }) {
+  const [size, setSize] = useState<{ width: number; height: number } | null>(null);
+  return (
+    <div
+      className="relative mt-3 w-full max-w-sm overflow-hidden rounded-md border border-border bg-white"
+      style={{
+        aspectRatio: size === null ? undefined : `${crop.w * size.width} / ${crop.h * size.height}`,
+        visibility: size === null ? "hidden" : "visible",
+      }}
+    >
+      <img
+        src={imageUrl}
+        alt="The problem's diagram"
+        onLoad={(event) =>
+          setSize({
+            width: event.currentTarget.naturalWidth,
+            height: event.currentTarget.naturalHeight,
+          })
+        }
+        className="absolute max-w-none"
+        style={{
+          width: `${100 / crop.w}%`,
+          left: `${(-crop.x / crop.w) * 100}%`,
+          top: `${(-crop.y / crop.h) * 100}%`,
+        }}
+      />
+    </div>
   );
 }

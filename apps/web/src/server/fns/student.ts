@@ -77,6 +77,7 @@ export const getStudentWork = createServerFn({ method: "GET" })
             text: schema.problems.text,
             diagramDescription: schema.problems.diagramDescription,
             pageNumbers: schema.problems.pageNumbers,
+            diagramCrops: schema.problems.diagramCrops,
           })
           .from(schema.problems)
           .where(eq(schema.problems.assignmentId, session.assignmentId))
