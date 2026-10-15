@@ -9,26 +9,20 @@
  * 1. Seed a lobby session; a student joins as "Maya R." and sees the lobby with their creature.
  * 2. Set the session live; the first problem opens without a reload.
  * 3. Submit is disabled on an empty board. Draw a stroke, reload: the stroke is still there.
- * 4. Submit. The transition shows "Problem 1 is in", then problem 2 opens. Within a few seconds
+ * 4. Submit. The transition cheers ("Nice work!"), then problem 2 opens. Within a few seconds
  *    the strip shows 2/2 on problem 1.
  * 5. A student named "Flag F." sees "Teacher will check" for that problem, never an error.
  * 6. Go offline (context.setOffline), submit problem 2: "Saved. We'll send it when you're back
  *    online." Go online: it sends, and the summary shows both problems.
  * 7. End the session: the student sees "Your teacher ended the session" and their scores.
  */
-import { Avatar, type GradeStatus, ProgressStrip } from "@goblins/ui";
+import { Avatar, type GradeStatus, ProgressStrip, SubmitTransition } from "@goblins/ui";
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Schema } from "effect";
 import { useMemo, useState } from "react";
 import { gradeStatus, nextOpenProblem } from "../../components/student/grades";
-import {
-  JoinAgain,
-  Lobby,
-  type SendState,
-  Summary,
-  Transition,
-} from "../../components/student/screens";
+import { JoinAgain, Lobby, Summary } from "../../components/student/screens";
 import { useOutbox } from "../../components/student/useOutbox";
 import { TimeLeft, Workspace } from "../../components/student/Workspace";
 import "../../components/student/student.css";
@@ -161,12 +155,8 @@ function Play() {
     setView({ _tag: "Transition", problemId });
   };
 
-  const sendState = (problemId: string): SendState =>
-    !outbox.items.some((item) => item.problemId === problemId)
-      ? "sent"
-      : outbox.waitingForNetwork
-        ? "waiting-for-network"
-        : "sending";
+  const savedOffline = (problemId: string) =>
+    outbox.waitingForNetwork && outbox.items.some((item) => item.problemId === problemId);
 
   const rows = work.problems.map((p) => ({ id: p.id, label: p.label, status: statusOf(p.id) }));
   const working = screen._tag === "Working" || screen._tag === "Transition";
@@ -178,7 +168,7 @@ function Play() {
         : "";
 
   return (
-    <div className={`flex flex-col bg-bg ${working ? "h-dvh" : "min-h-dvh"}`}>
+    <div className="flex min-h-dvh flex-col bg-bg">
       <header className="flex items-center gap-2 px-4 pt-3 pb-2 md:px-5">
         <Avatar
           kind="creature"
@@ -216,18 +206,20 @@ function Play() {
                 sessionId={sessionId}
                 studentId={work.student.id}
                 problem={screen.problem}
+                total={work.problems.length}
                 pages={work.pages}
                 onSubmit={(png) => submitProblem(screen.problem.id, png)}
               />
             );
           case "Transition":
             return (
-              <Transition
+              <SubmitTransition
                 key={screen.problem.id}
-                label={screen.problem.label}
-                status={statusOf(screen.problem.id)}
-                send={sendState(screen.problem.id)}
-                nextLabel={screen.next?.label ?? null}
+                creatureId={work.student.avatarId}
+                problemIndex={work.problems.findIndex((p) => p.id === screen.problem.id)}
+                nextLabel={screen.next?.label}
+                grade={statusOf(screen.problem.id)}
+                offline={savedOffline(screen.problem.id)}
                 onDone={() =>
                   setView(
                     screen.next === null

@@ -7,7 +7,8 @@
   padding: var(--gb-space-4);
   background: rgb(244 245 240 / 0.82);
   backdrop-filter: blur(6px);
-  animation: gb-transition-fade 1500ms var(--gb-ease-out) both;
+  /* Fades in only: the component unmounts at its deadline, which a late score can extend to 3 s. */
+  animation: gb-transition-fade 180ms var(--gb-ease-out) both;
 }
 
 .gb-transition-card {
@@ -45,6 +46,11 @@
   animation: gb-transition-pop 360ms var(--gb-ease-spring) both;
 }
 
+.gb-transition-note {
+  margin: 0;
+  color: var(--gb-color-text-muted);
+}
+
 .gb-transition-next {
   margin: var(--gb-space-3) 0 0;
   color: var(--gb-color-text-muted);
@@ -78,14 +84,7 @@
 }
 
 @keyframes gb-transition-fade {
-  0% {
-    opacity: 0;
-  }
-  12%,
-  85% {
-    opacity: 1;
-  }
-  100% {
+  from {
     opacity: 0;
   }
 }

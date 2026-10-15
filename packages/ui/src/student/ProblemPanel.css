@@ -17,6 +17,14 @@
   font-weight: var(--gb-weight-bold);
 }
 
+.gb-problem-label {
+  margin: 0;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: normal;
+}
+
 .gb-problem-text {
   margin-top: var(--gb-space-3);
   color: var(--gb-color-text);
@@ -38,9 +46,20 @@
 }
 
 @media (max-width: 860px) {
+  /* Long problems scroll inside the panel, so the board stays on the first screen. */
   .gb-problem {
     max-width: none;
+    max-height: 34dvh;
+    overflow-y: auto;
     padding: var(--gb-space-4) var(--gb-space-5);
+  }
+
+  .gb-problem-label {
+    margin: 0;
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: normal;
   }
 
   .gb-problem-text {
