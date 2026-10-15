@@ -5,5 +5,5 @@ export * as GradeStore from "./GradeStore.ts";
 export * as InProcessQueue from "./InProcessQueue.ts";
 export * from "./ModelClient.ts";
 export * as OpenRouter from "./OpenRouter.ts";
+export * as QStashQueue from "./QStashQueue.ts";
 export * as RetryPolicy from "./RetryPolicy.ts";
-export * as VercelQueue from "./VercelQueue.ts";
