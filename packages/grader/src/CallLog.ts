@@ -186,8 +186,8 @@ export const withCallLog = (provider: Provider) =>
   );
 
 /**
- * Writes rows to the domain's `model_calls` table. A failed insert is logged and
- * dropped: losing a log row must never fail a grade.
+ * Writes rows to the domain's `model_calls` table. A failed or stalled (over 5 s)
+ * insert is logged and dropped: losing a log row must never fail or hold a grade.
  */
 export const postgres = Layer.effect(
   CallLog,
@@ -220,6 +220,13 @@ export const postgres = Layer.effect(
           })
           .pipe(
             Effect.asVoid,
+            // `wrap` records inside an uninterruptible region, so bound the insert here: a
+            // stalled database drops the row instead of holding the grade.
+            Effect.interruptible,
+            Effect.timeoutFail({
+              duration: "5 seconds",
+              onTimeout: () => "call log insert timed out after 5 s",
+            }),
             Effect.catchAll((error) => Effect.logWarning("call log insert failed", error)),
           ),
     };
