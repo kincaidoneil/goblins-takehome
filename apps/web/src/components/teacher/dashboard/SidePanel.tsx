@@ -2,7 +2,8 @@ import { type ReactNode, useEffect } from "react";
 
 /**
  * A panel docked to the right of the dashboard. Not modal: the grid stays live and clickable
- * beside it, so the teacher can open another cell without closing this one. Escape closes it.
+ * beside it, so the teacher can open another cell without closing this one. It sits below the
+ * header, so the session controls stay usable. Escape closes it.
  */
 export function SidePanel(props: {
   readonly label: string;
@@ -24,7 +25,7 @@ export function SidePanel(props: {
     <aside
       role="dialog"
       aria-label={props.label}
-      className="fixed top-3 right-3 bottom-3 z-40 flex w-[min(640px,calc(100vw-24px))] animate-pop flex-col overflow-hidden rounded-xl bg-surface shadow-lg ring-1 ring-border"
+      className="fixed top-[76px] right-3 bottom-3 z-40 flex w-[min(640px,calc(100vw-24px))] animate-pop flex-col overflow-hidden rounded-xl bg-surface shadow-lg ring-1 ring-border"
     >
       <header className="flex items-center gap-3 border-border border-b px-5 py-3">
         <div className="min-w-0 flex-1">{props.header}</div>
