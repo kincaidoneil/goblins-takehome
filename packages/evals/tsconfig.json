@@ -4,5 +4,5 @@
     "types": ["node"],
     "allowImportingTsExtensions": true
   },
-  "include": ["datasets", "vitest.config.ts"]
+  "include": ["datasets", "src", "scripts", "vitest.config.ts"]
 }
