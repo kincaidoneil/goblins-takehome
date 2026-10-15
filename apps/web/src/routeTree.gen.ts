@@ -14,6 +14,7 @@ import { Route as JoinRouteImport } from './routes/join'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as ApiShapeRouteImport } from './routes/api/shape'
 import { Route as PlaySessionIdRouteImport } from './routes/play/$sessionId'
+import { Route as ApiWhiteboardsNameRouteImport } from './routes/api/whiteboards/$name'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,11 @@ const PlaySessionIdRoute = PlaySessionIdRouteImport.update({
   path: '/play/$sessionId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiWhiteboardsNameRoute = ApiWhiteboardsNameRouteImport.update({
+  id: '/api/whiteboards/$name',
+  path: '/api/whiteboards/$name',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/api/health': typeof ApiHealthRoute
   '/api/shape': typeof ApiShapeRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
+  '/api/whiteboards/$name': typeof ApiWhiteboardsNameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/api/health': typeof ApiHealthRoute
   '/api/shape': typeof ApiShapeRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
+  '/api/whiteboards/$name': typeof ApiWhiteboardsNameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,12 +70,25 @@ export interface FileRoutesById {
   '/api/health': typeof ApiHealthRoute
   '/api/shape': typeof ApiShapeRoute
   '/play/$sessionId': typeof PlaySessionIdRoute
+  '/api/whiteboards/$name': typeof ApiWhiteboardsNameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/join' | '/api/health' | '/api/shape' | '/play/$sessionId'
+  fullPaths:
+    | '/'
+    | '/join'
+    | '/api/health'
+    | '/api/shape'
+    | '/play/$sessionId'
+    | '/api/whiteboards/$name'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/join' | '/api/health' | '/api/shape' | '/play/$sessionId'
+  to:
+    | '/'
+    | '/join'
+    | '/api/health'
+    | '/api/shape'
+    | '/play/$sessionId'
+    | '/api/whiteboards/$name'
   id:
     | '__root__'
     | '/'
@@ -75,6 +96,7 @@ export interface FileRouteTypes {
     | '/api/health'
     | '/api/shape'
     | '/play/$sessionId'
+    | '/api/whiteboards/$name'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -83,6 +105,7 @@ export interface RootRouteChildren {
   ApiHealthRoute: typeof ApiHealthRoute
   ApiShapeRoute: typeof ApiShapeRoute
   PlaySessionIdRoute: typeof PlaySessionIdRoute
+  ApiWhiteboardsNameRoute: typeof ApiWhiteboardsNameRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -122,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlaySessionIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/whiteboards/$name': {
+      id: '/api/whiteboards/$name'
+      path: '/api/whiteboards/$name'
+      fullPath: '/api/whiteboards/$name'
+      preLoaderRoute: typeof ApiWhiteboardsNameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -131,6 +161,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiHealthRoute: ApiHealthRoute,
   ApiShapeRoute: ApiShapeRoute,
   PlaySessionIdRoute: PlaySessionIdRoute,
+  ApiWhiteboardsNameRoute: ApiWhiteboardsNameRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
