@@ -1,0 +1,82 @@
+[
+  {
+    "itemId": "1",
+    "lines": [
+      { "id": "L1", "points": 1, "description": "Distributes correctly: 3x − 12 = 12x." },
+      { "id": "L2", "points": 1, "description": "x = −4/3." }
+    ],
+    "notes": "Accept −4/3, −12/9, −1 1/3 and −1.33. An unsimplified −12/9 earns L2. A bare correct answer earns L2 only: L1 needs the distribution written out."
+  },
+  {
+    "itemId": "2",
+    "lines": [
+      { "id": "L1", "points": 1, "description": "x = 9, with work." },
+      { "id": "L2", "points": 1, "description": "y = 2, with work." },
+      { "id": "L3", "points": 1, "description": "n = 4, with work." }
+    ],
+    "notes": "The problem asks for reasoning, so a correct solution with no supporting work earns no credit for that line. Work means at least one correct intermediate step."
+  },
+  {
+    "itemId": "3",
+    "lines": [
+      { "id": "L1", "points": 1, "description": "m = −7, with work." },
+      { "id": "L2", "points": 1, "description": "r = 4, with work." },
+      { "id": "L3", "points": 1, "description": "y = −6, with work." }
+    ],
+    "notes": "The check is not scored separately. A correct solution with no supporting work earns no credit for that line."
+  },
+  {
+    "itemId": "4",
+    "lines": [
+      { "id": "L1", "points": 1, "description": "b = 29/11, with work." },
+      { "id": "L2", "points": 1, "description": "x = 0, with work." },
+      { "id": "L3", "points": 1, "description": "c = −5, with work." }
+    ],
+    "notes": "Accept b = 2 7/11 or b ≈ 2.64. A correct solution with no supporting work earns no credit for that line."
+  },
+  {
+    "itemId": "5",
+    "lines": [
+      { "id": "L1", "points": 1, "description": "w = −7/4, with work." },
+      { "id": "L2", "points": 1, "description": "x = 3, with work." },
+      { "id": "L3", "points": 1, "description": "z = 8, with work." }
+    ],
+    "notes": "Accept w = −1.75 or −1 3/4. The check is not scored separately. A correct solution with no supporting work earns no credit for that line."
+  },
+  {
+    "itemId": "6",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "Identifies the step from −6x + 10 = 4x + 20 to 10 = −2x + 20 as the mistake (6x was subtracted from the right side instead of added)."
+      },
+      { "id": "L2", "points": 1, "description": "x = −1." }
+    ],
+    "notes": "L1 needs the right step; the explanation of why can be brief (\"should be 10x\" is enough)."
+  },
+  {
+    "itemId": "7",
+    "lines": [
+      {
+        "id": "L1",
+        "points": 1,
+        "description": "Identifies an error in the step from line 1 to line 2: 12 · 5 is 60, not 72, or −(5 − 9y) is −5 + 9y."
+      },
+      { "id": "L2", "points": 1, "description": "y = −65/11." }
+    ],
+    "notes": "Naming either error earns L1 (Kincaid confirmed). Accept y ≈ −5.91."
+  },
+  {
+    "itemId": "8",
+    "lines": [
+      { "id": "L1", "points": 1, "description": "Disagrees with Elena." },
+      {
+        "id": "L2",
+        "points": 1,
+        "description": "Shows that x = 0 is a solution, by solving or by substituting."
+      }
+    ],
+    "notes": "Disagreeing with no reason earns L1 only."
+  }
+]
