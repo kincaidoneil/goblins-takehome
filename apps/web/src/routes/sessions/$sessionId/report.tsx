@@ -90,8 +90,8 @@ function LiveReport({
   const students = useLiveQuery(() => teacherStudents(sessionId), [sessionId]);
   const grades = useLiveQuery(() => teacherGrades(sessionId), [sessionId]);
   const live = sessions.isReady && students.isReady && grades.isReady;
-  // Previews and some school networks have no sync; the snapshot still makes a full report.
-  const syncFailed = sessions.isError || students.isError || grades.isError;
+  // Where sync is off (previews), the snapshot stays: a full report as of page load. The app's
+  // LiveStatusBanner tells the teacher live updates are off.
 
   const input: ReportInput = useMemo(
     () =>
@@ -141,13 +141,6 @@ function LiveReport({
       mistakes={mistakes}
       dashboardHref={`/sessions/${sessionId}`}
       createShareLink={createShareLink}
-      notice={
-        syncFailed ? (
-          <p className="m-0 px-1 text-sm text-text-muted" data-testid="sync-off">
-            Live updates are off here. Reload the page to see newly checked grades.
-          </p>
-        ) : undefined
-      }
     />
   );
 }
