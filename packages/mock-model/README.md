@@ -69,7 +69,7 @@ Completion text for graded and needs-teacher outcomes comes from `renderJson`. P
 
 The measured calls have p50 3.9 s, p95 8.0 s, p99 11.4 s and a maximum of 33 s. Limits of that sample:
 
-- **No failures.** All 1,839 calls succeeded, so the `claude-haiku-5.5` profile produces no errors by itself. That bounds the real failure rate below about 0.16% (95% confidence). It does not show the rate is zero. Use the scenarios to test failure handling, or the `seed` profile for a background error rate.
+- **Almost no failures.** All 1,839 imported calls succeeded. The eval run had one other failure, of unknown status, that was dropped from the export for lacking a latency: about 0.05% (1 in 1,840). So the `claude-haiku-5.5` profile produces no errors by itself. Use the scenarios to test failure handling, or the `seed` profile for a background error rate.
 - **Low concurrency.** The calls came from a laptop at 8 concurrent, not from Vercel functions under load. Provider latency at testing-day volume may be higher; `latency-doubling` covers that case.
 
 Load-test reports must say which profile or recording a run used.

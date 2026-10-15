@@ -2,7 +2,7 @@
 import type { CompactCall } from "../compact.ts";
 
 export const claudeHaiku55Source =
-  "1,839 real grading calls to anthropic/claude-haiku-5.5 via OpenRouter, from the AI quality eval run on 2026-10-15 (laptop, 8 concurrent). No failures were observed.";
+  "1,839 real grading calls to anthropic/claude-haiku-5.5 via OpenRouter, from the AI quality eval run on 2026-10-15 (laptop, 8 concurrent). One other call failed (status unknown) and was not exported: about 0.05%.";
 export const claudeHaiku55T0 = 1792075612091;
 export const claudeHaiku55Calls: readonly [CompactCall, ...Array<CompactCall>] = [
   [0, 5354, "Ok", 200, 2203, 365],
