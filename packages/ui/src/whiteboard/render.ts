@@ -1,5 +1,5 @@
 import { Either } from "effect";
-import { BOARD_HEIGHT, BOARD_WIDTH, type Stroke, type WhiteboardDoc } from "./doc";
+import { BOARD_HEIGHT, BOARD_WIDTH, pageSize, type Stroke, type WhiteboardDoc } from "./doc";
 
 /** Line width at a point: stylus pressure thickens or thins the line; mouse and finger (0.5) give `size`. */
 export function widthAt(size: number, pressure: number): number {
@@ -96,7 +96,8 @@ export function isDocEmpty(doc: WhiteboardDoc): boolean {
   if (typeof document === "undefined") return false;
   const ctx = canvas(CHECK_WIDTH, CHECK_HEIGHT).getContext("2d", { willReadFrequently: true });
   if (ctx === null) return false;
-  ctx.scale(CHECK_WIDTH / BOARD_WIDTH, CHECK_HEIGHT / BOARD_HEIGHT);
+  const page = pageSize(doc.shape);
+  ctx.scale(CHECK_WIDTH / page.width, CHECK_HEIGHT / page.height);
   drawDoc(ctx, doc);
   const alpha = ctx.getImageData(0, 0, CHECK_WIDTH, CHECK_HEIGHT).data;
   for (let i = 3; i < alpha.length; i += 4) {
@@ -110,11 +111,13 @@ export type RenderError = "CanvasUnavailable" | "EncodingFailed";
 
 /**
  * The student's work as a 1024 × 768 PNG on white. Same strokes, same browser
- * engine, same bytes: no timestamps, no device pixel ratio, no grid.
+ * engine, same bytes: no timestamps, no device pixel ratio, no grid. Engines
+ * antialias differently, so Chrome and Safari bytes differ for the same strokes.
  */
 export function renderWhiteboardPng(doc: WhiteboardDoc): Promise<Either.Either<Blob, RenderError>> {
   // Erasing must only remove ink, so strokes go on their own layer before the white page.
-  const ink = canvas(BOARD_WIDTH, BOARD_HEIGHT);
+  const size = pageSize(doc.shape);
+  const ink = canvas(size.width, size.height);
   const inkCtx = ink.getContext("2d");
   const page = canvas(BOARD_WIDTH, BOARD_HEIGHT);
   const pageCtx = page.getContext("2d");
@@ -122,7 +125,11 @@ export function renderWhiteboardPng(doc: WhiteboardDoc): Promise<Either.Either<B
   drawDoc(inkCtx, doc);
   pageCtx.fillStyle = "#ffffff";
   pageCtx.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
-  pageCtx.drawImage(ink, 0, 0);
+  // A portrait page is scaled to fit and centered, leaving white on both sides.
+  const scale = Math.min(BOARD_WIDTH / size.width, BOARD_HEIGHT / size.height);
+  const width = size.width * scale;
+  const height = size.height * scale;
+  pageCtx.drawImage(ink, (BOARD_WIDTH - width) / 2, (BOARD_HEIGHT - height) / 2, width, height);
   return new Promise((resolve) =>
     page.toBlob(
       (blob) => resolve(blob === null ? Either.left("EncodingFailed") : Either.right(blob)),

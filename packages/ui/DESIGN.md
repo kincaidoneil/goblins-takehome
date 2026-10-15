@@ -71,6 +71,19 @@ React components built on [Base UI](https://base-ui.com), one file each in [src/
 
 48 creatures, drawn in code from parts: 8 colors from the palette, 6 head tops (goblin ears, bear ears, bunny ears, horns, antenna, sprout), 3 head shapes, 4 eye styles and 4 mouths. Every creature has a different color and head-top pair, so a class of 30 never has two that look alike at a glance. Each has a name for its accessible label. Assign one with `randomCreatureId(takenIds)`, which picks from the creatures no one in the session has yet, and render it with `<Avatar kind="creature" creatureId={id} />`. The art is original; nothing is traced from Goblins.
 
+## Whiteboard
+
+`Whiteboard` is the student's drawing surface. Work is a `WhiteboardDoc`: a list of strokes on a page of fixed size, so it doesn't depend on the screen it was drawn on.
+
+- **Page shape.** Landscape pages are 1024 × 768 (4:3). On screens 600 px wide or less, a blank board becomes a portrait page, 1024 × 1365 (3:4), so a phone gets about twice the room to write. A page keeps its shape once it has strokes.
+- **Export.** `renderWhiteboardPng(doc)` always returns a 1024 × 768 PNG on white with no grid. A portrait page is scaled to fit and centered, with white on both sides.
+- **Bytes.** The same strokes give the same PNG bytes in the same browser engine. Chrome and Safari antialias differently, so their bytes differ for the same strokes: don't compare hashes across browsers. The simulator and E2E tests upload fixture PNGs, so they don't depend on this.
+- **Saving.** `serializeDoc` and `parseDoc` (Effect Schema, returns `Either`) keep work in localStorage across reloads and dropped connections. Work saved before portrait pages existed decodes as landscape.
+- **Empty.** `isDocEmpty(doc)` is true when no ink is visible, including a board erased back to blank. Use it to block an empty Submit.
+- **Input.** Pointer events for finger, stylus and mouse; a stylus varies the width by pressure, and once one draws, touches are ignored as palms.
+
+The student screen around it is `StudentWorkLayout` (problem beside the board, stacked on narrow screens, Submit pinned to the bottom on phones), `ProblemPanel` (problem text and, when it has one, its diagram), `SubmitButton` and `SubmitTransition`.
+
 ## Using it
 
 ```css
