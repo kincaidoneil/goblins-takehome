@@ -307,8 +307,8 @@
       "reason": "Uses the whole base 8 instead of 4 (no L1); carries it through the Pythagorean theorem (L2 by the note); x = 0 is wrong."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "The note gives L2 for a wrong half-base carried correctly, so L2 = 1. A teacher could withhold it: the student used the full base, not a half, and accepted an impossible height of 0."
+      "_tag": "Checked",
+      "note": "Decided 2026-10-15: L2 = 1; the rubric note gives the setup point for a wrong half-base carried correctly through the Pythagorean theorem."
     }
   },
   {
@@ -619,11 +619,12 @@
         }
       ],
       "flag": "ShouldFlag",
-      "reason": "Half-base 4 and the Pythagorean setup are right; the final reads as 4√3 or 43 depending on whether the small tick is a radical."
+      "reason": "Half-base 4 and the Pythagorean setup are right; the final reads as 4√3 or 43 depending on whether the small tick is a radical.",
+      "scoreOn": "flag"
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "The tick before the 3 could be a radical (4√3) or a stray mark (43). The visible work leads to 4√3, so chose full credit; a teacher could withhold L3."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). The tick before the 3 could be a radical (4√3) or a stray mark (43). The visible work leads to 4√3, so chose full credit; a teacher could withhold L3."
     }
   },
   {
@@ -985,11 +986,12 @@
         }
       ],
       "flag": "ShouldFlag",
-      "reason": "The answer is 60 and 90 written over each other; neither is crossed out."
+      "reason": "The answer is 60 and 90 written over each other; neither is crossed out.",
+      "scoreOn": "flag"
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "Cannot tell which digit was written last. Chose 1 on the guess that the student corrected 90 to 60; a teacher reading 90 would give 0."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). Cannot tell which digit was written last. Chose 1 on the guess that the student corrected 90 to 60; a teacher reading 90 would give 0."
     }
   },
   {
@@ -1424,8 +1426,8 @@
       "reason": "Uses 1/2 · 8 · 6.93 in the second line (L1), but leaves two final answers, 55.44 boxed and 27.72, neither crossed out."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "Two answers with neither crossed out. Chose L1 = 1 for the 1/2 · b · h line and L2 = 0 because the boxed answer is 55.44; a teacher could take 27.72 as the answer and give 2."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 2). Two answers with neither crossed out. Chose L1 = 1 for the 1/2 · b · h line and L2 = 0 because the boxed answer is 55.44; a teacher could take 27.72 as the answer and give 2."
     }
   },
   {
@@ -2098,8 +2100,8 @@
       "reason": "Valid method the rubric does not list: four small squares of side √2, area 8."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "The method is neither side² with 2√2 nor diagonal² ÷ 2, so L1 does not literally apply. It is correct, so chose full credit; a strict reading gives L2 only."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 3). The method is neither side² with 2√2 nor diagonal² ÷ 2, so L1 does not literally apply. It is correct, so chose full credit; a strict reading gives L2 only."
     }
   },
   {
@@ -3285,8 +3287,8 @@
       "reason": "BD = 5 is right (L1); the proportion pairs the wrong sides, so AD is wrong; it checks with AB² = AD · AC, which exposes the error."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "L3 asks for a check by a different method, and the student did one, though it fails and the student does not fix AD. Chose L3 = 1; a teacher could require a check that confirms the answers."
+      "_tag": "Checked",
+      "note": "Decided 2026-10-15: L3 = 1; the student checks with a genuinely different method, and the rubric line asks for the check, not for the check to pass."
     }
   },
   {
@@ -3802,8 +3804,8 @@
       "reason": "JH = 9 sin 35° is right; GJ comes from the Pythagorean theorem instead of a trig ratio, and 7.37 is right."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "L2 names 9 cos 35° or 9 sin 55°; the Pythagorean route is valid and the problem only asks for an expression. Chose full credit; a strict reading withholds L2."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 3). L2 names 9 cos 35° or 9 sin 55°; the Pythagorean route is valid and the problem only asks for an expression. Chose full credit; a strict reading withholds L2."
     }
   },
   {
@@ -4225,11 +4227,12 @@
         }
       ],
       "flag": "ShouldFlag",
-      "reason": "Right method (tan⁻¹(5/12) and 90 − θ), but the deciding digits are overwritten: 22.6 or 27.6, and 67.4 or 62.4."
+      "reason": "Right method (tan⁻¹(5/12) and 90 − θ), but the deciding digits are overwritten: 22.6 or 27.6, and 67.4 or 62.4.",
+      "scoreOn": "flag"
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "Each angle has two digits written over each other. The method gives 22.6° and 67.4°, so chose full credit; a teacher who reads 27.6 and 62.4 would give 0."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). Each angle has two digits written over each other. The method gives 22.6° and 67.4°, so chose full credit; a teacher who reads 27.6 and 62.4 would give 0."
     }
   },
   {
@@ -4656,8 +4659,8 @@
       "reason": "Both leg lengths are right, but the student never says which is QP and which is RQ."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "The rubric scores QP = 2 and RQ = 2√3 and penalizes swapping; this answer names neither leg. Chose full credit because x is the short leg by convention; a teacher could withhold both."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 3). The rubric scores QP = 2 and RQ = 2√3 and penalizes swapping; this answer names neither leg. Chose full credit because x is the short leg by convention; a teacher could withhold both."
     }
   }
 ]

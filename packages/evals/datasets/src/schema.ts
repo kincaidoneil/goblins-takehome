@@ -202,6 +202,11 @@ export const Case = Schema.Struct({
       Schema.Struct({ id: LineId, points: Schema.Int.pipe(Schema.nonNegative()) }),
     ),
     flag: Flag,
+    /**
+     * `flag`: the points hinge on a digit or sign that cannot be read for sure, so the eval scores
+     * only whether the grader flags it, not its points. Defaults to `points`.
+     */
+    scoreOn: Schema.optionalWith(Schema.Literal("points", "flag"), { default: () => "points" }),
     /** Why these points: the reasoning a careful teacher would give. */
     reason: Schema.NonEmptyString,
   }),

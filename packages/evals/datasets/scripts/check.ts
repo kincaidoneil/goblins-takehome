@@ -39,6 +39,9 @@ for (const [flag, n] of count(generated.map((c) => c.expected.flag)))
 const scoreBands = generated.map((c) =>
   c.expectedPoints === c.maxPoints ? "full" : c.expectedPoints === 0 ? "zero" : "partial",
 );
+console.log(
+  `scored on the flag only: ${generated.filter((c) => c.expected.scoreOn === "flag").length}`,
+);
 console.log("by score:");
 for (const [band, n] of count(scoreBands)) console.log(`  ${band}: ${n}`);
 

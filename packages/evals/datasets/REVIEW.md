@@ -1,21 +1,21 @@
-# Unsure cases for Kincaid
+# Review of the 33 uncertain cases
 
-These 33 cases are ones where a careful teacher could reasonably score differently from us. Each has the score we chose and why. The eval reports them apart from the Checked cases until you decide.
+These 33 cases were marked Unsure: a careful teacher could reasonably score them differently from us. All are now Checked.
 
 "Blind" is the score a separate grader gave from the image and rubric alone, without seeing ours; ≠ marks a disagreement. All seven disagreements in the dataset are on this list.
 
-To review: open `grading/images/<case>.png`, read the note, and either confirm our score or tell the dataset stream the score you'd give. Once decided, the case becomes Checked with your decision in its note. `pnpm --filter @goblins/evals dataset:check` prints the current list.
+On 2026-10-15 Kincaid accepted the recommendation for each of the four groups below, and the dataset stream decided the other eight. Each case's `review.note` records the decision.
 
-Most fall into four groups, so one answer per group settles 25 of them:
+1. **A deciding digit or sign written over or ambiguous** (11): `ar-1-overwritten-digit`, `ar-4-overwritten-digit`, `ar-8-overwritten-digit`, `sle-2-messy-overwrite`, `sle-4-ambiguous-sign`, `lr-2b-overwrite`, `lr-3c-overwrite`, `lr-7b-overwrite`, `rt-1a-messy-ambiguous`, `rt-1b-overwritten`, `rt-8b-messy-overwrite`. The scores stay as the reading the student's own work points to, but these cases carry `expected.scoreOn: "flag"`: the eval scores only whether the grader flags them. Five of the seven blind disagreements are here.
+2. **Two final answers, neither crossed out** (3): `ar-3-two-answers`, `sle-7-two-answers`, `rt-2-two-answers`. The answer point is withheld.
+3. **A valid method or form the rubric line does not name** (8): `sle-1-divide-by-3`, `rt-3b-small-squares`, `rt-7-pythagoras`, `lr-5c-mph`, `ar-5-drawings-only`, `lr-7a-recursive`, `lr-5a-compares-time`, `rt-9-unlabeled`. Equivalent work earns credit, and the grader is expected to flag it.
+4. **Angles given by measure, or with the wrong vertex letter** (3): `ar-2a-measures-only`, `ar-2b-measures-only`, `ar-2b-wrong-vertex`. Measures count when each appears once in the figure; a misnamed angle does not.
 
-1. **A deciding digit or sign written over or ambiguous** (11): `ar-1-overwritten-digit`, `ar-4-overwritten-digit`, `ar-8-overwritten-digit`, `sle-2-messy-overwrite`, `sle-4-ambiguous-sign`, `lr-2b-overwrite`, `lr-3c-overwrite`, `lr-7b-overwrite`, `rt-1a-messy-ambiguous`, `rt-1b-overwritten`, `rt-8b-messy-overwrite`. We score the reading the student's own work points to, and expect the grader to flag them. Five of the seven blind disagreements are here. Recommendation: score these cases on the flag only, not the points.
-2. **Two final answers, neither crossed out** (3): `ar-3-two-answers`, `sle-7-two-answers`, `rt-2-two-answers`. We withhold the answer point. Recommendation: keep.
-3. **A valid method or form the rubric line does not name** (8): `sle-1-divide-by-3`, `rt-3b-small-squares`, `rt-7-pythagoras`, `lr-5c-mph`, `ar-5-drawings-only`, `lr-7a-recursive`, `lr-5a-compares-time`, `rt-9-unlabeled`. We give credit where the work is mathematically equivalent, and expect a flag. Recommendation: keep; a teacher who wrote "accept equivalent methods" would agree.
-4. **Angles given by measure, or with the wrong vertex letter** (3): `ar-2a-measures-only`, `ar-2b-measures-only`, `ar-2b-wrong-vertex`. We accept measures when each appears once in the figure, and not a misnamed angle. Recommendation: keep.
+The other eight kept their scores, each for the reason in its note: `ar-5-no-explanation`, `sle-3-checks-only`, `sle-7-crossed-out-thin`, `sle-8-partly-agrees`, `lr-1-per-pizza`, `lr-3c-total-over-hours`, `rt-1a-full-base-zero`, `rt-6-wrong-ratio`.
 
-The other eight need a look one by one: `ar-5-no-explanation`, `sle-3-checks-only`, `sle-7-crossed-out-thin`, `sle-8-partly-agrees`, `lr-1-per-pizza`, `lr-3c-total-over-hours`, `rt-1a-full-base-zero`, `rt-6-wrong-ratio`.
+The table keeps the doubt as it was written before the review.
 
-| Case | Item | Ours | Blind | Note |
+| Case | Item | Ours | Blind | Doubt before review |
 |---|---|---|---|---|
 | `ar-1-overwritten-digit` | angle-relationships 1 | 1·1 | 1·1 | Middle digit overwritten: 106 or 116. Chose L2 = 1 because the correct setup above makes 106 the likely reading; a teacher could equally withhold it. Flag is what matters. |
 | `ar-2a-measures-only` | angle-relationships 2a | 1·1 | 1·1 | No angle names. The rubric note allows measures when it is clear which angles are meant; 27, 63, 26 and 64 each appear once in the figure, so chose 2/2. A teacher who insists on names would give 0. |

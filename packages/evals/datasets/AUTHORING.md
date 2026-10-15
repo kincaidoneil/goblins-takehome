@@ -40,6 +40,7 @@ A case is one student's whiteboard for one gradable item (a whole problem such a
   - `ShouldNotFlag`: the work is readable and the rubric clearly decides every line. Blank work is this too: it clearly earns 0.
   - `Either`: readable but sloppy, or a small judgment call a teacher would accept either way.
   - `ShouldFlag`: a part that decides points is unreadable, the student leaves two different final answers with neither crossed out, or the student does something the rubric does not cover.
+- `expected.scoreOn`: optional. Set it to `"flag"` when the points hinge on a digit or sign that cannot be read for sure; the eval then scores only whether the grader flags the case. Leave it out otherwise (it defaults to `"points"`).
 - `expected.reason`: one line a teacher would write, naming what earned or lost each point.
 - `review`: `{ "_tag": "Checked" }` when the rubric decides every line without doubt. `{ "_tag": "Unsure", "note": "..." }` when a careful teacher could reasonably score it differently; the note says what the doubt is and which score you chose. Kincaid reviews every Unsure case.
 

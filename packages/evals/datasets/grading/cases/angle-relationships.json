@@ -342,11 +342,12 @@
         }
       ],
       "flag": "ShouldFlag",
-      "reason": "Setup 180 − 74 is correct; the answer's middle digit is written over and could be 0 or 1."
+      "reason": "Setup 180 − 74 is correct; the answer's middle digit is written over and could be 0 or 1.",
+      "scoreOn": "flag"
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "Middle digit overwritten: 106 or 116. Chose L2 = 1 because the correct setup above makes 106 the likely reading; a teacher could equally withhold it. Flag is what matters."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). Middle digit overwritten: 106 or 116. Chose L2 = 1 because the correct setup above makes 106 the likely reading; a teacher could equally withhold it. Flag is what matters."
     }
   },
   {
@@ -688,8 +689,8 @@
       "reason": "Pairs given by measure only; each measure is labeled once in the figure, so the angles meant are clear."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "No angle names. The rubric note allows measures when it is clear which angles are meant; 27, 63, 26 and 64 each appear once in the figure, so chose 2/2. A teacher who insists on names would give 0."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 4). No angle names. The rubric note allows measures when it is clear which angles are meant; 27, 63, 26 and 64 each appear once in the figure, so chose 2/2. A teacher who insists on names would give 0."
     }
   },
   {
@@ -1077,8 +1078,8 @@
       "reason": "Lists measures, not angle names; 63, 53, 64 matches the angles at M, but the problem asks to name angles."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "Item asks to name angles and the student gives only measures. Any reading of 63, 53, 64 (angles at M or triangle CMG) is a valid set, so chose 1; a teacher who requires names would give 0."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 4). Item asks to name angles and the student gives only measures. Any reading of 63, 53, 64 (angles at M or triangle CMG) is a valid set, so chose 1; a teacher who requires names would give 0."
     }
   },
   {
@@ -1116,8 +1117,8 @@
       "reason": "∠MGF is the 26° angle at G, so the named angles sum to 142; the student meant GMF."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "The 64 shows the student meant ∠GMF but wrote ∠MGF. Chose 0 because the named set does not sum to 180 and the item is about naming angles; a lenient teacher may accept the intent."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 4). The 64 shows the student meant ∠GMF but wrote ∠MGF. Chose 0 because the named set does not sum to 180 and the item is about naming angles; a lenient teacher may accept the intent."
     }
   },
   {
@@ -1518,8 +1519,8 @@
       "reason": "b = 42 earns L1; c is left as both 138 and 48 with neither crossed out."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "Two final values for c and neither crossed out; the last thing written is 48. Chose L2 = 0 because the student did not commit to 138; a teacher might take the first correct line."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 2). Two final values for c and neither crossed out; the last thing written is 48. Chose L2 = 0 because the student did not commit to 138; a teacher might take the first correct line."
     }
   },
   {
@@ -1984,11 +1985,12 @@
         }
       ],
       "flag": "ShouldFlag",
-      "reason": "Setup 90 − 62 is right; the answer's tens digit is overwritten and reads as 2 or 3."
+      "reason": "Setup 90 − 62 is right; the answer's tens digit is overwritten and reads as 2 or 3.",
+      "scoreOn": "flag"
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "Tens digit overwritten: 28 or 38. Chose L2 = 1 because the setup makes 28 the likely reading; a teacher could withhold it. The case is mainly for the flag."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). Tens digit overwritten: 28 or 38. Chose L2 = 1 because the setup makes 28 the likely reading; a teacher could withhold it. The case is mainly for the flag."
     }
   },
   {
@@ -2105,8 +2107,8 @@
       "reason": "Both answers are right, but nothing says vertical angles are equal."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "Bare answers. Chose L1 = 0 because the student never says the angles are equal or writes x and x, and the problem asks to explain; a teacher might read 'both 90' as using equality."
+      "_tag": "Checked",
+      "note": "Decided 2026-10-15: L1 stays 0; the problem asks to explain, and nothing on the board says vertical angles are equal."
     }
   },
   {
@@ -2391,8 +2393,8 @@
       "reason": "Drawings show equal opposite angles of 90 and of 45; no written explanation."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "Only labeled drawings and 'yes'. The equal labels on opposite angles show vertical angles are equal and give 90 and 45, so chose 3/3; a teacher who requires a written explanation could withhold L1."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 3). Only labeled drawings and 'yes'. The equal labels on opposite angles show vertical angles are equal and give 90 and 45, so chose 3/3; a teacher who requires a written explanation could withhold L1."
     }
   },
   {
@@ -3797,11 +3799,12 @@
         }
       ],
       "flag": "ShouldFlag",
-      "reason": "w = 42 and x = 90 − 19 − 42 are right; the answer's tens digit is overwritten and reads as 2 or 3."
+      "reason": "w = 42 and x = 90 − 19 − 42 are right; the answer's tens digit is overwritten and reads as 2 or 3.",
+      "scoreOn": "flag"
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "Tens digit of x overwritten: 29 or 39. Chose L3 = 1 because the setup makes 29 the likely reading; a teacher could withhold it. The case is mainly for the flag."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). Tens digit of x overwritten: 29 or 39. Chose L3 = 1 because the setup makes 29 the likely reading; a teacher could withhold it. The case is mainly for the flag."
     }
   }
 ]

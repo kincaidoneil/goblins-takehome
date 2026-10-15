@@ -311,8 +311,8 @@
       "reason": "Valid method: dividing by 3 replaces distributing; x = −4/3 is right and checked."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "L1 describes distributing (3x − 12 = 12x); the student never distributes but divides both sides by 3, an equivalent correct step. Scored 1/1 treating L1 as 'correct first step'."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 3). L1 describes distributing (3x − 12 = 12x); the student never distributes but divides both sides by 3, an equivalent correct step. Scored 1/1 treating L1 as 'correct first step'."
     }
   },
   {
@@ -702,11 +702,12 @@
         }
       ],
       "flag": "ShouldFlag",
-      "reason": "x and y are right with work; 12n = 48 is right but the final digit of n is written over and unclear."
+      "reason": "x and y are right with work; 12n = 48 is right but the final digit of n is written over and unclear.",
+      "scoreOn": "flag"
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "The final n is a 4 and a 9 written on top of each other. 12n = 48 points to 4, so L3 is scored 1; a teacher could score it 0 or ask the student."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). The final n is a 4 and a 9 written on top of each other. 12n = 48 points to 4, so L3 is scored 1; a teacher could score it 0 or ask the student."
     }
   },
   {
@@ -1131,8 +1132,8 @@
       "reason": "Correct answers verified by substitution, but no steps solving any equation."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "The rubric gives no credit without supporting work and says the check is not scored. The checks prove each answer is right but do not show how it was found. Scored 0/0/0; a teacher could count the checks as work and give 3/3."
+      "_tag": "Checked",
+      "note": "Decided 2026-10-15: 0/0/0; substituting proves each answer but shows no solving step, and the rubric scores neither bare answers nor checks."
     }
   },
   {
@@ -1562,11 +1563,12 @@
         }
       ],
       "flag": "ShouldFlag",
-      "reason": "b and x are right with work; −3c = 15 is right but the sign of the final c is unclear."
+      "reason": "b and x are right with work; −3c = 15 is right but the sign of the final c is unclear.",
+      "scoreOn": "flag"
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "The mark before the 5 is a tiny stroke that could be a minus, a stray mark or a decimal point. −3c = 15 points to c = −5, so L3 is scored 1; a teacher could read c = 5 and score 0."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). The mark before the 5 is a tiny stroke that could be a minus, a stray mark or a decimal point. −3c = 15 points to c = −5, so L3 is scored 1; a teacher could read c = 5 and score 0."
     }
   },
   {
@@ -2682,8 +2684,8 @@
       "reason": "Names 12 · 5 = 60 for L1; leaves two different boxed answers, so L2 is not earned."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "Two boxed answers with neither crossed out, one of them correct. Scored L2 0 as most teachers would; some might accept the correct one."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 2). Two boxed answers with neither crossed out, one of them correct. Scored L2 0 as most teachers would; some might accept the correct one."
     }
   },
   {
@@ -2740,8 +2742,8 @@
       "reason": "Locates the error in line 2 and the rewritten line fixes both 60 and +9y; y = −65/11."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "The student names the line but not the error itself; the corrected line shows 60 and +9y. Scored L1 1; a strict teacher could want 12 · 5 = 60 or the sign stated in words."
+      "_tag": "Checked",
+      "note": "Decided 2026-10-15: L1 = 1; the student names line 2 and rewrites it with both corrections, which identifies the error."
     }
   },
   {
@@ -2985,8 +2987,8 @@
       "reason": "Shows x = 0 works and concludes there is a solution, which contradicts Elena, though it opens with 'kind of'."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "The student hedges ('kind of') instead of stating disagreement, but concludes the equation has a solution, which contradicts Elena. Scored L1 1; a teacher could want an explicit 'no'."
+      "_tag": "Checked",
+      "note": "Decided 2026-10-15: 2/2; despite \"kind of\", the student shows x = 0 works and concludes there is a solution, which contradicts Elena."
     }
   },
   {

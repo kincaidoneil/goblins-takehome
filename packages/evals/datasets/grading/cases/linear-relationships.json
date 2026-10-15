@@ -210,8 +210,8 @@
       "reason": "$12.50 per pizza ignores the fee and no fee is found; \"about 6\" is not a solution of the cost model, so no line is earned."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "Chose 0/0/0: the student never finds a fee, and 6.4 rounded to \"about 6\" is not a whole-pizza answer. A teacher could give L3 for solving 80 = 12.50n correctly under their own (fee-less) model."
+      "_tag": "Checked",
+      "note": "Decided 2026-10-15: 0/0/0; no fee is found and \"about 6\" is not a solution of any cost model the student wrote."
     }
   },
   {
@@ -856,11 +856,12 @@
         }
       ],
       "flag": "ShouldFlag",
-      "reason": "Lin 10 earns L1; Noah's answer is either 7.5 or 1.5 because the digit is written over, so the teacher should look."
+      "reason": "Lin 10 earns L1; Noah's answer is either 7.5 or 1.5 because the digit is written over, so the teacher should look.",
+      "scoreOn": "flag"
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "The deciding digit of Noah's answer is overwritten (7 or 1). Chose L2 = 1 because the line above sets up 5 × 1.5, which gives 7.5; a teacher reading 1.5 would give 0."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). The deciding digit of Noah's answer is overwritten (7 or 1). Chose L2 = 1 because the line above sets up 5 × 1.5, which gives 7.5; a teacher reading 1.5 would give 0."
     }
   },
   {
@@ -1576,8 +1577,8 @@
       "reason": "60 ignores the $500 starting point, so the slope is wrong; the per-hour meaning is given for that rate."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "L2 accepts 'their slope' per hour. The student gives a per-hour meaning for 60, which is not the slope of their own line. Chose L2 = 1; a teacher could give 0 because 60 is not a slope of the graph."
+      "_tag": "Checked",
+      "note": "Decided 2026-10-15: L2 = 1; the rubric credits the per-hour meaning of the student's own slope, and L1 already takes the point for the wrong slope."
     }
   },
   {
@@ -1795,11 +1796,12 @@
         }
       ],
       "flag": "ShouldFlag",
-      "reason": "The slope's first digit is written over, 5 or 3; the per-hour meaning points to that number, so the teacher should read it."
+      "reason": "The slope's first digit is written over, 5 or 3; the per-hour meaning points to that number, so the teacher should read it.",
+      "scoreOn": "flag"
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "The deciding digit is overwritten: 50 (which 1500/30 gives) or 30 (the run). Chose 1, 1 on the 50 reading; a teacher reading 30 would give 0, 0."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). The deciding digit is overwritten: 50 (which 1500/30 gives) or 30 (the run). Chose 1, 1 on the 50 reading; a teacher reading 30 would give 0, 0."
     }
   },
   {
@@ -2307,8 +2309,8 @@
       "reason": "Picks Tyler with valid reasoning, but never finds Elena's distance and gives the gap in minutes, not miles."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "The rubric expects distances; this compares times for the same 1.2 miles. Chose 1, 0, 0. A teacher could give L2 for Tyler's 1.2 and an equivalent comparison."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 3). The rubric expects distances; this compares times for the same 1.2 miles. Chose 1, 0, 0. A teacher could give L2 for Tyler's 1.2 and an equivalent comparison."
     }
   },
   {
@@ -2776,8 +2778,8 @@
       "reason": "Tyler, with a valid speed comparison in miles per hour instead of the fewer-minutes-per-mile argument."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "L2 describes reasoning about fewer minutes per mile; this converts to mph and compares speeds, which is equivalent. Chose 1, 1; a strict reading of L2 gives 0."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 3). L2 describes reasoning about fewer minutes per mile; this converts to mph and compares speeds, which is equivalent. Chose 1, 1; a strict reading of L2 gives 0."
     }
   },
   {
@@ -3411,8 +3413,8 @@
       "reason": "Rate 3 and start 12 are both there, but as a recursive rule, not an equation relating h and t."
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "The rubric expects h = 3t + 12; the student gives a correct recursive rule with start 12. Chose L1 = 1, L2 = 0 because no equation in t is written; a teacher could give L2 for using the 12-inch start."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 3). The rubric expects h = 3t + 12; the student gives a correct recursive rule with start 12. Chose L1 = 1, L2 = 0 because no equation in t is written; a teacher could give L2 for using the 12-inch start."
     }
   },
   {
@@ -3807,11 +3809,12 @@
         }
       ],
       "flag": "ShouldFlag",
-      "reason": "Setup is right; the final digit is overwritten (18 or 16), so the teacher should read it."
+      "reason": "Setup is right; the final digit is overwritten (18 or 16), so the teacher should read it.",
+      "scoreOn": "flag"
     },
     "review": {
-      "_tag": "Unsure",
-      "note": "The answer's second digit is written over: 18 (which 54 ÷ 3 gives) or 16. Chose L2 = 1 on the 18 reading; a teacher reading 16 would give 0."
+      "_tag": "Checked",
+      "note": "Reviewed by Kincaid on 2026-10-15 (group 1). The answer's second digit is written over: 18 (which 54 ÷ 3 gives) or 16. Chose L2 = 1 on the 18 reading; a teacher reading 16 would give 0."
     }
   }
 ]

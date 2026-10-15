@@ -23,14 +23,15 @@ const band = (c: GradingCase) =>
 /**
  * Up to `perItem` whiteboards for each item of the template, in worksheet order: full credit
  * first, then partial, then zero. Only Checked cases, so the simulator never relies on ground
- * truth still waiting for review.
+ * truth still waiting for review, and none whose points hinge on an unreadable digit.
  */
 export const simulatorWhiteboards = (
   templateId: string,
   perItem = 3,
 ): ReadonlyMap<string, ReadonlyArray<SimulatorWhiteboard>> => {
   const cases = loadGradingDataset([templateId]).cases.filter(
-    (c) => c.slice === "generated" && c.review._tag === "Checked",
+    (c) =>
+      c.slice === "generated" && c.review._tag === "Checked" && c.expected.scoreOn === "points",
   );
   const byItem = new Map<string, Array<SimulatorWhiteboard>>();
   for (const itemId of [...new Set(cases.map((c) => c.itemId))]) {

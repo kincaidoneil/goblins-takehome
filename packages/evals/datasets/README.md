@@ -10,7 +10,7 @@ Student whiteboards for every gradable item of the four templates in `packages/t
 | By expected score | full credit 110, partial 62, zero 58 |
 | By expected flag | should not flag 170, either 35, should flag 25 |
 | By what the student did (a case can have several) | correct 97, common mistake 69, partial 66, diagram 54, messy handwriting 43, incorrect 35, alternate method 22, answer only 15, follow-through 13, crossed-out work 12, off-rubric 12, near-blank 11, blank 8 |
-| Review | Checked 197, Unsure 33 (listed in [UNSURE.md](UNSURE.md)) |
+| Review | All 230 Checked; 33 of them were uncertain and settled with Kincaid ([REVIEW.md](REVIEW.md)); 11 are scored on the flag only |
 
 ## What is here
 
@@ -46,7 +46,7 @@ Ground truth is the points per rubric line, built in three passes:
 2. The dataset stream reviewed every case against the rubric. Where the rubric left a call open, the rubric got a note (for example, what a bare answer earns) rather than the case getting a guess.
 3. Separate agents regraded every case blind, from the image and rubric only, with opaque case ids and without our points. They agreed line by line on 223 of 230 cases. All seven disagreements were already marked Unsure.
 
-Cases where a careful teacher could reasonably score differently are marked `Unsure` with a note and listed in [UNSURE.md](UNSURE.md) for Kincaid. No score rests on one model's judgment alone, and none came from the grader under test.
+The 33 cases where a careful teacher could reasonably score differently were marked `Unsure` and settled on 2026-10-15 ([REVIEW.md](REVIEW.md)). Eleven of them hinge on a digit that cannot be read for sure; they carry `expected.scoreOn: "flag"`, so the eval scores whether the grader asks the teacher, not its points. No score rests on one model's judgment alone, and none came from the grader under test.
 
 `expected.flag` says whether a careful grader should ask the teacher: `ShouldFlag` (a deciding part is unreadable, two conflicting answers, or work the rubric does not cover), `ShouldNotFlag` (readable and clearly decided by the rubric, including blank work), or `Either`. The eval reports how often the grader flags and whether it flags the right ones.
 
