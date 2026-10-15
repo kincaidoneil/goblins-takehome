@@ -299,6 +299,14 @@ layer(TestDatabase, { timeout: 60_000 })("grade lifecycle", (it) => {
         scoreGrade(s.submissionId, [{ rubricLineId: (yield* first(p1Lines)).id, points: 1 }])
       )
       expect(Either.isLeft(missing) && missing.left._tag).toBe("LinePointsMismatch")
+      const negative = yield* Effect.either(
+        scoreGrade(s.submissionId, p1Lines.map((line, i) => ({ rubricLineId: line.id, points: i === 0 ? -1 : 1 })))
+      )
+      expect(Either.isLeft(negative) && negative.left._tag).toBe("LinePointsMismatch")
+      const fractional = yield* Effect.either(
+        scoreGrade(s.submissionId, p1Lines.map((line) => ({ rubricLineId: line.id, points: 0.5 })))
+      )
+      expect(Either.isLeft(fractional) && fractional.left._tag).toBe("LinePointsMismatch")
     }))
 
   it.effect("rejects an impossible grade row at the database", () =>

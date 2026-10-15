@@ -8,7 +8,7 @@
  * impossible state.
  */
 import { and, asc, eq, inArray, isNull, lt, or, sql } from "drizzle-orm"
-import { Data, Effect, Option } from "effect"
+import { Data, Effect, Either, Option, Schema } from "effect"
 import { Db } from "./db"
 import {
   Attempt,
@@ -19,6 +19,7 @@ import {
   type GraderOutcome,
   Grading,
   type LinePoints,
+  LinePoints as LinePointsSchema,
   NeedsTeacher,
   Submitted,
   SubmissionId,
@@ -127,6 +128,10 @@ const checkLinePoints = (submissionId: SubmissionId, linePoints: LinePoints) =>
       .where(eq(grades.submissionId, submissionId))
     const max = new Map(lines.map((line) => [line.id, line.points]))
     const fail = (problem: string) => Effect.fail(new LinePointsMismatch({ submissionId, problem }))
+    // Model output and teacher input arrive as plain data; enforce whole, non-negative points.
+    if (Either.isLeft(Schema.decodeUnknownEither(LinePointsSchema)(linePoints))) {
+      return yield* fail("line points must be whole numbers of at least 0")
+    }
     // The rubric is locked once an assignment launches, so this only trips on a bug; it turns
     // the `grades_points_in_range` check into a typed error.
     const maxPoints = lines[0]?.maxPoints ?? 0
