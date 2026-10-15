@@ -1,5 +1,5 @@
 {
-  "id": "7a525362-da78-4d2f-848b-1251688c30cb",
+  "id": "01e678f7-492b-493b-a355-8ea53567f3fc",
   "prevId": "8aa85e28-acdf-4451-87f7-03764e1c6d2a",
   "version": "7",
   "dialect": "postgresql",
@@ -1053,35 +1053,55 @@
       },
       "isRLSEnabled": false
     },
-    "public.rate_limits": {
-      "name": "rate_limits",
+    "public.rate_limit_events": {
+      "name": "rate_limit_events",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "action": {
+          "name": "action",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "key": {
           "name": "key",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "window_start": {
-          "name": "window_start",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": true
-        },
-        "count": {
-          "name": "count",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {
-        "rate_limits_window_start_index": {
-          "name": "rate_limits_window_start_index",
+        "rate_limit_events_action_key_created_at_index": {
+          "name": "rate_limit_events_action_key_created_at_index",
           "columns": [
             {
-              "expression": "window_start",
+              "expression": "action",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "key",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -1094,12 +1114,7 @@
         }
       },
       "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "rate_limits_key_window_start_pk": {
-          "name": "rate_limits_key_window_start_pk",
-          "columns": ["key", "window_start"]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
