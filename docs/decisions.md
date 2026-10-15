@@ -88,3 +88,5 @@ One line of reasoning per decision. Newest last. The fixed decisions in [prd.md]
 | 2026-10-15 | Whiteboard | `isDocEmpty` is true when no ink is visible: no pen strokes, or (only if something was erased) no ink left on a 256 × 192 render | The PRD blocks empty submissions, and a student can erase back to blank; rendering only when eraser strokes exist keeps the check cheap |
 | 2026-10-15 | Whiteboard | Once a stylus draws, touch input is ignored for that board | Palm rejection for iPads and Chromebook styluses without device-specific code |
 | 2026-10-15 | Whiteboard | Clear asks for confirmation and is also undoable | A mis-tap never loses a student's work |
+| 2026-10-15 | Repo | Repo stays private until submission; no branch protection, so agents check CI themselves before merging | Kincaid's call: GitHub only enforces branch protection on private repos with Pro. Making the repo public and turning on protection is on the before-submission list |
+| 2026-10-15 | Infra | Logical replication is on for `goblins-db` (`SHOW wal_level` returns `logical`, checked 2026-10-15) | Electric reads changes through logical replication |

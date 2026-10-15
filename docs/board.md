@@ -31,4 +31,4 @@ At most six sessions write code at once.
 1. First working slice deployed
 2. First eval report
 3. First load run
-4. Before submission
+4. Before submission: make the repo public and turn on branch protection for `main`, requiring CI
