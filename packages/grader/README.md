@@ -3,15 +3,15 @@
 The grading pipeline. A student's submission becomes a queue message, a Vercel Function grades it with one model call, and the grade lands in Postgres in one of the PRD's states. Every model call is logged with its latency, status, tokens and cost.
 
 ```
-submit (apps/web)                       Vercel Queues, topic "grade"           consumer (this package)
-───────────────────                     ────────────────────────────           ───────────────────────
-submitWork: grade row in `submitted` ┐  at-least-once, 7-day retention,        startGrading: claim a 120 s lease
-commit                               └▶ dedupe on grade:<id>:<attempt>,  ──▶   ├─ Stale ─▶ ack
-send { submissionId, attempt }          maxConcurrency in-flight cap           ├─ InProgress ─▶ redeliver later
-                                                                               └─ Claimed ─▶ grade(input), ≤ 3 tries, ≤ 100 s
-cron, every minute: stuckJobs ─▶ resend                                            ├─ ok ─▶ recordOutcome: graded / needs_teacher
-(queued > 3 min, or lease expired)                                                 ├─ transient error ─▶ releaseClaim, redeliver after backoff
-                                                                                   └─ retries exhausted ─▶ recordOutcome: couldnt_grade
+submit (apps/web)                       Upstash QStash                          consumer (this package)
+───────────────────                     ──────────────                          ───────────────────────
+submitWork: grade row in `submitted` ┐  at-least-once, signed deliveries,       startGrading: claim a 120 s lease
+commit                               └▶ dedupe on grade:<id>:<attempt>,  ──▶    ├─ Stale ─▶ ack
+publish { job, deliveryCount: 1 }       flow control: key "grade",              ├─ InProgress ─▶ delayed republish, ack
+                                        parallelism ≤ 100                       └─ Claimed ─▶ grade(input), ≤ 3 tries, ≤ 100 s
+QStash schedule, every minute:                                                      ├─ ok ─▶ recordOutcome: graded / needs_teacher
+stuckJobs ─▶ resend                                                                 ├─ transient error ─▶ releaseClaim, delayed republish, ack
+(queued > 3 min, or lease expired)                                                  └─ retries exhausted ─▶ recordOutcome: couldnt_grade
 ```
 
 ## Modules
@@ -25,12 +25,12 @@ cron, every minute: stuckJobs ─▶ resend                                     
 | `GradeStore` | The domain package's pipeline operations (`startGrading`, `recordOutcome`, `releaseClaim`, `stuckJobs`) as one service. `postgres` calls them; `inMemory` follows the same rules for fast tests. |
 | `Consumer` | `handleGradeJob(job, delivery) → Done \| RetryLater`, the model router for load tests, and the stuck-grade sweeper. |
 | `RetryPolicy` | The pure rule for retrying or giving up. |
-| `VercelQueue` | Sends jobs and adapts push deliveries to `handleGradeJob`. |
+| `QStashQueue` | Publishes jobs with QStash flow control, verifies and handles deliveries, schedules retries as delayed messages, and keeps the sweeper's schedule. |
 | `InProcessQueue` | Local and test stand-in with the same cap, redelivery and dedupe. |
 
 ## How it holds up
 
-**No lost submissions.** The submit path commits the grade row before it sends the job. If the send fails or the function dies in between, the grade sits in `submitted`. The sweeper resends anything queued for more than 3 minutes, or claimed by a delivery whose lease ran out. Its resends use a key that changes every 10 minutes: with the submit path's key, a resend for a message the queue had dropped would itself be dropped for the 24-hour dedupe window. Messages are kept for 7 days, so a broken consumer deploy delays grades until it is fixed rather than dropping them overnight.
+**No lost submissions.** The submit path commits the grade row before it sends the job. If the send fails or the function dies in between, the grade sits in `submitted`. The sweeper resends anything queued for more than 3 minutes, or claimed by a delivery whose lease ran out. Its resends use a key that changes every 10 minutes, so the queue's dedupe can never swallow a resend for a message it already dropped. A consumer that crashes is redelivered by QStash three times, then the message goes to QStash's dead-letter queue; the grade is still `submitted` or `grading` in Postgres, so the sweeper sends it again. The database, not the queue, is the record of what still needs grading.
 
 **Idempotent writes.** Delivery is at-least-once. The domain package owns the grade row's state machine:
 
@@ -46,45 +46,46 @@ One delivery's grading is capped at 100 s, so a live delivery never outlives its
 
 **Concurrency cap.** The queue limits model calls in flight. That protects the provider's rate limits, our database connections and the budget. OpenRouter sets no request cap on paid models, so the binding limits are the upstream provider's and our own. A cap of 100 is a reasonable start: by Little's law, at about 4 s per call, 100 in flight sustains 25 grades/s. A testing day of 1,000 students (10 submissions each over 30 minutes) averages about 6 grades/s, and the bell spike runs perhaps three times that. The load test finds the real limit.
 
-Which queue enforces the cap is still open. Vercel Queues enforces it through an undocumented `maxConcurrency` on the trigger. Infra measured it: 60 five-second jobs at cap 10 took 129 s, against an ideal 30 s. Upstash QStash flow control (parallelism and rate) is the preferred alternative. It is being benchmarked the same way, and the result goes in `docs/decisions.md`. The consumer does not depend on the choice: `handleGradeJob` takes a job and a delivery count and returns `Done` or `RetryLater`, and each queue gets a thin adapter (`VercelQueue` today).
+The queue is Upstash QStash with flow control: every grade message carries the key `grade` and `parallelism=N`, so at most N deliveries are in flight across all instances. Measured with 5-second jobs, QStash dispatched 60 at parallelism 10 in 32.4 s (ideal 30 s), where Vercel Queues took 129 s, and 500 at parallelism 100 in 27.3 s (ideal 25 s). Details are in [docs/grade-queue-options.md](../../docs/grade-queue-options.md). `handleGradeJob` does not know which queue drives it; `QStashQueue` is a thin adapter.
 
 **Load tests never spend money.** A grade whose class session carries a `loadTestRunId` (read into `GradingInput` at claim time) is graded by `LoadTestModelClient` (the mock), whatever `MODEL_CLIENT` the deploy uses. Its call-log rows carry the run id, so they can be excluded from reports and deleted after the run.
 
 ## Wiring it into the app
 
-The consumer route, `vercel.json` and the cron belong to `apps/web` and Infra. What they need:
+The routes belong to `apps/web`. What they need:
 
 ```ts
-// apps/web: the queue consumer route
+// apps/web: shared pieces
+const qstash: QStashQueue.QStashConfig = {
+  token: Redacted.make(process.env.QSTASH_TOKEN),
+  baseUrl: process.env.QSTASH_URL,
+  currentSigningKey: Redacted.make(process.env.QSTASH_CURRENT_SIGNING_KEY),
+  nextSigningKey: Redacted.make(process.env.QSTASH_NEXT_SIGNING_KEY),
+  consumerUrl: `${appUrl}/api/grader/consume`,
+  parallelism: 100,
+};
+const publish = QStashQueue.makePublish(qstash);
+export const gradeQueue = QStashQueue.makeQueue(publish); // provide as Consumer.GradeQueue
+
+// POST /api/grader/consume
 const runtime = ManagedRuntime.make(
   Consumer.ModelRouterLive.pipe(
     Layer.provideMerge(Layer.mergeAll(GradeStore.postgres, Layer.succeed(Grader.Grader, Grader.placeholder))),
     Layer.provide(Layer.mergeAll(ModelClientLive, LoadTestModelClientLive, CallLogLive)),
     Layer.provide(DatabaseLive), // from @goblins/domain
   ),
-)
-export const POST = VercelQueue.makeHandler(runtime)
+);
+export const POST = QStashQueue.makeHandler({ runtime, verify: QStashQueue.makeVerify(qstash), publish });
+
+// POST /api/grader/sweep: verify the QStash signature, then
+//   sweepStuckGrades({ queuedFor: Duration.minutes(3), limit: 500 })
+// with GradeStore.postgres and gradeQueue. Run once per deploy:
+//   QStashQueue.ensureSweepSchedule(qstash, `${appUrl}/api/grader/sweep`)
 ```
 
-```json
-{
-  "functions": {
-    "<path to the consumer route>": {
-      "maxDuration": 300,
-      "experimentalTriggers": [
-        { "type": "queue/v2beta", "topic": "grade", "maxConcurrency": 100, "retryAfterSeconds": 10, "maxDeliveries": 40 }
-      ]
-    }
-  },
-  "crons": [{ "path": "/api/cron/sweep-grades", "schedule": "* * * * *" }]
-}
-```
+The consumer route needs `maxDuration` of at least 120 s: one delivery's grading is capped at 100 s.
 
-`maxDeliveries` is a backstop for crashes (defects the consumer does not model, which the adapter redelivers every 10 s). The 15-minute retry budget needs about 20 deliveries, so 40 never cuts a modeled retry short. If a message is dropped anyway, the sweeper resends it.
-
-The sweeper route calls `sweepStuckGrades({ queuedFor: Duration.minutes(3), limit: 500 })` with `GradeStore.postgres` and `VercelQueue.makeQueue()`.
-
-`maxConcurrency` on a `queue/v2beta` trigger is accepted by Vercel's build schema (`@vercel/build-utils`, 1 to 8192) but is not yet in the `vercel.json` docs. Confirming that it holds on the real deploy is an open task.
+The QStash resource must be on pay-as-you-go. The free plan silently clamps parallelism to 10 and allows 1,000 messages a day.
 
 ## Tests
 
