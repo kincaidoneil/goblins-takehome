@@ -1,4 +1,5 @@
 import { createClerkClient } from "@clerk/backend";
+import { isClerkAPIResponseError } from "@clerk/backend/errors";
 import { clerkSetup } from "@clerk/testing/playwright";
 import { authMode, clerkUserEmail } from "./auth";
 
@@ -24,10 +25,20 @@ export default async function globalSetup() {
   const client = createClerkClient({ secretKey });
   const existing = await client.users.getUserList({ emailAddress: [clerkUserEmail] });
   if (existing.data.length === 0) {
-    await client.users.createUser({
-      emailAddress: [clerkUserEmail],
-      firstName: "E2E",
-      lastName: "Teacher",
-    });
+    try {
+      await client.users.createUser({
+        emailAddress: [clerkUserEmail],
+        firstName: "E2E",
+        lastName: "Teacher",
+        // The test signs in with a sign-in token, so the user needs no password or consent.
+        skipPasswordRequirement: true,
+        skipLegalChecks: true,
+      });
+    } catch (error) {
+      if (!isClerkAPIResponseError(error)) throw error;
+      // Clerk's codes name the instance setting that blocked creation.
+      const reasons = error.errors.map((e) => `${e.code}: ${e.longMessage ?? e.message}`);
+      throw new Error(`Clerk refused to create ${clerkUserEmail}:\n${reasons.join("\n")}`);
+    }
   }
 }
