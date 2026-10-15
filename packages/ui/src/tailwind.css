@@ -1,0 +1,83 @@
+/*
+ * Tailwind v4 theme built on the Goblins tokens. In an app stylesheet:
+ *
+ *   @import "tailwindcss";
+ *   @import "@goblins/ui/tailwind.css";
+ *
+ * Utilities then follow the tokens: bg-surface, text-brand, rounded-xl, shadow-md.
+ */
+
+@import "./tokens.css";
+
+@theme inline {
+  --font-sans: var(--gb-font-sans);
+  --font-mono: var(--gb-font-mono);
+
+  --color-bg: var(--gb-color-bg);
+  --color-surface: var(--gb-color-surface);
+  --color-surface-sunken: var(--gb-color-surface-sunken);
+  --color-surface-tint: var(--gb-color-surface-tint);
+
+  --color-text: var(--gb-color-text);
+  --color-text-brand: var(--gb-color-text-brand);
+  --color-text-muted: var(--gb-color-text-muted);
+  --color-text-subtle: var(--gb-color-text-subtle);
+  --color-text-on-accent: var(--gb-color-text-on-accent);
+
+  --color-border: var(--gb-color-border);
+  --color-border-strong: var(--gb-color-border-strong);
+  --color-border-brand: var(--gb-color-border-brand);
+
+  --color-brand: var(--gb-color-brand);
+  --color-brand-hover: var(--gb-color-brand-hover);
+  --color-brand-soft: var(--gb-color-brand-soft);
+  --color-accent: var(--gb-color-accent);
+  --color-accent-hover: var(--gb-color-accent-hover);
+
+  --color-success: var(--gb-color-success);
+  --color-success-soft: var(--gb-color-success-soft);
+  --color-warning: var(--gb-color-warning);
+  --color-warning-soft: var(--gb-color-warning-soft);
+  --color-danger: var(--gb-color-danger);
+  --color-danger-soft: var(--gb-color-danger-soft);
+  --color-info: var(--gb-color-info);
+  --color-info-soft: var(--gb-color-info-soft);
+
+  --color-green-950: var(--gb-green-950);
+  --color-green-800: var(--gb-green-800);
+  --color-green-700: var(--gb-green-700);
+  --color-green-600: var(--gb-green-600);
+  --color-green-500: var(--gb-green-500);
+  --color-green-100: var(--gb-green-100);
+  --color-green-50: var(--gb-green-50);
+  --color-lime-400: var(--gb-lime-400);
+  --color-lime-100: var(--gb-lime-100);
+  --color-sun-300: var(--gb-sun-300);
+  --color-sun-100: var(--gb-sun-100);
+  --color-coral-500: var(--gb-coral-500);
+  --color-coral-100: var(--gb-coral-100);
+  --color-lilac-700: var(--gb-lilac-700);
+  --color-lilac-100: var(--gb-lilac-100);
+
+  --text-xs: var(--gb-text-xs);
+  --text-sm: var(--gb-text-sm);
+  --text-base: var(--gb-text-md);
+  --text-lg: var(--gb-text-lg);
+  --text-xl: var(--gb-text-xl);
+  --text-2xl: var(--gb-text-2xl);
+  --text-3xl: var(--gb-text-3xl);
+
+  --radius-sm: var(--gb-radius-sm);
+  --radius-md: var(--gb-radius-md);
+  --radius-lg: var(--gb-radius-lg);
+  --radius-xl: var(--gb-radius-xl);
+
+  --shadow-xs: var(--gb-shadow-xs);
+  --shadow-sm: var(--gb-shadow-sm);
+  --shadow-md: var(--gb-shadow-md);
+  --shadow-lg: var(--gb-shadow-lg);
+  --shadow-brand: var(--gb-shadow-brand);
+
+  --ease-out: var(--gb-ease-out);
+  --ease-spring: var(--gb-ease-spring);
+}
