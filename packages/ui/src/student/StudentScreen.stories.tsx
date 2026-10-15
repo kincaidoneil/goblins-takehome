@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useCallback, useState } from "react";
+import ANGLES_PAGE_1 from "../../../templates/templates/angle-relationships/page-1.png";
 import { Avatar } from "../components/Avatar";
 import { Button } from "../components/Button";
 import type { GradeStatus } from "../components/grade";
@@ -13,11 +14,6 @@ import { StudentWorkLayout } from "./StudentWorkLayout";
 import { SubmitButton, type SubmitState } from "./SubmitButton";
 import { SubmitTransition } from "./SubmitTransition";
 
-/** A right triangle with labeled sides, standing in for a cropped worksheet region. */
-const TRIANGLE = `data:image/svg+xml,${encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260"><rect width="400" height="260" fill="#fff"/><path d="M60 220 H340 L60 40 Z" fill="none" stroke="#1e2b24" stroke-width="3" stroke-linejoin="round"/><path d="M60 200 h20 v20" fill="none" stroke="#1e2b24" stroke-width="2"/><g font-family="Helvetica, Arial" font-size="22" fill="#1e2b24"><text x="190" y="248">8 cm</text><text x="18" y="136">6 cm</text><text x="210" y="120">x</text><text x="44" y="34">A</text><text x="40" y="244">B</text><text x="346" y="244">C</text></g></svg>`,
-)}`;
-
 const PROBLEMS = [
   { id: "p1", label: "1", text: "Solve 3(x − 4) = 12x." },
   { id: "p2", label: "2", text: "Solve 2(x + 5) = 3x + 1. Explain or show your reasoning." },
@@ -25,10 +21,12 @@ const PROBLEMS = [
   {
     id: "p4",
     label: "4",
-    text: "Triangle ABC has a right angle at B. Find the length of side x.",
+    text: "List two pairs of angles in square CDFG that are complementary.",
     figure: {
-      src: TRIANGLE,
-      alt: "Right triangle ABC with the right angle at B, AB = 6 cm, BC = 8 cm, hypotenuse AC labeled x.",
+      src: ANGLES_PAGE_1,
+      alt: "Square CDFG with a point E on side DF and segments from C to E.",
+      crop: { x: 0.579, y: 0.516, w: 0.233, h: 0.185 },
+      onOpen: () => {},
     },
   },
   { id: "p5", label: "5", text: "Solve 12(5 + 2y) = 4y − (6 − 9y)." },

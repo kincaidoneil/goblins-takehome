@@ -38,11 +38,17 @@ export {
 export { Tooltip, type TooltipProps, TooltipProvider } from "./components/Tooltip";
 export { Wordmark, type WordmarkProps } from "./components/Wordmark";
 export {
+  type PageRegion,
   type WorksheetPage,
   WorksheetViewer,
   type WorksheetViewerProps,
 } from "./components/WorksheetViewer";
-export { type ProblemFigure, ProblemPanel, type ProblemPanelProps } from "./student/ProblemPanel";
+export {
+  type FigureCrop,
+  type ProblemFigure,
+  ProblemPanel,
+  type ProblemPanelProps,
+} from "./student/ProblemPanel";
 export { StudentWorkLayout, type StudentWorkLayoutProps } from "./student/StudentWorkLayout";
 export { SubmitButton, type SubmitButtonProps, type SubmitState } from "./student/SubmitButton";
 export {

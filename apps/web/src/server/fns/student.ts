@@ -76,6 +76,7 @@ export const getStudentWork = createServerFn({ method: "GET" })
             label: schema.problems.label,
             text: schema.problems.text,
             diagramDescription: schema.problems.diagramDescription,
+            diagramCrops: schema.problems.diagramCrops,
             pageNumbers: schema.problems.pageNumbers,
           })
           .from(schema.problems)

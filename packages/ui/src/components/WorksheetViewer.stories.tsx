@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
+import anglesPage1 from "../../../templates/templates/angle-relationships/page-1.png";
 import page1 from "../../../templates/templates/linear-relationships/page-1.png";
 import page2 from "../../../templates/templates/linear-relationships/page-2.png";
 import page3 from "../../../templates/templates/linear-relationships/page-3.png";
@@ -82,4 +83,12 @@ export const InDialog: Story = {
       </div>
     </Dialog>
   ),
+};
+
+/** Opened from a problem's figure: zoomed to the figure's region of its page. */
+export const FocusedOnFigure: Story = {
+  args: {
+    pages: [{ pageNumber: 1, imageUrl: anglesPage1 }],
+    focus: { pageNumber: 1, x: 0.579, y: 0.516, w: 0.233, h: 0.185 },
+  },
 };

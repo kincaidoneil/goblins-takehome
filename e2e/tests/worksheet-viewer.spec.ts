@@ -1,7 +1,8 @@
 import type { BrowserContext } from "@playwright/test";
 import { expect, test } from "../fixtures";
 
-// A student opens "See worksheet" and zooms the page with the + and Fit width buttons.
+// A student opens "See worksheet" and zooms the page with the + and Fit width buttons, then
+// taps a problem's cropped figure, which opens the worksheet zoomed to it.
 // Runs where AUTH_MODE=local signs in a local teacher (CI's Docker stack); on a deploy, launch
 // needs Google sign-in and the test skips.
 
@@ -48,4 +49,11 @@ test("a student zooms the worksheet", async ({ classroom, baseURL }) => {
   await expect(phone.getByRole("status", { name: "Zoom level" })).toHaveText("150%");
   await phone.getByRole("button", { name: "Fit width" }).click();
   await expect(page).toHaveAttribute("data-scale", "1.00");
+  await phone.getByRole("button", { name: "Back to my work" }).click();
+
+  // Problem 2a shares problem 2's graph: its figure opens the worksheet zoomed in on it.
+  await phone.getByRole("button", { name: "Problem 2a", exact: true }).click();
+  await expect(phone.getByRole("heading", { name: "Problem 2a of" })).toBeVisible();
+  await phone.getByRole("button", { name: /Zoom$/ }).click();
+  await expect(page).toHaveAttribute("data-scale", /^(?!1\.00$)\d/);
 });
