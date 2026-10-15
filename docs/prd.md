@@ -200,6 +200,8 @@ The report is the payoff: it saves the teacher an evening of grading, shows exac
 
 These choices are settled; everything else about implementation is up to the workstreams, who record their calls in the decision log.
 
+**Changed since kickoff** (details in the [decision log](decisions.md)): grade jobs moved from Vercel Queues to Upstash QStash, because Vercel Queues measured 129 s against QStash's 32 s for the same 60 jobs. Sync moved from Electric Cloud to Electric self-hosted on Fly.io, because Electric Cloud is winding down.
+
 | Area | Decision | Why |
 |---|---|---|
 | Repo | pnpm monorepo, one package per area (app, UI, domain, grader, evals, simulator, load test) | Each workstream mostly owns one package, so streams work in parallel without colliding |

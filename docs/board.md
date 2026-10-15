@@ -1,34 +1,35 @@
 # Task board
 
-The orchestrator keeps this current. Sessions are named for their stream.
+The orchestrator keeps this current. Sessions are named for their stream. As of 2026-10-15, before submission.
 
-## Phase 1: started 2026-10-15
+## Streams
 
-At most six sessions write code at once.
+| Stream | Package | Status |
+|---|---|---|
+| Infra and CI | root, `.github/`, `e2e/` | Done: CI, E2E in Docker, Vercel and Fly deploys |
+| Web app lead | `packages/domain`, `apps/web` | Done; ongoing fixes |
+| Design system | `packages/ui` | Polishing the student phone screen (#97) |
+| Templates | `packages/templates` | Done: four Illustrative Mathematics worksheets |
+| Grading pipeline | `packages/grader` | Done: QStash consumer, retries, sweeper, call log, spend cap |
+| Mock model and replay | `packages/mock-model` | Done: profile measured from 1,839 real Haiku calls |
+| AI quality | `packages/grader/src/ai`, `packages/evals` | Done: [eval report](../packages/evals/REPORT.md) |
+| Eval dataset | `packages/evals/datasets` | Done: 230 generated whiteboards |
+| Assignment setup | `apps/web` | Done: extraction, review, chat edits, launch |
+| Dashboard | `apps/web` | Done |
+| Report | `apps/web/src/report` | Done |
+| Class simulator and load test | `packages/simulator`, `packages/loadtest` | Running capacity reruns; 6-process ramp in review (#99) |
+| Writeup and recording | `README.md`, `docs/` | README, demo script and writeup draft merged; capacity numbers pending |
+| Brief audit | `docs/brief-audit.md` | In review (#98); fixes applied to the writeup and docs |
 
-| Stream | Package | First deliverable | Status |
-|---|---|---|---|
-| Infra and CI | root, `.github/`, `e2e/` | Setup list for Kincaid; tooling, CI, Vercel project, E2E harness | Started |
-| Web app lead | `packages/domain`, `apps/web` | Domain package (schema, migrations, types), then the app shell | Started |
-| Design system | `packages/ui` | Goblins design language, tokens, Base UI components, Storybook, avatars | Started |
-| Templates | `packages/templates` | 3–5 openly licensed math worksheets, one with geometry | Started |
-| Grading pipeline | `packages/grader` | `ModelClient`, queue consumer, retries, call log, usage report | Started |
-| Mock model and replay | `packages/mock-model` | Mock `ModelClient`: sampled latency and errors, scenarios, replay | Started |
+## Open before submission
 
-## Waiting to start
-
-| Stream | Starts when |
-|---|---|
-| AI quality | Templates exist |
-| Landing page | Tokens exist |
-| Class simulator | Domain package merged |
-| Report | A writer slot frees up (works against fixture data) |
-| Load test | A writer slot frees up; real runs once the pipeline is deployed |
-| Writeup and recording | After the first full load run |
+- Load-test capacity with the measured latency profile, then the ship / no-ship call in [writeup.md](writeup.md) and the README.
+- The simulator command for the demo's 27 students.
+- Kincaid's edits to the README, and the recording.
 
 ## Checkpoints
 
-1. First working slice deployed
-2. First eval report
-3. First load run
-4. Before submission
+1. First working slice deployed: done
+2. First eval report: done
+3. First load run: done
+4. Before submission: in progress
