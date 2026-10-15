@@ -22,12 +22,16 @@ const hmac = (key: Redacted.Redacted, message: string) =>
     return Buffer.from(signature).toString("base64url")
   })
 
-/** A `Set-Cookie` value that identifies this browser as the student in the session. */
+/** The cookie that identifies this browser as the student in the session. */
 export const studentCookie = (sessionId: string, studentId: string) =>
   Effect.gen(function* () {
     const signature = yield* hmac(yield* secret, `${sessionId}.${studentId}`)
-    // Lax, so the cookie survives arriving from a QR code scan.
-    return `${cookieName(sessionId)}=${studentId}.${signature}; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=86400`
+    return {
+      name: cookieName(sessionId),
+      value: `${studentId}.${signature}`,
+      // Lax, so the cookie survives arriving from a QR code scan.
+      options: { path: "/", httpOnly: true, sameSite: "lax", secure: true, maxAge: 60 * 60 * 24 } as const
+    }
   })
 
 /** The student id this request's cookie proves for the session, if any. */
