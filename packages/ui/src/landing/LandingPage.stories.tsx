@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import "./LandingPage.css";
 import { LandingPage } from "./LandingPage";
-import { PLACEHOLDER_TEMPLATES } from "./templates";
+import { TEMPLATE_SUMMARIES } from "./templates";
 import type { UploadResult } from "./upload";
 
 /** Stands in for the setup flow until the web app shell lands. */
@@ -15,7 +15,7 @@ const meta = {
   component: LandingPage,
   parameters: { layout: "fullscreen" },
   args: {
-    templates: PLACEHOLDER_TEMPLATES,
+    templates: TEMPLATE_SUMMARIES,
     onFiles: stubUpload({ _tag: "Started", draftId: "draft_123" }),
     onTemplate: () => {},
     onStarted: () => {},

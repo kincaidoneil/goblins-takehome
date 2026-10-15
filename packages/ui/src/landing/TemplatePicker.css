@@ -19,6 +19,10 @@
   scroll-margin-top: var(--gb-space-8);
 }
 
+/*
+ * Each card spans six shared rows (thumbnail, meta, title, description, tags,
+ * source) through subgrid, so the same line sits at the same height in every card.
+ */
 .lp-templates-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -28,11 +32,20 @@
   list-style: none;
 }
 
+.lp-templates-grid > li,
 .lp-template {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-row: span 6;
+  grid-template-rows: subgrid;
+}
+
+.lp-templates-grid > li {
+  row-gap: 0;
+}
+
+.lp-template {
+  row-gap: var(--gb-space-1);
   width: 100%;
-  height: 100%;
   padding: 0;
   overflow: hidden;
   border: 0;
@@ -58,35 +71,63 @@
   outline-offset: 3px;
 }
 
+/* The top of the worksheet's first page, on a soft tint like a page on a desk. */
 .lp-template-thumb {
   display: block;
+  height: 168px;
+  margin-bottom: var(--gb-space-3);
+  padding: var(--gb-space-4) var(--gb-space-6) 0;
+  overflow: hidden;
   background: linear-gradient(160deg, var(--gb-lime-100), var(--gb-green-100));
 }
 
-.lp-template-thumb[data-topic="equations"] {
+.lp-templates-grid li:nth-child(4n + 2) .lp-template-thumb {
   background: linear-gradient(160deg, var(--gb-sun-100), var(--gb-sun-300));
 }
 
-.lp-template-thumb[data-topic="triangles"] {
+.lp-templates-grid li:nth-child(4n + 3) .lp-template-thumb {
   background: linear-gradient(160deg, var(--gb-lilac-100), #ddd5fb);
 }
 
-.lp-template-thumb[data-topic="fractions"] {
+.lp-templates-grid li:nth-child(4n + 4) .lp-template-thumb {
   background: linear-gradient(160deg, var(--gb-coral-100), var(--gb-coral-200));
 }
 
-.lp-template-thumb svg {
+.lp-template-thumb img {
   display: block;
   width: 100%;
   height: auto;
-  margin-bottom: -4px;
+  border-radius: var(--gb-radius-sm) var(--gb-radius-sm) 0 0;
+  background: var(--gb-paper-0);
+  box-shadow: var(--gb-shadow-md);
+  transition: translate var(--gb-duration-base) var(--gb-ease-spring);
 }
 
-.lp-template-body {
+.lp-template:hover .lp-template-thumb img {
+  translate: 0 -4px;
+}
+
+.lp-template-description {
+  color: var(--gb-color-text-muted);
+  font-size: var(--gb-text-sm);
+  line-height: var(--gb-leading-snug);
+}
+
+.lp-template-tags {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
   gap: var(--gb-space-1);
-  padding: var(--gb-space-4) var(--gb-space-5) var(--gb-space-5);
+  padding-top: var(--gb-space-2);
+}
+
+/* The text rows are the card's own grid items; the wrapper only groups them in the markup. */
+.lp-template-body {
+  display: contents;
+}
+
+.lp-template-body > * {
+  padding-inline: var(--gb-space-5);
 }
 
 .lp-template-meta {
@@ -103,8 +144,9 @@
 }
 
 .lp-template-source {
-  margin-top: auto;
+  align-self: end;
   padding-top: var(--gb-space-2);
+  padding-bottom: var(--gb-space-5);
   color: var(--gb-color-text-subtle);
   font-size: var(--gb-text-xs);
 }

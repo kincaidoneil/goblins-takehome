@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@fontsource/patrick-hand": "5.2.8",
+    "@goblins/templates": "workspace:*",
     "@storybook/react-vite": "10.6.1",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
