@@ -1,20 +1,26 @@
 # Statement of confidence
 
-> **Draft for Kincaid to edit.** Numbers in `[TBD: …]` wait on the full load-test ramp. Everything else is measured and linked.
+> **Draft for Kincaid to edit.** The ship call waits on the 990-student rerun. Everything else is measured and linked.
 
 ## What the system handles today
 
-`[TBD: The grading pipeline holds N students in one testing window (classes of 30 starting within 2 minutes of the bell, 9 submissions each) with no lost submissions, submit p99 under 1 s and grades on the teacher's dashboard within 30 s at p95. Link the ramp report.]`
+**Capacity: at least 510 students in one testing window, on one laptop.** That is a floor, not Vercel's ceiling: the laptop ran the generator, Postgres, Electric and six app processes at once. At 510 students (17 classes starting within 2 minutes of the bell, 9 submissions each, at 4× the real submission rate), every criterion held ([report](../packages/loadtest/reports/after-sync-fix-510/report.md)):
 
-What is measured so far. Every run below mocked the model with the guessed `seed` latency profile (median 3.5 s, p95 9 s, about 1.2% errors), not the profile measured from 1,839 real Haiku calls. Reruns with the measured profile are pending.
+- submit p99 0.38 s, peak 12.8 submits a second;
+- submit to grade on the dashboard p95 18.4 s: 0.4 s in the queue, 8.1 s grading, 12.5 s of sync;
+- 0 lost, 0 failed grades, and every grade matched what the whiteboard should get.
+
+That run mocked the model with latency measured from 1,839 real Haiku calls. The earlier runs below used a guessed profile (median 3.5 s).
 
 | Run | Where | Students | Lost | Submit p99 | Dashboard p95 | Failed grades | Result |
 |---|---|---|---|---|---|---|---|
-| [smoke-production](../packages/loadtest/reports/smoke-production/report.md) | Production: Vercel Functions, QStash free plan, Neon, Electric on Fly | 30 (one class), 10× pace | 0 | 0.66 s | 9.2 s | 0 | Pass |
-| [local-app-3classes](../packages/loadtest/reports/local-app-3classes/report.md) | Production build on a laptop, in-process queue | 90, 20× pace | 0 | 1.38 s | 5.9 s | 0 | Fail: submit p99 |
-| [ramp-local-qstash](../packages/loadtest/reports/ramp-local-qstash/report.md) | Production build as ONE Node process on a laptop, QStash dev server at parallelism 100 | 990, 4× pace | 0 | 49.5 s | 254 s | 0 | Fail: submit p99 (database waits), dashboard p95 (sync) |
+| [after-sync-fix-510](../packages/loadtest/reports/after-sync-fix-510/report.md) | Production build as 6 processes on a laptop, QStash dev server, measured profile | 510, 4× pace | 0 | 0.38 s | 18.4 s | 0 | Pass |
+| [smoke-production](../packages/loadtest/reports/smoke-production/report.md) | Production: Vercel Functions, QStash free plan, Neon, Electric on Fly | 30, 10× pace | 0 | 0.66 s | 9.2 s | 0 | Pass |
+| [provider-down-local](../packages/loadtest/reports/provider-down-local/report.md) | Laptop, model down for 5 minutes | 300, 2× pace | 0 | 0.62 s | 192 s | 0 | Pass on the outage bar (0 failed); grades were delayed, as expected |
+| [ramp-local-6workers](../packages/loadtest/reports/ramp-local-6workers/report.md) | Laptop, 6 processes, before the sync fixes | 990, 4× pace | 0 | 5.8 s | 49 s | 0 | Fail: sync |
+| [ramp-local-qstash](../packages/loadtest/reports/ramp-local-qstash/report.md) | Laptop, ONE app process | 990, 4× pace | 0 | 49.5 s | 254 s | 0 | Fail: one process saturates |
 
-Nothing was lost in any run. The 990-student step failed because one local Node process served every request, where Vercel runs many instances. It says where a single instance saturates, not what the deployed system holds.
+Nothing was lost in any run, and no grade failed, including during a 5-minute model outage. The 990-student runs failed on live sync to the dashboards. The fixes have merged (one shared subscription per class, then per-student filtering, and higher Electric limits), and the 990 rerun is pending. An earlier rerun after the first fix was invalid because of a request storm from the load generator.
 
 Notes on the smoke test:
 
@@ -34,17 +40,15 @@ The brief says the student sees their score after each problem. In the smoke tes
 
 The criteria were set in the [PRD](prd.md#quality-bar) before the first run.
 
-| Criterion | Bar | Result at capacity |
+| Criterion | Bar | At 510 students |
 |---|---|---|
-| Lost submissions | 0 | `[TBD]` |
-| Submit latency p99 | < 1 s | `[TBD]` |
-| Submit to grade on dashboard, p95 | < 30 s | `[TBD]` |
-| Grades that fail, normal conditions | < 0.1% | `[TBD]` |
-| Grades that fail, provider down for 5 minutes | 0% | `[TBD]` |
+| Lost submissions | 0 | 0 |
+| Submit latency p99 | < 1 s | 0.38 s |
+| Submit to grade on dashboard, p95 | < 30 s | 18.4 s |
+| Grades that fail, normal conditions | < 0.1% | 0% |
+| Grades that fail, provider down for 5 minutes | 0% | 0% (at 300 students) |
 
-Ship means capacity of at least 1,000 students in one testing window.
-
-`[TBD: the call. Draft if the ramp clears 1,000: "Ship, with QStash moved to pay-as-you-go first. On the free plan, production serves about three classes a day." If it doesn't: name the step, the criterion and the component that failed first, and the fix.]`
+Ship means capacity of at least 1,000 students in one testing window. **The call waits on the 990-student rerun.** If it passes every criterion: ship, after moving QStash to pay-as-you-go, since on the free plan production handles about three classes a day. If it fails: no ship for a 1,000-student window until the component that failed first is fixed. Today the measured floor is 510.
 
 ## Cost
 
@@ -62,12 +66,22 @@ Peak load assumes every student tests in the same 30-minute window, which overst
 
 | Students | Model cost a month | Peak grades/s | What changes |
 |---|---|---|---|
-| 1,000 | $25 | 6 | QStash to pay-as-you-go; about 25 model calls in flight, within one provider's default limits. `[TBD: what else changes, from the capacity reruns. The single-process local ramp at 990 students failed first on database waits and sync.]` |
+| 1,000 | $25 | 6 | QStash to pay-as-you-go; about 25 model calls in flight, within one provider's default limits. Sync is the part to watch: 510 students pass on one laptop, and the 990 rerun will show whether the sync fixes hold at this size. |
 | 10,000 | $254 | 56 | About 250 calls in flight. QStash caps parallelism at 100 per key, so shard grades across several flow-control keys. Raise the model's rate limits and fail over to GPT-6 Luna on rate limits. Move whiteboards out of Postgres, where they are stored inline as `data:` URLs (about 6 GB a month at this size), into object storage. Add Electric machines: one Fly machine is capped at 10,000 connections and each student holds two. |
 | 100,000 | $2,500 | 560 | Model cost now matters. Cache the prompt prefix shared by every student on a problem (about a fifth of the cost), trim the per-line evidence text (output is almost half the cost), and send a smaller image. Put Electric behind a CDN, which its HTTP shapes allow. A larger Postgres for about 1,700 writes a second. |
 | 1,000,000 | $25,000 | 5,600 | 1.2 billion tokens a minute at peak is beyond any single provider. Route across several providers and negotiate contract pricing. Replace QStash with a queue built for this rate, such as SQS. Partition grades by district. Self-hosting an open model is the alternative, but the open models we tested are not accurate enough yet. |
 
 Past 10,000 students, model cost and provider capacity limit us before our own infrastructure does, as the PRD expected.
+
+## Abuse limits
+
+Setup needs no sign-in, and any Google account can sign in as a teacher, so the app limits what one visitor can spend ([security review](security-review.md), findings 1–3):
+
+- **Setup** (#125): problem text up to 2,000 characters and 50 problems; 30 chat messages per draft, with only the last 10 turns sent to the model; per hour, 5 uploads and 30 chat messages per IP and per draft owner; and a $3 spend cap on setup calls.
+- **Classes** (#123): at most 60 students per class, rate limits on joining and submitting, and at most 1,000 grades per teacher per hour. Load-test traffic with a valid token skips these limits.
+- **Everything:** a global cap stops all model calls once the key has spent $20 (`MODEL_SPEND_CAP_USD`).
+
+Not built: real accounts for students, and per-teacher billing quotas for a launch at scale.
 
 ## What we haven't verified
 
