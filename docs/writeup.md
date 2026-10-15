@@ -46,7 +46,7 @@ The criteria were set in the [PRD](prd.md#quality-bar) before the first run.
 | Grades that fail, normal conditions | < 0.1% | 0% |
 | Grades that fail, provider down for 5 minutes | 0% | 0% (at 300 students) |
 
-Every bar held at 510 students in one testing window, measured on one laptop. 1,000 is not verified, because the laptop driving the load ran out before the system did. **Ship for testing windows up to 510 students.** A 1,000-student window needs the load split across several generator machines to verify it, plus QStash on pay-as-you-go.
+Every bar held at 510 students in one testing window, measured on one laptop. 1,000 is not verified, because the laptop driving the load ran out before the system did. **Ship for testing windows up to 510 students, once QStash is on pay-as-you-go.** The 510 run used QStash at parallelism 100; production's free plan allows 10 grades in flight and 1,000 messages a day (about three classes). A 1,000-student window also needs the load split across several generator machines to verify it.
 
 ## Cost
 
