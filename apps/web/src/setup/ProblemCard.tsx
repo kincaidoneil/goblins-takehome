@@ -7,6 +7,9 @@ import { Badge, Button, Dialog, DialogClose, Menu } from "@goblins/ui";
 import { useState } from "react";
 import type { DraftProblem } from "../server/setup/draft";
 import type { Edit } from "../server/setup/edits";
+
+export type EditBuilder = ReadonlyArray<Edit> | ((latest: DraftProblem) => ReadonlyArray<Edit>);
+
 import { EditableText } from "./EditableText";
 import { pointsLabel, totalPoints } from "./problem-groups";
 
@@ -21,7 +24,11 @@ export interface ProblemCardProps {
   readonly highlighted: boolean;
   /** Open in edit mode, for a problem the chat just added with no text. */
   readonly isNew: boolean;
-  readonly onEdit: (edits: ReadonlyArray<Edit>) => void;
+  /**
+   * Edits run one at a time. Pass a function to build them from the problem as it is when the
+   * edit runs, so a rubric or link change doesn't undo one still being saved.
+   */
+  readonly onEdit: (edits: EditBuilder) => void;
   readonly onShowPage: (pageNumber: number) => void;
 }
 
@@ -56,11 +63,18 @@ export function ProblemCard({
         },
       ]);
 
-  const setLines = (lines: ReadonlyArray<{ points: number; description: string }>) => {
-    const [first, ...rest] = lines;
-    if (first !== undefined)
-      onEdit([{ _tag: "SetRubric", problemId: problem.id, lines: [first, ...rest] }]);
-  };
+  type Line = { readonly points: number; readonly description: string };
+  const setLines = (update: (lines: ReadonlyArray<Line>) => ReadonlyArray<Line>) =>
+    onEdit((latest) => {
+      const [first, ...rest] = update(latest.rubric);
+      return first === undefined
+        ? []
+        : [{ _tag: "SetRubric", problemId: latest.id, lines: [first, ...rest] }];
+    });
+  const setLinks = (update: (dependsOn: ReadonlyArray<string>) => ReadonlyArray<string>) =>
+    onEdit((latest) => [
+      { _tag: "SetDependencies", problemId: latest.id, dependsOn: [...update(latest.dependsOn)] },
+    ]);
 
   const dependsOn = earlier.filter((p) => problem.dependsOn.includes(p.id));
 
@@ -195,14 +209,16 @@ export function ProblemCard({
                 value={line.points}
                 label={`Points for rubric line ${index + 1} of problem ${problem.label}`}
                 onChange={(points) =>
-                  setLines(problem.rubric.map((l, i) => (i === index ? { ...l, points } : l)))
+                  setLines((lines) => lines.map((l, i) => (i === index ? { ...l, points } : l)))
                 }
               />
               <EditableText
                 value={line.description}
                 onSave={(description) =>
                   description.trim() !== "" &&
-                  setLines(problem.rubric.map((l, i) => (i === index ? { ...l, description } : l)))
+                  setLines((lines) =>
+                    lines.map((l, i) => (i === index ? { ...l, description } : l)),
+                  )
                 }
                 label={`Rubric line ${index + 1} of problem ${problem.label}`}
                 placeholder="What earns this point."
@@ -213,7 +229,7 @@ export function ProblemCard({
                   type="button"
                   className="setup-icon-button"
                   aria-label={`Remove rubric line ${index + 1} of problem ${problem.label}`}
-                  onClick={() => setLines(problem.rubric.filter((_, i) => i !== index))}
+                  onClick={() => setLines((lines) => lines.filter((_, i) => i !== index))}
                 >
                   <svg viewBox="0 0 16 16" aria-hidden="true">
                     <path
@@ -232,8 +248,8 @@ export function ProblemCard({
           type="button"
           className="setup-add-line"
           onClick={() =>
-            setLines([
-              ...problem.rubric,
+            setLines((lines) => [
+              ...lines,
               { points: 1, description: "Describe what earns this point." },
             ])
           }
@@ -259,15 +275,7 @@ export function ProblemCard({
                 type="button"
                 className="setup-chip-remove"
                 aria-label={`Unlink ${problem.label} from ${dependency.label}`}
-                onClick={() =>
-                  onEdit([
-                    {
-                      _tag: "SetDependencies",
-                      problemId: problem.id,
-                      dependsOn: problem.dependsOn.filter((id) => id !== dependency.id),
-                    },
-                  ])
-                }
+                onClick={() => setLinks((links) => links.filter((id) => id !== dependency.id))}
               >
                 ×
               </button>
@@ -302,15 +310,11 @@ export function ProblemCard({
                   type="checkbox"
                   checked={checked}
                   onChange={() =>
-                    onEdit([
-                      {
-                        _tag: "SetDependencies",
-                        problemId: problem.id,
-                        dependsOn: checked
-                          ? problem.dependsOn.filter((id) => id !== candidate.id)
-                          : [...problem.dependsOn, candidate.id],
-                      },
-                    ])
+                    setLinks((links) =>
+                      links.includes(candidate.id)
+                        ? links.filter((id) => id !== candidate.id)
+                        : [...links, candidate.id],
+                    )
                   }
                 />
                 <span className="setup-link-option-label">{candidate.label}</span>

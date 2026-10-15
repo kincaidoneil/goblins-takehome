@@ -85,15 +85,42 @@ export function SetupScreen({
       .getElementById(`problem-${id}`)
       ?.scrollIntoView({ behavior: "smooth", block: "center" });
 
-  const applyEdits = async (edits: ReadonlyArray<Edit>) => {
+  // Edits run one at a time, each built from the draft as the previous one left it, so two quick
+  // changes to the same rubric can't overwrite each other.
+  const latest = useRef(draft);
+  const queue = useRef<Promise<void>>(Promise.resolve());
+  const inFlight = useRef(0);
+
+  const applyEdits = (build: ReadonlyArray<Edit> | ((latest: Draft) => ReadonlyArray<Edit>)) => {
+    inFlight.current++;
     setSave("saving");
-    const result = await editDraft({ data: { draftId: draft.id, edits: [...edits] } });
-    if (result._tag === "Ok") {
-      setDraft(result.value);
-      setSave("saved");
-      return;
+    queue.current = queue.current.then(async () => {
+      const edits = typeof build === "function" ? build(latest.current) : build;
+      const outcome = edits.length === 0 ? null : await runEdits(edits);
+      inFlight.current--;
+      if (outcome === "failed") setSave("failed");
+      else if (inFlight.current === 0) setSave("saved");
+    });
+    return queue.current;
+  };
+
+  const runEdits = async (edits: ReadonlyArray<Edit>): Promise<"saved" | "failed"> => {
+    const result = await editDraft({ data: { draftId: draft.id, edits: [...edits] } }).catch(
+      () => null,
+    );
+    if (result === null) {
+      toast({
+        title: "That change didn't save",
+        description: "Check your connection and try again.",
+        tone: "attention",
+      });
+      return "failed";
     }
-    setSave("failed");
+    if (result._tag === "Ok") {
+      latest.current = result.value;
+      setDraft(result.value);
+      return "saved";
+    }
     switch (result.error._tag) {
       case "DraftLocked":
         toast({
@@ -101,7 +128,7 @@ export function SetupScreen({
           description: "Its rubric is locked now that students can join.",
           tone: "attention",
         });
-        return;
+        return "failed";
       case "EditRejected":
         toast({
           title:
@@ -110,14 +137,14 @@ export function SetupScreen({
               : "That change didn't save",
           tone: "attention",
         });
-        return;
+        return "failed";
       case "DraftNotFound":
         toast({
           title: "That change didn't save",
           description: "Reload the page and try again.",
           tone: "attention",
         });
-        return;
+        return "failed";
     }
   };
 
@@ -134,6 +161,7 @@ export function SetupScreen({
       return;
     }
     const before = new Set(draft.problems.map((p) => p.id));
+    latest.current = result.value.draft;
     setDraft(result.value.draft);
     setHighlighted(new Set(result.value.changed));
     setNewProblemIds(
@@ -197,13 +225,16 @@ export function SetupScreen({
                   className="setup-stem"
                   onSave={(stem) => {
                     const old = group.stem ?? "";
-                    void applyEdits(
-                      group.problems.map((p) => ({
-                        _tag: "SetField",
-                        problemId: p.id,
-                        field: "text",
-                        value: `${stem}${p.text.slice(old.length)}`,
-                      })),
+                    const ids = new Set(group.problems.map((p) => p.id));
+                    void applyEdits((current) =>
+                      current.problems
+                        .filter((p) => ids.has(p.id) && p.text.startsWith(old))
+                        .map((p) => ({
+                          _tag: "SetField",
+                          problemId: p.id,
+                          field: "text",
+                          value: `${stem}${p.text.slice(old.length)}`,
+                        })),
                     );
                   }}
                 />
@@ -228,7 +259,13 @@ export function SetupScreen({
                   stem={group.stem === "" ? null : group.stem}
                   highlighted={highlighted.has(problem.id)}
                   isNew={newProblemIds.has(problem.id) && problem.text.trim() === ""}
-                  onEdit={(edits) => void applyEdits(edits)}
+                  onEdit={(build) =>
+                    void applyEdits((current) => {
+                      if (typeof build !== "function") return build;
+                      const fresh = current.problems.find((p) => p.id === problem.id);
+                      return fresh === undefined ? [] : build(fresh);
+                    })
+                  }
                   onShowPage={showPage}
                 />
               </div>
@@ -258,7 +295,7 @@ export function SetupScreen({
   );
 
   return (
-    <div className="setup-screen" data-hydrated={hydrated || undefined}>
+    <div className="setup-screen" data-testid="setup-review" data-hydrated={hydrated || undefined}>
       <header className="setup-topbar">
         <Link to="/" className="setup-wordmark" aria-label="Goblins Grader home">
           <CreatureArt id={0} size={32} title="" />
@@ -297,7 +334,12 @@ export function SetupScreen({
             )}
           </p>
         </div>
-        <Button size="lg" onClick={openLaunch} className="setup-launch-button">
+        <Button
+          size="lg"
+          onClick={openLaunch}
+          className="setup-launch-button"
+          data-testid="setup-launch"
+        >
           Launch
         </Button>
       </header>

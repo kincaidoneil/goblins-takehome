@@ -89,6 +89,27 @@ export const ensureEditable = (draftId: string) =>
     if (sessionId !== null) return yield* Effect.fail(new DraftLocked({ sessionId }));
   });
 
+/**
+ * Runs a change to a draft that is not launched, holding the assignment row lock that launch also
+ * takes, so a change can't land after the session exists.
+ */
+export const whileEditable = <A, E, R>(draftId: string, change: Effect.Effect<A, E, R>) =>
+  Effect.gen(function* () {
+    const db = yield* Db;
+    const sql = yield* SqlClient;
+    return yield* sql.withTransaction(
+      Effect.gen(function* () {
+        yield* db
+          .select({ id: schema.assignments.id })
+          .from(schema.assignments)
+          .where(eq(schema.assignments.id, draftId))
+          .for("update");
+        yield* ensureEditable(draftId);
+        return yield* change;
+      }),
+    );
+  });
+
 export const loadDraft = (viewer: Viewer, draftId: string) =>
   Effect.gen(function* () {
     const assignment = yield* ownedAssignment(viewer, draftId);

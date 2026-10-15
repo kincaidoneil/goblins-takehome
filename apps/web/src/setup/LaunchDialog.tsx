@@ -65,7 +65,15 @@ export function LaunchDialog({
     // popup; point it at the session once it exists.
     const projector = window.open("about:blank", "goblins-projector", "popup");
     setState({ _tag: "Launching" });
-    const result = await launch({ data: { draftId, timeLimitMinutes } });
+    const result = await launch({ data: { draftId, timeLimitMinutes } }).catch(() => null);
+    if (result === null) {
+      projector?.close();
+      setState({
+        _tag: "Failed",
+        message: "That didn't go through. Check your connection and try again.",
+      });
+      return;
+    }
     if (result._tag === "Ok") {
       if (projector !== null) projector.location.href = projectorPath(result.value.sessionId);
       window.location.assign(dashboardPath(result.value.sessionId));
@@ -122,6 +130,7 @@ export function LaunchDialog({
           <Button
             size="lg"
             className="setup-launch-cta"
+            data-testid="launch-open-projector"
             onClick={start}
             disabled={state._tag === "Launching" || saving}
           >
@@ -132,7 +141,12 @@ export function LaunchDialog({
                 : "Open the projector"}
           </Button>
         ) : (
-          <Button size="lg" className="setup-launch-cta" onClick={signIn}>
+          <Button
+            size="lg"
+            className="setup-launch-cta"
+            data-testid="launch-sign-in"
+            onClick={signIn}
+          >
             <GoogleMark /> Sign in with Google to launch
           </Button>
         )

@@ -9,7 +9,7 @@ import { Effect, Option, Schema } from "effect";
 import { err, ok } from "../result";
 import { run } from "../runtime";
 import { currentTeacher, signedInUserId } from "../teacher";
-import { type Draft, ensureEditable, loadDraft, ownedAssignment } from "./draft";
+import { type Draft, ensureEditable, loadDraft, ownedAssignment, whileEditable } from "./draft";
 import { applyEdits, Edit } from "./edits";
 import { claimDrafts, launchDraft } from "./launch";
 import { editByChat } from "./setup-ai";
@@ -113,8 +113,7 @@ export const editDraft = createServerFn({ method: "POST" })
       Effect.gen(function* () {
         const viewer = yield* currentViewer;
         yield* ownedAssignment(viewer, data.draftId);
-        yield* ensureEditable(data.draftId);
-        yield* applyEdits(data.draftId, data.edits);
+        yield* whileEditable(data.draftId, applyEdits(data.draftId, data.edits));
         return ok(yield* loadDraft(viewer, data.draftId));
       }).pipe(
         Effect.catchTags({
@@ -157,7 +156,7 @@ export const sendChatMessage = createServerFn({ method: "POST" })
           .values({ assignmentId: data.draftId, role: "teacher", content: data.message });
         const { reply, edits } = yield* editByChat(before, data.message);
         // A reply whose edits don't apply is the model's mistake, not the teacher's: say so.
-        const applied = yield* applyEdits(data.draftId, edits).pipe(
+        const applied = yield* whileEditable(data.draftId, applyEdits(data.draftId, edits)).pipe(
           Effect.as(reply),
           Effect.catchTag("EditRejected", () =>
             Effect.succeed(
