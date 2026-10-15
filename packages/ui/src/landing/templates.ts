@@ -50,7 +50,11 @@ export function toSummary(template: Template): TemplateSummary {
     title: template.title,
     description: template.description,
     course: template.course,
-    problemCount: template.problems.length,
+    // Counted as setup and the student screen count them: each lettered part is its own problem.
+    problemCount: template.problems.reduce(
+      (n, problem) => n + (problem._tag === "WithParts" ? problem.parts.length : 1),
+      0,
+    ),
     tags: template.features.map((feature) => TAGS[feature]),
     attribution: template.source.attribution,
     licenseUrl: template.source.licenseUrl,
