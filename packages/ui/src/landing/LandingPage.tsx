@@ -1,6 +1,6 @@
 import { type ReactNode, useRef, useState } from "react";
-import { CreatureArt } from "../components/creatures";
 import { ScoreChip } from "../components/ScoreChip";
+import { Wordmark } from "../components/Wordmark";
 import { DropZone, type DropZoneState } from "./DropZone";
 import { GradedWorksheet } from "./GradedWorksheet";
 import { TemplatePicker } from "./TemplatePicker";
@@ -79,11 +79,8 @@ export function LandingPage({
   return (
     <div className="lp">
       <header className="lp-header">
-        <a className="lp-wordmark" href="/">
-          <CreatureArt id={0} size={36} title="" />
-          <span>
-            Goblins <span className="lp-wordmark-sub">Grader</span>
-          </span>
+        <a className="lp-wordmark" href="/" aria-label="Goblins Grader home">
+          <Wordmark product="grader" />
         </a>
         {signIn}
       </header>

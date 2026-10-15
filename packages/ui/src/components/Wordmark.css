@@ -1,0 +1,40 @@
+.gb-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  color: var(--gb-color-text-brand);
+  font-size: var(--gb-text-lg);
+  font-weight: var(--gb-weight-heavy);
+  letter-spacing: var(--gb-tracking-heading);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.gb-wordmark[data-size="sm"] {
+  font-size: var(--gb-text-md);
+}
+
+.gb-wordmark[data-size="lg"] {
+  font-size: var(--gb-text-xl);
+}
+
+.gb-wordmark-mark {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 1.6em;
+  height: 1.6em;
+}
+
+.gb-wordmark-mark svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Nunito sits high in its line box; this nudge centers the capitals on Pip's face. */
+.gb-wordmark-text {
+  padding-top: 0.09em;
+}
+
+.gb-wordmark-sub {
+  color: var(--gb-green-500);
+}

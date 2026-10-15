@@ -42,17 +42,7 @@
 
 .setup-wordmark {
   display: inline-flex;
-  align-items: center;
-  gap: var(--gb-space-2);
-  color: var(--gb-color-text-brand);
-  font-size: var(--gb-text-lg);
-  font-weight: var(--gb-weight-heavy);
-  letter-spacing: var(--gb-tracking-heading);
   text-decoration: none;
-}
-
-.setup-wordmark-sub {
-  font-weight: var(--gb-weight-medium);
 }
 
 .setup-title-field {

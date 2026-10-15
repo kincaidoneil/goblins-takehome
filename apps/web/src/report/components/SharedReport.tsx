@@ -2,6 +2,7 @@
  * The view-only report behind a share link. It shows class-level results without names, then
  * pitches Goblins: the free plan to teachers, Goblins Max to school and district leaders.
  */
+import { Wordmark } from "@goblins/ui";
 import { useMemo } from "react";
 import { shareLinks } from "../goblins";
 import { groupByRubricLine, type ProblemMistakes } from "../mistakes";
@@ -35,8 +36,8 @@ export function SharedReport({
     <main className="min-h-dvh bg-bg pb-16">
       <div className="border-b border-border bg-surface">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <a href="/" className="text-base font-[850] text-brand no-underline">
-            Goblins Grader
+          <a href="/" className="no-underline" aria-label="Goblins Grader home">
+            <Wordmark product="grader" size="sm" />
           </a>
           <span className="text-sm text-text-muted">View-only class report</span>
         </div>

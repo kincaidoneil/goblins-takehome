@@ -2,7 +2,7 @@
  * The review screen: the worksheet pages, the problems as the grader will know them, and the chat.
  * Three columns on a wide screen; on narrower ones the pages and chat move into tabs or sheets.
  */
-import { Button, CreatureArt, Dialog, Tabs, useToast } from "@goblins/ui";
+import { Button, CreatureArt, Dialog, Tabs, useToast, Wordmark } from "@goblins/ui";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Draft, DraftProblem } from "../server/setup/draft";
@@ -314,10 +314,7 @@ export function SetupScreen({
     <div className="setup-screen" data-testid="setup-review" data-hydrated={hydrated || undefined}>
       <header className="setup-topbar">
         <Link to="/" className="setup-wordmark" aria-label="Goblins Grader home">
-          <CreatureArt id={0} size={32} title="" />
-          <span>
-            Goblins <span className="setup-wordmark-sub">Grader</span>
-          </span>
+          <Wordmark product="grader" size="sm" />
         </Link>
         <div className="setup-title-field">
           <input

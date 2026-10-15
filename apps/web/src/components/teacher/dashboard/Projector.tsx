@@ -1,4 +1,4 @@
-import { Avatar, Button, CreatureArt } from "@goblins/ui";
+import { Avatar, Button, CreatureArt, Wordmark } from "@goblins/ui";
 import { QRCodeSVG } from "qrcode.react";
 import { useState } from "react";
 import type { SessionRow, StudentRow } from "../../../lib/sync";
@@ -30,10 +30,8 @@ export function Projector(props: ProjectorProps) {
   return (
     <div className="pj">
       <header className="flex items-center justify-between gap-4 px-[4vw] pt-[2.5vw]">
-        <span className="pj-brand">
-          <Avatar kind="creature" creatureId={0} size="sm" name="" />
-          Goblins Grader
-        </span>
+        {/* The class watches the projector, so it carries the students' brand. */}
+        <Wordmark product="goblins" className="pj-brand" />
         <span className="truncate font-bold text-text-muted">{props.title}</span>
       </header>
       {clock._tag === "Lobby" ? <Lobby {...props} /> : <Live {...props} clock={clock} />}

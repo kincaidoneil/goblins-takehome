@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Field, Input } from "@goblins/ui";
+import { Avatar, Button, Card, Field, Input, Wordmark } from "@goblins/ui";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Schema } from "effect";
 import { type FormEvent, useState } from "react";
@@ -72,6 +72,7 @@ function JoinPage() {
   return (
     <main className="min-h-dvh bg-bg px-4 py-10 sm:py-20">
       <div className="mx-auto flex max-w-sm flex-col items-center gap-6">
+        <Wordmark product="goblins" />
         <div className="flex -space-x-3" aria-hidden="true">
           {[3, 17, 29].map((id) => (
             <Avatar key={id} kind="creature" creatureId={id} size="lg" />
