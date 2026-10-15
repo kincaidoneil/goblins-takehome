@@ -52,7 +52,8 @@
       "text": "Angles \\(A\\) and \\(C\\) are supplementary. Find the measure of angle \\(C\\).",
       "diagrams": [
         {
-          "description": "Two separate angles side by side. Angle EAB has vertex A, a horizontal ray AB to the right and a ray AE up and slightly right; it is labeled 74°. Angle FCD has vertex C, a horizontal ray CD to the right and a ray CF up and slightly left, so it is obtuse; it is marked with an arc but no measure."
+          "description": "Two separate angles side by side. Angle EAB has vertex A, a horizontal ray AB to the right and a ray AE up and slightly right; it is labeled 74°. Angle FCD has vertex C, a horizontal ray CD to the right and a ray CF up and slightly left, so it is obtuse; it is marked with an arc but no measure.",
+          "crop": { "page": 1, "x": 0.162, "y": 0.204, "w": 0.485, "h": 0.189 }
         }
       ],
       "answer": { "_tag": "Exact", "value": "106°", "accept": ["106", "m∠C = 106°"] },
@@ -71,7 +72,8 @@
       "stem": "",
       "diagrams": [
         {
-          "description": "Square CDFG with C top left, D top right, F bottom right and G bottom left. Point M is on side DF. Segments CM and GM are drawn. Labeled angles: angle DCM = 27°, angle DMC = 63°, angle GMF = 64°, angle MGF = 26°. The square's corners are right angles. Unlabeled but derivable: angle MCG = 63°, angle CGM = 64°, angle CMG = 53°."
+          "description": "Square CDFG with C top left, D top right, F bottom right and G bottom left. Point M is on side DF. Segments CM and GM are drawn. Labeled angles: angle DCM = 27°, angle DMC = 63°, angle GMF = 64°, angle MGF = 26°. The square's corners are right angles. Unlabeled but derivable: angle MCG = 63°, angle CGM = 64°, angle CMG = 53°.",
+          "crop": { "page": 1, "x": 0.579, "y": 0.516, "w": 0.233, "h": 0.185 }
         }
       ],
       "parts": [
@@ -118,7 +120,8 @@
       "text": "Two lines intersect. Find the value of \\(b\\) and \\(c\\).",
       "diagrams": [
         {
-          "description": "Two lines cross and form four angles. The angle on the right, between the two right-hand rays, is labeled 42°. The angle on the left, opposite it, is labeled b°. The angle at the bottom, between the lower-left and lower-right rays, is labeled c°. The top angle is unlabeled."
+          "description": "Two lines cross and form four angles. The angle on the right, between the two right-hand rays, is labeled 42°. The angle on the left, opposite it, is labeled b°. The angle at the bottom, between the lower-left and lower-right rays, is labeled c°. The top angle is unlabeled.",
+          "crop": { "page": 2, "x": 0.162, "y": 0.087, "w": 0.501, "h": 0.185 }
         }
       ],
       "answer": { "_tag": "Exact", "value": "b = 42, c = 138", "accept": ["b = 42°, c = 138°"] },
@@ -137,7 +140,8 @@
       "text": "In this figure, angles \\(R\\) and \\(S\\) are complementary. Find the measure of angle \\(S\\).",
       "diagrams": [
         {
-          "description": "Triangle QRS with a right angle at Q (top left). Angle R (bottom left) is labeled 62°. Angle S (right) is unlabeled."
+          "description": "Triangle QRS with a right angle at Q (top left). Angle R (bottom left) is labeled 62°. Angle S (right) is unlabeled.",
+          "crop": { "page": 2, "x": 0.162, "y": 0.393, "w": 0.386, "h": 0.187 }
         }
       ],
       "answer": { "_tag": "Exact", "value": "28°", "accept": ["28", "m∠S = 28°"] },
@@ -179,7 +183,8 @@
       "text": "Segments \\(AB\\), \\(EF\\), and \\(CD\\) intersect at point \\(C\\), and angle \\(ACD\\) is a right angle. Find the value of \\(g\\).",
       "diagrams": [
         {
-          "description": "Segment AB runs from A (left) to B (right), sloping slightly down, through point C. Segment EF passes through C from F (lower left) to E (upper right). Segment CD goes up from C to D. Angle ACD is marked as a right angle. Angle DCE is labeled 53°. Angle ECB is labeled g°."
+          "description": "Segment AB runs from A (left) to B (right), sloping slightly down, through point C. Segment EF passes through C from F (lower left) to E (upper right). Segment CD goes up from C to D. Angle ACD is marked as a right angle. Angle DCE is labeled 53°. Angle ECB is labeled g°.",
+          "crop": { "page": 3, "x": 0.16, "y": 0.115, "w": 0.292, "h": 0.144 }
         }
       ],
       "answer": { "_tag": "Exact", "value": "g = 37", "accept": ["37", "37°", "g = 37°"] },
@@ -198,7 +203,8 @@
       "text": "Segments \\(AB\\), \\(DC\\), and \\(EC\\) intersect at point \\(C\\). Angle \\(DCE\\) measures \\(148^\\circ\\). Find the value of \\(x\\).",
       "diagrams": [
         {
-          "description": "Horizontal segment AB with C between A and B. Segments CD and CE go down from C, to D on the lower left and E on the lower right. Angle ACD is labeled x°, angle DCE is labeled 148°, and angle ECB is labeled x°."
+          "description": "Horizontal segment AB with C between A and B. Segments CD and CE go down from C, to D on the lower left and E on the lower right. Angle ACD is labeled x°, angle DCE is labeled 148°, and angle ECB is labeled x°.",
+          "crop": { "page": 3, "x": 0.16, "y": 0.404, "w": 0.292, "h": 0.085 }
         }
       ],
       "answer": { "_tag": "Exact", "value": "x = 16", "accept": ["16", "16°", "x = 16°"] },
@@ -217,7 +223,8 @@
       "text": "Line \\(\\ell\\) is perpendicular to line \\(m\\). Find the value of \\(x\\) and \\(w\\).",
       "diagrams": [
         {
-          "description": "Vertical line ℓ meets horizontal line m at a point. Between the upward ray of ℓ and the rightward ray of m there are two more rays from the intersection, splitting the right angle into three angles. From ℓ going clockwise they are labeled 19°, x° and w°. The second of these rays is part of a line that continues through the intersection to the lower left. The angle from the rightward ray of m, clockwise down to that lower-left ray, is labeled 138°."
+          "description": "Vertical line ℓ meets horizontal line m at a point. Between the upward ray of ℓ and the rightward ray of m there are two more rays from the intersection, splitting the right angle into three angles. From ℓ going clockwise they are labeled 19°, x° and w°. The second of these rays is part of a line that continues through the intersection to the lower left. The angle from the rightward ray of m, clockwise down to that lower-left ray, is labeled 138°.",
+          "crop": { "page": 3, "x": 0.16, "y": 0.618, "w": 0.292, "h": 0.144 }
         }
       ],
       "answer": { "_tag": "Exact", "value": "x = 29, w = 42", "accept": ["x = 29°, w = 42°"] },

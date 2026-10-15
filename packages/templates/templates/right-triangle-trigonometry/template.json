@@ -48,7 +48,8 @@
       "stem": "Triangle \\(ABC\\) is equilateral.",
       "diagrams": [
         {
-          "description": "Triangle ABC with A at the top, C at the bottom left and B at the bottom right. Side AC is labeled 8. Altitude AD is drawn as a dashed segment from A to D on CB, marked perpendicular to CB and labeled x. Angles C and B are marked congruent."
+          "description": "Triangle ABC with A at the top, C at the bottom left and B at the bottom right. Side AC is labeled 8. Altitude AD is drawn as a dashed segment from A to D on CB, marked perpendicular to CB and labeled x. Angles C and B are marked congruent.",
+          "crop": { "page": 1, "x": 0.624, "y": 0.184, "w": 0.191, "h": 0.135 }
         }
       ],
       "parts": [
@@ -111,7 +112,8 @@
       "stem": "The quilt is made of squares with diagonals.\nThe length of \\(BD\\) is 4.",
       "diagrams": [
         {
-          "description": "Square ABCD with B top left, C top right, D bottom right and A bottom left. G, F, E and H are the midpoints of BC, CD, AD and AB. Segments GE and HF split it into four small squares, and each small square has both diagonals drawn. Together these form the big square's diagonals BD and AC through the center, and the inner square HEFG (a diamond) joining the midpoints. No lengths are labeled; the text gives BD = 4."
+          "description": "Square ABCD with B top left, C top right, D bottom right and A bottom left. G, F, E and H are the midpoints of BC, CD, AD and AB. Segments GE and HF split it into four small squares, and each small square has both diagonals drawn. Together these form the big square's diagonals BD and AC through the center, and the inner square HEFG (a diamond) joining the midpoints. No lengths are labeled; the text gives BD = 4.",
+          "crop": { "page": 1, "x": 0.581, "y": 0.527, "w": 0.226, "h": 0.175 }
         }
       ],
       "parts": [
@@ -148,7 +150,8 @@
       "text": "Kiran is flying a kite. He gets tired, so he stakes the kite into the ground. The kite is on a string that is 18 feet long and makes a 30 degree angle with the ground. How high is the kite?",
       "diagrams": [
         {
-          "description": "Right triangle formed by the kite string, the ground and a vertical segment from the kite down to the ground. The string is the hypotenuse, labeled 18, making a 30° angle with the ground at the stake. The right angle is where the vertical segment meets the ground."
+          "description": "Right triangle formed by the kite string, the ground and a vertical segment from the kite down to the ground. The string is the hypotenuse, labeled 18, making a 30° angle with the ground at the stake. The right angle is where the vertical segment meets the ground.",
+          "crop": { "page": 2, "x": 0.167, "y": 0.115, "w": 0.452, "h": 0.182 }
         }
       ],
       "answer": { "_tag": "Exact", "value": "9 feet", "accept": ["9"] },
@@ -167,7 +170,8 @@
       "text": "What is the length of side \\(AB\\)?",
       "diagrams": [
         {
-          "description": "Right triangle ABC with the right angle at A (bottom left), B above A and C to the right of A. AC is labeled 6 and angle C is labeled 30°."
+          "description": "Right triangle ABC with the right angle at A (bottom left), B above A and C to the right of A. AC is labeled 6 and angle C is labeled 30°.",
+          "crop": { "page": 2, "x": 0.576, "y": 0.398, "w": 0.271, "h": 0.142 }
         }
       ],
       "answer": {
@@ -190,7 +194,8 @@
       "text": "Find the lengths of segments \\(AD\\) and \\(BD\\). Then check your answers using a different method.",
       "diagrams": [
         {
-          "description": "Triangle ABC with A at the bottom left, C at the bottom right and B above, near A. The angle at B is a right angle. Altitude BD is drawn from B to D on AC, with a right angle at D. DC is labeled 12 and BC is labeled 13."
+          "description": "Triangle ABC with A at the bottom left, C at the bottom right and B above, near A. The angle at B is a right angle. Altitude BD is drawn from B to D on AC, with a right angle at D. DC is labeled 12 and BC is labeled 13.",
+          "crop": { "page": 2, "x": 0.584, "y": 0.642, "w": 0.252, "h": 0.093 }
         }
       ],
       "answer": {
@@ -213,7 +218,8 @@
       "text": "Write an expression that can be used to find the length of \\(JH\\) and an expression that can be used to find the length of \\(GJ\\).",
       "diagrams": [
         {
-          "description": "Right triangle GHJ with the right angle at J (top). G is at the bottom left and H at the bottom right. Angle G is labeled 35° and the hypotenuse GH is labeled 9."
+          "description": "Right triangle GHJ with the right angle at J (top). G is at the bottom left and H at the bottom right. Angle G is labeled 35° and the hypotenuse GH is labeled 9.",
+          "crop": { "page": 3, "x": 0.574, "y": 0.067, "w": 0.273, "h": 0.118 }
         }
       ],
       "answer": {
@@ -273,7 +279,8 @@
       "text": "Find the length of each leg.",
       "diagrams": [
         {
-          "description": "Right triangle PQR with the right angle at Q (bottom left). R is above Q and P is to the right of Q. The hypotenuse RP is labeled 4. Angle R is 30° and angle P is 60°."
+          "description": "Right triangle PQR with the right angle at Q (bottom left). R is above Q and P is to the right of Q. The hypotenuse RP is labeled 4. Angle R is 30° and angle P is 60°.",
+          "crop": { "page": 3, "x": 0.584, "y": 0.527, "w": 0.146, "h": 0.176 }
         }
       ],
       "answer": {
