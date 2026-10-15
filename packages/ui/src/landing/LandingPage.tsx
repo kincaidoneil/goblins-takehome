@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { CreatureArt } from "../components/creatures";
+import { ScoreChip } from "../components/ScoreChip";
 import { DropZone, type DropZoneState } from "./DropZone";
 import { GradedWorksheet } from "./GradedWorksheet";
 import { TemplatePicker } from "./TemplatePicker";
@@ -71,6 +72,16 @@ export function LandingPage({
               Drop in the worksheet you were going to hand out anyway. Students show their work, and
               you get a graded class without grading a thing.
             </p>
+            <div className="lp-proof" aria-hidden="true">
+              <div className="lp-proof-chips">
+                <ScoreChip status={{ state: "graded", points: 2, maxPoints: 2 }} size="sm" />
+                <ScoreChip status={{ state: "graded", points: 1, maxPoints: 2 }} size="sm" />
+                <ScoreChip status={{ state: "needs-teacher" }} size="sm" />
+              </div>
+              <div className="lp-proof-text">
+                <strong>28 of 30 graded</strong>2 flagged for you to check
+              </div>
+            </div>
             <DropZone
               onFiles={onFiles}
               onStarted={onStarted}

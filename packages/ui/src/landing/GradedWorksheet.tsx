@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Avatar } from "../components/Avatar";
 import type { GradeStatus } from "../components/grade";
 import { ScoreChip } from "../components/ScoreChip";
@@ -33,11 +34,42 @@ const ROWS: ReadonlyArray<Row> = [
 
 const CLASS = [2, 9, 19, 28, 35, 44];
 
+const FIRST_MS = 600;
+const STEP_MS = 450;
+
+/** How many rows have their grade in. Counts up once, about 2 s; all at once with reduced motion. */
+function useRevealed(total: number): number {
+  const [revealed, setRevealed] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setRevealed(total);
+      return;
+    }
+    const timers = Array.from({ length: total }, (_, i) =>
+      window.setTimeout(() => setRevealed(i + 1), FIRST_MS + i * STEP_MS),
+    );
+    return () => {
+      for (const t of timers) window.clearTimeout(t);
+    };
+  }, [total]);
+  return revealed;
+}
+
+function points(status: GradeStatus): { points: number; max: number } {
+  return status.state === "graded"
+    ? { points: status.points, max: status.maxPoints }
+    : { points: 0, max: 0 };
+}
+
 /**
- * The landing page's picture of the product: a student's worksheet, graded,
- * with the class beside it. Chips pop in one after another.
+ * The landing page's picture of the product: a student's worksheet whose
+ * scores fill in one after another, with the class beside it.
  */
 export function GradedWorksheet() {
+  const revealed = useRevealed(ROWS.length);
+  const shown = ROWS.slice(0, revealed).map((row) => points(row.status));
+  const earned = shown.reduce((sum, p) => sum + p.points, 0);
+  const possible = shown.reduce((sum, p) => sum + p.max, 0);
   return (
     <figure
       className="lp-sheet"
@@ -53,10 +85,16 @@ export function GradedWorksheet() {
             </div>
           </div>
           <div className="lp-sheet-total">
-            <div>
-              <span>5</span>/6
-            </div>
-            <small>points so far</small>
+            {possible === 0 ? (
+              <small>grading…</small>
+            ) : (
+              <>
+                <div>
+                  <span>{earned}</span>/{possible}
+                </div>
+                <small>points so far</small>
+              </>
+            )}
           </div>
         </div>
         <ol className="lp-sheet-rows">
@@ -70,11 +108,15 @@ export function GradedWorksheet() {
                 <p className="lp-sheet-prompt">{row.prompt}</p>
                 <p className="lp-sheet-work">{row.work}</p>
               </div>
-              <ScoreChip status={row.status} className="lp-sheet-chip" />
+              {i < revealed ? (
+                <ScoreChip key="graded" status={row.status} className="lp-sheet-chip" />
+              ) : (
+                <ScoreChip key="grading" status={{ state: "grading" }} />
+              )}
             </li>
           ))}
         </ol>
-        <p className="lp-sheet-reason">
+        <p className="lp-sheet-reason" data-shown={revealed === ROWS.length || undefined}>
           <strong>Why 4 needs you:</strong> the grader can't tell if the last digit is a 6 or a b.
         </p>
       </div>

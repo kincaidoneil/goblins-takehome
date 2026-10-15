@@ -140,7 +140,39 @@
   font-weight: var(--gb-weight-bold);
 }
 
+/* The payoff, shown above the drop zone only when the full worksheet falls below the fold. */
+.lp-proof {
+  display: none;
+}
+
 @media (max-width: 900px) {
+  .lp-proof {
+    display: flex;
+    align-items: center;
+    gap: var(--gb-space-3);
+    margin: calc(-1 * var(--gb-space-3)) 0 var(--gb-space-6);
+  }
+
+  .lp-proof-chips {
+    display: flex;
+    gap: var(--gb-space-1);
+  }
+
+  .lp-proof-text {
+    color: var(--gb-color-text-muted);
+    font-size: var(--gb-text-sm);
+    line-height: 1.3;
+  }
+
+  .lp-proof-text strong {
+    display: block;
+    color: var(--gb-color-text-brand);
+  }
+
+  .lp-drop {
+    padding-block: var(--gb-space-8);
+  }
+
   .lp-hero {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--gb-space-12);
@@ -162,9 +194,5 @@
   .lp main,
   .lp-footer {
     padding-inline: var(--gb-space-4);
-  }
-
-  .lp-wordmark-sub {
-    display: none;
   }
 }
