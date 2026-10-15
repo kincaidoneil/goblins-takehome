@@ -18,8 +18,7 @@ import {
   type GradeJob,
   type GraderOutcome,
   Grading,
-  type LinePoints,
-  LinePoints as LinePointsSchema,
+  LinePoints,
   NeedsTeacher,
   Submitted,
   SubmissionId,
@@ -129,7 +128,7 @@ const checkLinePoints = (submissionId: SubmissionId, linePoints: LinePoints) =>
     const max = new Map(lines.map((line) => [line.id, line.points]))
     const fail = (problem: string) => Effect.fail(new LinePointsMismatch({ submissionId, problem }))
     // Model output and teacher input arrive as plain data; enforce whole, non-negative points.
-    if (Either.isLeft(Schema.decodeUnknownEither(LinePointsSchema)(linePoints))) {
+    if (Either.isLeft(Schema.decodeUnknownEither(LinePoints)(linePoints))) {
       return yield* fail("line points must be whole numbers of at least 0")
     }
     // The rubric is locked once an assignment launches, so this only trips on a bug; it turns
