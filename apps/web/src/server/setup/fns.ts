@@ -8,7 +8,7 @@ import { waitUntil } from "@vercel/functions";
 import { Effect, Option, Schema } from "effect";
 import { err, ok } from "../result";
 import { run } from "../runtime";
-import { currentTeacher } from "../teacher";
+import { currentTeacher, signedInUserId } from "../teacher";
 import { type Draft, ensureEditable, loadDraft, ownedAssignment } from "./draft";
 import { applyEdits, Edit } from "./edits";
 import { claimDrafts, launchDraft } from "./launch";
@@ -91,7 +91,10 @@ export const getDraft = createServerFn({ method: "GET" })
     run(
       Effect.gen(function* () {
         const viewer = yield* currentViewer;
-        return ok(yield* loadDraft(viewer, data.draftId));
+        const draft = yield* loadDraft(viewer, data.draftId);
+        // From the server, so local sign-in mode (`AUTH_MODE=local`) counts as signed in.
+        const signedIn = (yield* signedInUserId) !== null;
+        return ok({ draft, signedIn });
       }).pipe(Effect.catchTag("DraftNotFound", notFound)),
     ),
   );

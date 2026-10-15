@@ -20,6 +20,7 @@ export interface LaunchDialogProps {
   readonly onTimeLimitChange: (minutes: number | null) => void;
   /** An edit is still being saved; launching now could lock the rubric before it lands. */
   readonly saving: boolean;
+  readonly signedIn: boolean;
   /** A problem the server refused to launch with, so the screen can point at it. */
   readonly onProblemNeedsText: (label: string) => void;
 }
@@ -41,9 +42,10 @@ export function LaunchDialog({
   timeLimitMinutes,
   onTimeLimitChange,
   saving,
+  signedIn,
   onProblemNeedsText,
 }: LaunchDialogProps) {
-  const { isSignedIn, user } = useUser();
+  const { user } = useUser();
   const clerk = useClerk();
   const [state, setState] = useState<LaunchState>({ _tag: "Idle" });
 
@@ -116,7 +118,7 @@ export function LaunchDialog({
       title={`Launch “${title}”`}
       description={`${problemCount} ${problemCount === 1 ? "problem" : "problems"} · ${pointsLabel(points)}. Students join with a code on your projector; they don't need accounts.`}
       actions={
-        isSignedIn ? (
+        signedIn ? (
           <Button
             size="lg"
             className="setup-launch-cta"
@@ -155,8 +157,10 @@ export function LaunchDialog({
       <ul className="setup-launch-notes">
         <li>The projector opens in its own window. Drag it to the classroom screen.</li>
         <li>The rubric locks once you launch, so every student is graded the same way.</li>
-        {isSignedIn ? (
-          <li>Signed in as {user.primaryEmailAddress?.emailAddress ?? user.fullName ?? "you"}.</li>
+        {signedIn ? (
+          <li>
+            Signed in as {user?.primaryEmailAddress?.emailAddress ?? user?.fullName ?? "a teacher"}.
+          </li>
         ) : (
           <li>Signing in keeps your class and grades in your account. Your setup is saved.</li>
         )}

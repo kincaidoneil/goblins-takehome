@@ -74,10 +74,34 @@ test("teacher sets up a template by chat and inline edits, and it persists", asy
     page.locator(".setup-chat-message[data-role=teacher]:not([data-pending])"),
   ).toHaveCount(3);
 
-  // Launch asks for Google sign-in, and only here.
+  // Launch: Google sign-in on a deploy, or straight through with local sign-in.
   await page.getByRole("button", { name: "Launch", exact: true }).click();
   await expect(page.getByRole("dialog")).toContainText("Period 3 · Linear relationships quiz");
-  await expect(page.getByRole("button", { name: "Sign in with Google to launch" })).toBeVisible();
+  await expect(
+    page
+      .getByRole("button", { name: "Sign in with Google to launch" })
+      .or(page.getByRole("button", { name: "Open the projector" })),
+  ).toBeVisible();
+});
+
+test("launch opens the projector and the dashboard, and locks the setup page", async ({ page }) => {
+  await page.goto("/setup/template/angle-relationships");
+  await ready(page);
+  await page.getByRole("button", { name: "Launch", exact: true }).click();
+  const open = page.getByRole("button", { name: "Open the projector" });
+  const signIn = page.getByRole("button", { name: "Sign in with Google to launch" });
+  await expect(open.or(signIn)).toBeVisible();
+  // Agents can't sign in with Google; this runs where AUTH_MODE=local signs in a local teacher.
+  test.skip(await signIn.isVisible(), "needs a signed-in teacher");
+
+  const setupUrl = page.url();
+  await page.getByText("30 min").click();
+  const [projector] = await Promise.all([page.waitForEvent("popup"), open.click()]);
+  await expect(page).toHaveURL(/\/sessions\/[0-9a-f-]{36}$/, { timeout: 20_000 });
+  await expect(projector).toHaveURL(/\/sessions\/[0-9a-f-]{36}\/projector$/);
+
+  await page.goto(setupUrl);
+  await expect(page.getByText("This assignment is live")).toBeVisible();
 });
 
 test("a part asked about by its problem number gets a question back, not a guess", async ({
@@ -93,6 +117,12 @@ test("a part asked about by its problem number gets a question back, not a guess
 test("another browser cannot open the draft", async ({ page, browser }) => {
   await page.goto("/setup/template/angle-relationships");
   await ready(page);
+  // With AUTH_MODE=local every browser is the same teacher, so there is no stranger.
+  await page.getByRole("button", { name: "Launch", exact: true }).click();
+  test.skip(
+    await page.getByRole("button", { name: "Open the projector" }).isVisible(),
+    "every browser is the local teacher",
+  );
   const stranger = await browser.newPage();
   await stranger.goto(page.url());
   await expect(stranger.getByText("We can't find that assignment")).toBeVisible();

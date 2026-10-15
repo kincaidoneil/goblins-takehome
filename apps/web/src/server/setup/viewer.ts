@@ -6,11 +6,11 @@
  *
  * The cookie is an unguessable UUID, so it is a bearer token on its own and needs no signature.
  */
-import { auth } from "@clerk/tanstack-react-start/server";
 import { Db, schema } from "@goblins/domain";
 import { getCookie, setCookie } from "@tanstack/react-start/server";
 import { eq } from "drizzle-orm";
 import { Effect, Option, Schema } from "effect";
+import { signedInUserId } from "../teacher";
 
 const COOKIE = "gb_draft_owner";
 const isUuid = Schema.is(Schema.UUID);
@@ -28,7 +28,7 @@ const draftOwnerFromCookie = () => {
 
 /** The signed-in teacher's row id, without creating one: a teacher with no row owns nothing yet. */
 const signedInTeacherId = Effect.gen(function* () {
-  const { userId } = yield* Effect.promise(() => auth());
+  const userId = yield* signedInUserId;
   if (userId === null) return Option.none<string>();
   const db = yield* Db;
   const [row] = yield* db

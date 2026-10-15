@@ -25,8 +25,8 @@ export const Route = createFileRoute("/setup/$draftId")({
     meta: [
       {
         title:
-          loaderData?._tag === "Ok" && loaderData.value.title !== ""
-            ? `${loaderData.value.title} · Goblins Grader`
+          loaderData?._tag === "Ok" && loaderData.value.draft.title !== ""
+            ? `${loaderData.value.draft.title} · Goblins Grader`
             : "Set up your assignment · Goblins Grader",
       },
     ],
@@ -42,7 +42,7 @@ function SetupRoute() {
   const result = Route.useLoaderData();
   const search = Route.useSearch();
   const router = useRouter();
-  const extracting = result._tag === "Ok" && result.value.status._tag === "Extracting";
+  const extracting = result._tag === "Ok" && result.value.draft.status._tag === "Extracting";
 
   // While the worksheet is read, check once a second. Setup has one writer, so polling a single
   // read is simpler than syncing the draft live.
@@ -69,7 +69,7 @@ function SetupRoute() {
     );
   }
 
-  const draft = withCurrentTemplatePages(result.value);
+  const draft = withCurrentTemplatePages(result.value.draft);
   if (draft.launchedSessionId !== null) {
     return (
       <div className="setup-centered">
@@ -101,6 +101,7 @@ function SetupRoute() {
           <SetupScreen
             key={draft.id}
             initial={draft}
+            signedIn={result.value.signedIn}
             launchOnArrival={search.launch !== undefined}
             initialTimeLimit={search.minutes ?? null}
           />

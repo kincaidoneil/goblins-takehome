@@ -18,6 +18,8 @@ import { useMediaQuery } from "./use-media-query";
 
 export interface SetupScreenProps {
   readonly initial: Draft;
+  /** Whether the server sees a signed-in teacher, so launch can skip the sign-in step. */
+  readonly signedIn: boolean;
   /** Open the launch dialog on arrival, after returning from sign-in. */
   readonly launchOnArrival: boolean;
   readonly initialTimeLimit: number | null;
@@ -40,7 +42,12 @@ const suggestionsFor = (problems: ReadonlyArray<DraftProblem>): ReadonlyArray<st
   ];
 };
 
-export function SetupScreen({ initial, launchOnArrival, initialTimeLimit }: SetupScreenProps) {
+export function SetupScreen({
+  initial,
+  signedIn,
+  launchOnArrival,
+  initialTimeLimit,
+}: SetupScreenProps) {
   const [draft, setDraft] = useState(initial);
   const [save, setSave] = useState<SaveState>("saved");
   const [pendingMessage, setPendingMessage] = useState<string | null>(null);
@@ -355,6 +362,7 @@ export function SetupScreen({ initial, launchOnArrival, initialTimeLimit }: Setu
         timeLimitMinutes={timeLimit}
         onTimeLimitChange={setTimeLimit}
         saving={save === "saving"}
+        signedIn={signedIn}
         onProblemNeedsText={onProblemNeedsText}
       />
     </div>
