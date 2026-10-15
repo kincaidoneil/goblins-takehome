@@ -50,6 +50,9 @@ function Problem({ index }: { index: number }) {
 }
 
 const style = `
+/* Like the app's play route: one screen tall on a phone, so the board fills what's left. */
+.story-screen { display: flex; flex-direction: column; min-height: 100dvh; }
+@media (max-width: 860px) { .story-screen { height: 100dvh; } }
 .story-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; color: var(--gb-color-text-brand); font-weight: 800; }
 `;
 
@@ -120,40 +123,42 @@ function StudentScreen({ start, gradeAfterMs }: ScreenProps) {
   return (
     <>
       <style>{style}</style>
-      <StudentWorkLayout
-        progress={
-          <>
-            <div className="story-top">
-              <Avatar kind="creature" creatureId={11} size="sm" />
-              Maya R. · Unit 3 quiz
-            </div>
-            <ProgressStrip
-              problems={strip}
-              currentId={PROBLEMS[index]?.id ?? ""}
-              onSelect={(id) => {
-                setIndex(PROBLEMS.findIndex((p) => p.id === id));
-                setDoc(EMPTY_DOC);
-                setBoardKey((k) => k + 1);
-              }}
+      <div className="story-screen">
+        <StudentWorkLayout
+          progress={
+            <>
+              <div className="story-top">
+                <Avatar kind="creature" creatureId={11} size="sm" />
+                Maya R. · Unit 3 quiz
+              </div>
+              <ProgressStrip
+                problems={strip}
+                currentId={PROBLEMS[index]?.id ?? ""}
+                onSelect={(id) => {
+                  setIndex(PROBLEMS.findIndex((p) => p.id === id));
+                  setDoc(EMPTY_DOC);
+                  setBoardKey((k) => k + 1);
+                }}
+              />
+            </>
+          }
+          problem={<Problem index={index} />}
+          board={
+            <Whiteboard
+              key={boardKey}
+              initialDoc={doc}
+              onChange={setDoc}
+              disabled={phase._tag !== "Working"}
+              accessory={
+                <Button variant="secondary" size="sm">
+                  See worksheet
+                </Button>
+              }
             />
-          </>
-        }
-        problem={<Problem index={index} />}
-        board={
-          <Whiteboard
-            key={boardKey}
-            initialDoc={doc}
-            onChange={setDoc}
-            disabled={phase._tag !== "Working"}
-            accessory={
-              <Button variant="secondary" size="sm">
-                See worksheet
-              </Button>
-            }
-          />
-        }
-        submit={<SubmitButton state={submitState} onSubmit={submit} />}
-      />
+          }
+          submit={<SubmitButton state={submitState} onSubmit={submit} />}
+        />
+      </div>
       {phase._tag === "Transition" && (
         <SubmitTransition
           creatureId={11}

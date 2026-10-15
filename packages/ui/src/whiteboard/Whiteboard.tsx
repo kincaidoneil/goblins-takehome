@@ -71,17 +71,27 @@ export function Whiteboard({
   const doc = history.present;
   const page = pageSize(doc.shape);
 
-  // A blank board on a narrow screen becomes a portrait page, so a phone gets room to write.
-  // Re-checked whenever the board is blank again, e.g. after Clear.
+  // A blank board on a narrow screen takes the shape that fills its space better: portrait when
+  // the space is taller than wide (a phone held upright), landscape otherwise. Re-checked whenever
+  // the board is blank again, e.g. after Clear.
   const blank = doc.strokes.length === 0;
+  const stageRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!blank) return;
+    const stage = stageRef.current;
+    if (!blank || stage === null) return;
     const narrow = window.matchMedia("(max-width: 600px)");
-    const pick = () =>
-      dispatch({ _tag: "SetShape", shape: narrow.matches ? "portrait" : "landscape" });
+    const pick = () => {
+      const tall = stage.clientHeight > stage.clientWidth;
+      dispatch({ _tag: "SetShape", shape: narrow.matches && tall ? "portrait" : "landscape" });
+    };
     pick();
     narrow.addEventListener("change", pick);
-    return () => narrow.removeEventListener("change", pick);
+    const observer = new ResizeObserver(pick);
+    observer.observe(stage);
+    return () => {
+      narrow.removeEventListener("change", pick);
+      observer.disconnect();
+    };
   }, [blank]);
 
   const redraw = useCallback(() => {
@@ -258,18 +268,21 @@ export function Whiteboard({
         </div>
         {accessory !== undefined && <div className="gb-board-accessory">{accessory}</div>}
       </div>
-      <div className="gb-board-surface" data-shape={doc.shape}>
-        <canvas
-          ref={canvasRef}
-          className="gb-board-canvas"
-          data-tool={tool._tag}
-          role="img"
-          aria-label={label}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerEnd}
-          onPointerCancel={onPointerEnd}
-        />
+      {/* Lets a layout size the surface to the space it has (StudentWorkLayout on phones). */}
+      <div ref={stageRef} className="gb-board-stage">
+        <div className="gb-board-surface" data-shape={doc.shape}>
+          <canvas
+            ref={canvasRef}
+            className="gb-board-canvas"
+            data-tool={tool._tag}
+            role="img"
+            aria-label={label}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerEnd}
+            onPointerCancel={onPointerEnd}
+          />
+        </div>
       </div>
       <Dialog
         open={confirmClear}
