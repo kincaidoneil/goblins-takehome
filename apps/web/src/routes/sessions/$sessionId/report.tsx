@@ -2,7 +2,7 @@ import { SignInButton } from "@clerk/tanstack-react-start";
 import { Button, EmptyState } from "@goblins/ui";
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { teacherGrades, teacherSession, teacherStudents } from "../../../lib/sync";
 import { TeacherReport } from "../../../report/components/TeacherReport";
 import type { ProblemMistakes } from "../../../report/mistakes";
@@ -90,22 +90,21 @@ function LiveReport({
   const students = useLiveQuery(() => teacherStudents(sessionId), [sessionId]);
   const grades = useLiveQuery(() => teacherGrades(sessionId), [sessionId]);
   const live = sessions.isReady && students.isReady && grades.isReady;
-  // Where sync is off (previews), the snapshot stays: a full report as of page load. The app's
-  // LiveStatusBanner tells the teacher live updates are off.
+  // Until the collections are ready, the page-load snapshot. Where sync is off (previews), it
+  // stays, and the app's LiveStatusBanner says so. Once live data has arrived, a later sync
+  // failure keeps the last live data rather than going back to the older snapshot.
+  const lastLive = useRef<ReportInput | null>(null);
 
-  const input: ReportInput = useMemo(
-    () =>
-      live
-        ? {
-            problems: snapshot.problems,
-            students: [...(students.data ?? [])].sort((a, b) =>
-              a.createdAt.localeCompare(b.createdAt),
-            ),
-            grades: grades.data ?? [],
-          }
-        : snapshot,
-    [live, snapshot, students.data, grades.data],
-  );
+  const input: ReportInput = useMemo(() => {
+    if (!live) return lastLive.current ?? snapshot;
+    const current = {
+      problems: snapshot.problems,
+      students: [...(students.data ?? [])].sort((a, b) => a.createdAt.localeCompare(b.createdAt)),
+      grades: grades.data ?? [],
+    };
+    lastLive.current = current;
+    return current;
+  }, [live, snapshot, students.data, grades.data]);
 
   // Regroup mistakes when the missed grades on weak problems change, not on every grade update.
   const signature = useMemo(() => {
