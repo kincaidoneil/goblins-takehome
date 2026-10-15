@@ -20,7 +20,7 @@ const inputHash = (stats: ProblemStats): string =>
     .update(
       JSON.stringify(
         stats.misses
-          .map((m) => [m.student.id, m.points, m.reason] as const)
+          .map((m) => [m.student.id, m.points, m.reason, m.lostLines.map((l) => l.id)] as const)
           .sort(([a], [b]) => a.localeCompare(b)),
       ),
     )
