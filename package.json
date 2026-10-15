@@ -12,7 +12,8 @@
     "format": "biome check --write .",
     "test": "pnpm -r --if-present test",
     "e2e": "pnpm --filter @goblins/e2e e2e",
-    "e2e:full": "pnpm --filter @goblins/e2e e2e:full"
+    "e2e:full": "pnpm --filter @goblins/e2e e2e:full",
+    "demo:class": "pnpm --filter @goblins/simulator demo:class"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",

@@ -362,6 +362,9 @@ importers:
       '@electric-sql/client':
         specifier: ^1.5.28
         version: 1.5.28
+      '@goblins/evals':
+        specifier: workspace:*
+        version: link:../evals
       '@goblins/mock-model':
         specifier: workspace:*
         version: link:../mock-model
