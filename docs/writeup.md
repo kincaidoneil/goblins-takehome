@@ -27,7 +27,7 @@ Notes on the smoke test:
 
 Two limits apply to production as it is deployed now, separate from what the ramp measures:
 
-- **QStash is on the free plan, and that is the first limit we'd hit.** It allows 1,000 messages a day, about three classes of 30, and 10 grades in flight. In the smoke test, grades in flight peaked at exactly 10. At Haiku's 4.5 s median, that is about 2 grades a second. Moving to pay-as-you-go (parallelism 100, $1 per 100,000 messages) is the first step toward real scale. We didn't make that switch for the review window.
+- **QStash was on the free plan for these runs, and that was the first limit we hit.** It allows 1,000 messages a day, about three classes of 30, and 10 grades in flight. In the smoke test, grades in flight peaked at exactly 10, about 2 grades a second at Haiku's 4.5 s median. A demo rehearsal later hit the daily cap, so production moved to pay-as-you-go (up to 100 in flight, $1 per 100,000 messages) on 2026-10-15.
 - **The ramp runs on one machine, not on Vercel.** Vercel permits load tests only on Enterprise plans and blocks unannounced traffic. So the ramp drives the production build locally with only the model mocked, and production gets the one-class smoke test above. The same command runs against Vercel with `--i-have-vercel-approval`.
 
 ## Where we deviate from the brief
@@ -46,7 +46,7 @@ The criteria were set in the [PRD](prd.md#quality-bar) before the first run.
 | Grades that fail, normal conditions | < 0.1% | 0% |
 | Grades that fail, provider down for 5 minutes | 0% | 0% (at 300 students) |
 
-**Ship.** At the highest load one machine could generate (510 students at 4× pace, the submit rate of about 2,000 real students), every bar held and nothing in the implementation failed. Scaling from here is a serving change, not a code change: QStash's paid plan runs 100 grades at once, about 23 a second, against about 6 a second at peak for a 1,000-student testing window; Vercel Functions scale out on their own; Electric and Postgres scale by adding machines. Production today is on QStash's free plan (10 grades in flight, 1,000 messages a day, about three classes), so moving to pay-as-you-go comes first. Before a large rollout, I'd confirm it with a 1,000-student run on paid production infrastructure, generating the load from several machines; on one laptop, the 990-student run ran out of load generator before the system failed.
+**Ship.** At the highest load one machine could generate (510 students at 4× pace, the submit rate of about 2,000 real students), every bar held and nothing in the implementation failed. Scaling from here is a serving change, not a code change: QStash's paid plan runs 100 grades at once, about 23 a second, against about 6 a second at peak for a 1,000-student testing window; Vercel Functions scale out on their own; Electric and Postgres scale by adding machines. Before a large rollout, I'd confirm it with a 1,000-student run on paid production infrastructure, generating the load from several machines; on one laptop, the 990-student run ran out of load generator before the system failed.
 
 ## Cost
 
@@ -64,7 +64,7 @@ Peak load assumes every student tests in the same 30-minute window, which overst
 
 | Students | Model cost a month | Peak grades/s | What changes |
 |---|---|---|---|
-| 1,000 | $25 | 6 | QStash to pay-as-you-go; about 25 model calls in flight, within one provider's default limits. Sync is the part to watch: 510 students pass on one laptop. |
+| 1,000 | $25 | 6 | QStash on pay-as-you-go (done); about 25 model calls in flight, within one provider's default limits. Sync is the part to watch: 510 students pass on one laptop. |
 | 10,000 | $254 | 56 | About 250 calls in flight. QStash caps parallelism at 100 per key, so shard grades across several flow-control keys. Raise the model's rate limits and fail over to GPT-6 Luna on rate limits. Move whiteboards out of Postgres, where they are stored inline as `data:` URLs (about 6 GB a month at this size), into object storage. Add Electric machines: one Fly machine is capped at 10,000 connections and each student holds two. |
 | 100,000 | $2,500 | 560 | Model cost now matters. Cache the prompt prefix shared by every student on a problem (about a fifth of the cost), trim the per-line evidence text (output is almost half the cost), and send a smaller image. Put Electric behind a CDN, which its HTTP shapes allow. A larger Postgres for about 1,700 writes a second. |
 | 1,000,000 | $25,000 | 5,600 | 1.2 billion tokens a minute at peak is beyond any single provider. Route across several providers and negotiate contract pricing. Replace QStash with a queue built for this rate, such as SQS. Partition grades by district. Self-hosting an open model is the alternative, but the open models we tested are not accurate enough yet. |
