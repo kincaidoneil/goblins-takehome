@@ -1,68 +1,82 @@
 # Goblins Grader
 
-A free auto-grader for math teachers. A teacher drops in the worksheet they were going to hand out anyway, students show their work on a whiteboard, and the teacher gets a graded class and a report that points the struggling students at Goblins.
+Kincaid O'Neil
 
-Live: **https://goblins-takehome-three.vercel.app** · [sample report](https://goblins-takehome-three.vercel.app/report/demo) · [shared view](https://goblins-takehome-three.vercel.app/share/demo)
+**[Live app](https://goblins-takehome-three.vercel.app)** · [Sample report](https://goblins-takehome-three.vercel.app/report/demo)
 
-## How I approached it
+[![Walkthrough](https://img.youtube.com/vi/mQDi1DlVHp0/maxresdefault.jpg)](https://youtu.be/mQDi1DlVHp0)
 
-**The problem first.** The brief calls this a growth product: Goblins keeps students once a teacher assigns work, but teachers stall before the first assignment. So the grader had to save a teacher real hours on something they already do, and end one click from Goblins. That framing decided what to build and what to cut.
+I tried to do two things well:
 
-**A spec before any code.** I wrote a [PRD](docs/prd.md) with the user flows, the decisions I didn't want reopened, and the ship / no-ship criteria for the load test, each with its reason, before anything was built or measured. Where the PRD was silent, whoever made the call logged it in [docs/decisions.md](docs/decisions.md) with one line of reasoning.
+1. Orienting agents around the business goal: get teachers using the free auto-grader, then into Goblins, with a report they can use to pitch their administrators or district on Goblins with feedback on. For students, it should feel low-stakes and fun: creature avatars, no red marks, and no waiting on the grader.
+2. Splitting work into parallel streams, so each session can deliver a higher level of quality and polish within the time constraints
 
-**Evidence as the bar.** Evals picked the model and what it sees. The load test, re-runnable by anyone, makes the ship call. The $20 model budget was split by use up front, and a mock model keeps tests and load tests free.
+I drafted the [PRD](docs/prd.md), which fleshed out more detailed descriptions of key user flows, some technical decisions, and importantly, suggested sequencing and splitting of work.
 
-**Agents built it; I made the calls.** An orchestrator Claude session split the PRD into about a dozen parallel Claude Code workstreams, one package each, every change a small PR merged on green CI and E2E. I set scope, chose vendors, approved spend, reviewed eval ground truth the agents weren't sure of, and changed course when something failed: Electric Cloud shut down mid-build, and Vercel Queues measured 4× slower than QStash.
+The live app uses TanStack Start deployed on Vercel, with Neon Postgres, Electric for real-time sync hosted on Fly.io, Clerk for auth for teachers (no student auth), Upstash QStash for queueing grade jobs, and OpenRouter for model calls. Server code uses Effect. It's a pnpm monorepo with Playwright E2E tests and a Storybook for the UI components.
 
-## Key product decisions
+### How I split the work
 
-- **Start from the worksheet the teacher already has.** No form for typing problems; a few real worksheets cover the empty state. Sign-in comes only at launch, so a teacher sees the extracted problems and rubrics before any friction.
-- **A live class session, joined like Kahoot.** A code on the projector, a first name, and the teacher in the room as the identity check. No student accounts: handing out access is exactly where teachers stall today.
-- **The grader asks instead of guessing.** Every grade either stands or goes to the teacher with a reason, and the teacher always has the last word. That is what makes a cheap model trustworthy. Students see "your teacher will check this one", never an error.
-- **The report is the growth loop.** It shows where the class struggled, offers one click to give exactly those students practice in Goblins, and makes a name-free link to share with colleagues and administrators.
+I designed tasks so different sessions could independently work on them. Here's an example of separate streams:
 
-## Technical overview
+1. **Generating evals**: collecting real worksheets and synthetically generating "gold" eval cases with handwritten fonts. (Obviously, real world examples are ultimately better!)
+2. **Inference engineering**: building and optimizing the grader pipeline around cost and eval performance, varying models and prompts, and projecting its economics
+3. **Load testing**: test with mocked inference responses/failures and timing. I suggested:
+   1. Use some synthetic scenarios: provider downtime, some latency distribution, % of requests failing (the agent later expanded upon this)
+   2. Capture *real* model request latency and failures that can then be replayed to test load
 
-TanStack Start and Effect on Vercel, Postgres on Neon, Electric (self-hosted on Fly) for live dashboards, Upstash QStash for grading jobs, and Claude Haiku 5.5 through OpenRouter, with a mock behind the same interface.
+### Results
 
-- **The model was chosen by evals.** Eight cheap vision models graded 230 generated whiteboards. Haiku 5.5 matched the correct score most often and flagged the most ambiguous work. One call per submission beat one per rubric line, and a text description of the diagram beat sending the page image. [Eval report](packages/evals/REPORT.md).
-- **A mock model makes testing free.** Its latency is sampled from real Haiku calls and it can replay outages and rate-limit storms, so E2E, the class simulator and the load test cost nothing to repeat.
-- **The queue was chosen by measurement.** At a concurrency cap of 10, QStash ran 60 five-second jobs in 32 s; Vercel Queues took 129 s. [Comparison](docs/grade-queue-options.md).
-- **No grade is lost.** Grade writes are idempotent per attempt, a claim lease stops duplicate model calls, and a sweeper re-sends anything stuck.
-- **The load test runs on a local production build.** Vercel allows load tests only on Enterprise plans, so the full ramp runs the app's production build against Postgres and Electric on one machine, and production gets a one-class smoke test through the same command.
+#### Cost
 
-## Results
+An agent compared eight cheap vision models across three prompt versions and chose Claude Haiku 5.5, which grades straight from the whiteboard image. On 230 synthetic submissions it matched the intended score about 95% of the time, at about $0.00057 a grade. The handwriting was generated from fonts, so I'd expect lower accuracy on submissions from real students.
 
-- **Accuracy:** 96% of grades match the correct score; 7% go to the teacher. Measured on generated handwriting, so treat it as an upper bound.
-- **Cost:** $0.00057 per grade, about half the $0.001 target: $3.30 a month for a teacher with 130 students grading one 10-problem assignment a week.
-- **Load:** capacity pending the full ramp. So far: 90 students at 20× testing-day pace, 0 lost, grades on the dashboard at p95 5.9 s. [Load-test reports](packages/loadtest/reports/README.md).
+Assuming 130 students and one 10-problem assignment a week, that's roughly $3.30 per teacher a month. Multiplied by the average number of teachers it takes to land a district account and the months each teacher uses it, that's this feature's contribution to CAC.
 
-## Deferred
+[Eval report](packages/evals/REPORT.md)
 
-- **Rubric questions.** Grouping a problem's flagged grades into one question for the teacher ("5 students left 6/8 unsimplified; full credit?"). The flag already gets the teacher there; grouping is polish.
-- **Real handwriting in the evals.** The dataset is generated from handwriting fonts; I didn't have time to draw the planned check set.
-- **The full ramp on Vercel.** It needs an Enterprise plan and QStash pay-as-you-go. The runner supports it with one flag.
-- **A real Goblins handoff.** Goblins has no public API, so the CTA opens a labeled demo screen and links to Goblins onboarding.
-- **Grade export and share-link revocation.** Worth building once teachers come back for a second assignment.
+#### Load
 
-## Run it
+Each submission is saved to Postgres, then published to Upstash QStash, which calls a Vercel Function to grade it. QStash caps how many grades run at once, to stay under the model provider's rate limits, and retries failed calls, so a model outage delays grades instead of failing them. Delivery is at-least-once, so a grade is only written if its attempt is still current, and grading a submission twice changes nothing. A cron job re-sends any grade that gets stuck.
+
+The load test runs simulated classes through the real app, queue, database and sync, with only the model mocked so it's free to re-run. On my machine, 510 students passed every bar I set beforehand (nothing lost, submit p99 under 1 s, grades reach the teacher's dashboard within 30 s at p95, under 0.1% of grades failing). Nothing was lost or failed even through a model outage. It's built to run against production: the same command takes the deployed URL, and a load-test token routes those requests to the mock model and tags their data so it stays out of real dashboards. But when I ran it, production's QStash was on the free plan, which allows 1,000 grade messages a day (a 510-student run sends about 4,600), so production ran one class of 30, and 1,000 students and real provider behavior at scale are unverified.
+
+**Ship call:** ship. At the highest load one machine could generate (510 students at 4× pace, the submit rate of about 2,000 real students), nothing in the implementation failed. Scaling from here is a serving change, not a code change: QStash's paid plan runs 100 grades at once, about 23 a second, against about 6 a second for a 1,000-student testing day; Vercel Functions scale out on their own; Electric and Postgres scale by adding machines. Before a large rollout, I'd confirm it with a 1,000-student run on paid production infrastructure, generating the load from several machines.
+
+Past 10,000 students, scaling is mostly serving and contracts, not code: raise the queue's parallelism, get an enterprise agreement with the model provider for higher rate limits (plus a second provider for failover), and add Electric and Postgres capacity. Live sync is the part to watch: Electric broke first in our 990-student runs, and fixing it took per-student subscriptions and raised connection limits. At scale it needs more Electric machines and a CDN in front of them. Model cost grows linearly, at about $0.025 per student a month, so it's a budget decision, though at 100,000 and up it's worth cutting with prompt caching and shorter output. The statement of confidence covers what changes at each step, from 1,000 to 1M students.
+
+[Statement of confidence](docs/writeup.md)
+
+### Deferred
+
+- **Reusing an assignment.** Setup leads straight to launch, so a teacher can't save an assignment or relaunch it for another class. The data model already supports it.
+- **Real handwriting in the evals.** Every accuracy number comes from generated whiteboards.
+- **Student identity and class management.** There are no student accounts or rosters. Students join with a code and a typed name, so anyone with the code can join (up to 60 per class), and a student can resume as someone else by typing their name. The teacher in the room is the only check. Real student identity (Google, Clever) and class rosters that carry across assignments come next.
+- **Gating on setup.** Worksheet upload and chat editing need no sign-in, so anyone can spend model calls on them. They're limited only by per-IP and per-draft rate limits (5 uploads and 30 chat messages an hour) and a $3 spend cap on setup. A real launch needs sign-in or per-account quotas there.
+
+### Run it
 
 Needs Node 22, pnpm and Docker. Run `pnpm install` first.
 
 ```bash
-# The app, at http://localhost:3000 (Postgres and Electric in Docker, mock model, no sign-in needed)
+# The app at http://localhost:3000, with the mock model and no sign-in
 pnpm --filter @goblins/web db:up && \
   DATABASE_URL=postgres://postgres:postgres@localhost:55432/goblins pnpm --filter @goblins/domain db:migrate && \
   pnpm --filter @goblins/web dev
 
-# E2E, against a production build as CI runs it (the dev server is too slow for the tests' timeouts)
+# E2E, against a production build as CI runs it
 pnpm --filter @goblins/web build && (cd apps/web && PORT=3000 node --env-file=local.env .output/server/index.mjs &)
 pnpm --filter @goblins/e2e exec playwright install chromium
 E2E_BASE_URL=http://localhost:3000 pnpm e2e
 
-# Evals: rebuilds the tables from cached responses, at no cost
+# Evals, rebuilt from cached responses at no cost
 pnpm --filter @goblins/evals eval:tables anthropic/claude-haiku-5.5
 
-# Load test: see packages/loadtest/README.md to start the production build, then
+# Load test: start the production build as in packages/loadtest/README.md, then
 LOAD_TEST_TOKEN=local pnpm --filter @goblins/loadtest loadtest ramp --url http://localhost:3290 --pricing none
+
+# Load test against production: one class of 30, with the deploy's load-test token.
+# More classes need --i-have-vercel-approval and QStash on a paid plan.
+LOAD_TEST_TOKEN=<token> pnpm --filter @goblins/loadtest loadtest scenario normal \
+  --url https://goblins-takehome-three.vercel.app --start-classes 1 --time-scale 0.1
 ```
