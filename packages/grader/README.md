@@ -85,7 +85,7 @@ export const POST = QStashQueue.makeHandler({ runtime, verify: QStashQueue.makeV
 
 The consumer route needs `maxDuration` of at least 120 s: one delivery's grading is capped at 100 s.
 
-Production runs on QStash's free plan: parallelism 10 (the default, `GRADER_PARALLELISM`) and 1,000 messages a day, which covers the demo and a one-class smoke test. Pay-as-you-go (parallelism up to 100) is the next step for real scale. The sweeper runs on Vercel cron every minute (`apps/web/vercel.json`).
+Production runs on QStash's pay-as-you-go plan (since 2026-10-15): no daily message cap, $1 per 100,000 messages. Parallelism is still the default 10 (`GRADER_PARALLELISM`); the plan allows up to 100. The sweeper runs on Vercel cron every minute (`apps/web/vercel.json`).
 
 To run against QStash's local dev server, as the load test's local ramp does:
 
